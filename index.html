@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Fazar Blog</title>
+  <title>fazar.site</title>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -17,7 +17,7 @@
 
     /* NAV */
     nav {
-      max-width: 780px;
+      max-width: 860px;
       margin: 0 auto;
       padding: 1.25rem 1.5rem;
       display: flex;
@@ -29,22 +29,10 @@
       font-weight: 600;
       color: #1a1a2e;
     }
-    nav .links {
-      display: flex;
-      gap: 1.5rem;
-    }
-    nav .links a {
-      font-size: 13px;
-      color: #5a6484;
-      text-decoration: none;
-      cursor: pointer;
-      transition: color 0.2s;
-    }
-    nav .links a:hover { color: #1a1a2e; }
 
     /* MAIN WRAPPER */
     .wrapper {
-      max-width: 780px;
+      max-width: 860px;
       margin: 0 auto;
       padding: 0 1.5rem 3rem;
     }
@@ -53,7 +41,7 @@
     .hero {
       background: linear-gradient(135deg, #1a4fa0 0%, #2563eb 60%, #1d4ed8 100%);
       border-radius: 20px;
-      padding: 2.5rem 2rem;
+      padding: 2.75rem 2rem;
       text-align: center;
       margin-bottom: 1.25rem;
       position: relative;
@@ -72,7 +60,7 @@
       background: rgba(255,255,255,0.05);
     }
     .hero h1 {
-      font-size: 28px;
+      font-size: 30px;
       font-weight: 600;
       color: #fff;
       line-height: 1.3;
@@ -80,10 +68,11 @@
     }
     .hero p {
       font-size: 14px;
-      color: rgba(255,255,255,0.72);
-      line-height: 1.7;
-      max-width: 400px;
+      color: rgba(255,255,255,0.75);
+      line-height: 1.75;
+      max-width: 420px;
       margin: 0 auto 1.5rem;
+      text-align: center;
     }
     .hero-tags {
       display: flex;
@@ -106,7 +95,7 @@
       justify-content: center;
     }
     .btn-white {
-      padding: 9px 22px;
+      padding: 9px 24px;
       font-size: 13px;
       font-family: inherit;
       background: #fff;
@@ -115,45 +104,39 @@
       border-radius: 10px;
       cursor: pointer;
       font-weight: 600;
-      transition: opacity 0.2s;
+      transition: opacity 0.2s, transform 0.2s;
     }
-    .btn-white:hover { opacity: 0.9; }
-    .btn-ghost {
-      padding: 9px 22px;
-      font-size: 13px;
-      font-family: inherit;
-      background: rgba(255,255,255,0.15);
-      color: #fff;
-      border: 1px solid rgba(255,255,255,0.3);
-      border-radius: 10px;
-      cursor: pointer;
-      transition: background 0.2s;
-    }
-    .btn-ghost:hover { background: rgba(255,255,255,0.22); }
+    .btn-white:hover { opacity: 0.9; transform: translateY(-1px); }
 
     /* STATS */
     .stats-row {
       display: grid;
-      grid-template-columns: 1fr 1fr 1fr;
-      gap: 10px;
-      margin-bottom: 1.25rem;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-bottom: 1.5rem;
     }
     .stat-card {
       border-radius: 14px;
-      padding: 1rem;
+      padding: 1.1rem 1rem;
       text-align: center;
       border: 0.5px solid #e2e8f0;
       background: #fff;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+      transition: box-shadow 0.2s, transform 0.2s;
+    }
+    .stat-card:hover {
+      box-shadow: 0 6px 20px rgba(0,0,0,0.09);
+      transform: translateY(-2px);
     }
     .stat-num {
       font-size: 22px;
       font-weight: 600;
-      margin-bottom: 3px;
+      margin-bottom: 4px;
     }
     .stat-label {
       font-size: 11px;
       color: #7a86a1;
-      line-height: 1.4;
+      line-height: 1.5;
     }
     .stat-card.blue .stat-num { color: #2563eb; }
     .stat-card.green .stat-num { color: #16a34a; }
@@ -164,60 +147,67 @@
       font-size: 11px;
       color: #9aa5bd;
       text-transform: uppercase;
-      letter-spacing: 0.08em;
-      margin-bottom: 0.875rem;
+      letter-spacing: 0.09em;
+      margin-bottom: 1rem;
+      font-weight: 500;
     }
 
     /* FEATURE CARDS */
     .cards-row {
       display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px;
-      margin-bottom: 1.25rem;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-bottom: 1.5rem;
     }
     .feat-card {
       border-radius: 14px;
-      padding: 1.25rem;
+      padding: 1.35rem;
       background: #fff;
       border: 0.5px solid #e2e8f0;
       border-top: 3px solid transparent;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+      transition: box-shadow 0.2s, transform 0.2s;
     }
-    .feat-card.green { border-top-color: #16a34a; }
-    .feat-card.blue  { border-top-color: #2563eb; }
-    .feat-card.orange{ border-top-color: #ea580c; }
-    .feat-card.purple{ border-top-color: #7c3aed; }
+    .feat-card:hover {
+      box-shadow: 0 8px 24px rgba(0,0,0,0.10);
+      transform: translateY(-3px);
+    }
+    .feat-card.green  { border-top-color: #16a34a; }
+    .feat-card.blue   { border-top-color: #2563eb; }
+    .feat-card.purple { border-top-color: #7c3aed; }
+    .kontak-card { grid-column: 1 / -1; }
     .feat-card h3 {
       font-size: 14px;
       font-weight: 600;
       color: #1a1a2e;
-      margin-bottom: 0.4rem;
+      margin-bottom: 0.5rem;
     }
     .feat-card p {
-      font-size: 12px;
+      font-size: 12.5px;
       color: #7a86a1;
-      line-height: 1.6;
-      margin-bottom: 0.875rem;
+      line-height: 1.7;
+      margin-bottom: 1rem;
+      text-align: justify;
     }
     .feat-tags {
       display: flex;
       flex-wrap: wrap;
-      gap: 4px;
-      margin-bottom: 0.875rem;
+      gap: 5px;
+      margin-bottom: 1rem;
     }
     .feat-tag {
       font-size: 10px;
-      padding: 2px 8px;
+      padding: 3px 9px;
       border-radius: 10px;
       font-weight: 500;
     }
     .feat-tag.g { background: #dcfce7; color: #166534; }
     .feat-tag.b { background: #dbeafe; color: #1e40af; }
-    .feat-tag.o { background: #ffedd5; color: #9a3412; }
     .feat-tag.p { background: #ede9fe; color: #5b21b6; }
 
     .card-btn {
       display: inline-block;
-      padding: 6px 16px;
+      padding: 7px 18px;
       font-size: 12px;
       font-family: inherit;
       font-weight: 500;
@@ -226,23 +216,23 @@
       background: transparent;
       color: #1a1a2e;
       cursor: pointer;
-      transition: background 0.2s;
+      transition: background 0.2s, border-color 0.2s;
       text-decoration: none;
     }
-    .card-btn:hover { background: #f4f6fb; }
+    .card-btn:hover { background: #f4f6fb; border-color: #c7d0e0; }
 
     /* CONTACT BUTTONS */
     .contact-btns {
       display: flex;
       gap: 8px;
       flex-wrap: wrap;
-      margin-top: 0.5rem;
+      margin-top: 0.25rem;
     }
     .contact-btn {
       display: inline-flex;
       align-items: center;
       gap: 6px;
-      padding: 6px 14px;
+      padding: 7px 16px;
       font-size: 12px;
       font-family: inherit;
       font-weight: 500;
@@ -252,9 +242,59 @@
       color: #1a1a2e;
       cursor: pointer;
       text-decoration: none;
-      transition: background 0.2s;
+      transition: background 0.2s, border-color 0.2s;
     }
-    .contact-btn:hover { background: #f4f6fb; }
+    .contact-btn:hover { background: #f4f6fb; border-color: #c7d0e0; }
+
+    /* INSTAGRAM SECTION */
+    .insta-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-bottom: 1.5rem;
+    }
+    .insta-card {
+      border-radius: 14px;
+      background: #fff;
+      border: 0.5px solid #e2e8f0;
+      overflow: hidden;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+      transition: box-shadow 0.2s, transform 0.2s;
+      text-decoration: none;
+      display: block;
+    }
+    .insta-card:hover {
+      box-shadow: 0 8px 24px rgba(0,0,0,0.10);
+      transform: translateY(-3px);
+    }
+    .insta-img {
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      object-fit: cover;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, #e8edf7, #d0d9ee);
+      font-size: 32px;
+      color: #9aa5bd;
+    }
+    .insta-body {
+      padding: 0.875rem 1rem;
+    }
+    .insta-meta {
+      font-size: 10px;
+      color: #9aa5bd;
+      margin-bottom: 5px;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+    .insta-caption {
+      font-size: 12px;
+      color: #5a6484;
+      line-height: 1.6;
+      text-align: justify;
+    }
 
     /* PDF MODAL */
     .modal-overlay {
@@ -271,8 +311,8 @@
       background: #fff;
       border-radius: 16px;
       width: 90%;
-      max-width: 700px;
-      height: 80vh;
+      max-width: 740px;
+      height: 82vh;
       overflow: hidden;
       display: flex;
       flex-direction: column;
@@ -297,27 +337,79 @@
       cursor: pointer;
       color: #7a86a1;
       line-height: 1;
+      transition: color 0.2s;
     }
+    .modal-close:hover { color: #1a1a2e; }
     .modal-body { flex: 1; overflow: hidden; }
     .modal-body iframe { width: 100%; height: 100%; border: none; }
 
     /* FOOTER */
     footer {
       border-top: 0.5px solid #e2e8f0;
-      padding: 1.25rem 0 0;
+      margin-top: 1.5rem;
+      padding: 1.75rem 0 1.25rem;
+    }
+    .footer-inner {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-top: 1.5rem;
+      flex-wrap: wrap;
+      gap: 1rem;
     }
-    footer p { font-size: 12px; color: #9aa5bd; }
-    footer .socials { display: flex; gap: 1rem; }
-    footer .socials a {
+    .footer-brand {
+      font-size: 14px;
+      font-weight: 600;
+      color: #1a1a2e;
+      margin-bottom: 4px;
+    }
+    .footer-sub {
       font-size: 12px;
-      color: #7a86a1;
-      text-decoration: none;
+      color: #9aa5bd;
     }
-    footer .socials a:hover { color: #1a1a2e; }
+    .footer-links {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 5px;
+    }
+    .footer-links a {
+      font-size: 12px;
+      color: #5a6484;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      transition: color 0.2s;
+    }
+    .footer-links a:hover { color: #1a1a2e; }
+    .footer-copy {
+      text-align: center;
+      font-size: 11px;
+      color: #b0bac9;
+      margin-top: 1.25rem;
+      padding-top: 1rem;
+      border-top: 0.5px solid #f0f2f8;
+    }
+
+    /* RESPONSIVE */
+    @media (max-width: 720px) {
+      .stats-row  { grid-template-columns: repeat(2, 1fr); }
+      .cards-row  { grid-template-columns: repeat(2, 1fr); }
+      .insta-grid { grid-template-columns: repeat(2, 1fr); }
+      .kontak-card { grid-column: 1 / -1; }
+    }
+    @media (max-width: 480px) {
+      .stats-row  { grid-template-columns: 1fr; }
+      .cards-row  { grid-template-columns: 1fr; }
+      .insta-grid { grid-template-columns: 1fr; }
+      .kontak-card { grid-column: 1 / -1; }
+      nav { padding: 1rem; }
+      .wrapper { padding: 0 1rem 2rem; }
+      .hero { padding: 2rem 1.25rem; }
+      .hero h1 { font-size: 24px; }
+      .footer-inner { flex-direction: column; align-items: flex-start; }
+      .footer-links { align-items: flex-start; }
+    }
   </style>
 </head>
 <body>
@@ -358,44 +450,39 @@
       </div>
     </div>
 
-    <!-- PORTFOLIO -->
+    <!-- CARDS -->
     <div id="portfolio">
       <p class="section-label">Apa yang ada di sini</p>
       <div class="cards-row">
 
         <div class="feat-card green">
           <h3>Portfolio</h3>
-          <p>Kumpulan karya dan proyek yang pernah saya kerjakan.</p>
+          <p>Kumpulan karya dan proyek yang pernah saya kerjakan selama bertugas.</p>
           <div class="feat-tags">
             <span class="feat-tag g">Karya</span>
             <span class="feat-tag g">Proyek</span>
           </div>
-          <!-- Ganti URL di bawah dengan link Google Drive PDF kamu -->
+          <!-- Ganti URL dengan link Google Drive PDF Portfolio kamu -->
           <button class="card-btn" onclick="openPDF('GANTI_DENGAN_LINK_GOOGLE_DRIVE_PDF_PORTFOLIO', 'Portfolio')">Lihat Portfolio</button>
         </div>
 
-        <!-- CV -->
         <div id="cv" class="feat-card blue">
           <h3>CV</h3>
-          <p>Riwayat pendidikan dan pengalaman saya selengkapnya.</p>
+          <p>Riwayat pendidikan dan pengalaman saya secara lengkap dan terstruktur.</p>
           <div class="feat-tags">
             <span class="feat-tag b">Pendidikan</span>
             <span class="feat-tag b">Pengalaman</span>
           </div>
-          <!-- Ganti URL di bawah dengan link Google Drive PDF CV kamu -->
+          <!-- Ganti URL dengan link Google Drive PDF CV kamu -->
           <button class="card-btn" onclick="openPDF('GANTI_DENGAN_LINK_GOOGLE_DRIVE_PDF_CV', 'CV')">Lihat CV</button>
         </div>
 
-        <!-- KONTAK -->
-        <div id="kontak" class="feat-card purple" style="grid-column: span 2;">
+        <div id="kontak" class="feat-card purple kontak-card">
           <h3>Kontak</h3>
-          <p>Mau ngobrol atau kolaborasi? Hubungi saya melalui email atau media sosial.</p>
+          <p>Mau ngobrol atau kolaborasi? Hubungi saya melalui email atau media sosial berikut.</p>
           <div class="contact-btns">
-            <!-- Ganti dengan email kamu -->
-            <a class="contact-btn" href="mailto:email@kamu.com">✉️ Email</a>
-            <!-- Ganti dengan link Instagram kamu -->
-            <a class="contact-btn" href="https://instagram.com/usernamekamu" target="_blank">📷 Instagram</a>
-            <!-- Ganti dengan link LinkedIn kamu -->
+            <a class="contact-btn" href="mailto:fazarriansyah@gmail.com">✉️ fazarriansyah@gmail.com</a>
+            <a class="contact-btn" href="https://instagram.com/fazar.riansyah" target="_blank">📷 fazar.riansyah</a>
             <a class="contact-btn" href="https://linkedin.com/in/usernamekamu" target="_blank">💼 LinkedIn</a>
           </div>
         </div>
@@ -403,12 +490,50 @@
       </div>
     </div>
 
+    <!-- INSTAGRAM -->
+    <p class="section-label">Postingan Instagram Terbaru</p>
+    <div class="insta-grid">
+
+      <a class="insta-card" href="https://instagram.com/fazar.riansyah" target="_blank">
+        <!-- Ganti src dengan URL foto asli dari postingan Instagram kamu -->
+        <div class="insta-img">📸</div>
+        <div class="insta-body">
+          <p class="insta-meta">@fazar.riansyah</p>
+          <p class="insta-caption">Ganti dengan caption postingan Instagram pertama kamu.</p>
+        </div>
+      </a>
+
+      <a class="insta-card" href="https://instagram.com/fazar.riansyah" target="_blank">
+        <div class="insta-img">📸</div>
+        <div class="insta-body">
+          <p class="insta-meta">@fazar.riansyah</p>
+          <p class="insta-caption">Ganti dengan caption postingan Instagram kedua kamu.</p>
+        </div>
+      </a>
+
+      <a class="insta-card" href="https://instagram.com/fazar.riansyah" target="_blank">
+        <div class="insta-img">📸</div>
+        <div class="insta-body">
+          <p class="insta-meta">@fazar.riansyah</p>
+          <p class="insta-caption">Ganti dengan caption postingan Instagram ketiga kamu.</p>
+        </div>
+      </a>
+
+    </div>
+
+    <!-- FOOTER -->
     <footer>
-      <p>© 2025 Fazar Blog</p>
-      <div class="socials">
-        <a href="mailto:email@kamu.com">Email</a>
-        <a href="https://instagram.com/usernamekamu" target="_blank">Instagram</a>
+      <div class="footer-inner">
+        <div>
+          <p class="footer-brand">Fazar Riansyah</p>
+          <p class="footer-sub">PTP Ahli Pertama · P4 Jakarta Pusat</p>
+        </div>
+        <div class="footer-links">
+          <a href="mailto:fazarriansyah@gmail.com">✉️ fazarriansyah@gmail.com</a>
+          <a href="https://instagram.com/fazar.riansyah" target="_blank">📷 fazar.riansyah</a>
+        </div>
       </div>
+      <p class="footer-copy">© 2025 fazar.site — Dibuat dengan ❤️</p>
     </footer>
 
   </div>

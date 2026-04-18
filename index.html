@@ -354,10 +354,10 @@
   <!-- MINI GAME ACCORDION -->
   <div class="accordion-bar" id="accordionBar" onclick="toggleGame()">
     <div class="accordion-left">
-      <span class="accordion-emoji">🐍</span>
+      <span class="accordion-emoji">🧠</span>
       <div>
-        <div class="accordion-label">Mini Game</div>
-        <div class="accordion-sublabel" id="accordionSub">Snake — klik untuk buka</div>
+        <div class="accordion-label">Smart Snake</div>
+        <div class="accordion-sublabel" id="accordionSub">Quiz + Snake — klik untuk buka</div>
       </div>
     </div>
     <span class="accordion-arrow">▼</span>
@@ -371,8 +371,8 @@
         <div class="game-card">
           <div class="game-header">
             <div>
-              <h3>🐍 Snake</h3>
-              <p>Arrow keys / WASD untuk bergerak</p>
+              <h3>🧠 Smart Snake</h3>
+              <p>Makan apel → Jawab kuis → Kumpulkan poin!</p>
             </div>
             <div class="score-row">
               <div class="score-box">
@@ -389,9 +389,9 @@
           <div class="canvas-wrap">
             <canvas id="snakeCanvas"></canvas>
             <div id="gameOverlay">
-              <div id="overlayIcon">🐍</div>
-              <div id="overlayTitle">Snake Game</div>
-              <div id="overlayDesc">Arrow keys / WASD untuk bergerak</div>
+              <div id="overlayIcon">🧠</div>
+              <div id="overlayTitle">Smart Snake</div>
+              <div id="overlayDesc">Kumpulkan apel & jawab kuis penalaran umum!</div>
               <div class="name-input-wrap" id="nameInputWrap">
                 <label>Nama Kamu</label>
                 <input id="playerNameInput" type="text" maxlength="20" placeholder="Masukkan nama..." autocomplete="off" />
@@ -421,19 +421,30 @@
           </div>
           <div class="info-card">
             <h4>Cara Bermain</h4>
-            <p>Arahkan ular untuk memakan makanan 🍎 dan hindari menabrak tembok atau tubuhmu sendiri.</p>
+            <p>Arahkan ular untuk memakan apel 🍎 dan hindari menabrak tembok atau tubuhmu sendiri. Setiap <strong>5 apel</strong>, kamu akan mendapat tantangan kuis!</p>
             <div class="key-list">
               <span class="key-badge">↑ ↓ ← →</span>
               <span class="key-badge">W A S D</span>
             </div>
           </div>
           <div class="info-card">
-            <h4>Tips</h4>
-            <p>Semakin banyak makanan dimakan, semakin cepat ularnya. Rencanakan jalurmu dengan cermat!</p>
+            <h4>⚡ Sistem Kuis</h4>
+            <p>Setiap 5 apel dimakan, pilih tingkat kesulitan soal penalaran umum:</p>
+            <div style="margin-top:8px;display:flex;flex-direction:column;gap:5px;">
+              <div style="display:flex;justify-content:space-between;align-items:center;padding:5px 10px;background:#dcfce7;border-radius:8px;font-size:12px;">
+                <span>🟢 <strong>Mudah</strong></span><span style="color:#16a34a;font-weight:700;">+10 poin</span>
+              </div>
+              <div style="display:flex;justify-content:space-between;align-items:center;padding:5px 10px;background:#fef9c3;border-radius:8px;font-size:12px;">
+                <span>🟡 <strong>Sedang</strong></span><span style="color:#ca8a04;font-weight:700;">+20 poin</span>
+              </div>
+              <div style="display:flex;justify-content:space-between;align-items:center;padding:5px 10px;background:#fee2e2;border-radius:8px;font-size:12px;">
+                <span>🔴 <strong>Susah</strong></span><span style="color:#dc2626;font-weight:700;">+30 poin</span>
+              </div>
+            </div>
           </div>
           <div class="info-card">
-            <h4>Penilaian</h4>
-            <p>Setiap makanan bernilai <strong>+10 poin</strong>. Skor tertinggi per nama tersimpan di leaderboard global.</p>
+            <h4>🏅 Penilaian</h4>
+            <p>Setiap apel bernilai <strong>+10 poin</strong>. Jawaban kuis benar memberikan bonus poin sesuai tingkat kesulitan. Salah menjawab? Tidak ada pengurangan poin — tapi bonus hangus! Skor tertinggi tersimpan di leaderboard global.</p>
           </div>
         </div>
 
@@ -513,6 +524,53 @@
   </div>
 </div>
 
+<!-- QUIZ MODAL -->
+<div class="modal-overlay" id="quizModal">
+  <div class="contact-modal-box" style="max-width:480px;padding:0;overflow:hidden;border-radius:20px;">
+    <!-- Header -->
+    <div id="quizHeader" style="padding:1.5rem 1.5rem 1rem;background:linear-gradient(135deg,#1a4fa0,#2563eb);text-align:center;">
+      <div style="font-size:28px;margin-bottom:6px;">🧠</div>
+      <div style="font-size:14px;font-weight:700;color:#fff;margin-bottom:3px;">Tantangan Kuis!</div>
+      <div style="font-size:11px;color:rgba(255,255,255,0.65);" id="quizAppleCount"></div>
+    </div>
+    <!-- Difficulty Pick -->
+    <div id="quizDiffPicker" style="padding:1.25rem;">
+      <div style="font-size:13px;font-weight:600;color:#1a1a2e;text-align:center;margin-bottom:1rem;">Pilih Tingkat Kesulitan</div>
+      <div style="display:flex;flex-direction:column;gap:10px;">
+        <button onclick="startQuiz('easy')" style="display:flex;justify-content:space-between;align-items:center;padding:12px 16px;border-radius:12px;border:1.5px solid #bbf7d0;background:#dcfce7;cursor:pointer;font-family:inherit;transition:transform 0.15s;" onmouseover="this.style.transform='translateX(4px)'" onmouseout="this.style.transform=''">
+          <span style="font-size:13px;font-weight:600;color:#166534;">🟢 Mudah</span>
+          <span style="font-size:12px;color:#16a34a;font-weight:700;">+10 Poin</span>
+        </button>
+        <button onclick="startQuiz('medium')" style="display:flex;justify-content:space-between;align-items:center;padding:12px 16px;border-radius:12px;border:1.5px solid #fef08a;background:#fef9c3;cursor:pointer;font-family:inherit;transition:transform 0.15s;" onmouseover="this.style.transform='translateX(4px)'" onmouseout="this.style.transform=''">
+          <span style="font-size:13px;font-weight:600;color:#854d0e;">🟡 Sedang</span>
+          <span style="font-size:12px;color:#ca8a04;font-weight:700;">+20 Poin</span>
+        </button>
+        <button onclick="startQuiz('hard')" style="display:flex;justify-content:space-between;align-items:center;padding:12px 16px;border-radius:12px;border:1.5px solid #fecaca;background:#fee2e2;cursor:pointer;font-family:inherit;transition:transform 0.15s;" onmouseover="this.style.transform='translateX(4px)'" onmouseout="this.style.transform=''">
+          <span style="font-size:13px;font-weight:600;color:#991b1b;">🔴 Susah</span>
+          <span style="font-size:12px;color:#dc2626;font-weight:700;">+30 Poin</span>
+        </button>
+      </div>
+      <div style="margin-top:12px;font-size:11px;color:#9aa5bd;text-align:center;">Ular berhenti sementara — ambil napas dulu 😄</div>
+    </div>
+    <!-- Question Area -->
+    <div id="quizQuestion" style="padding:1.25rem;display:none;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+        <span id="quizDiffBadge" style="font-size:11px;font-weight:600;padding:3px 10px;border-radius:10px;"></span>
+        <span id="quizTimer" style="font-size:13px;font-weight:700;color:#2563eb;"></span>
+      </div>
+      <div id="quizQuestionText" style="font-size:13px;font-weight:600;color:#1a1a2e;line-height:1.65;margin-bottom:1rem;min-height:48px;"></div>
+      <div id="quizOptions" style="display:flex;flex-direction:column;gap:8px;"></div>
+    </div>
+    <!-- Result Area -->
+    <div id="quizResult" style="padding:1.5rem;text-align:center;display:none;">
+      <div id="quizResultIcon" style="font-size:40px;margin-bottom:10px;"></div>
+      <div id="quizResultTitle" style="font-size:15px;font-weight:700;color:#1a1a2e;margin-bottom:5px;"></div>
+      <div id="quizResultDesc" style="font-size:12px;color:#7a86a1;margin-bottom:16px;line-height:1.6;"></div>
+      <button onclick="closeQuiz()" style="padding:10px 28px;background:#2563eb;color:#fff;border:none;border-radius:10px;font-size:13px;font-weight:600;font-family:inherit;cursor:pointer;">Lanjut Main! 🐍</button>
+    </div>
+  </div>
+</div>
+
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
   import { getDatabase, ref, get, set, onValue } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
@@ -553,7 +611,7 @@
     const sub  = document.getElementById('accordionSub');
     bar.classList.toggle('open', gameOpen);
     body.classList.toggle('open', gameOpen);
-    sub.textContent = gameOpen ? 'Snake — klik untuk tutup' : 'Snake — klik untuk buka';
+    sub.textContent = gameOpen ? 'Smart Snake — klik untuk tutup' : 'Quiz + Snake — klik untuk buka';
     if (!gameOpen && running) {
       clearInterval(gameLoop);
       running = false;
@@ -593,7 +651,7 @@
   onValue(ref(db, 'leaderboard'), snap => renderLeaderboard(snap.val()),
     err => console.error('Firebase read error:', err));
 
-  // ── Snake Game ──
+  // ── Smart Snake Game ──
   const canvas = document.getElementById('snakeCanvas');
   const ctx    = canvas.getContext('2d');
   const GRID   = 20;
@@ -601,6 +659,183 @@
 
   let snake, dir, nextDir, food, score, highScore = 0, gameLoop, running = false;
   let currentPlayerName = '';
+  let appleCount = 0;          // total apples eaten this session
+  let quizPending = false;     // game paused for quiz
+  let quizTimerInterval = null;
+
+  // ── Quiz Bank ──
+  const quizBank = {
+    easy: [
+      { q:"Jika hari ini Rabu, dua hari lagi adalah hari apa?", opts:["Kamis","Jumat","Sabtu","Minggu"], a:1 },
+      { q:"Manakah yang merupakan bilangan prima?", opts:["9","15","17","21"], a:2 },
+      { q:"Jika 1 lusin = 12 buah, berapa buah 3 lusin?", opts:["24","30","36","48"], a:2 },
+      { q:"Kata 'BUKU' jika dibaca terbalik menjadi?", opts:["UKUB","KUBУ","UKBU","BUKU"], a:0 },
+      { q:"Berapa hasil dari 15% × 200?", opts:["20","25","30","35"], a:2 },
+      { q:"Manakah yang bukan merupakan hari kerja ASN pada umumnya?", opts:["Senin","Rabu","Jumat","Sabtu"], a:3 },
+      { q:"Jika A lebih tua dari B, dan B lebih tua dari C, maka siapa yang termuda?", opts:["A","B","C","Sama"], a:2 },
+      { q:"Berapa jumlah sisi pada sebuah segitiga?", opts:["2","3","4","5"], a:1 },
+      { q:"Apa lawan kata dari 'transparan'?", opts:["Bening","Tembus cahaya","Buram","Jernih"], a:2 },
+      { q:"Jika kecepatan 60 km/jam, berapa jarak yang ditempuh dalam 30 menit?", opts:["20 km","30 km","40 km","60 km"], a:1 },
+      { q:"Manakah yang termasuk bilangan genap?", opts:["11","13","16","17"], a:2 },
+      { q:"Satu jam sama dengan berapa menit?", opts:["30","45","60","90"], a:2 },
+      { q:"Jika X = 5, maka 3X + 2 = ?", opts:["13","15","17","19"], a:2 },
+      { q:"Huruf vokal dalam kata 'PELATIHAN' berjumlah?", opts:["3","4","5","6"], a:1 },
+      { q:"Manakah pecahan yang nilainya paling besar?", opts:["1/2","1/3","1/4","1/5"], a:0 },
+      { q:"Jika sebuah persegi memiliki sisi 4 cm, maka luasnya adalah?", opts:["8 cm²","12 cm²","16 cm²","20 cm²"], a:2 },
+      { q:"Antonim dari kata 'efisien' adalah?", opts:["Hemat","Produktif","Boros","Cepat"], a:2 },
+      { q:"Berapakah 25% dari 80?", opts:["15","20","25","30"], a:1 },
+      { q:"Jika ada 5 baris kursi dan setiap baris ada 8 kursi, berapa total kursi?", opts:["35","40","45","50"], a:1 },
+      { q:"Kata mana yang merupakan sinonim dari 'kompeten'?", opts:["Lambat","Mampu","Pasif","Gagal"], a:1 },
+    ],
+    medium: [
+      { q:"Sebuah deret: 2, 4, 8, 16, __ . Bilangan berikutnya adalah?", opts:["24","28","32","36"], a:2 },
+      { q:"Jika semua A adalah B, dan semua B adalah C, maka…?", opts:["Semua C adalah A","Semua A adalah C","Semua B adalah A","Tidak bisa disimpulkan"], a:1 },
+      { q:"Sebuah proyek dikerjakan 5 orang dalam 10 hari. Jika dikerjakan 10 orang, selesai dalam berapa hari?", opts:["3","5","7","8"], a:1 },
+      { q:"Deret: 3, 6, 11, 18, 27, __ . Bilangan berikutnya?", opts:["36","38","40","42"], a:1 },
+      { q:"Jika KODE = 12-15-4-5, maka BUDI = ?", opts:["2-21-4-9","1-20-3-8","2-15-4-9","3-21-5-9"], a:0 },
+      { q:"Rata-rata nilai 5 siswa adalah 70. Jika satu siswa mendapat 90, rata-rata 4 siswa lainnya adalah?", opts:["62,5","65","67,5","70"], a:1 },
+      { q:"Manakah yang BERBEDA dari pola berikut: 16, 25, 36, 48, 64?", opts:["16","25","48","64"], a:2 },
+      { q:"Sebuah roda berputar 3 kali per detik. Dalam 1 menit, berapa kali roda berputar?", opts:["120","150","180","200"], a:2 },
+      { q:"Jika 'MEJA' dikodekan 'NFKB', maka 'KURSI' dikodekan?", opts:["LVSTJ","LVRSJ","LVSJI","JTSHK"], a:0 },
+      { q:"Pak Andi lebih tua dari Bu Bela. Bu Bela lebih muda dari Pak Candra. Pak Candra lebih tua dari Pak Andi. Siapa yang paling tua?", opts:["Pak Andi","Bu Bela","Pak Candra","Tidak bisa ditentukan"], a:2 },
+      { q:"Deret: 1, 1, 2, 3, 5, 8, __ . Bilangan berikutnya?", opts:["11","12","13","14"], a:2 },
+      { q:"Jika harga barang naik 20% lalu turun 20%, harga akhir dibanding harga awal?", opts:["Sama","Turun 4%","Naik 4%","Turun 2%"], a:1 },
+      { q:"Sebuah kolam diisi air oleh keran A dalam 4 jam, keran B dalam 6 jam. Jika keduanya dibuka bersamaan, kolam penuh dalam berapa jam?", opts:["2 jam","2,4 jam","3 jam","3,5 jam"], a:1 },
+      { q:"Kata 'REFORMASI' memiliki berapa huruf berbeda (unik)?", opts:["7","8","9","10"], a:1 },
+      { q:"Jika hari ini Jumat, 100 hari lagi adalah hari apa?", opts:["Senin","Selasa","Rabu","Kamis"], a:0 },
+      { q:"Sebuah deret: 100, 90, 81, 73, 66, __ . Selanjutnya?", opts:["58","59","60","61"], a:2 },
+      { q:"Manakah kesimpulan yang VALID? Semua peserta lulus. Budi adalah peserta.", opts:["Budi pasti lulus","Budi mungkin lulus","Budi tidak lulus","Tidak bisa disimpulkan"], a:0 },
+      { q:"Jika nilai rata-rata 4 angka adalah 25, dan tiga angka pertama adalah 20, 25, 30, angka keempat adalah?", opts:["20","25","30","35"], a:1 },
+      { q:"Pola gambar: ○ □ △ ○ □ △ ○ __ . Selanjutnya?", opts:["○","□","△","◇"], a:1 },
+      { q:"Sebuah kantor memiliki 3 printer. Printer A mencetak 30 hlm/menit, B 20 hlm/menit, C 10 hlm/menit. Berapa halaman dalam 5 menit jika ketiga printer berjalan?", opts:["250","300","350","400"], a:1 },
+    ],
+    hard: [
+      { q:"Jika p → q BENAR, dan q SALAH, maka p…?", opts:["Pasti benar","Pasti salah","Mungkin benar","Tidak dapat ditentukan"], a:1 },
+      { q:"Tiga kotak berisi bola merah (M), biru (B), dan campuran (C). Label semua kotak SALAH. Kotak berlabel M diambil satu bola: merah. Kotak berlabel C berisi?", opts:["Merah saja","Biru saja","Campuran","Tidak dapat ditentukan"], a:1 },
+      { q:"Deret: 2, 3, 5, 7, 11, 13, __ . Pola deret ini adalah?", opts:["+1, +2, +2...","Bilangan prima","Fibonacci mod 3","Bilangan ganjil prima"], a:1 },
+      { q:"Jika X² + Y² = 25 dan XY = 12, maka (X+Y)² = ?", opts:["37","49","25","144"], a:1 },
+      { q:"5 karyawan menyelesaikan 5 tugas dalam 5 hari. Berapa hari untuk 10 karyawan menyelesaikan 10 tugas?", opts:["5","10","2,5","20"], a:0 },
+      { q:"Seorang pedagang menjual dengan untung 25%. Jika harga jual Rp 500.000, berapa harga belinya?", opts:["Rp 375.000","Rp 400.000","Rp 425.000","Rp 450.000"], a:1 },
+      { q:"Dalam sebuah kompetisi, P mengalahkan Q, R mengalahkan S, Q mengalahkan R. Siapa yang terkuat?", opts:["P","Q","R","S"], a:0 },
+      { q:"Berapa banyak cara menyusun 3 huruf dari kata 'ABCD' tanpa pengulangan?", opts:["12","24","36","64"], a:1 },
+      { q:"Sebuah jam menunjukkan pukul 15:00. Berapakah sudut antara jarum panjang dan pendek?", opts:["60°","75°","90°","120°"], a:2 },
+      { q:"Jika semua manajer adalah pemimpin, sebagian pemimpin adalah inovatif, maka…?", opts:["Semua manajer inovatif","Sebagian manajer mungkin inovatif","Tidak ada manajer yang inovatif","Semua pemimpin adalah manajer"], a:1 },
+      { q:"Deret: 1, 8, 27, 64, __ . Bilangan berikutnya?", opts:["100","125","216","144"], a:1 },
+      { q:"Jika harga saham naik 50% lalu turun 33,33%, perubahan akhir adalah?", opts:["Naik sedikit","Turun sedikit","Tetap sama","Naik banyak"], a:2 },
+      { q:"Seorang ASN bertugas di 3 kota berbeda dalam satu minggu: Jakarta, Bandung, Surabaya. Berapa kemungkinan urutan kota yang bisa dikunjungi?", opts:["3","6","9","12"], a:1 },
+      { q:"Jika kata 'AKUNTABILITAS' memiliki pola pengkodean A=1, B=2, dst., berapa total nilai huruf vokalnya?", opts:["48","51","55","60"], a:1 },
+      { q:"Sebuah tangki bocor kehilangan 1/6 isinya setiap jam. Setelah 3 jam, sisa air adalah berapa persen dari semula?", opts:["57,87%","58,57%","60%","62,5%"], a:0 },
+      { q:"Jika KOMPETENSI dikodekan dengan membalik setiap pasang huruf (K↔O, M↔P, ...), hasil kodenya dimulai dengan?", opts:["OK","MK","OM","KO"], a:0 },
+      { q:"Sebuah proyek butuh 120 hari dengan 30 pekerja. Setelah 40 hari, 10 pekerja keluar. Berapa hari tambahan dibutuhkan?", opts:["100","110","120","80"], a:0 },
+      { q:"Dalam logika: ¬(P ∧ Q) ekuivalen dengan?", opts:["¬P ∧ ¬Q","¬P ∨ ¬Q","P ∨ Q","¬P ∨ Q"], a:1 },
+      { q:"Sebuah gedung 10 lantai punya 4 lift. Berapa kemungkinan 3 orang berbeda naik ke lantai berbeda dengan lift berbeda (urutan tidak penting)?", opts:["24","36","48","64"], a:0 },
+      { q:"Seorang peserta CPNS menjawab 100 soal: benar +4, salah -1, kosong 0. Skor 250 dengan 20 kosong. Berapa soal yang dijawab benar?", opts:["62","64","66","70"], a:2 },
+    ]
+  };
+
+  // Track used indices per difficulty per session
+  let usedIdx = { easy: [], medium: [], hard: [] };
+  let currentDiff = 'easy';
+  let currentQuestion = null;
+  let quizTimeLeft = 0;
+
+  function getRandomQuestion(diff) {
+    const pool = quizBank[diff];
+    let available = pool.map((_,i)=>i).filter(i => !usedIdx[diff].includes(i));
+    if (!available.length) { usedIdx[diff] = []; available = pool.map((_,i)=>i); }
+    const idx = available[Math.floor(Math.random() * available.length)];
+    usedIdx[diff].push(idx);
+    return pool[idx];
+  }
+
+  function openQuizModal() {
+    quizPending = true;
+    clearInterval(gameLoop);
+    document.getElementById('quizAppleCount').textContent = `🍎 ${appleCount} apel dimakan — bonus menanti!`;
+    document.getElementById('quizModal').classList.add('open');
+    document.getElementById('quizDiffPicker').style.display = 'block';
+    document.getElementById('quizQuestion').style.display = 'none';
+    document.getElementById('quizResult').style.display = 'none';
+  }
+
+  function startQuiz(diff) {
+    currentDiff = diff;
+    currentQuestion = getRandomQuestion(diff);
+    document.getElementById('quizDiffPicker').style.display = 'none';
+    document.getElementById('quizQuestion').style.display = 'block';
+    document.getElementById('quizResult').style.display = 'none';
+
+    const badge = document.getElementById('quizDiffBadge');
+    const colors = { easy:['#dcfce7','#166534','🟢 Mudah'], medium:['#fef9c3','#854d0e','🟡 Sedang'], hard:['#fee2e2','#991b1b','🔴 Susah'] };
+    badge.style.background = colors[diff][0];
+    badge.style.color = colors[diff][1];
+    badge.textContent = colors[diff][2];
+
+    document.getElementById('quizQuestionText').textContent = currentQuestion.q;
+
+    const optsEl = document.getElementById('quizOptions');
+    optsEl.innerHTML = '';
+    currentQuestion.opts.forEach((opt, i) => {
+      const btn = document.createElement('button');
+      btn.textContent = `${['A','B','C','D'][i]}. ${opt}`;
+      btn.style.cssText = 'width:100%;padding:10px 14px;border-radius:10px;border:1.5px solid #e2e8f0;background:#f8fafc;font-size:12.5px;font-family:inherit;cursor:pointer;text-align:left;transition:background 0.15s,border-color 0.15s;';
+      btn.onmouseover = () => { btn.style.background='#eff6ff'; btn.style.borderColor='#bfdbfe'; };
+      btn.onmouseout  = () => { btn.style.background='#f8fafc'; btn.style.borderColor='#e2e8f0'; };
+      btn.onclick = () => answerQuiz(i);
+      optsEl.appendChild(btn);
+    });
+
+    // Timer: easy=30s, medium=25s, hard=20s
+    quizTimeLeft = diff==='easy' ? 30 : diff==='medium' ? 25 : 20;
+    updateTimerDisplay();
+    clearInterval(quizTimerInterval);
+    quizTimerInterval = setInterval(() => {
+      quizTimeLeft--;
+      updateTimerDisplay();
+      if (quizTimeLeft <= 0) { clearInterval(quizTimerInterval); answerQuiz(-1); }
+    }, 1000);
+  }
+
+  function updateTimerDisplay() {
+    const el = document.getElementById('quizTimer');
+    el.textContent = `⏱ ${quizTimeLeft}s`;
+    el.style.color = quizTimeLeft <= 5 ? '#dc2626' : '#2563eb';
+  }
+
+  function answerQuiz(chosen) {
+    clearInterval(quizTimerInterval);
+    const pts = { easy:10, medium:20, hard:30 };
+    const correct = chosen === currentQuestion.a;
+    const bonus = correct ? pts[currentDiff] : 0;
+
+    document.getElementById('quizQuestion').style.display = 'none';
+    document.getElementById('quizResult').style.display = 'block';
+
+    if (correct) {
+      score += bonus;
+      document.getElementById('score').textContent = score;
+      if (score > highScore) { highScore = score; document.getElementById('highscore').textContent = highScore; }
+      document.getElementById('quizResultIcon').textContent = '🎉';
+      document.getElementById('quizResultTitle').textContent = `Jawaban Benar! +${bonus} Poin`;
+      document.getElementById('quizResultDesc').textContent = `Luar biasa! Jawaban yang tepat. Kamu mendapatkan bonus ${bonus} poin untuk level ${currentDiff === 'easy' ? 'Mudah' : currentDiff === 'medium' ? 'Sedang' : 'Susah'}.`;
+    } else if (chosen === -1) {
+      document.getElementById('quizResultIcon').textContent = '⏰';
+      document.getElementById('quizResultTitle').textContent = 'Waktu Habis!';
+      document.getElementById('quizResultDesc').textContent = `Waktu menjawab habis. Jawaban yang benar adalah: ${currentQuestion.opts[currentQuestion.a]}. Tidak ada pengurangan poin.`;
+    } else {
+      document.getElementById('quizResultIcon').textContent = '😅';
+      document.getElementById('quizResultTitle').textContent = 'Kurang Tepat!';
+      document.getElementById('quizResultDesc').textContent = `Jawaban yang benar adalah: ${currentQuestion.opts[currentQuestion.a]}. Tidak ada pengurangan poin — tetap semangat!`;
+    }
+  }
+
+  function closeQuiz() {
+    document.getElementById('quizModal').classList.remove('open');
+    quizPending = false;
+    if (running) {
+      gameLoop = setInterval(tick, Math.max(60, 200 - (appleCount * 2)));
+    }
+  }
 
   function resizeCanvas() {
     const w = canvas.offsetWidth;
@@ -614,7 +849,7 @@
     while (snake.some(s => s.x === food.x && s.y === food.y));
   }
   function setDir(x, y) {
-    if (!running) return;
+    if (!running || quizPending) return;
     if (x === -dir.x && y === -dir.y) return;
     nextDir = { x, y };
   }
@@ -635,10 +870,12 @@
 
   function startGame() {
     resizeCanvas();
-    snake   = [{ x:10,y:10 }, { x:9,y:10 }, { x:8,y:10 }];
-    dir     = { x:1, y:0 };
-    nextDir = { x:1, y:0 };
-    score   = 0;
+    snake     = [{ x:10,y:10 }, { x:9,y:10 }, { x:8,y:10 }];
+    dir       = { x:1, y:0 };
+    nextDir   = { x:1, y:0 };
+    score     = 0;
+    appleCount = 0;
+    usedIdx   = { easy: [], medium: [], hard: [] };
     document.getElementById('score').textContent = 0;
     spawnFood();
     document.getElementById('gameOverlay').style.display = 'none';
@@ -648,6 +885,7 @@
   }
 
   function tick() {
+    if (quizPending) return;
     dir = nextDir;
     const head = { x: snake[0].x + dir.x, y: snake[0].y + dir.y };
     if (head.x < 0 || head.x >= GRID || head.y < 0 || head.y >= GRID) return gameOver();
@@ -655,24 +893,36 @@
     snake.unshift(head);
     if (head.x === food.x && head.y === food.y) {
       score += 10;
+      appleCount++;
       document.getElementById('score').textContent = score;
       if (score > highScore) { highScore = score; document.getElementById('highscore').textContent = highScore; }
       spawnFood();
-      if (score % 10 === 0) { clearInterval(gameLoop); gameLoop = setInterval(tick, Math.max(60, 200 - score * 1.2)); }
+      // Speed up every apple
+      clearInterval(gameLoop);
+      if (appleCount % 5 === 0) {
+        // Trigger quiz after slight delay
+        setTimeout(openQuizModal, 150);
+      } else {
+        gameLoop = setInterval(tick, Math.max(60, 200 - (appleCount * 2)));
+      }
     } else { snake.pop(); }
     draw();
   }
 
   function gameOver() {
     clearInterval(gameLoop);
+    clearInterval(quizTimerInterval);
     running = false;
+    quizPending = false;
     addScore(currentPlayerName, score);
     document.getElementById('overlayIcon').textContent  = '💀';
     document.getElementById('overlayTitle').textContent = 'Game Over!';
-    document.getElementById('overlayDesc').textContent  = `${currentPlayerName} — Skor: ${score}`;
+    document.getElementById('overlayDesc').textContent  = `${currentPlayerName} — Skor: ${score} | 🍎 ${appleCount} apel`;
     document.getElementById('startBtn').textContent     = 'Main Lagi';
     document.getElementById('nameInputWrap').style.display = 'flex';
     document.getElementById('gameOverlay').style.display   = 'flex';
+    // Close quiz if open
+    document.getElementById('quizModal').classList.remove('open');
   }
 
   function drawRoundRect(x, y, w, h, r, fill) {
@@ -750,6 +1000,9 @@
   window.toggleGame       = toggleGame;
   window.handleStartBtn   = handleStartBtn;
   window.setDir           = setDir;
+  window.startQuiz        = startQuiz;
+  window.answerQuiz       = answerQuiz;
+  window.closeQuiz        = closeQuiz;
 </script>
 
 </body>

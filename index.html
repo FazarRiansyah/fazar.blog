@@ -19,7 +19,7 @@
     }
     .page-content { flex: 1; width: 100%; padding: 2rem 3rem 3rem; }
 
-    /* HERO */
+    /* ── HERO ── */
     .hero {
       background: linear-gradient(135deg, #1a4fa0 0%, #2563eb 55%, #1d4ed8 100%);
       border-radius: 20px;
@@ -40,10 +40,7 @@
       background: rgba(255,255,255,0.05);
     }
     .hero h1 { font-size: 34px; font-weight: 700; color: #fff; line-height: 1.25; margin-bottom: 0.9rem; }
-    .hero-desc {
-      font-size: 14.5px; color: rgba(255,255,255,0.75);
-      line-height: 1.75; margin: 0 auto 2rem;
-    }
+    .hero-desc { font-size: 14.5px; color: rgba(255,255,255,0.75); line-height: 1.75; margin: 0 auto 2rem; }
     .btn-white {
       display: inline-block; padding: 11px 30px; font-size: 13px;
       font-family: inherit; font-weight: 600; background: #fff; color: #1d4ed8;
@@ -52,11 +49,8 @@
     }
     .btn-white:hover { opacity: 0.9; transform: translateY(-2px); }
 
-    /* STATS */
-    .stats-row {
-      display: grid; grid-template-columns: repeat(3, 1fr);
-      gap: 14px; margin-bottom: 1.5rem;
-    }
+    /* ── STATS ── */
+    .stats-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-bottom: 1.5rem; }
     .stat-card {
       border-radius: 16px; padding: 1.4rem 1rem; text-align: center;
       border: 0.5px solid #e2e8f0; background: #fff;
@@ -71,7 +65,7 @@
     .stat-card.green .stat-num  { color: #16a34a; }
     .stat-card.orange .stat-num { color: #ea580c; font-size: 18px; }
 
-    /* CARDS */
+    /* ── FEATURE CARDS ── */
     .cards-row { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; margin-bottom: 1.5rem; }
     .feat-card {
       border-radius: 16px; padding: 1.6rem; background: #fff;
@@ -83,7 +77,7 @@
     .feat-card.green { border-top-color: #16a34a; }
     .feat-card.blue  { border-top-color: #2563eb; }
     .feat-card h3 { font-size: 15px; font-weight: 600; color: #1a1a2e; margin-bottom: 0.5rem; }
-    .feat-card p { font-size: 13px; color: #7a86a1; line-height: 1.75; margin-bottom: 1.1rem; text-align: justify; }
+    .feat-card p  { font-size: 13px; color: #7a86a1; line-height: 1.75; margin-bottom: 1.1rem; text-align: justify; }
     .feat-tags { display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 1.1rem; }
     .feat-tag { font-size: 10px; padding: 3px 10px; border-radius: 10px; font-weight: 500; }
     .feat-tag.g { background: #dcfce7; color: #166534; }
@@ -97,25 +91,64 @@
     }
     .card-btn:hover { background: #f4f6fb; border-color: #c7d0e0; transform: translateY(-1px); }
 
-    /* GAME SECTION */
+    /* ── MINI GAME ACCORDION ── */
+    .accordion-bar {
+      display: flex; align-items: center; justify-content: space-between;
+      background: #fff; border: 0.5px solid #e2e8f0;
+      border-radius: 14px; padding: 0.9rem 1.25rem;
+      cursor: pointer; user-select: none;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.04);
+      transition: box-shadow 0.2s, border-color 0.2s, border-radius 0.1s;
+      margin-bottom: 0;
+    }
+    .accordion-bar:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.08); border-color: #c7d0e0; }
+    .accordion-bar.open {
+      border-radius: 14px 14px 0 0;
+      border-bottom-color: #f0f3f8;
+    }
+    .accordion-left { display: flex; align-items: center; gap: 10px; }
+    .accordion-emoji { font-size: 18px; line-height: 1; }
+    .accordion-label { font-size: 13px; font-weight: 600; color: #1a1a2e; }
+    .accordion-sublabel { font-size: 11px; color: #9aa5bd; margin-top: 1px; }
+    .accordion-arrow {
+      font-size: 11px; color: #b0bac9;
+      transition: transform 0.35s ease;
+    }
+    .accordion-bar.open .accordion-arrow { transform: rotate(180deg); }
+
+    .accordion-body {
+      background: #fff;
+      border: 0.5px solid #e2e8f0; border-top: none;
+      border-radius: 0 0 14px 14px;
+      overflow: hidden;
+      max-height: 0;
+      opacity: 0;
+      transition: max-height 0.45s ease, opacity 0.3s ease;
+      margin-bottom: 1.5rem;
+    }
+    .accordion-body.open {
+      max-height: 1400px;
+      opacity: 1;
+    }
+    .accordion-inner { padding: 1.25rem; }
+
+    /* ── GAME LAYOUT ── */
     .game-section {
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 14px;
-      margin-bottom: 1.5rem;
       align-items: start;
     }
     .game-card {
-      border-radius: 16px; padding: 1.5rem; background: #fff;
+      border-radius: 12px; padding: 1.25rem; background: #f8fafc;
       border: 0.5px solid #e2e8f0; border-top: 3px solid #2563eb;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.04);
     }
     .game-header {
       display: flex; justify-content: space-between; align-items: center;
       margin-bottom: 1rem;
     }
     .game-header h3 { font-size: 15px; font-weight: 600; color: #1a1a2e; }
-    .game-header p { font-size: 11px; color: #9aa5bd; margin-top: 2px; }
+    .game-header p  { font-size: 11px; color: #9aa5bd; margin-top: 2px; }
     .score-row { display: flex; gap: 1.25rem; }
     .score-box { text-align: center; }
     .score-label { font-size: 9px; color: #9aa5bd; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 2px; }
@@ -142,6 +175,17 @@
     }
     #startBtn:hover { opacity: 0.85; }
 
+    .name-input-wrap { display: flex; flex-direction: column; align-items: center; gap: 8px; width: 100%; padding: 0 1.5rem; }
+    .name-input-wrap label { font-size: 11px; color: rgba(255,255,255,0.55); letter-spacing: 0.05em; text-transform: uppercase; }
+    #playerNameInput {
+      width: 100%; padding: 9px 14px; border-radius: 8px;
+      border: 1.5px solid rgba(255,255,255,0.2); background: rgba(255,255,255,0.1);
+      color: #fff; font-size: 13px; font-family: inherit; text-align: center;
+      outline: none; transition: border-color 0.2s;
+    }
+    #playerNameInput::placeholder { color: rgba(255,255,255,0.35); }
+    #playerNameInput:focus { border-color: rgba(255,255,255,0.5); background: rgba(255,255,255,0.15); }
+
     .ctrl-pad { display: flex; flex-direction: column; align-items: center; gap: 5px; margin-top: 1rem; }
     .ctrl-row { display: flex; gap: 5px; }
     .ctrl-btn {
@@ -153,14 +197,11 @@
     .ctrl-btn:active { background: #f4f6fb; transform: scale(0.9); }
     .ctrl-btn.empty { border-color: transparent; background: transparent; cursor: default; }
 
-    /* info panel sebelah kanan game */
-    .game-info {
-      display: flex; flex-direction: column; gap: 14px;
-    }
+    /* ── GAME INFO PANEL ── */
+    .game-info { display: flex; flex-direction: column; gap: 12px; }
     .info-card {
-      border-radius: 16px; padding: 1.25rem; background: #fff;
+      border-radius: 12px; padding: 1rem; background: #fff;
       border: 0.5px solid #e2e8f0;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.04);
     }
     .info-card h4 { font-size: 13px; font-weight: 600; color: #1a1a2e; margin-bottom: 0.5rem; }
     .info-card p  { font-size: 12px; color: #7a86a1; line-height: 1.7; }
@@ -170,7 +211,22 @@
       background: #f4f6fb; color: #1a1a2e; border: 1px solid #e2e8f0;
     }
 
-    /* FOOTER */
+    /* ── LEADERBOARD ── */
+    .lb-list { display: flex; flex-direction: column; gap: 6px; margin-top: 0.5rem; }
+    .lb-item {
+      display: flex; align-items: center; gap: 10px;
+      padding: 7px 10px; border-radius: 10px;
+      background: #f8fafc; border: 0.5px solid #e2e8f0; font-size: 12px;
+    }
+    .lb-item.top1 { background: #fffbeb; border-color: #fde68a; }
+    .lb-item.top2 { background: #f8fafc; border-color: #e2e8f0; }
+    .lb-item.top3 { background: #fff7f0; border-color: #fed7aa; }
+    .lb-rank  { font-size: 13px; width: 20px; text-align: center; flex-shrink: 0; }
+    .lb-name  { flex: 1; font-weight: 500; color: #1a1a2e; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .lb-score { font-weight: 700; color: #2563eb; flex-shrink: 0; }
+    .lb-empty { font-size: 12px; color: #b0bac9; text-align: center; padding: 0.75rem 0; }
+
+    /* ── FOOTER ── */
     footer {
       width: 100%; padding: 1.25rem 3rem;
       border-top: 0.5px solid #e2e8f0; background: #fff;
@@ -180,7 +236,7 @@
     .footer-sub   { font-size: 12px; color: #9aa5bd; margin-top: 2px; }
     .footer-copy  { font-size: 12px; color: #b0bac9; }
 
-    /* MODALS */
+    /* ── MODALS ── */
     .modal-overlay {
       display: none; position: fixed; inset: 0;
       background: rgba(0,0,0,0.45); z-index: 999;
@@ -230,35 +286,7 @@
     .contact-option-text strong { display: block; font-size: 13px; font-weight: 600; color: #1a1a2e; }
     .contact-option-text span   { font-size: 11px; color: #7a86a1; }
 
-    /* LEADERBOARD */
-    .lb-list { display: flex; flex-direction: column; gap: 6px; margin-top: 0.5rem; }
-    .lb-item {
-      display: flex; align-items: center; gap: 10px;
-      padding: 7px 10px; border-radius: 10px;
-      background: #f8fafc; border: 0.5px solid #e2e8f0;
-      font-size: 12px; transition: background 0.15s;
-    }
-    .lb-item.top1 { background: #fffbeb; border-color: #fde68a; }
-    .lb-item.top2 { background: #f8fafc; border-color: #e2e8f0; }
-    .lb-item.top3 { background: #fff7f0; border-color: #fed7aa; }
-    .lb-rank { font-size: 13px; width: 20px; text-align: center; flex-shrink: 0; }
-    .lb-name { flex: 1; font-weight: 500; color: #1a1a2e; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .lb-score { font-weight: 700; color: #2563eb; flex-shrink: 0; }
-    .lb-empty { font-size: 12px; color: #b0bac9; text-align: center; padding: 0.75rem 0; }
-
-    /* NAME INPUT in overlay */
-    .name-input-wrap { display: flex; flex-direction: column; align-items: center; gap: 8px; width: 100%; padding: 0 1.5rem; }
-    .name-input-wrap label { font-size: 11px; color: rgba(255,255,255,0.55); letter-spacing: 0.05em; text-transform: uppercase; }
-    #playerNameInput {
-      width: 100%; padding: 9px 14px; border-radius: 8px;
-      border: 1.5px solid rgba(255,255,255,0.2); background: rgba(255,255,255,0.1);
-      color: #fff; font-size: 13px; font-family: inherit; text-align: center;
-      outline: none; transition: border-color 0.2s;
-    }
-    #playerNameInput::placeholder { color: rgba(255,255,255,0.35); }
-    #playerNameInput:focus { border-color: rgba(255,255,255,0.5); background: rgba(255,255,255,0.15); }
-
-    /* RESPONSIVE */
+    /* ── RESPONSIVE ── */
     @media (max-width: 860px) {
       .page-content { padding: 1.5rem; }
       footer { padding: 1.25rem 1.5rem; }
@@ -301,7 +329,7 @@
     </a>
   </div>
 
-  <!-- PORTFOLIO & CV CARDS -->
+  <!-- PORTFOLIO & CV -->
   <div class="cards-row">
     <div class="feat-card green">
       <h3>Portfolio</h3>
@@ -323,83 +351,97 @@
     </div>
   </div>
 
-  <!-- MINI GAME -->
-  <p style="font-size:11px;color:#9aa5bd;text-transform:uppercase;letter-spacing:0.09em;margin-bottom:1rem;font-weight:500;">Mini Game</p>
-  <div class="game-section">
-
-    <!-- LEFT: GAME -->
-    <div class="game-card">
-      <div class="game-header">
-        <div>
-          <h3>🐍 Snake</h3>
-          <p>Arrow keys / WASD untuk bergerak</p>
-        </div>
-        <div class="score-row">
-          <div class="score-box">
-            <div class="score-label">Skor</div>
-            <div class="score-num blue" id="score">0</div>
-          </div>
-          <div class="score-box">
-            <div class="score-label">Tertinggi</div>
-            <div class="score-num green" id="highscore">0</div>
-          </div>
-        </div>
-      </div>
-
-      <div class="canvas-wrap">
-        <canvas id="snakeCanvas"></canvas>
-        <div id="gameOverlay">
-          <div id="overlayIcon">🐍</div>
-          <div id="overlayTitle">Snake Game</div>
-          <div id="overlayDesc">Arrow keys / WASD untuk bergerak</div>
-          <div class="name-input-wrap" id="nameInputWrap">
-            <label>Nama Kamu</label>
-            <input id="playerNameInput" type="text" maxlength="20" placeholder="Masukkan nama..." autocomplete="off" />
-          </div>
-          <button id="startBtn" onclick="handleStartBtn()">Mulai Main</button>
-        </div>
-      </div>
-
-      <div class="ctrl-pad">
-        <button class="ctrl-btn" onclick="setDir(0,-1)">▲</button>
-        <div class="ctrl-row">
-          <button class="ctrl-btn" onclick="setDir(-1,0)">◀</button>
-          <button class="ctrl-btn empty"></button>
-          <button class="ctrl-btn" onclick="setDir(1,0)">▶</button>
-        </div>
-        <button class="ctrl-btn" onclick="setDir(0,1)">▼</button>
+  <!-- MINI GAME ACCORDION -->
+  <div class="accordion-bar" id="accordionBar" onclick="toggleGame()">
+    <div class="accordion-left">
+      <span class="accordion-emoji">🐍</span>
+      <div>
+        <div class="accordion-label">Mini Game</div>
+        <div class="accordion-sublabel" id="accordionSub">Snake — klik untuk buka</div>
       </div>
     </div>
-
-    <!-- RIGHT: INFO -->
-    <div class="game-info">
-      <div class="info-card">
-        <h4>🏆 Leaderboard</h4>
-        <div class="lb-list" id="leaderboardList">
-          <div class="lb-empty">Belum ada skor. Yuk main!</div>
-        </div>
-      </div>
-      <div class="info-card">
-        <h4>Cara Bermain</h4>
-        <p>Arahkan ular untuk memakan makanan 🍎 dan hindari menabrak tembok atau tubuhmu sendiri.</p>
-        <div class="key-list">
-          <span class="key-badge">↑ ↓ ← →</span>
-          <span class="key-badge">W A S D</span>
-        </div>
-      </div>
-      <div class="info-card">
-        <h4>Tips</h4>
-        <p>Semakin banyak makanan dimakan, semakin cepat ularnya. Rencanakan jalurmu dengan cermat agar tidak terjebak!</p>
-      </div>
-      <div class="info-card">
-        <h4>Penilaian</h4>
-        <p>Setiap makanan bernilai <strong>+10 poin</strong>. Skor tertinggi tersimpan selama sesi bermain.</p>
-      </div>
-    </div>
-
+    <span class="accordion-arrow">▼</span>
   </div>
 
-</div>
+  <div class="accordion-body" id="accordionBody">
+    <div class="accordion-inner">
+      <div class="game-section">
+
+        <!-- LEFT: GAME CANVAS -->
+        <div class="game-card">
+          <div class="game-header">
+            <div>
+              <h3>🐍 Snake</h3>
+              <p>Arrow keys / WASD untuk bergerak</p>
+            </div>
+            <div class="score-row">
+              <div class="score-box">
+                <div class="score-label">Skor</div>
+                <div class="score-num blue" id="score">0</div>
+              </div>
+              <div class="score-box">
+                <div class="score-label">Tertinggi</div>
+                <div class="score-num green" id="highscore">0</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="canvas-wrap">
+            <canvas id="snakeCanvas"></canvas>
+            <div id="gameOverlay">
+              <div id="overlayIcon">🐍</div>
+              <div id="overlayTitle">Snake Game</div>
+              <div id="overlayDesc">Arrow keys / WASD untuk bergerak</div>
+              <div class="name-input-wrap" id="nameInputWrap">
+                <label>Nama Kamu</label>
+                <input id="playerNameInput" type="text" maxlength="20" placeholder="Masukkan nama..." autocomplete="off" />
+              </div>
+              <button id="startBtn" onclick="handleStartBtn()">Mulai Main</button>
+            </div>
+          </div>
+
+          <div class="ctrl-pad">
+            <button class="ctrl-btn" onclick="setDir(0,-1)">▲</button>
+            <div class="ctrl-row">
+              <button class="ctrl-btn" onclick="setDir(-1,0)">◀</button>
+              <button class="ctrl-btn empty"></button>
+              <button class="ctrl-btn" onclick="setDir(1,0)">▶</button>
+            </div>
+            <button class="ctrl-btn" onclick="setDir(0,1)">▼</button>
+          </div>
+        </div>
+
+        <!-- RIGHT: INFO PANEL -->
+        <div class="game-info">
+          <div class="info-card">
+            <h4>🏆 Leaderboard</h4>
+            <div class="lb-list" id="leaderboardList">
+              <div class="lb-empty">Belum ada skor. Yuk main!</div>
+            </div>
+          </div>
+          <div class="info-card">
+            <h4>Cara Bermain</h4>
+            <p>Arahkan ular untuk memakan makanan 🍎 dan hindari menabrak tembok atau tubuhmu sendiri.</p>
+            <div class="key-list">
+              <span class="key-badge">↑ ↓ ← →</span>
+              <span class="key-badge">W A S D</span>
+            </div>
+          </div>
+          <div class="info-card">
+            <h4>Tips</h4>
+            <p>Semakin banyak makanan dimakan, semakin cepat ularnya. Rencanakan jalurmu dengan cermat!</p>
+          </div>
+          <div class="info-card">
+            <h4>Penilaian</h4>
+            <p>Setiap makanan bernilai <strong>+10 poin</strong>. Skor tertinggi per nama tersimpan di leaderboard global.</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+</div><!-- end page-content -->
 
 <!-- FOOTER -->
 <footer>
@@ -472,9 +514,26 @@
 </div>
 
 <script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+  import { getDatabase, ref, get, set, onValue } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+
+  // ── Firebase ──
+  const app = initializeApp({
+    apiKey: "AIzaSyDrx9zz8wIOFktxlAHun7z4ttCx5-o7mo4",
+    authDomain: "tester-c9106.firebaseapp.com",
+    databaseURL: "https://tester-c9106.firebaseio.com",
+    projectId: "tester-c9106",
+    storageBucket: "tester-c9106.firebasestorage.app",
+    messagingSenderId: "18341905173",
+    appId: "1:18341905173:web:81f8323a41e1e8d40a1f1c"
+  });
+  const db = getDatabase(app);
+
   // ── Modal functions ──
-  function showDevNotice()  { document.getElementById('devModal').classList.add('open'); }
-  function closeDevNotice() { document.getElementById('devModal').classList.remove('open'); }
+  function showDevNotice()    { document.getElementById('devModal').classList.add('open'); }
+  function closeDevNotice()   { document.getElementById('devModal').classList.remove('open'); }
+  function openContactModal() { document.getElementById('contactModal').classList.add('open'); }
+  function closeContact()     { document.getElementById('contactModal').classList.remove('open'); }
   function openPDF(url, title) {
     document.getElementById('pdfModalTitle').textContent = title;
     document.getElementById('pdfFrame').src = url;
@@ -484,117 +543,94 @@
     document.getElementById('pdfModal').classList.remove('open');
     document.getElementById('pdfFrame').src = '';
   }
-  function openContactModal() { document.getElementById('contactModal').classList.add('open'); }
-  function closeContact()     { document.getElementById('contactModal').classList.remove('open'); }
 
-  // ── Snake Game ──
-  const canvas = document.getElementById('snakeCanvas');
-  const ctx    = canvas.getContext('2d');
-
-  function resizeCanvas() {
-    const w = canvas.offsetWidth;
-    canvas.width  = w;
-    canvas.height = w;
+  // ── Accordion ──
+  let gameOpen = false;
+  function toggleGame() {
+    gameOpen = !gameOpen;
+    const bar  = document.getElementById('accordionBar');
+    const body = document.getElementById('accordionBody');
+    const sub  = document.getElementById('accordionSub');
+    bar.classList.toggle('open', gameOpen);
+    body.classList.toggle('open', gameOpen);
+    sub.textContent = gameOpen ? 'Snake — klik untuk tutup' : 'Snake — klik untuk buka';
+    if (!gameOpen && running) {
+      clearInterval(gameLoop);
+      running = false;
+      document.getElementById('gameOverlay').style.display = 'flex';
+    }
+    if (gameOpen) {
+      setTimeout(() => { resizeCanvas(); if (!running) drawIdleScreen(); }, 50);
+    }
   }
-  resizeCanvas();
-  window.addEventListener('resize', () => { resizeCanvas(); if (!running) drawIdleScreen(); });
-
-  const GRID = 20;
-  function CELL() { return canvas.width / GRID; }
-
-  let snake, dir, nextDir, food, score, highScore = 0, gameLoop, running = false;
-  let currentPlayerName = '';
-
-  // ── Firebase Setup ──
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-  import { getDatabase, ref, get, set, onValue } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
-
-  const firebaseConfig = {
-    apiKey: "AIzaSyDrx9zz8wIOFktxlAHun7z4ttCx5-o7mo4",
-    authDomain: "tester-c9106.firebaseapp.com",
-    databaseURL: "https://tester-c9106.firebaseio.com",
-    projectId: "tester-c9106",
-    storageBucket: "tester-c9106.firebasestorage.app",
-    messagingSenderId: "18341905173",
-    appId: "1:18341905173:web:81f8323a41e1e8d40a1f1c"
-  };
-  const app = initializeApp(firebaseConfig);
-  const db  = getDatabase(app);
 
   // ── Leaderboard ──
   function sanitizeKey(name) {
-    // Firebase key cannot contain . # $ / [ ]
-    return name.replace(/[.#$\/\[\]]/g, '_').substring(0, 30);
+    return name.replace(/[.#$/\[\]]/g, '_').substring(0, 30);
   }
-
   function addScore(name, pts) {
     if (pts <= 0) return;
-    const key     = sanitizeKey(name || 'Anonim');
+    const key      = sanitizeKey(name || 'Anonim');
     const entryRef = ref(db, 'leaderboard/' + key);
     get(entryRef).then(snap => {
       const existing = snap.exists() ? snap.val().score : 0;
-      if (pts > existing) {
-        set(entryRef, { name: name || 'Anonim', score: pts });
-      }
+      if (pts > existing) set(entryRef, { name: name || 'Anonim', score: pts });
     }).catch(err => console.error('Firebase write error:', err));
   }
-
   function renderLeaderboard(data) {
     const el     = document.getElementById('leaderboardList');
     const medals = ['🥇','🥈','🥉'];
-    if (!data) {
-      el.innerHTML = '<div class="lb-empty">Belum ada skor. Yuk main!</div>';
-      return;
-    }
-    const entries = Object.values(data)
-      .sort((a, b) => b.score - a.score)
-      .slice(0, 5);
-    if (!entries.length) {
-      el.innerHTML = '<div class="lb-empty">Belum ada skor. Yuk main!</div>';
-      return;
-    }
-    el.innerHTML = entries.map((e, i) => `
+    if (!data) { el.innerHTML = '<div class="lb-empty">Belum ada skor. Yuk main!</div>'; return; }
+    const entries = Object.values(data).sort((a,b) => b.score - a.score).slice(0, 5);
+    if (!entries.length) { el.innerHTML = '<div class="lb-empty">Belum ada skor. Yuk main!</div>'; return; }
+    el.innerHTML = entries.map((e,i) => `
       <div class="lb-item ${i===0?'top1':i===1?'top2':i===2?'top3':''}">
         <span class="lb-rank">${medals[i] || (i+1)}</span>
         <span class="lb-name">${e.name}</span>
         <span class="lb-score">${e.score}</span>
       </div>`).join('');
   }
+  onValue(ref(db, 'leaderboard'), snap => renderLeaderboard(snap.val()),
+    err => console.error('Firebase read error:', err));
 
-  // Listen real-time — updates semua device otomatis
-  onValue(ref(db, 'leaderboard'), snap => {
-    renderLeaderboard(snap.val());
-  }, err => console.error('Firebase read error:', err));
+  // ── Snake Game ──
+  const canvas = document.getElementById('snakeCanvas');
+  const ctx    = canvas.getContext('2d');
+  const GRID   = 20;
+  function CELL() { return canvas.width / GRID; }
 
-  // ── Name input handling ──
-  function handleStartBtn() {
-    const nameInput = document.getElementById('playerNameInput');
-    const name = nameInput.value.trim();
-    if (!name) {
-      nameInput.style.borderColor = 'rgba(239,68,68,0.7)';
-      nameInput.placeholder = 'Nama wajib diisi!';
-      nameInput.focus();
-      setTimeout(() => {
-        nameInput.style.borderColor = '';
-        nameInput.placeholder = 'Masukkan nama...';
-      }, 1500);
-      return;
-    }
-    currentPlayerName = name;
-    startGame();
+  let snake, dir, nextDir, food, score, highScore = 0, gameLoop, running = false;
+  let currentPlayerName = '';
+
+  function resizeCanvas() {
+    const w = canvas.offsetWidth;
+    canvas.width = canvas.height = w;
   }
+  window.addEventListener('resize', () => { resizeCanvas(); if (!running) drawIdleScreen(); });
 
   function rand() { return Math.floor(Math.random() * GRID); }
-
   function spawnFood() {
     do { food = { x: rand(), y: rand() }; }
     while (snake.some(s => s.x === food.x && s.y === food.y));
   }
-
   function setDir(x, y) {
     if (!running) return;
     if (x === -dir.x && y === -dir.y) return;
     nextDir = { x, y };
+  }
+
+  function handleStartBtn() {
+    const input = document.getElementById('playerNameInput');
+    const name  = input.value.trim();
+    if (!name) {
+      input.style.borderColor = 'rgba(239,68,68,0.7)';
+      input.placeholder = 'Nama wajib diisi!';
+      input.focus();
+      setTimeout(() => { input.style.borderColor = ''; input.placeholder = 'Masukkan nama...'; }, 1500);
+      return;
+    }
+    currentPlayerName = name;
+    startGame();
   }
 
   function startGame() {
@@ -635,89 +671,67 @@
     document.getElementById('overlayTitle').textContent = 'Game Over!';
     document.getElementById('overlayDesc').textContent  = `${currentPlayerName} — Skor: ${score}`;
     document.getElementById('startBtn').textContent     = 'Main Lagi';
-    // Show name input again for next round (keep name prefilled)
     document.getElementById('nameInputWrap').style.display = 'flex';
-    document.getElementById('gameOverlay').style.display = 'flex';
+    document.getElementById('gameOverlay').style.display   = 'flex';
   }
 
   function drawRoundRect(x, y, w, h, r, fill) {
-    ctx.beginPath();
-    ctx.roundRect(x, y, w, h, r);
-    ctx.fillStyle = fill;
-    ctx.fill();
+    ctx.beginPath(); ctx.roundRect(x, y, w, h, r);
+    ctx.fillStyle = fill; ctx.fill();
   }
 
   function draw() {
     const C = CELL();
     ctx.fillStyle = '#0f172a';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-    // grid
-    ctx.strokeStyle = 'rgba(255,255,255,0.03)';
-    ctx.lineWidth = 0.5;
+    ctx.strokeStyle = 'rgba(255,255,255,0.03)'; ctx.lineWidth = 0.5;
     for (let i = 0; i <= GRID; i++) {
       ctx.beginPath(); ctx.moveTo(i*C,0); ctx.lineTo(i*C,canvas.height); ctx.stroke();
       ctx.beginPath(); ctx.moveTo(0,i*C); ctx.lineTo(canvas.width,i*C); ctx.stroke();
     }
-
-    // food glow
-    const fx = food.x * C + C/2, fy = food.y * C + C/2;
+    const fx = food.x*C + C/2, fy = food.y*C + C/2;
     const glow = ctx.createRadialGradient(fx,fy,2,fx,fy,C/2);
-    glow.addColorStop(0,'rgba(249,115,22,0.45)');
-    glow.addColorStop(1,'rgba(249,115,22,0)');
+    glow.addColorStop(0,'rgba(249,115,22,0.45)'); glow.addColorStop(1,'rgba(249,115,22,0)');
     ctx.beginPath(); ctx.arc(fx,fy,C/2,0,Math.PI*2); ctx.fillStyle=glow; ctx.fill();
     drawRoundRect(food.x*C+3, food.y*C+3, C-6, C-6, 4, '#f97316');
     ctx.fillStyle='rgba(255,255,255,0.22)';
     ctx.beginPath(); ctx.ellipse(fx-2, food.y*C+6, 3, 2, -0.5, 0, Math.PI*2); ctx.fill();
-
-    // snake
-    snake.forEach((seg, i) => {
-      const x = seg.x*C, y = seg.y*C;
-      const pad = i===0 ? 1 : 2, size = C - pad*2;
-      const g = ctx.createLinearGradient(x,y,x+C,y+C);
-      if (i===0) { g.addColorStop(0,'#60a5fa'); g.addColorStop(1,'#2563eb'); }
-      else       { g.addColorStop(0,'#34d399'); g.addColorStop(1,'#059669'); }
-      drawRoundRect(x+pad, y+pad, size, size, i===0?6:4, g);
-
-      // eyes
-      if (i===0) {
-        const ex  = dir.x===1 ? x+C-8  : dir.x===-1 ? x+5  : x+C/2-5;
-        const ey  = dir.y===1 ? y+C-8  : dir.y===-1 ? y+5  : y+C/2-5;
-        const ex2 = dir.x!==0 ? ex      : ex+10;
-        const ey2 = dir.y!==0 ? ey+8   : ey;
+    snake.forEach((seg,i) => {
+      const x=seg.x*C, y=seg.y*C, pad=i===0?1:2, size=C-pad*2;
+      const g=ctx.createLinearGradient(x,y,x+C,y+C);
+      if(i===0){g.addColorStop(0,'#60a5fa');g.addColorStop(1,'#2563eb');}
+      else      {g.addColorStop(0,'#34d399');g.addColorStop(1,'#059669');}
+      drawRoundRect(x+pad,y+pad,size,size,i===0?6:4,g);
+      if(i===0){
+        const ex=dir.x===1?x+C-8:dir.x===-1?x+5:x+C/2-5;
+        const ey=dir.y===1?y+C-8:dir.y===-1?y+5:y+C/2-5;
+        const ex2=dir.x!==0?ex:ex+10, ey2=dir.y!==0?ey+8:ey;
         ctx.fillStyle='#fff';
-        ctx.beginPath(); ctx.arc(ex,ey,2.5,0,Math.PI*2); ctx.fill();
-        ctx.beginPath(); ctx.arc(ex2,ey2,2.5,0,Math.PI*2); ctx.fill();
+        ctx.beginPath();ctx.arc(ex,ey,2.5,0,Math.PI*2);ctx.fill();
+        ctx.beginPath();ctx.arc(ex2,ey2,2.5,0,Math.PI*2);ctx.fill();
         ctx.fillStyle='#0f172a';
-        ctx.beginPath(); ctx.arc(ex+0.5,ey+0.5,1.2,0,Math.PI*2); ctx.fill();
-        ctx.beginPath(); ctx.arc(ex2+0.5,ey2+0.5,1.2,0,Math.PI*2); ctx.fill();
+        ctx.beginPath();ctx.arc(ex+0.5,ey+0.5,1.2,0,Math.PI*2);ctx.fill();
+        ctx.beginPath();ctx.arc(ex2+0.5,ey2+0.5,1.2,0,Math.PI*2);ctx.fill();
       }
     });
   }
 
   function drawIdleScreen() {
     const C = CELL();
-    ctx.fillStyle = '#0f172a';
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-    ctx.strokeStyle = 'rgba(255,255,255,0.03)';
-    ctx.lineWidth = 0.5;
-    for (let i = 0; i <= GRID; i++) {
-      ctx.beginPath(); ctx.moveTo(i*C,0); ctx.lineTo(i*C,canvas.height); ctx.stroke();
-      ctx.beginPath(); ctx.moveTo(0,i*C); ctx.lineTo(canvas.width,i*C); ctx.stroke();
+    ctx.fillStyle = '#0f172a'; ctx.fillRect(0,0,canvas.width,canvas.height);
+    ctx.strokeStyle='rgba(255,255,255,0.03)'; ctx.lineWidth=0.5;
+    for(let i=0;i<=GRID;i++){
+      ctx.beginPath();ctx.moveTo(i*C,0);ctx.lineTo(i*C,canvas.height);ctx.stroke();
+      ctx.beginPath();ctx.moveTo(0,i*C);ctx.lineTo(canvas.width,i*C);ctx.stroke();
     }
   }
 
-  // keyboard
   document.addEventListener('keydown', e => {
-    // Allow typing in name input without triggering game controls
     if (document.activeElement === document.getElementById('playerNameInput')) {
       if (e.key === 'Enter') handleStartBtn();
       return;
     }
-    const map = {
-      ArrowUp:'u', w:'u', ArrowDown:'d', s:'d',
-      ArrowLeft:'l', a:'l', ArrowRight:'r', d:'r'
-    };
+    const map = { ArrowUp:'u', w:'u', ArrowDown:'d', s:'d', ArrowLeft:'l', a:'l', ArrowRight:'r', d:'r' };
     if (!map[e.key]) return;
     e.preventDefault();
     if (map[e.key]==='u') setDir(0,-1);
@@ -726,17 +740,16 @@
     if (map[e.key]==='r') setDir(1, 0);
   });
 
-  drawIdleScreen();
-
-  // Expose ke global (diperlukan karena type="module")
-  window.showDevNotice  = showDevNotice;
-  window.closeDevNotice = closeDevNotice;
-  window.openPDF        = openPDF;
-  window.closePDF       = closePDF;
+  // Expose to global scope
+  window.showDevNotice    = showDevNotice;
+  window.closeDevNotice   = closeDevNotice;
   window.openContactModal = openContactModal;
-  window.closeContact   = closeContact;
-  window.handleStartBtn = handleStartBtn;
-  window.setDir         = setDir;
+  window.closeContact     = closeContact;
+  window.openPDF          = openPDF;
+  window.closePDF         = closePDF;
+  window.toggleGame       = toggleGame;
+  window.handleStartBtn   = handleStartBtn;
+  window.setDir           = setDir;
 </script>
 
 </body>

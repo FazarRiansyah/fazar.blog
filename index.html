@@ -4,7 +4,6 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Fazar Site</title>
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>👨‍🏫</text></svg>">
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -68,8 +67,9 @@
       font-size: 14.5px;
       color: rgba(255,255,255,0.75);
       line-height: 1.75;
-      max-width: 480px;
+      max-width: 600px;
       margin: 0 auto 2rem;
+      white-space: nowrap;
     }
     .btn-white {
       display: inline-block;
@@ -337,8 +337,7 @@
           <span class="feat-tag g">Karya</span>
           <span class="feat-tag g">Proyek</span>
         </div>
-        <!-- Ganti URL dengan link Google Drive PDF Portfolio kamu -->
-        <button class="card-btn" onclick="openPDF('GANTI_DENGAN_LINK_GOOGLE_DRIVE_PDF_PORTFOLIO', 'Portfolio')">Lihat Portfolio</button>
+        <button class="card-btn" onclick="showDevNotice()">Lihat Portfolio</button>
       </div>
 
       <div class="feat-card blue">
@@ -348,8 +347,7 @@
           <span class="feat-tag b">Pendidikan</span>
           <span class="feat-tag b">Pengalaman</span>
         </div>
-        <!-- Ganti URL dengan link Google Drive PDF CV kamu -->
-        <button class="card-btn" onclick="openPDF('GANTI_DENGAN_LINK_GOOGLE_DRIVE_PDF_CV', 'CV')">Lihat CV</button>
+        <button class="card-btn" onclick="showDevNotice()">Lihat CV</button>
       </div>
     </div>
 
@@ -363,6 +361,16 @@
     </div>
     <p class="footer-copy">© 2025 Fazar Site. All rights reserved.</p>
   </footer>
+
+  <!-- DEV NOTICE MODAL -->
+  <div class="modal-overlay" id="devModal" onclick="closeDevModal(event)">
+    <div class="contact-modal-box" style="text-align:center;max-width:360px;">
+      <div style="font-size:36px;margin-bottom:1rem;">🚧</div>
+      <h2 style="font-size:16px;font-weight:600;color:#1a1a2e;margin-bottom:0.5rem;">Sedang Dalam Pengembangan</h2>
+      <p style="font-size:13px;color:#7a86a1;line-height:1.7;margin-bottom:1.5rem;">Halaman ini masih dalam tahap pengembangan. Mohon ditunggu, konten akan segera tersedia. Terima kasih atas kesabarannya! 🙏</p>
+      <button class="btn-white" style="background:#2563eb;color:#fff;width:100%;" onclick="closeDevNotice()">Oke, Mengerti</button>
+    </div>
+  </div>
 
   <!-- PDF MODAL -->
   <div class="modal-overlay" id="pdfModal" onclick="closePDFModal(event)">
@@ -419,6 +427,15 @@
   </div>
 
   <script>
+    function showDevNotice() {
+      document.getElementById('devModal').classList.add('open');
+    }
+    function closeDevNotice() {
+      document.getElementById('devModal').classList.remove('open');
+    }
+    function closeDevModal(e) {
+      if (e.target === document.getElementById('devModal')) closeDevNotice();
+    }
     function openPDF(url, title) {
       document.getElementById('pdfModalTitle').textContent = title;
       document.getElementById('pdfFrame').src = url;

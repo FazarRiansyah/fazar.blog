@@ -301,6 +301,18 @@
       .hero h1 { font-size: 26px; }
       .hero { padding: 2rem 1.25rem; }
     }
+    .ctrl-btn {
+      width: 44px; height: 44px;
+      border-radius: 10px;
+      border: 1px solid #e2e8f0;
+      background: #fff;
+      font-size: 14px;
+      cursor: pointer;
+      color: #1a1a2e;
+      transition: background 0.15s, transform 0.1s;
+      font-family: inherit;
+    }
+    .ctrl-btn:active { background: #f4f6fb; transform: scale(0.93); }
   </style>
 </head>
 <body>
@@ -353,9 +365,52 @@
       </div>
     </div>
 
+    <!-- SNAKE GAME -->
+    <div style="margin-top:1.5rem;">
+      <p style="font-size:11px;color:#9aa5bd;text-transform:uppercase;letter-spacing:0.09em;margin-bottom:1rem;font-weight:500;">Mini Game</p>
+      <div class="feat-card" style="border-top:3px solid #2563eb;padding:1.75rem;text-align:center;">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1.25rem;flex-wrap:wrap;gap:0.75rem;">
+          <div style="text-align:left;">
+            <h3 style="font-size:15px;font-weight:600;color:#1a1a2e;margin-bottom:3px;">🐍 Snake</h3>
+            <p style="font-size:12px;color:#9aa5bd;margin:0;">Gunakan arrow keys atau WASD untuk bermain</p>
+          </div>
+          <div style="display:flex;align-items:center;gap:1.5rem;">
+            <div style="text-align:center;">
+              <div style="font-size:10px;color:#9aa5bd;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:2px;">Skor</div>
+              <div id="score" style="font-size:24px;font-weight:700;color:#2563eb;line-height:1;">0</div>
+            </div>
+            <div style="text-align:center;">
+              <div style="font-size:10px;color:#9aa5bd;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:2px;">Tertinggi</div>
+              <div id="highscore" style="font-size:24px;font-weight:700;color:#16a34a;line-height:1;">0</div>
+            </div>
+          </div>
+        </div>
+
+        <div style="position:relative;display:inline-block;">
+          <canvas id="snakeCanvas" width="400" height="400" style="border-radius:12px;background:#0f172a;display:block;"></canvas>
+          <div id="gameOverlay" style="position:absolute;inset:0;border-radius:12px;background:rgba(15,23,42,0.88);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0.75rem;">
+            <div id="overlayIcon" style="font-size:42px;">🐍</div>
+            <div id="overlayTitle" style="font-size:18px;font-weight:700;color:#fff;">Snake Game</div>
+            <div id="overlayDesc" style="font-size:12px;color:rgba(255,255,255,0.5);margin-bottom:0.25rem;">Arrow keys / WASD untuk bergerak</div>
+            <button id="startBtn" onclick="startGame()" style="padding:10px 28px;background:#2563eb;color:#fff;border:none;border-radius:10px;font-size:13px;font-weight:600;font-family:inherit;cursor:pointer;">Mulai Main</button>
+          </div>
+        </div>
+
+        <div style="display:flex;flex-direction:column;align-items:center;gap:6px;margin-top:1.25rem;">
+          <button class="ctrl-btn" onclick="setDir(0,-1)">▲</button>
+          <div style="display:flex;gap:6px;">
+            <button class="ctrl-btn" onclick="setDir(-1,0)">◀</button>
+            <button class="ctrl-btn" style="background:transparent;border-color:transparent;cursor:default;"></button>
+            <button class="ctrl-btn" onclick="setDir(1,0)">▶</button>
+          </div>
+          <button class="ctrl-btn" onclick="setDir(0,1)">▼</button>
+        </div>
+      </div>
+    </div>
+
   </div>
 
-  <!-- FOOTER -->
+
   <footer>
     <div class="footer-left">
       <p class="footer-brand">Fazar Riansyah</p>
@@ -437,8 +492,10 @@
     </div>
   </div>
 
+  </script>
+
   <script>
-    function showDevNotice() {
+    const GRID = 20;
       document.getElementById('devModal').classList.add('open');
     }
     function closeDevNotice() {
@@ -468,6 +525,168 @@
     function closeContactModal(e) {
       if (e.target === document.getElementById('contactModal')) closeContact();
     }
+  </script>
+
+  <script>
+    const CELL = 400 / GRID;
+    const canvas = document.getElementById('snakeCanvas');
+    const ctx = canvas.getContext('2d');
+
+    let snake, dir, nextDir, food, score, highScore = 0, gameLoop, running = false;
+
+    const COLORS = {
+      headLight: '#60a5fa',
+      head:      '#2563eb',
+      bodyLight: '#34d399',
+      body:      '#16a34a',
+      food:      '#f97316',
+      foodGlow:  '#fed7aa',
+      grid:      'rgba(255,255,255,0.03)',
+    };
+
+    function drawGrid() {
+      ctx.strokeStyle = COLORS.grid;
+      ctx.lineWidth = 0.5;
+      for (let i = 0; i <= GRID; i++) {
+        ctx.beginPath(); ctx.moveTo(i * CELL, 0); ctx.lineTo(i * CELL, 400); ctx.stroke();
+        ctx.beginPath(); ctx.moveTo(0, i * CELL); ctx.lineTo(400, i * CELL); ctx.stroke();
+      }
+    }
+
+    function drawRoundRect(x, y, w, h, r, fill) {
+      ctx.beginPath();
+      ctx.roundRect(x, y, w, h, r);
+      ctx.fillStyle = fill;
+      ctx.fill();
+    }
+
+    function drawSnake() {
+      snake.forEach((seg, i) => {
+        const x = seg.x * CELL, y = seg.y * CELL;
+        const pad = i === 0 ? 1 : 2;
+        const size = CELL - pad * 2;
+        const color = i === 0 ? COLORS.head : COLORS.body;
+        const colorLight = i === 0 ? COLORS.headLight : COLORS.bodyLight;
+
+        // body gradient feel
+        const grad = ctx.createLinearGradient(x, y, x + CELL, y + CELL);
+        grad.addColorStop(0, colorLight);
+        grad.addColorStop(1, color);
+        drawRoundRect(x + pad, y + pad, size, size, i === 0 ? 6 : 4, grad);
+
+        // eyes on head
+        if (i === 0) {
+          ctx.fillStyle = '#fff';
+          const ex = dir.x === 1 ? x + CELL - 7 : dir.x === -1 ? x + 4 : x + CELL / 2 - 5;
+          const ey = dir.y === 1 ? y + CELL - 7 : dir.y === -1 ? y + 4 : y + CELL / 2 - 5;
+          const ex2 = dir.x !== 0 ? ex : ex + 10;
+          const ey2 = dir.y !== 0 ? ey + 8 : ey;
+          ctx.beginPath(); ctx.arc(ex, ey, 3, 0, Math.PI * 2); ctx.fill();
+          ctx.beginPath(); ctx.arc(ex2, ey2, 3, 0, Math.PI * 2); ctx.fill();
+          ctx.fillStyle = '#0f172a';
+          ctx.beginPath(); ctx.arc(ex + 0.5, ey + 0.5, 1.5, 0, Math.PI * 2); ctx.fill();
+          ctx.beginPath(); ctx.arc(ex2 + 0.5, ey2 + 0.5, 1.5, 0, Math.PI * 2); ctx.fill();
+        }
+      });
+    }
+
+    function drawFood() {
+      const x = food.x * CELL + CELL / 2;
+      const y = food.y * CELL + CELL / 2;
+      // glow
+      const glow = ctx.createRadialGradient(x, y, 2, x, y, CELL / 2);
+      glow.addColorStop(0, 'rgba(249,115,22,0.4)');
+      glow.addColorStop(1, 'rgba(249,115,22,0)');
+      ctx.beginPath(); ctx.arc(x, y, CELL / 2, 0, Math.PI * 2);
+      ctx.fillStyle = glow; ctx.fill();
+      // apple
+      drawRoundRect(food.x * CELL + 3, food.y * CELL + 3, CELL - 6, CELL - 6, 5, COLORS.food);
+      // shine
+      ctx.fillStyle = 'rgba(255,255,255,0.25)';
+      ctx.beginPath(); ctx.ellipse(x - 2, food.y * CELL + 6, 3, 2, -0.5, 0, Math.PI * 2); ctx.fill();
+    }
+
+    function spawnFood() {
+      let pos;
+      do {
+        pos = { x: Math.floor(Math.random() * GRID), y: Math.floor(Math.random() * GRID) };
+      } while (snake.some(s => s.x === pos.x && s.y === pos.y));
+      food = pos;
+    }
+
+    function setDir(x, y) {
+      if (!running) { startGame(); return; }
+      if (x === -dir.x && y === -dir.y) return;
+      nextDir = { x, y };
+    }
+
+    function startGame() {
+      snake = [{ x: 10, y: 10 }, { x: 9, y: 10 }, { x: 8, y: 10 }];
+      dir = { x: 1, y: 0 };
+      nextDir = { x: 1, y: 0 };
+      score = 0;
+      document.getElementById('score').textContent = 0;
+      spawnFood();
+      document.getElementById('gameOverlay').style.display = 'none';
+      running = true;
+      clearInterval(gameLoop);
+      gameLoop = setInterval(tick, 120);
+    }
+
+    function tick() {
+      dir = nextDir;
+      const head = { x: snake[0].x + dir.x, y: snake[0].y + dir.y };
+
+      // wall collision
+      if (head.x < 0 || head.x >= GRID || head.y < 0 || head.y >= GRID) return gameOver();
+      // self collision
+      if (snake.some(s => s.x === head.x && s.y === head.y)) return gameOver();
+
+      snake.unshift(head);
+
+      if (head.x === food.x && head.y === food.y) {
+        score += 10;
+        document.getElementById('score').textContent = score;
+        if (score > highScore) { highScore = score; document.getElementById('highscore').textContent = highScore; }
+        spawnFood();
+        // speed up slightly
+        if (score % 50 === 0) { clearInterval(gameLoop); gameLoop = setInterval(tick, Math.max(60, 120 - score)); }
+      } else {
+        snake.pop();
+      }
+
+      // draw
+      ctx.fillStyle = '#0f172a';
+      ctx.fillRect(0, 0, 400, 400);
+      drawGrid();
+      drawFood();
+      drawSnake();
+    }
+
+    function gameOver() {
+      clearInterval(gameLoop);
+      running = false;
+      const overlay = document.getElementById('gameOverlay');
+      document.getElementById('overlayIcon').textContent = '💀';
+      document.getElementById('overlayTitle').textContent = 'Game Over!';
+      document.getElementById('overlayDesc').textContent = `Skor kamu: ${score}`;
+      document.getElementById('startBtn').textContent = 'Main Lagi';
+      overlay.style.display = 'flex';
+    }
+
+    // keyboard controls
+    document.addEventListener('keydown', e => {
+      if (['ArrowUp','ArrowDown','ArrowLeft','ArrowRight','w','a','s','d'].includes(e.key)) e.preventDefault();
+      if (e.key === 'ArrowUp'    || e.key === 'w') setDir(0, -1);
+      if (e.key === 'ArrowDown'  || e.key === 's') setDir(0,  1);
+      if (e.key === 'ArrowLeft'  || e.key === 'a') setDir(-1, 0);
+      if (e.key === 'ArrowRight' || e.key === 'd') setDir(1,  0);
+    });
+
+    // draw initial screen
+    ctx.fillStyle = '#0f172a';
+    ctx.fillRect(0, 0, 400, 400);
+    drawGrid();
   </script>
 
 </body>

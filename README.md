@@ -1,0 +1,2 @@
+# fazar.blog
+Personal Blog

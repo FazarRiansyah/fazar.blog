@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>fazar.site</title>
+  <title>Fazar Site</title>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -17,11 +17,9 @@
 
     /* NAV */
     nav {
-      max-width: 860px;
-      margin: 0 auto;
-      padding: 1.25rem 1.5rem;
+      width: 100%;
+      padding: 1.25rem 3rem;
       display: flex;
-      justify-content: space-between;
       align-items: center;
     }
     nav .logo {
@@ -30,72 +28,66 @@
       color: #1a1a2e;
     }
 
-    /* MAIN WRAPPER */
+    /* MAIN WRAPPER — full width dengan padding sisi */
     .wrapper {
-      max-width: 860px;
-      margin: 0 auto;
-      padding: 0 1.5rem 3rem;
+      width: 100%;
+      padding: 0 3rem 4rem;
     }
 
     /* HERO */
     .hero {
       background: linear-gradient(135deg, #1a4fa0 0%, #2563eb 60%, #1d4ed8 100%);
       border-radius: 20px;
-      padding: 2.75rem 2rem;
+      padding: 3rem 2rem;
       text-align: center;
-      margin-bottom: 1.25rem;
+      margin-bottom: 1.5rem;
       position: relative;
       overflow: hidden;
     }
     .hero::before {
       content: '';
-      position: absolute; top: -50px; right: -50px;
-      width: 200px; height: 200px; border-radius: 50%;
+      position: absolute; top: -60px; right: -60px;
+      width: 260px; height: 260px; border-radius: 50%;
       background: rgba(255,255,255,0.06);
     }
     .hero::after {
       content: '';
-      position: absolute; bottom: -40px; left: -40px;
-      width: 160px; height: 160px; border-radius: 50%;
+      position: absolute; bottom: -50px; left: -50px;
+      width: 200px; height: 200px; border-radius: 50%;
       background: rgba(255,255,255,0.05);
     }
     .hero h1 {
-      font-size: 30px;
+      font-size: 32px;
       font-weight: 600;
       color: #fff;
       line-height: 1.3;
       margin-bottom: 0.75rem;
     }
     .hero p {
-      font-size: 14px;
-      color: rgba(255,255,255,0.75);
+      font-size: 15px;
+      color: rgba(255,255,255,0.78);
       line-height: 1.75;
-      max-width: 420px;
+      max-width: 500px;
       margin: 0 auto 1.5rem;
-      text-align: center;
     }
     .hero-tags {
       display: flex;
       gap: 8px;
       flex-wrap: wrap;
       justify-content: center;
-      margin-bottom: 1.5rem;
+      margin-bottom: 1.75rem;
     }
     .hero-tag {
-      padding: 5px 14px;
+      padding: 5px 16px;
       border-radius: 20px;
       font-size: 12px;
       background: rgba(255,255,255,0.15);
       color: #fff;
       border: 1px solid rgba(255,255,255,0.25);
     }
-    .hero-btns {
-      display: flex;
-      gap: 8px;
-      justify-content: center;
-    }
     .btn-white {
-      padding: 9px 24px;
+      display: inline-block;
+      padding: 11px 28px;
       font-size: 13px;
       font-family: inherit;
       background: #fff;
@@ -104,20 +96,21 @@
       border-radius: 10px;
       cursor: pointer;
       font-weight: 600;
+      text-decoration: none;
       transition: opacity 0.2s, transform 0.2s;
     }
-    .btn-white:hover { opacity: 0.9; transform: translateY(-1px); }
+    .btn-white:hover { opacity: 0.9; transform: translateY(-2px); }
 
     /* STATS */
     .stats-row {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 12px;
-      margin-bottom: 1.5rem;
+      gap: 14px;
+      margin-bottom: 1.75rem;
     }
     .stat-card {
       border-radius: 14px;
-      padding: 1.1rem 1rem;
+      padding: 1.25rem 1rem;
       text-align: center;
       border: 0.5px solid #e2e8f0;
       background: #fff;
@@ -125,21 +118,17 @@
       transition: box-shadow 0.2s, transform 0.2s;
     }
     .stat-card:hover {
-      box-shadow: 0 6px 20px rgba(0,0,0,0.09);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.09);
       transform: translateY(-2px);
     }
     .stat-num {
-      font-size: 22px;
+      font-size: 24px;
       font-weight: 600;
       margin-bottom: 4px;
     }
-    .stat-label {
-      font-size: 11px;
-      color: #7a86a1;
-      line-height: 1.5;
-    }
-    .stat-card.blue .stat-num { color: #2563eb; }
-    .stat-card.green .stat-num { color: #16a34a; }
+    .stat-label { font-size: 12px; color: #7a86a1; line-height: 1.5; }
+    .stat-card.blue .stat-num   { color: #2563eb; }
+    .stat-card.green .stat-num  { color: #16a34a; }
     .stat-card.orange .stat-num { color: #ea580c; }
 
     /* SECTION LABEL */
@@ -152,16 +141,16 @@
       font-weight: 500;
     }
 
-    /* FEATURE CARDS */
+    /* CARDS ROW — 3 kolom */
     .cards-row {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 12px;
-      margin-bottom: 1.5rem;
+      gap: 14px;
+      margin-bottom: 1.75rem;
     }
     .feat-card {
-      border-radius: 14px;
-      padding: 1.35rem;
+      border-radius: 16px;
+      padding: 1.5rem;
       background: #fff;
       border: 0.5px solid #e2e8f0;
       border-top: 3px solid transparent;
@@ -169,35 +158,36 @@
       transition: box-shadow 0.2s, transform 0.2s;
     }
     .feat-card:hover {
-      box-shadow: 0 8px 24px rgba(0,0,0,0.10);
+      box-shadow: 0 10px 28px rgba(0,0,0,0.10);
       transform: translateY(-3px);
     }
     .feat-card.green  { border-top-color: #16a34a; }
     .feat-card.blue   { border-top-color: #2563eb; }
     .feat-card.purple { border-top-color: #7c3aed; }
     .kontak-card { grid-column: 1 / -1; }
+
     .feat-card h3 {
-      font-size: 14px;
+      font-size: 15px;
       font-weight: 600;
       color: #1a1a2e;
       margin-bottom: 0.5rem;
     }
     .feat-card p {
-      font-size: 12.5px;
+      font-size: 13px;
       color: #7a86a1;
-      line-height: 1.7;
-      margin-bottom: 1rem;
+      line-height: 1.75;
+      margin-bottom: 1.1rem;
       text-align: justify;
     }
     .feat-tags {
       display: flex;
       flex-wrap: wrap;
       gap: 5px;
-      margin-bottom: 1rem;
+      margin-bottom: 1.1rem;
     }
     .feat-tag {
       font-size: 10px;
-      padding: 3px 9px;
+      padding: 3px 10px;
       border-radius: 10px;
       font-weight: 500;
     }
@@ -207,7 +197,7 @@
 
     .card-btn {
       display: inline-block;
-      padding: 7px 18px;
+      padding: 8px 20px;
       font-size: 12px;
       font-family: inherit;
       font-weight: 500;
@@ -216,15 +206,19 @@
       background: transparent;
       color: #1a1a2e;
       cursor: pointer;
-      transition: background 0.2s, border-color 0.2s;
+      transition: background 0.2s, border-color 0.2s, transform 0.15s;
       text-decoration: none;
     }
-    .card-btn:hover { background: #f4f6fb; border-color: #c7d0e0; }
+    .card-btn:hover {
+      background: #f4f6fb;
+      border-color: #c7d0e0;
+      transform: translateY(-1px);
+    }
 
     /* CONTACT BUTTONS */
     .contact-btns {
       display: flex;
-      gap: 8px;
+      gap: 10px;
       flex-wrap: wrap;
       margin-top: 0.25rem;
     }
@@ -232,8 +226,8 @@
       display: inline-flex;
       align-items: center;
       gap: 6px;
-      padding: 7px 16px;
-      font-size: 12px;
+      padding: 8px 18px;
+      font-size: 13px;
       font-family: inherit;
       font-weight: 500;
       border-radius: 8px;
@@ -242,19 +236,23 @@
       color: #1a1a2e;
       cursor: pointer;
       text-decoration: none;
-      transition: background 0.2s, border-color 0.2s;
+      transition: background 0.2s, border-color 0.2s, transform 0.15s;
     }
-    .contact-btn:hover { background: #f4f6fb; border-color: #c7d0e0; }
+    .contact-btn:hover {
+      background: #f4f6fb;
+      border-color: #c7d0e0;
+      transform: translateY(-1px);
+    }
 
     /* INSTAGRAM SECTION */
     .insta-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 12px;
-      margin-bottom: 1.5rem;
+      gap: 14px;
+      margin-bottom: 1.75rem;
     }
     .insta-card {
-      border-radius: 14px;
+      border-radius: 16px;
       background: #fff;
       border: 0.5px solid #e2e8f0;
       overflow: hidden;
@@ -264,22 +262,49 @@
       display: block;
     }
     .insta-card:hover {
-      box-shadow: 0 8px 24px rgba(0,0,0,0.10);
+      box-shadow: 0 10px 28px rgba(0,0,0,0.10);
       transform: translateY(-3px);
     }
-    .insta-img {
+    /* Embed container — rasio 1:1 */
+    .insta-embed-wrap {
       width: 100%;
       aspect-ratio: 1 / 1;
-      object-fit: cover;
+      overflow: hidden;
+      background: #f0f2f8;
       display: flex;
       align-items: center;
       justify-content: center;
-      background: linear-gradient(135deg, #e8edf7, #d0d9ee);
-      font-size: 32px;
-      color: #9aa5bd;
+      position: relative;
+    }
+    /* Simulasi feed Instagram */
+    .insta-mock {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, #f9a8d4 0%, #c084fc 50%, #818cf8 100%);
+      position: relative;
+    }
+    .insta-mock.green {
+      background: linear-gradient(135deg, #6ee7b7 0%, #3b82f6 100%);
+    }
+    .insta-mock.orange {
+      background: linear-gradient(135deg, #fcd34d 0%, #f97316 100%);
+    }
+    .insta-mock-icon {
+      font-size: 40px;
+      margin-bottom: 8px;
+      filter: drop-shadow(0 2px 4px rgba(0,0,0,0.15));
+    }
+    .insta-mock-label {
+      font-size: 11px;
+      color: rgba(255,255,255,0.85);
+      font-weight: 500;
     }
     .insta-body {
-      padding: 0.875rem 1rem;
+      padding: 1rem 1.1rem;
     }
     .insta-meta {
       font-size: 10px;
@@ -290,9 +315,9 @@
       letter-spacing: 0.06em;
     }
     .insta-caption {
-      font-size: 12px;
+      font-size: 12.5px;
       color: #5a6484;
-      line-height: 1.6;
+      line-height: 1.65;
       text-align: justify;
     }
 
@@ -311,32 +336,27 @@
       background: #fff;
       border-radius: 16px;
       width: 90%;
-      max-width: 740px;
-      height: 82vh;
+      max-width: 800px;
+      height: 85vh;
       overflow: hidden;
       display: flex;
       flex-direction: column;
-      box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+      box-shadow: 0 24px 64px rgba(0,0,0,0.22);
     }
     .modal-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 1rem 1.25rem;
+      padding: 1rem 1.5rem;
       border-bottom: 0.5px solid #e2e8f0;
     }
-    .modal-header span {
-      font-size: 14px;
-      font-weight: 600;
-      color: #1a1a2e;
-    }
+    .modal-header span { font-size: 14px; font-weight: 600; color: #1a1a2e; }
     .modal-close {
       font-size: 18px;
       background: none;
       border: none;
       cursor: pointer;
       color: #7a86a1;
-      line-height: 1;
       transition: color 0.2s;
     }
     .modal-close:hover { color: #1a1a2e; }
@@ -346,69 +366,45 @@
     /* FOOTER */
     footer {
       border-top: 0.5px solid #e2e8f0;
-      margin-top: 1.5rem;
-      padding: 1.75rem 0 1.25rem;
-    }
-    .footer-inner {
+      margin-top: 1rem;
+      padding: 1.5rem 3rem;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      flex-wrap: wrap;
-      gap: 1rem;
     }
     .footer-brand {
       font-size: 14px;
       font-weight: 600;
       color: #1a1a2e;
-      margin-bottom: 4px;
     }
     .footer-sub {
       font-size: 12px;
       color: #9aa5bd;
+      margin-top: 3px;
     }
-    .footer-links {
-      display: flex;
-      flex-direction: column;
-      align-items: flex-end;
-      gap: 5px;
-    }
-    .footer-links a {
+    .footer-right {
       font-size: 12px;
-      color: #5a6484;
-      text-decoration: none;
-      display: flex;
-      align-items: center;
-      gap: 5px;
-      transition: color 0.2s;
-    }
-    .footer-links a:hover { color: #1a1a2e; }
-    .footer-copy {
-      text-align: center;
-      font-size: 11px;
       color: #b0bac9;
-      margin-top: 1.25rem;
-      padding-top: 1rem;
-      border-top: 0.5px solid #f0f2f8;
     }
 
     /* RESPONSIVE */
-    @media (max-width: 720px) {
-      .stats-row  { grid-template-columns: repeat(2, 1fr); }
+    @media (max-width: 900px) {
+      .wrapper { padding: 0 1.5rem 3rem; }
+      nav { padding: 1.25rem 1.5rem; }
+      footer { padding: 1.5rem; }
       .cards-row  { grid-template-columns: repeat(2, 1fr); }
       .insta-grid { grid-template-columns: repeat(2, 1fr); }
       .kontak-card { grid-column: 1 / -1; }
     }
-    @media (max-width: 480px) {
+    @media (max-width: 560px) {
+      .wrapper { padding: 0 1rem 2rem; }
+      nav { padding: 1rem; }
+      footer { padding: 1.25rem 1rem; flex-direction: column; gap: 0.5rem; align-items: flex-start; }
       .stats-row  { grid-template-columns: 1fr; }
       .cards-row  { grid-template-columns: 1fr; }
       .insta-grid { grid-template-columns: 1fr; }
-      .kontak-card { grid-column: 1 / -1; }
-      nav { padding: 1rem; }
-      .wrapper { padding: 0 1rem 2rem; }
-      .hero { padding: 2rem 1.25rem; }
       .hero h1 { font-size: 24px; }
-      .footer-inner { flex-direction: column; align-items: flex-start; }
-      .footer-links { align-items: flex-start; }
+      .hero { padding: 2rem 1.25rem; }
     }
   </style>
 </head>
@@ -429,9 +425,8 @@
         <span class="hero-tag">CV Online</span>
         <span class="hero-tag">Kontak</span>
       </div>
-      <div class="hero-btns">
-        <button class="btn-white" onclick="document.getElementById('kontak').scrollIntoView({behavior:'smooth'})">Hubungi Saya</button>
-      </div>
+      <!-- Button langsung ke WhatsApp -->
+      <a class="btn-white" href="https://wa.me/6289601066548" target="_blank">Hubungi Saya</a>
     </div>
 
     <!-- STATS -->
@@ -457,7 +452,7 @@
 
         <div class="feat-card green">
           <h3>Portfolio</h3>
-          <p>Kumpulan karya dan proyek yang pernah saya kerjakan selama bertugas.</p>
+          <p>Kumpulan karya dan proyek yang pernah saya kerjakan selama bertugas di P4 Jakarta Pusat.</p>
           <div class="feat-tags">
             <span class="feat-tag g">Karya</span>
             <span class="feat-tag g">Proyek</span>
@@ -468,7 +463,7 @@
 
         <div id="cv" class="feat-card blue">
           <h3>CV</h3>
-          <p>Riwayat pendidikan dan pengalaman saya secara lengkap dan terstruktur.</p>
+          <p>Riwayat pendidikan dan pengalaman saya secara lengkap dan terstruktur sebagai tenaga profesional.</p>
           <div class="feat-tags">
             <span class="feat-tag b">Pendidikan</span>
             <span class="feat-tag b">Pengalaman</span>
@@ -479,11 +474,11 @@
 
         <div id="kontak" class="feat-card purple kontak-card">
           <h3>Kontak</h3>
-          <p>Mau ngobrol atau kolaborasi? Hubungi saya melalui email atau media sosial berikut.</p>
+          <p>Mau ngobrol atau kolaborasi? Hubungi saya melalui salah satu platform berikut.</p>
           <div class="contact-btns">
-            <a class="contact-btn" href="mailto:fazarriansyah@gmail.com">✉️ fazarriansyah@gmail.com</a>
-            <a class="contact-btn" href="https://instagram.com/fazar.riansyah" target="_blank">📷 fazar.riansyah</a>
-            <a class="contact-btn" href="https://linkedin.com/in/usernamekamu" target="_blank">💼 LinkedIn</a>
+            <a class="contact-btn" href="mailto:fazarriansyah@gmail.com">✉️ Kirim Email</a>
+            <a class="contact-btn" href="https://instagram.com/fazar.riansyah" target="_blank">📷 Instagram</a>
+            <a class="contact-btn" href="https://linkedin.com/in/fazarriansyah" target="_blank">💼 LinkedIn</a>
           </div>
         </div>
 
@@ -495,48 +490,57 @@
     <div class="insta-grid">
 
       <a class="insta-card" href="https://instagram.com/fazar.riansyah" target="_blank">
-        <!-- Ganti src dengan URL foto asli dari postingan Instagram kamu -->
-        <div class="insta-img">📸</div>
+        <div class="insta-embed-wrap">
+          <!-- Ganti div di bawah dengan <img src="URL_FOTO" style="width:100%;height:100%;object-fit:cover"> jika punya URL foto langsung -->
+          <div class="insta-mock">
+            <div class="insta-mock-icon">📝</div>
+            <div class="insta-mock-label">@fazar.riansyah</div>
+          </div>
+        </div>
         <div class="insta-body">
           <p class="insta-meta">@fazar.riansyah</p>
-          <p class="insta-caption">Ganti dengan caption postingan Instagram pertama kamu.</p>
+          <p class="insta-caption">Ganti dengan caption postingan Instagram terbaru kamu di sini.</p>
         </div>
       </a>
 
       <a class="insta-card" href="https://instagram.com/fazar.riansyah" target="_blank">
-        <div class="insta-img">📸</div>
+        <div class="insta-embed-wrap">
+          <div class="insta-mock green">
+            <div class="insta-mock-icon">🌿</div>
+            <div class="insta-mock-label">@fazar.riansyah</div>
+          </div>
+        </div>
         <div class="insta-body">
           <p class="insta-meta">@fazar.riansyah</p>
-          <p class="insta-caption">Ganti dengan caption postingan Instagram kedua kamu.</p>
+          <p class="insta-caption">Ganti dengan caption postingan Instagram kedua kamu di sini.</p>
         </div>
       </a>
 
       <a class="insta-card" href="https://instagram.com/fazar.riansyah" target="_blank">
-        <div class="insta-img">📸</div>
+        <div class="insta-embed-wrap">
+          <div class="insta-mock orange">
+            <div class="insta-mock-icon">✨</div>
+            <div class="insta-mock-label">@fazar.riansyah</div>
+          </div>
+        </div>
         <div class="insta-body">
           <p class="insta-meta">@fazar.riansyah</p>
-          <p class="insta-caption">Ganti dengan caption postingan Instagram ketiga kamu.</p>
+          <p class="insta-caption">Ganti dengan caption postingan Instagram ketiga kamu di sini.</p>
         </div>
       </a>
 
     </div>
 
-    <!-- FOOTER -->
-    <footer>
-      <div class="footer-inner">
-        <div>
-          <p class="footer-brand">Fazar Riansyah</p>
-          <p class="footer-sub">PTP Ahli Pertama · P4 Jakarta Pusat</p>
-        </div>
-        <div class="footer-links">
-          <a href="mailto:fazarriansyah@gmail.com">✉️ fazarriansyah@gmail.com</a>
-          <a href="https://instagram.com/fazar.riansyah" target="_blank">📷 fazar.riansyah</a>
-        </div>
-      </div>
-      <p class="footer-copy">© 2025 fazar.site — Dibuat dengan ❤️</p>
-    </footer>
+  </div><!-- end wrapper -->
 
-  </div>
+  <!-- FOOTER -->
+  <footer>
+    <div>
+      <p class="footer-brand">Fazar Riansyah</p>
+      <p class="footer-sub">PTP Ahli Pertama · P4 Jakarta Pusat</p>
+    </div>
+    <p class="footer-right">Fazar Site</p>
+  </footer>
 
   <!-- PDF MODAL -->
   <div class="modal-overlay" id="pdfModal" onclick="closeModal(event)">

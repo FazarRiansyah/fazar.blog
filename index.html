@@ -8,11 +8,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
-
-    html, body {
-      height: 100%;
-    }
-
+    html, body { height: 100%; }
     body {
       font-family: 'Plus Jakarta Sans', sans-serif;
       background: #f4f6fb;
@@ -21,270 +17,216 @@
       display: flex;
       flex-direction: column;
     }
-
-    /* MAIN CONTENT grows to push footer down */
-    .page-content {
-      flex: 1;
-      width: 100%;
-      padding: 2rem 3rem 3rem;
-    }
+    .page-content { flex: 1; width: 100%; padding: 2rem 3rem 3rem; }
 
     /* HERO */
     .hero {
       background: linear-gradient(135deg, #1a4fa0 0%, #2563eb 55%, #1d4ed8 100%);
       border-radius: 20px;
-      padding: 3rem 2rem 2.75rem;
+      padding: 3rem 2rem;
       text-align: center;
       margin-bottom: 1.5rem;
       position: relative;
       overflow: hidden;
     }
     .hero::before {
-      content: '';
-      position: absolute; top: -60px; right: -60px;
+      content: ''; position: absolute; top: -60px; right: -60px;
       width: 260px; height: 260px; border-radius: 50%;
       background: rgba(255,255,255,0.06);
     }
     .hero::after {
-      content: '';
-      position: absolute; bottom: -50px; left: -50px;
+      content: ''; position: absolute; bottom: -50px; left: -50px;
       width: 200px; height: 200px; border-radius: 50%;
       background: rgba(255,255,255,0.05);
     }
-    .hero-greeting {
-      font-size: 13px;
-      color: rgba(255,255,255,0.6);
-      letter-spacing: 0.06em;
-      margin-bottom: 0.6rem;
-    }
-    .hero h1 {
-      font-size: 34px;
-      font-weight: 700;
-      color: #fff;
-      line-height: 1.25;
-      margin-bottom: 0.9rem;
-    }
+    .hero h1 { font-size: 34px; font-weight: 700; color: #fff; line-height: 1.25; margin-bottom: 0.9rem; }
     .hero-desc {
-      font-size: 14.5px;
-      color: rgba(255,255,255,0.75);
-      line-height: 1.75;
-      max-width: 600px;
-      margin: 0 auto 2rem;
-      white-space: nowrap;
+      font-size: 14.5px; color: rgba(255,255,255,0.75);
+      line-height: 1.75; margin: 0 auto 2rem;
     }
     .btn-white {
-      display: inline-block;
-      padding: 11px 30px;
-      font-size: 13px;
-      font-family: inherit;
-      font-weight: 600;
-      background: #fff;
-      color: #1d4ed8;
-      border: none;
-      border-radius: 10px;
-      cursor: pointer;
-      text-decoration: none;
+      display: inline-block; padding: 11px 30px; font-size: 13px;
+      font-family: inherit; font-weight: 600; background: #fff; color: #1d4ed8;
+      border: none; border-radius: 10px; cursor: pointer; text-decoration: none;
       transition: opacity 0.2s, transform 0.2s;
     }
     .btn-white:hover { opacity: 0.9; transform: translateY(-2px); }
 
     /* STATS */
     .stats-row {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 14px;
-      margin-bottom: 1.5rem;
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      gap: 14px; margin-bottom: 1.5rem;
     }
     .stat-card {
-      border-radius: 16px;
-      padding: 1.4rem 1rem;
-      text-align: center;
-      border: 0.5px solid #e2e8f0;
-      background: #fff;
+      border-radius: 16px; padding: 1.4rem 1rem; text-align: center;
+      border: 0.5px solid #e2e8f0; background: #fff;
       box-shadow: 0 2px 10px rgba(0,0,0,0.04);
       transition: box-shadow 0.2s, transform 0.2s;
-      text-decoration: none;
-      display: block;
-      color: inherit;
+      text-decoration: none; display: block; color: inherit;
     }
-    .stat-card:hover {
-      box-shadow: 0 8px 24px rgba(0,0,0,0.09);
-      transform: translateY(-2px);
-    }
-    .stat-num {
-      font-size: 26px;
-      font-weight: 700;
-      line-height: 1.2;
-      margin-bottom: 5px;
-    }
-    .stat-label {
-      font-size: 12px;
-      color: #7a86a1;
-      line-height: 1.5;
-    }
-    .stat-card.blue  .stat-num { color: #2563eb; }
-    .stat-card.green .stat-num { color: #16a34a; }
-    .stat-card.orange .stat-num { color: #ea580c; }
+    .stat-card:hover { box-shadow: 0 8px 24px rgba(0,0,0,0.09); transform: translateY(-2px); }
+    .stat-num { font-size: 24px; font-weight: 700; line-height: 1.2; margin-bottom: 5px; }
+    .stat-label { font-size: 12px; color: #7a86a1; line-height: 1.5; }
+    .stat-card.blue .stat-num   { color: #2563eb; }
+    .stat-card.green .stat-num  { color: #16a34a; }
+    .stat-card.orange .stat-num { color: #ea580c; font-size: 18px; }
 
     /* CARDS */
-    .cards-row {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 14px;
-    }
+    .cards-row { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; margin-bottom: 1.5rem; }
     .feat-card {
-      border-radius: 16px;
-      padding: 1.6rem;
-      background: #fff;
-      border: 0.5px solid #e2e8f0;
-      border-top: 3px solid transparent;
+      border-radius: 16px; padding: 1.6rem; background: #fff;
+      border: 0.5px solid #e2e8f0; border-top: 3px solid transparent;
       box-shadow: 0 2px 10px rgba(0,0,0,0.04);
       transition: box-shadow 0.2s, transform 0.2s;
     }
-    .feat-card:hover {
-      box-shadow: 0 10px 28px rgba(0,0,0,0.10);
-      transform: translateY(-3px);
-    }
+    .feat-card:hover { box-shadow: 0 10px 28px rgba(0,0,0,0.10); transform: translateY(-3px); }
     .feat-card.green { border-top-color: #16a34a; }
     .feat-card.blue  { border-top-color: #2563eb; }
-    .feat-card h3 {
-      font-size: 15px;
-      font-weight: 600;
-      color: #1a1a2e;
-      margin-bottom: 0.5rem;
-    }
-    .feat-card p {
-      font-size: 13px;
-      color: #7a86a1;
-      line-height: 1.75;
-      margin-bottom: 1.1rem;
-      text-align: justify;
-    }
-    .feat-tags {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 5px;
-      margin-bottom: 1.1rem;
-    }
-    .feat-tag {
-      font-size: 10px;
-      padding: 3px 10px;
-      border-radius: 10px;
-      font-weight: 500;
-    }
+    .feat-card h3 { font-size: 15px; font-weight: 600; color: #1a1a2e; margin-bottom: 0.5rem; }
+    .feat-card p { font-size: 13px; color: #7a86a1; line-height: 1.75; margin-bottom: 1.1rem; text-align: justify; }
+    .feat-tags { display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 1.1rem; }
+    .feat-tag { font-size: 10px; padding: 3px 10px; border-radius: 10px; font-weight: 500; }
     .feat-tag.g { background: #dcfce7; color: #166534; }
     .feat-tag.b { background: #dbeafe; color: #1e40af; }
     .card-btn {
-      display: inline-block;
-      padding: 8px 20px;
-      font-size: 12px;
-      font-family: inherit;
-      font-weight: 500;
-      border-radius: 8px;
-      border: 1px solid #e2e8f0;
-      background: transparent;
-      color: #1a1a2e;
-      cursor: pointer;
-      transition: background 0.2s, border-color 0.2s, transform 0.15s;
+      display: inline-block; padding: 8px 20px; font-size: 12px;
+      font-family: inherit; font-weight: 500; border-radius: 8px;
+      border: 1px solid #e2e8f0; background: transparent; color: #1a1a2e;
+      cursor: pointer; transition: background 0.2s, border-color 0.2s, transform 0.15s;
       text-decoration: none;
     }
     .card-btn:hover { background: #f4f6fb; border-color: #c7d0e0; transform: translateY(-1px); }
 
-    /* FOOTER — always at bottom */
-    footer {
-      width: 100%;
-      padding: 1.25rem 3rem;
-      border-top: 0.5px solid #e2e8f0;
-      background: #fff;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
+    /* GAME SECTION */
+    .game-section {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin-bottom: 1.5rem;
+      align-items: start;
     }
-    .footer-left .footer-brand { font-size: 14px; font-weight: 600; color: #1a1a2e; }
-    .footer-left .footer-sub   { font-size: 12px; color: #9aa5bd; margin-top: 2px; }
-    .footer-copy { font-size: 12px; color: #b0bac9; }
+    .game-card {
+      border-radius: 16px; padding: 1.5rem; background: #fff;
+      border: 0.5px solid #e2e8f0; border-top: 3px solid #2563eb;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.04);
+    }
+    .game-header {
+      display: flex; justify-content: space-between; align-items: center;
+      margin-bottom: 1rem;
+    }
+    .game-header h3 { font-size: 15px; font-weight: 600; color: #1a1a2e; }
+    .game-header p { font-size: 11px; color: #9aa5bd; margin-top: 2px; }
+    .score-row { display: flex; gap: 1.25rem; }
+    .score-box { text-align: center; }
+    .score-label { font-size: 9px; color: #9aa5bd; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 2px; }
+    .score-num { font-size: 20px; font-weight: 700; line-height: 1; }
+    .score-num.blue  { color: #2563eb; }
+    .score-num.green { color: #16a34a; }
 
-    /* CONTACT MODAL */
+    .canvas-wrap { position: relative; display: block; }
+    #snakeCanvas { border-radius: 10px; background: #0f172a; display: block; width: 100%; aspect-ratio: 1/1; }
+
+    #gameOverlay {
+      position: absolute; inset: 0; border-radius: 10px;
+      background: rgba(15,23,42,0.88);
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center; gap: 0.6rem;
+    }
+    #overlayIcon  { font-size: 36px; }
+    #overlayTitle { font-size: 16px; font-weight: 700; color: #fff; }
+    #overlayDesc  { font-size: 11px; color: rgba(255,255,255,0.5); }
+    #startBtn {
+      margin-top: 4px; padding: 9px 24px; background: #2563eb; color: #fff;
+      border: none; border-radius: 8px; font-size: 13px; font-weight: 600;
+      font-family: inherit; cursor: pointer; transition: opacity 0.2s;
+    }
+    #startBtn:hover { opacity: 0.85; }
+
+    .ctrl-pad { display: flex; flex-direction: column; align-items: center; gap: 5px; margin-top: 1rem; }
+    .ctrl-row { display: flex; gap: 5px; }
+    .ctrl-btn {
+      width: 40px; height: 40px; border-radius: 8px;
+      border: 1px solid #e2e8f0; background: #fff;
+      font-size: 13px; cursor: pointer; color: #1a1a2e;
+      transition: background 0.15s, transform 0.1s; font-family: inherit;
+    }
+    .ctrl-btn:active { background: #f4f6fb; transform: scale(0.9); }
+    .ctrl-btn.empty { border-color: transparent; background: transparent; cursor: default; }
+
+    /* info panel sebelah kanan game */
+    .game-info {
+      display: flex; flex-direction: column; gap: 14px;
+    }
+    .info-card {
+      border-radius: 16px; padding: 1.25rem; background: #fff;
+      border: 0.5px solid #e2e8f0;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.04);
+    }
+    .info-card h4 { font-size: 13px; font-weight: 600; color: #1a1a2e; margin-bottom: 0.5rem; }
+    .info-card p  { font-size: 12px; color: #7a86a1; line-height: 1.7; }
+    .key-list { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 0.5rem; }
+    .key-badge {
+      padding: 3px 10px; border-radius: 6px; font-size: 11px; font-weight: 600;
+      background: #f4f6fb; color: #1a1a2e; border: 1px solid #e2e8f0;
+    }
+
+    /* FOOTER */
+    footer {
+      width: 100%; padding: 1.25rem 3rem;
+      border-top: 0.5px solid #e2e8f0; background: #fff;
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    .footer-brand { font-size: 14px; font-weight: 600; color: #1a1a2e; }
+    .footer-sub   { font-size: 12px; color: #9aa5bd; margin-top: 2px; }
+    .footer-copy  { font-size: 12px; color: #b0bac9; }
+
+    /* MODALS */
     .modal-overlay {
-      display: none;
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.45);
-      z-index: 999;
-      align-items: center;
-      justify-content: center;
+      display: none; position: fixed; inset: 0;
+      background: rgba(0,0,0,0.45); z-index: 999;
+      align-items: center; justify-content: center;
     }
     .modal-overlay.open { display: flex; }
-
-    /* PDF Modal */
     .pdf-modal-box {
-      background: #fff;
-      border-radius: 16px;
-      width: 90%;
-      max-width: 800px;
-      height: 85vh;
-      overflow: hidden;
-      display: flex;
-      flex-direction: column;
+      background: #fff; border-radius: 16px; width: 90%; max-width: 800px;
+      height: 85vh; overflow: hidden; display: flex; flex-direction: column;
       box-shadow: 0 24px 64px rgba(0,0,0,0.22);
     }
     .modal-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 1rem 1.5rem;
-      border-bottom: 0.5px solid #e2e8f0;
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 1rem 1.5rem; border-bottom: 0.5px solid #e2e8f0;
     }
     .modal-header span { font-size: 14px; font-weight: 600; color: #1a1a2e; }
-    .modal-close {
-      font-size: 18px; background: none; border: none;
-      cursor: pointer; color: #7a86a1; transition: color 0.2s;
-    }
+    .modal-close { font-size: 18px; background: none; border: none; cursor: pointer; color: #7a86a1; transition: color 0.2s; }
     .modal-close:hover { color: #1a1a2e; }
     .modal-body { flex: 1; overflow: hidden; }
     .modal-body iframe { width: 100%; height: 100%; border: none; }
 
-    /* Contact Modal */
     .contact-modal-box {
-      background: #fff;
-      border-radius: 20px;
-      width: 90%;
-      max-width: 400px;
-      padding: 2rem;
-      box-shadow: 0 24px 64px rgba(0,0,0,0.18);
-      animation: slideUp 0.25s ease;
-      position: relative;
+      background: #fff; border-radius: 20px; width: 90%; max-width: 400px;
+      padding: 2rem; box-shadow: 0 24px 64px rgba(0,0,0,0.18);
+      animation: slideUp 0.25s ease; position: relative;
     }
     @keyframes slideUp {
       from { transform: translateY(20px); opacity: 0; }
       to   { transform: translateY(0);    opacity: 1; }
     }
-    .contact-modal-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 0.4rem;
-    }
-    .contact-modal-header h2 { font-size: 16px; font-weight: 600; color: #1a1a2e; }
-    .contact-modal-sub { font-size: 12.5px; color: #9aa5bd; margin-bottom: 1.5rem; }
     .contact-options { display: flex; flex-direction: column; gap: 10px; }
     .contact-option {
-      display: flex; align-items: center; gap: 14px;
-      padding: 13px 16px; border-radius: 12px;
-      border: 0.5px solid #e2e8f0; background: #fff;
+      display: flex; align-items: center; gap: 14px; padding: 13px 16px;
+      border-radius: 12px; border: 0.5px solid #e2e8f0; background: #fff;
       text-decoration: none; color: #1a1a2e;
       transition: background 0.18s, border-color 0.18s, transform 0.15s;
     }
     .contact-option:hover { background: #f4f6fb; border-color: #c7d0e0; transform: translateX(3px); }
     .contact-option-icon {
       width: 38px; height: 38px; border-radius: 10px;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 18px; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center; flex-shrink: 0;
     }
-    .contact-option-icon.wa    { background: #f0fdf4; color: #16a34a; }
-    .contact-option-icon.email { background: #eff6ff; color: #2563eb; }
-    .contact-option-icon.ig    { background: #fdf2f8; color: #be185d; }
-    .contact-option-icon.li    { background: #f0f9ff; color: #0369a1; }
+    .contact-option-icon.wa    { background: #f0fdf4; }
+    .contact-option-icon.email { background: #eff6ff; }
+    .contact-option-icon.ig    { background: #fdf2f8; }
+    .contact-option-icon.li    { background: #f0f9ff; }
     .contact-option-text strong { display: block; font-size: 13px; font-weight: 600; color: #1a1a2e; }
     .contact-option-text span   { font-size: 11px; color: #7a86a1; }
 
@@ -292,6 +234,7 @@
     @media (max-width: 860px) {
       .page-content { padding: 1.5rem; }
       footer { padding: 1.25rem 1.5rem; }
+      .game-section { grid-template-columns: 1fr; }
     }
     @media (max-width: 580px) {
       .page-content { padding: 1rem; }
@@ -301,393 +244,365 @@
       .hero h1 { font-size: 26px; }
       .hero { padding: 2rem 1.25rem; }
     }
-    .ctrl-btn {
-      width: 44px; height: 44px;
-      border-radius: 10px;
-      border: 1px solid #e2e8f0;
-      background: #fff;
-      font-size: 14px;
-      cursor: pointer;
-      color: #1a1a2e;
-      transition: background 0.15s, transform 0.1s;
-      font-family: inherit;
-    }
-    .ctrl-btn:active { background: #f4f6fb; transform: scale(0.93); }
   </style>
 </head>
 <body>
 
-  <div class="page-content">
+<div class="page-content">
 
-    <!-- HERO -->
-    <div class="hero">
-      <h1>Hi, Welcome to Fazar Site</h1>
-      <p class="hero-desc">PTP Ahli Pertama dengan pengalaman 3 tahun di bidang pendidikan dan pelatihan.</p>
-      <button class="btn-white" onclick="openContactModal()">Hubungi Saya</button>
+  <!-- HERO -->
+  <div class="hero">
+    <h1>Hi, Welcome to Fazar Site</h1>
+    <p class="hero-desc">PTP Ahli Pertama dengan pengalaman 3 tahun di bidang pendidikan dan pelatihan.</p>
+    <button class="btn-white" onclick="openContactModal()">Hubungi Saya</button>
+  </div>
+
+  <!-- STATS -->
+  <div class="stats-row">
+    <div class="stat-card blue">
+      <div class="stat-num">3+</div>
+      <div class="stat-label">Tahun Pengalaman</div>
+    </div>
+    <div class="stat-card green">
+      <div class="stat-num">PTP</div>
+      <div class="stat-label">Ahli Pertama</div>
+    </div>
+    <a class="stat-card orange" href="https://share.google/ADIHPU8vpk26vTIMO" target="_blank">
+      <div class="stat-num">P4 Jakpus</div>
+      <div class="stat-label">Lihat Lokasi ↗</div>
+    </a>
+  </div>
+
+  <!-- PORTFOLIO & CV CARDS -->
+  <div class="cards-row">
+    <div class="feat-card green">
+      <h3>Portfolio</h3>
+      <p>Kumpulan karya dan proyek yang pernah saya kerjakan selama bertugas di P4 Jakarta Pusat.</p>
+      <div class="feat-tags">
+        <span class="feat-tag g">Karya</span>
+        <span class="feat-tag g">Proyek</span>
+      </div>
+      <button class="card-btn" onclick="showDevNotice()">Lihat Portfolio</button>
+    </div>
+    <div class="feat-card blue">
+      <h3>CV</h3>
+      <p>Riwayat pendidikan dan pengalaman saya secara lengkap dan terstruktur sebagai tenaga profesional.</p>
+      <div class="feat-tags">
+        <span class="feat-tag b">Pendidikan</span>
+        <span class="feat-tag b">Pengalaman</span>
+      </div>
+      <button class="card-btn" onclick="showDevNotice()">Lihat CV</button>
+    </div>
+  </div>
+
+  <!-- MINI GAME -->
+  <p style="font-size:11px;color:#9aa5bd;text-transform:uppercase;letter-spacing:0.09em;margin-bottom:1rem;font-weight:500;">Mini Game</p>
+  <div class="game-section">
+
+    <!-- LEFT: GAME -->
+    <div class="game-card">
+      <div class="game-header">
+        <div>
+          <h3>🐍 Snake</h3>
+          <p>Arrow keys / WASD untuk bergerak</p>
+        </div>
+        <div class="score-row">
+          <div class="score-box">
+            <div class="score-label">Skor</div>
+            <div class="score-num blue" id="score">0</div>
+          </div>
+          <div class="score-box">
+            <div class="score-label">Tertinggi</div>
+            <div class="score-num green" id="highscore">0</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="canvas-wrap">
+        <canvas id="snakeCanvas"></canvas>
+        <div id="gameOverlay">
+          <div id="overlayIcon">🐍</div>
+          <div id="overlayTitle">Snake Game</div>
+          <div id="overlayDesc">Arrow keys / WASD untuk bergerak</div>
+          <button id="startBtn" onclick="startGame()">Mulai Main</button>
+        </div>
+      </div>
+
+      <div class="ctrl-pad">
+        <button class="ctrl-btn" onclick="setDir(0,-1)">▲</button>
+        <div class="ctrl-row">
+          <button class="ctrl-btn" onclick="setDir(-1,0)">◀</button>
+          <button class="ctrl-btn empty"></button>
+          <button class="ctrl-btn" onclick="setDir(1,0)">▶</button>
+        </div>
+        <button class="ctrl-btn" onclick="setDir(0,1)">▼</button>
+      </div>
     </div>
 
-    <!-- STATS -->
-    <div class="stats-row">
-      <div class="stat-card blue">
-        <div class="stat-num">3+</div>
-        <div class="stat-label">Tahun Pengalaman</div>
+    <!-- RIGHT: INFO -->
+    <div class="game-info">
+      <div class="info-card">
+        <h4>Cara Bermain</h4>
+        <p>Arahkan ular untuk memakan makanan 🍎 dan hindari menabrak tembok atau tubuhmu sendiri.</p>
+        <div class="key-list">
+          <span class="key-badge">↑ ↓ ← →</span>
+          <span class="key-badge">W A S D</span>
+        </div>
       </div>
-      <div class="stat-card green">
-        <div class="stat-num">PTP</div>
-        <div class="stat-label">Ahli Pertama</div>
+      <div class="info-card">
+        <h4>Tips</h4>
+        <p>Semakin banyak makanan dimakan, semakin cepat ularnya. Rencanakan jalurmu dengan cermat agar tidak terjebak!</p>
       </div>
-      <a class="stat-card orange" href="https://share.google/ADIHPU8vpk26vTIMO" target="_blank">
-        <div class="stat-num">P4 Jakpus</div>
-        <div class="stat-label">Lihat Lokasi ↗</div>
+      <div class="info-card">
+        <h4>Penilaian</h4>
+        <p>Setiap makanan bernilai <strong>+10 poin</strong>. Skor tertinggi tersimpan selama sesi bermain.</p>
+      </div>
+    </div>
+
+  </div>
+
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div>
+    <p class="footer-brand">Fazar Riansyah</p>
+    <p class="footer-sub">PTP Ahli Pertama · P4 Jakarta Pusat</p>
+  </div>
+  <p class="footer-copy">© 2026 Fazar Site. All rights reserved.</p>
+</footer>
+
+<!-- DEV NOTICE MODAL -->
+<div class="modal-overlay" id="devModal" onclick="if(event.target===this)closeDevNotice()">
+  <div class="contact-modal-box" style="text-align:center;max-width:360px;">
+    <div style="font-size:36px;margin-bottom:1rem;">🚧</div>
+    <h2 style="font-size:16px;font-weight:600;color:#1a1a2e;margin-bottom:0.5rem;">Sedang Dalam Pengembangan</h2>
+    <p style="font-size:13px;color:#7a86a1;line-height:1.7;margin-bottom:1.5rem;">Halaman ini masih dalam tahap pengembangan. Mohon ditunggu, konten akan segera tersedia. Terima kasih atas kesabarannya! 🙏</p>
+    <button class="btn-white" style="background:#2563eb;color:#fff;width:100%;" onclick="closeDevNotice()">Oke, Mengerti</button>
+  </div>
+</div>
+
+<!-- PDF MODAL -->
+<div class="modal-overlay" id="pdfModal" onclick="if(event.target===this)closePDF()">
+  <div class="pdf-modal-box">
+    <div class="modal-header">
+      <span id="pdfModalTitle">Dokumen</span>
+      <button class="modal-close" onclick="closePDF()">✕</button>
+    </div>
+    <div class="modal-body">
+      <iframe id="pdfFrame" src=""></iframe>
+    </div>
+  </div>
+</div>
+
+<!-- CONTACT MODAL -->
+<div class="modal-overlay" id="contactModal" onclick="if(event.target===this)closeContact()">
+  <div class="contact-modal-box">
+    <div style="text-align:center;margin-bottom:1.25rem;">
+      <div style="font-size:36px;margin-bottom:0.75rem;">👋</div>
+      <h2 style="font-size:16px;font-weight:600;color:#1a1a2e;margin-bottom:0.3rem;">Hubungi Saya</h2>
+      <p style="font-size:12.5px;color:#9aa5bd;">Pilih platform yang kamu inginkan</p>
+    </div>
+    <button class="modal-close" onclick="closeContact()" style="position:absolute;top:1.25rem;right:1.25rem;">✕</button>
+    <div class="contact-options">
+      <a class="contact-option" href="https://wa.me/6289601066548" target="_blank">
+        <div class="contact-option-icon wa">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="#25D366"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+        </div>
+        <div class="contact-option-text"><strong>WhatsApp</strong><span>Chat langsung via WhatsApp</span></div>
+      </a>
+      <a class="contact-option" href="mailto:fazarriansyah@gmail.com">
+        <div class="contact-option-icon email">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" stroke="#2563eb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><polyline points="22,6 12,13 2,6" stroke="#2563eb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <div class="contact-option-text"><strong>Email</strong><span>fazarriansyah@gmail.com</span></div>
+      </a>
+      <a class="contact-option" href="https://instagram.com/fazar.riansyah" target="_blank">
+        <div class="contact-option-icon ig">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#be185d" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+        </div>
+        <div class="contact-option-text"><strong>Instagram</strong><span>@fazar.riansyah</span></div>
+      </a>
+      <a class="contact-option" href="https://linkedin.com/in/fazarriansyah" target="_blank">
+        <div class="contact-option-icon li">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="#0369a1"><path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6zM2 9h4v12H2z"/><circle cx="4" cy="4" r="2"/></svg>
+        </div>
+        <div class="contact-option-text"><strong>LinkedIn</strong><span>Fazar Riansyah</span></div>
       </a>
     </div>
-
-    <!-- CARDS -->
-    <div class="cards-row">
-      <div class="feat-card green">
-        <h3>Portfolio</h3>
-        <p>Kumpulan karya dan proyek yang pernah saya kerjakan selama bertugas di P4 Jakarta Pusat.</p>
-        <div class="feat-tags">
-          <span class="feat-tag g">Karya</span>
-          <span class="feat-tag g">Proyek</span>
-        </div>
-        <button class="card-btn" onclick="showDevNotice()">Lihat Portfolio</button>
-      </div>
-
-      <div class="feat-card blue">
-        <h3>CV</h3>
-        <p>Riwayat pendidikan dan pengalaman saya secara lengkap dan terstruktur sebagai tenaga profesional.</p>
-        <div class="feat-tags">
-          <span class="feat-tag b">Pendidikan</span>
-          <span class="feat-tag b">Pengalaman</span>
-        </div>
-        <button class="card-btn" onclick="showDevNotice()">Lihat CV</button>
-      </div>
-    </div>
-
-    <!-- SNAKE GAME -->
-    <div style="margin-top:1.5rem;">
-      <p style="font-size:11px;color:#9aa5bd;text-transform:uppercase;letter-spacing:0.09em;margin-bottom:1rem;font-weight:500;">Mini Game</p>
-      <div class="feat-card" style="border-top:3px solid #2563eb;padding:1.75rem;text-align:center;">
-        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1.25rem;flex-wrap:wrap;gap:0.75rem;">
-          <div style="text-align:left;">
-            <h3 style="font-size:15px;font-weight:600;color:#1a1a2e;margin-bottom:3px;">🐍 Snake</h3>
-            <p style="font-size:12px;color:#9aa5bd;margin:0;">Gunakan arrow keys atau WASD untuk bermain</p>
-          </div>
-          <div style="display:flex;align-items:center;gap:1.5rem;">
-            <div style="text-align:center;">
-              <div style="font-size:10px;color:#9aa5bd;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:2px;">Skor</div>
-              <div id="score" style="font-size:24px;font-weight:700;color:#2563eb;line-height:1;">0</div>
-            </div>
-            <div style="text-align:center;">
-              <div style="font-size:10px;color:#9aa5bd;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:2px;">Tertinggi</div>
-              <div id="highscore" style="font-size:24px;font-weight:700;color:#16a34a;line-height:1;">0</div>
-            </div>
-          </div>
-        </div>
-
-        <div style="position:relative;display:inline-block;">
-          <canvas id="snakeCanvas" width="400" height="400" style="border-radius:12px;background:#0f172a;display:block;"></canvas>
-          <div id="gameOverlay" style="position:absolute;inset:0;border-radius:12px;background:rgba(15,23,42,0.88);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0.75rem;">
-            <div id="overlayIcon" style="font-size:42px;">🐍</div>
-            <div id="overlayTitle" style="font-size:18px;font-weight:700;color:#fff;">Snake Game</div>
-            <div id="overlayDesc" style="font-size:12px;color:rgba(255,255,255,0.5);margin-bottom:0.25rem;">Arrow keys / WASD untuk bergerak</div>
-            <button id="startBtn" onclick="startGame()" style="padding:10px 28px;background:#2563eb;color:#fff;border:none;border-radius:10px;font-size:13px;font-weight:600;font-family:inherit;cursor:pointer;">Mulai Main</button>
-          </div>
-        </div>
-
-        <div style="display:flex;flex-direction:column;align-items:center;gap:6px;margin-top:1.25rem;">
-          <button class="ctrl-btn" onclick="setDir(0,-1)">▲</button>
-          <div style="display:flex;gap:6px;">
-            <button class="ctrl-btn" onclick="setDir(-1,0)">◀</button>
-            <button class="ctrl-btn" style="background:transparent;border-color:transparent;cursor:default;"></button>
-            <button class="ctrl-btn" onclick="setDir(1,0)">▶</button>
-          </div>
-          <button class="ctrl-btn" onclick="setDir(0,1)">▼</button>
-        </div>
-      </div>
-    </div>
-
   </div>
+</div>
 
+<script>
+  // ── Modal functions ──
+  function showDevNotice()  { document.getElementById('devModal').classList.add('open'); }
+  function closeDevNotice() { document.getElementById('devModal').classList.remove('open'); }
+  function openPDF(url, title) {
+    document.getElementById('pdfModalTitle').textContent = title;
+    document.getElementById('pdfFrame').src = url;
+    document.getElementById('pdfModal').classList.add('open');
+  }
+  function closePDF() {
+    document.getElementById('pdfModal').classList.remove('open');
+    document.getElementById('pdfFrame').src = '';
+  }
+  function openContactModal() { document.getElementById('contactModal').classList.add('open'); }
+  function closeContact()     { document.getElementById('contactModal').classList.remove('open'); }
 
-  <footer>
-    <div class="footer-left">
-      <p class="footer-brand">Fazar Riansyah</p>
-      <p class="footer-sub">PTP Ahli Pertama · P4 Jakarta Pusat</p>
-    </div>
-    <p class="footer-copy">© 2026 Fazar Site. All rights reserved.</p>
-  </footer>
+  // ── Snake Game ──
+  const canvas = document.getElementById('snakeCanvas');
+  const ctx    = canvas.getContext('2d');
 
-  <!-- DEV NOTICE MODAL -->
-  <div class="modal-overlay" id="devModal" onclick="closeDevModal(event)">
-    <div class="contact-modal-box" style="text-align:center;max-width:360px;">
-      <div style="font-size:36px;margin-bottom:1rem;">🚧</div>
-      <h2 style="font-size:16px;font-weight:600;color:#1a1a2e;margin-bottom:0.5rem;">Sedang Dalam Pengembangan</h2>
-      <p style="font-size:13px;color:#7a86a1;line-height:1.7;margin-bottom:1.5rem;">Halaman ini masih dalam tahap pengembangan. Mohon ditunggu, konten akan segera tersedia. Terima kasih atas kesabarannya! 🙏</p>
-      <button class="btn-white" style="background:#2563eb;color:#fff;width:100%;" onclick="closeDevNotice()">Oke, Mengerti</button>
-    </div>
-  </div>
+  // Make canvas square based on its CSS width
+  function resizeCanvas() {
+    const w = canvas.offsetWidth;
+    canvas.width  = w;
+    canvas.height = w;
+  }
+  resizeCanvas();
+  window.addEventListener('resize', () => { resizeCanvas(); if (!running) drawIdleScreen(); });
 
-  <!-- PDF MODAL -->
-  <div class="modal-overlay" id="pdfModal" onclick="closePDFModal(event)">
-    <div class="pdf-modal-box">
-      <div class="modal-header">
-        <span id="pdfModalTitle">Dokumen</span>
-        <button class="modal-close" onclick="closePDF()">✕</button>
-      </div>
-      <div class="modal-body">
-        <iframe id="pdfFrame" src=""></iframe>
-      </div>
-    </div>
-  </div>
+  const GRID = 20;
+  function CELL() { return canvas.width / GRID; }
 
-  <!-- CONTACT MODAL -->
-  <div class="modal-overlay" id="contactModal" onclick="closeContactModal(event)">
-    <div class="contact-modal-box">
-      <div style="text-align:center;margin-bottom:1.25rem;">
-        <div style="font-size:36px;margin-bottom:0.75rem;">👋</div>
-        <h2 style="font-size:16px;font-weight:600;color:#1a1a2e;margin-bottom:0.3rem;">Hubungi Saya</h2>
-        <p style="font-size:12.5px;color:#9aa5bd;">Pilih platform yang kamu inginkan</p>
-      </div>
-      <button class="modal-close" onclick="closeContact()" style="position:absolute;top:1.25rem;right:1.25rem;">✕</button>
-      <div class="contact-options">
-        <a class="contact-option" href="https://wa.me/6289601066548" target="_blank">
-          <div class="contact-option-icon wa">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="#25D366"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-          </div>
-          <div class="contact-option-text">
-            <strong>WhatsApp</strong>
-            <span>Chat langsung via WhatsApp</span>
-          </div>
-        </a>
-        <a class="contact-option" href="mailto:fazarriansyah@gmail.com">
-          <div class="contact-option-icon email">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" stroke="#2563eb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><polyline points="22,6 12,13 2,6" stroke="#2563eb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          </div>
-          <div class="contact-option-text">
-            <strong>Email</strong>
-            <span>fazarriansyah@gmail.com</span>
-          </div>
-        </a>
-        <a class="contact-option" href="https://instagram.com/fazar.riansyah" target="_blank">
-          <div class="contact-option-icon ig">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#be185d" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
-          </div>
-          <div class="contact-option-text">
-            <strong>Instagram</strong>
-            <span>@fazar.riansyah</span>
-          </div>
-        </a>
-        <a class="contact-option" href="https://linkedin.com/in/fazarriansyah" target="_blank">
-          <div class="contact-option-icon li">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="#0369a1"><path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6zM2 9h4v12H2z"/><circle cx="4" cy="4" r="2" fill="#0369a1"/></svg>
-          </div>
-          <div class="contact-option-text">
-            <strong>LinkedIn</strong>
-            <span>Fazar Riansyah</span>
-          </div>
-        </a>
-      </div>
-    </div>
-  </div>
+  let snake, dir, nextDir, food, score, highScore = 0, gameLoop, running = false;
 
-  </script>
+  function rand() { return Math.floor(Math.random() * GRID); }
 
-  <script>
-    const GRID = 20;
-      document.getElementById('devModal').classList.add('open');
-    }
-    function closeDevNotice() {
-      document.getElementById('devModal').classList.remove('open');
-    }
-    function closeDevModal(e) {
-      if (e.target === document.getElementById('devModal')) closeDevNotice();
-    }
-    function openPDF(url, title) {
-      document.getElementById('pdfModalTitle').textContent = title;
-      document.getElementById('pdfFrame').src = url;
-      document.getElementById('pdfModal').classList.add('open');
-    }
-    function closePDF() {
-      document.getElementById('pdfModal').classList.remove('open');
-      document.getElementById('pdfFrame').src = '';
-    }
-    function closePDFModal(e) {
-      if (e.target === document.getElementById('pdfModal')) closePDF();
-    }
-    function openContactModal() {
-      document.getElementById('contactModal').classList.add('open');
-    }
-    function closeContact() {
-      document.getElementById('contactModal').classList.remove('open');
-    }
-    function closeContactModal(e) {
-      if (e.target === document.getElementById('contactModal')) closeContact();
-    }
-  </script>
+  function spawnFood() {
+    do { food = { x: rand(), y: rand() }; }
+    while (snake.some(s => s.x === food.x && s.y === food.y));
+  }
 
-  <script>
-    const CELL = 400 / GRID;
-    const canvas = document.getElementById('snakeCanvas');
-    const ctx = canvas.getContext('2d');
+  function setDir(x, y) {
+    if (!running) return;
+    if (x === -dir.x && y === -dir.y) return;
+    nextDir = { x, y };
+  }
 
-    let snake, dir, nextDir, food, score, highScore = 0, gameLoop, running = false;
+  function startGame() {
+    resizeCanvas();
+    snake   = [{ x:10,y:10 }, { x:9,y:10 }, { x:8,y:10 }];
+    dir     = { x:1, y:0 };
+    nextDir = { x:1, y:0 };
+    score   = 0;
+    document.getElementById('score').textContent = 0;
+    spawnFood();
+    document.getElementById('gameOverlay').style.display = 'none';
+    running = true;
+    clearInterval(gameLoop);
+    gameLoop = setInterval(tick, 120);
+  }
 
-    const COLORS = {
-      headLight: '#60a5fa',
-      head:      '#2563eb',
-      bodyLight: '#34d399',
-      body:      '#16a34a',
-      food:      '#f97316',
-      foodGlow:  '#fed7aa',
-      grid:      'rgba(255,255,255,0.03)',
-    };
-
-    function drawGrid() {
-      ctx.strokeStyle = COLORS.grid;
-      ctx.lineWidth = 0.5;
-      for (let i = 0; i <= GRID; i++) {
-        ctx.beginPath(); ctx.moveTo(i * CELL, 0); ctx.lineTo(i * CELL, 400); ctx.stroke();
-        ctx.beginPath(); ctx.moveTo(0, i * CELL); ctx.lineTo(400, i * CELL); ctx.stroke();
-      }
-    }
-
-    function drawRoundRect(x, y, w, h, r, fill) {
-      ctx.beginPath();
-      ctx.roundRect(x, y, w, h, r);
-      ctx.fillStyle = fill;
-      ctx.fill();
-    }
-
-    function drawSnake() {
-      snake.forEach((seg, i) => {
-        const x = seg.x * CELL, y = seg.y * CELL;
-        const pad = i === 0 ? 1 : 2;
-        const size = CELL - pad * 2;
-        const color = i === 0 ? COLORS.head : COLORS.body;
-        const colorLight = i === 0 ? COLORS.headLight : COLORS.bodyLight;
-
-        // body gradient feel
-        const grad = ctx.createLinearGradient(x, y, x + CELL, y + CELL);
-        grad.addColorStop(0, colorLight);
-        grad.addColorStop(1, color);
-        drawRoundRect(x + pad, y + pad, size, size, i === 0 ? 6 : 4, grad);
-
-        // eyes on head
-        if (i === 0) {
-          ctx.fillStyle = '#fff';
-          const ex = dir.x === 1 ? x + CELL - 7 : dir.x === -1 ? x + 4 : x + CELL / 2 - 5;
-          const ey = dir.y === 1 ? y + CELL - 7 : dir.y === -1 ? y + 4 : y + CELL / 2 - 5;
-          const ex2 = dir.x !== 0 ? ex : ex + 10;
-          const ey2 = dir.y !== 0 ? ey + 8 : ey;
-          ctx.beginPath(); ctx.arc(ex, ey, 3, 0, Math.PI * 2); ctx.fill();
-          ctx.beginPath(); ctx.arc(ex2, ey2, 3, 0, Math.PI * 2); ctx.fill();
-          ctx.fillStyle = '#0f172a';
-          ctx.beginPath(); ctx.arc(ex + 0.5, ey + 0.5, 1.5, 0, Math.PI * 2); ctx.fill();
-          ctx.beginPath(); ctx.arc(ex2 + 0.5, ey2 + 0.5, 1.5, 0, Math.PI * 2); ctx.fill();
-        }
-      });
-    }
-
-    function drawFood() {
-      const x = food.x * CELL + CELL / 2;
-      const y = food.y * CELL + CELL / 2;
-      // glow
-      const glow = ctx.createRadialGradient(x, y, 2, x, y, CELL / 2);
-      glow.addColorStop(0, 'rgba(249,115,22,0.4)');
-      glow.addColorStop(1, 'rgba(249,115,22,0)');
-      ctx.beginPath(); ctx.arc(x, y, CELL / 2, 0, Math.PI * 2);
-      ctx.fillStyle = glow; ctx.fill();
-      // apple
-      drawRoundRect(food.x * CELL + 3, food.y * CELL + 3, CELL - 6, CELL - 6, 5, COLORS.food);
-      // shine
-      ctx.fillStyle = 'rgba(255,255,255,0.25)';
-      ctx.beginPath(); ctx.ellipse(x - 2, food.y * CELL + 6, 3, 2, -0.5, 0, Math.PI * 2); ctx.fill();
-    }
-
-    function spawnFood() {
-      let pos;
-      do {
-        pos = { x: Math.floor(Math.random() * GRID), y: Math.floor(Math.random() * GRID) };
-      } while (snake.some(s => s.x === pos.x && s.y === pos.y));
-      food = pos;
-    }
-
-    function setDir(x, y) {
-      if (!running) { startGame(); return; }
-      if (x === -dir.x && y === -dir.y) return;
-      nextDir = { x, y };
-    }
-
-    function startGame() {
-      snake = [{ x: 10, y: 10 }, { x: 9, y: 10 }, { x: 8, y: 10 }];
-      dir = { x: 1, y: 0 };
-      nextDir = { x: 1, y: 0 };
-      score = 0;
-      document.getElementById('score').textContent = 0;
+  function tick() {
+    dir = nextDir;
+    const head = { x: snake[0].x + dir.x, y: snake[0].y + dir.y };
+    if (head.x < 0 || head.x >= GRID || head.y < 0 || head.y >= GRID) return gameOver();
+    if (snake.some(s => s.x === head.x && s.y === head.y)) return gameOver();
+    snake.unshift(head);
+    if (head.x === food.x && head.y === food.y) {
+      score += 10;
+      document.getElementById('score').textContent = score;
+      if (score > highScore) { highScore = score; document.getElementById('highscore').textContent = highScore; }
       spawnFood();
-      document.getElementById('gameOverlay').style.display = 'none';
-      running = true;
-      clearInterval(gameLoop);
-      gameLoop = setInterval(tick, 120);
-    }
+      if (score % 50 === 0) { clearInterval(gameLoop); gameLoop = setInterval(tick, Math.max(55, 120 - score)); }
+    } else { snake.pop(); }
+    draw();
+  }
 
-    function tick() {
-      dir = nextDir;
-      const head = { x: snake[0].x + dir.x, y: snake[0].y + dir.y };
+  function gameOver() {
+    clearInterval(gameLoop);
+    running = false;
+    document.getElementById('overlayIcon').textContent  = '💀';
+    document.getElementById('overlayTitle').textContent = 'Game Over!';
+    document.getElementById('overlayDesc').textContent  = `Skor kamu: ${score}`;
+    document.getElementById('startBtn').textContent     = 'Main Lagi';
+    document.getElementById('gameOverlay').style.display = 'flex';
+  }
 
-      // wall collision
-      if (head.x < 0 || head.x >= GRID || head.y < 0 || head.y >= GRID) return gameOver();
-      // self collision
-      if (snake.some(s => s.x === head.x && s.y === head.y)) return gameOver();
+  function drawRoundRect(x, y, w, h, r, fill) {
+    ctx.beginPath();
+    ctx.roundRect(x, y, w, h, r);
+    ctx.fillStyle = fill;
+    ctx.fill();
+  }
 
-      snake.unshift(head);
-
-      if (head.x === food.x && head.y === food.y) {
-        score += 10;
-        document.getElementById('score').textContent = score;
-        if (score > highScore) { highScore = score; document.getElementById('highscore').textContent = highScore; }
-        spawnFood();
-        // speed up slightly
-        if (score % 50 === 0) { clearInterval(gameLoop); gameLoop = setInterval(tick, Math.max(60, 120 - score)); }
-      } else {
-        snake.pop();
-      }
-
-      // draw
-      ctx.fillStyle = '#0f172a';
-      ctx.fillRect(0, 0, 400, 400);
-      drawGrid();
-      drawFood();
-      drawSnake();
-    }
-
-    function gameOver() {
-      clearInterval(gameLoop);
-      running = false;
-      const overlay = document.getElementById('gameOverlay');
-      document.getElementById('overlayIcon').textContent = '💀';
-      document.getElementById('overlayTitle').textContent = 'Game Over!';
-      document.getElementById('overlayDesc').textContent = `Skor kamu: ${score}`;
-      document.getElementById('startBtn').textContent = 'Main Lagi';
-      overlay.style.display = 'flex';
-    }
-
-    // keyboard controls
-    document.addEventListener('keydown', e => {
-      if (['ArrowUp','ArrowDown','ArrowLeft','ArrowRight','w','a','s','d'].includes(e.key)) e.preventDefault();
-      if (e.key === 'ArrowUp'    || e.key === 'w') setDir(0, -1);
-      if (e.key === 'ArrowDown'  || e.key === 's') setDir(0,  1);
-      if (e.key === 'ArrowLeft'  || e.key === 'a') setDir(-1, 0);
-      if (e.key === 'ArrowRight' || e.key === 'd') setDir(1,  0);
-    });
-
-    // draw initial screen
+  function draw() {
+    const C = CELL();
     ctx.fillStyle = '#0f172a';
-    ctx.fillRect(0, 0, 400, 400);
-    drawGrid();
-  </script>
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    // grid
+    ctx.strokeStyle = 'rgba(255,255,255,0.03)';
+    ctx.lineWidth = 0.5;
+    for (let i = 0; i <= GRID; i++) {
+      ctx.beginPath(); ctx.moveTo(i*C,0); ctx.lineTo(i*C,canvas.height); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(0,i*C); ctx.lineTo(canvas.width,i*C); ctx.stroke();
+    }
+
+    // food glow
+    const fx = food.x * C + C/2, fy = food.y * C + C/2;
+    const glow = ctx.createRadialGradient(fx,fy,2,fx,fy,C/2);
+    glow.addColorStop(0,'rgba(249,115,22,0.45)');
+    glow.addColorStop(1,'rgba(249,115,22,0)');
+    ctx.beginPath(); ctx.arc(fx,fy,C/2,0,Math.PI*2); ctx.fillStyle=glow; ctx.fill();
+    drawRoundRect(food.x*C+3, food.y*C+3, C-6, C-6, 4, '#f97316');
+    ctx.fillStyle='rgba(255,255,255,0.22)';
+    ctx.beginPath(); ctx.ellipse(fx-2, food.y*C+6, 3, 2, -0.5, 0, Math.PI*2); ctx.fill();
+
+    // snake
+    snake.forEach((seg, i) => {
+      const x = seg.x*C, y = seg.y*C;
+      const pad = i===0 ? 1 : 2, size = C - pad*2;
+      const g = ctx.createLinearGradient(x,y,x+C,y+C);
+      if (i===0) { g.addColorStop(0,'#60a5fa'); g.addColorStop(1,'#2563eb'); }
+      else       { g.addColorStop(0,'#34d399'); g.addColorStop(1,'#059669'); }
+      drawRoundRect(x+pad, y+pad, size, size, i===0?6:4, g);
+
+      // eyes
+      if (i===0) {
+        const ex  = dir.x===1 ? x+C-8  : dir.x===-1 ? x+5  : x+C/2-5;
+        const ey  = dir.y===1 ? y+C-8  : dir.y===-1 ? y+5  : y+C/2-5;
+        const ex2 = dir.x!==0 ? ex      : ex+10;
+        const ey2 = dir.y!==0 ? ey+8   : ey;
+        ctx.fillStyle='#fff';
+        ctx.beginPath(); ctx.arc(ex,ey,2.5,0,Math.PI*2); ctx.fill();
+        ctx.beginPath(); ctx.arc(ex2,ey2,2.5,0,Math.PI*2); ctx.fill();
+        ctx.fillStyle='#0f172a';
+        ctx.beginPath(); ctx.arc(ex+0.5,ey+0.5,1.2,0,Math.PI*2); ctx.fill();
+        ctx.beginPath(); ctx.arc(ex2+0.5,ey2+0.5,1.2,0,Math.PI*2); ctx.fill();
+      }
+    });
+  }
+
+  function drawIdleScreen() {
+    const C = CELL();
+    ctx.fillStyle = '#0f172a';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.strokeStyle = 'rgba(255,255,255,0.03)';
+    ctx.lineWidth = 0.5;
+    for (let i = 0; i <= GRID; i++) {
+      ctx.beginPath(); ctx.moveTo(i*C,0); ctx.lineTo(i*C,canvas.height); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(0,i*C); ctx.lineTo(canvas.width,i*C); ctx.stroke();
+    }
+  }
+
+  // keyboard
+  document.addEventListener('keydown', e => {
+    const map = {
+      ArrowUp:'u', w:'u', ArrowDown:'d', s:'d',
+      ArrowLeft:'l', a:'l', ArrowRight:'r', d:'r'
+    };
+    if (!map[e.key]) return;
+    e.preventDefault();
+    if (map[e.key]==='u') setDir(0,-1);
+    if (map[e.key]==='d') setDir(0, 1);
+    if (map[e.key]==='l') setDir(-1,0);
+    if (map[e.key]==='r') setDir(1, 0);
+  });
+
+  drawIdleScreen();
+</script>
 
 </body>
 </html>

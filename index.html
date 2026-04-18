@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Fazar Blog</title>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background: #f4f6fb;
+      color: #1a1a2e;
+      min-height: 100vh;
+    }
+
+    /* NAV */
+    nav {
+      max-width: 780px;
+      margin: 0 auto;
+      padding: 1.25rem 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    nav .logo {
+      font-size: 16px;
+      font-weight: 600;
+      color: #1a1a2e;
+    }
+    nav .links {
+      display: flex;
+      gap: 1.5rem;
+    }
+    nav .links a {
+      font-size: 13px;
+      color: #5a6484;
+      text-decoration: none;
+      cursor: pointer;
+      transition: color 0.2s;
+    }
+    nav .links a:hover { color: #1a1a2e; }
+
+    /* MAIN WRAPPER */
+    .wrapper {
+      max-width: 780px;
+      margin: 0 auto;
+      padding: 0 1.5rem 3rem;
+    }
+
+    /* HERO */
+    .hero {
+      background: linear-gradient(135deg, #1a4fa0 0%, #2563eb 60%, #1d4ed8 100%);
+      border-radius: 20px;
+      padding: 2.5rem 2rem;
+      text-align: center;
+      margin-bottom: 1.25rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute; top: -50px; right: -50px;
+      width: 200px; height: 200px; border-radius: 50%;
+      background: rgba(255,255,255,0.06);
+    }
+    .hero::after {
+      content: '';
+      position: absolute; bottom: -40px; left: -40px;
+      width: 160px; height: 160px; border-radius: 50%;
+      background: rgba(255,255,255,0.05);
+    }
+    .hero h1 {
+      font-size: 28px;
+      font-weight: 600;
+      color: #fff;
+      line-height: 1.3;
+      margin-bottom: 0.75rem;
+    }
+    .hero p {
+      font-size: 14px;
+      color: rgba(255,255,255,0.72);
+      line-height: 1.7;
+      max-width: 400px;
+      margin: 0 auto 1.5rem;
+    }
+    .hero-tags {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-bottom: 1.5rem;
+    }
+    .hero-tag {
+      padding: 5px 14px;
+      border-radius: 20px;
+      font-size: 12px;
+      background: rgba(255,255,255,0.15);
+      color: #fff;
+      border: 1px solid rgba(255,255,255,0.25);
+    }
+    .hero-btns {
+      display: flex;
+      gap: 8px;
+      justify-content: center;
+    }
+    .btn-white {
+      padding: 9px 22px;
+      font-size: 13px;
+      font-family: inherit;
+      background: #fff;
+      color: #1d4ed8;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: opacity 0.2s;
+    }
+    .btn-white:hover { opacity: 0.9; }
+    .btn-ghost {
+      padding: 9px 22px;
+      font-size: 13px;
+      font-family: inherit;
+      background: rgba(255,255,255,0.15);
+      color: #fff;
+      border: 1px solid rgba(255,255,255,0.3);
+      border-radius: 10px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .btn-ghost:hover { background: rgba(255,255,255,0.22); }
+
+    /* STATS */
+    .stats-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 1.25rem;
+    }
+    .stat-card {
+      border-radius: 14px;
+      padding: 1rem;
+      text-align: center;
+      border: 0.5px solid #e2e8f0;
+      background: #fff;
+    }
+    .stat-num {
+      font-size: 22px;
+      font-weight: 600;
+      margin-bottom: 3px;
+    }
+    .stat-label {
+      font-size: 11px;
+      color: #7a86a1;
+      line-height: 1.4;
+    }
+    .stat-card.blue .stat-num { color: #2563eb; }
+    .stat-card.green .stat-num { color: #16a34a; }
+    .stat-card.orange .stat-num { color: #ea580c; }
+
+    /* SECTION LABEL */
+    .section-label {
+      font-size: 11px;
+      color: #9aa5bd;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 0.875rem;
+    }
+
+    /* FEATURE CARDS */
+    .cards-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 1.25rem;
+    }
+    .feat-card {
+      border-radius: 14px;
+      padding: 1.25rem;
+      background: #fff;
+      border: 0.5px solid #e2e8f0;
+      border-top: 3px solid transparent;
+    }
+    .feat-card.green { border-top-color: #16a34a; }
+    .feat-card.blue  { border-top-color: #2563eb; }
+    .feat-card.orange{ border-top-color: #ea580c; }
+    .feat-card.purple{ border-top-color: #7c3aed; }
+    .feat-card h3 {
+      font-size: 14px;
+      font-weight: 600;
+      color: #1a1a2e;
+      margin-bottom: 0.4rem;
+    }
+    .feat-card p {
+      font-size: 12px;
+      color: #7a86a1;
+      line-height: 1.6;
+      margin-bottom: 0.875rem;
+    }
+    .feat-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+      margin-bottom: 0.875rem;
+    }
+    .feat-tag {
+      font-size: 10px;
+      padding: 2px 8px;
+      border-radius: 10px;
+      font-weight: 500;
+    }
+    .feat-tag.g { background: #dcfce7; color: #166534; }
+    .feat-tag.b { background: #dbeafe; color: #1e40af; }
+    .feat-tag.o { background: #ffedd5; color: #9a3412; }
+    .feat-tag.p { background: #ede9fe; color: #5b21b6; }
+
+    .card-btn {
+      display: inline-block;
+      padding: 6px 16px;
+      font-size: 12px;
+      font-family: inherit;
+      font-weight: 500;
+      border-radius: 8px;
+      border: 1px solid #e2e8f0;
+      background: transparent;
+      color: #1a1a2e;
+      cursor: pointer;
+      transition: background 0.2s;
+      text-decoration: none;
+    }
+    .card-btn:hover { background: #f4f6fb; }
+
+    /* CONTACT BUTTONS */
+    .contact-btns {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 0.5rem;
+    }
+    .contact-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 14px;
+      font-size: 12px;
+      font-family: inherit;
+      font-weight: 500;
+      border-radius: 8px;
+      border: 1px solid #e2e8f0;
+      background: transparent;
+      color: #1a1a2e;
+      cursor: pointer;
+      text-decoration: none;
+      transition: background 0.2s;
+    }
+    .contact-btn:hover { background: #f4f6fb; }
+
+    /* PDF MODAL */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.55);
+      z-index: 999;
+      align-items: center;
+      justify-content: center;
+    }
+    .modal-overlay.open { display: flex; }
+    .modal-box {
+      background: #fff;
+      border-radius: 16px;
+      width: 90%;
+      max-width: 700px;
+      height: 80vh;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+    }
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 1.25rem;
+      border-bottom: 0.5px solid #e2e8f0;
+    }
+    .modal-header span {
+      font-size: 14px;
+      font-weight: 600;
+      color: #1a1a2e;
+    }
+    .modal-close {
+      font-size: 18px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: #7a86a1;
+      line-height: 1;
+    }
+    .modal-body { flex: 1; overflow: hidden; }
+    .modal-body iframe { width: 100%; height: 100%; border: none; }
+
+    /* FOOTER */
+    footer {
+      border-top: 0.5px solid #e2e8f0;
+      padding: 1.25rem 0 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 1.5rem;
+    }
+    footer p { font-size: 12px; color: #9aa5bd; }
+    footer .socials { display: flex; gap: 1rem; }
+    footer .socials a {
+      font-size: 12px;
+      color: #7a86a1;
+      text-decoration: none;
+    }
+    footer .socials a:hover { color: #1a1a2e; }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <span class="logo">Fazar Blog</span>
+  </nav>
+
+  <div class="wrapper">
+
+    <!-- HERO -->
+    <div class="hero">
+      <h1>Fazar Blog</h1>
+      <p>PTP Ahli Pertama dengan pengalaman 3 tahun di bidang pendidikan dan pelatihan.</p>
+      <div class="hero-tags">
+        <span class="hero-tag">Portfolio</span>
+        <span class="hero-tag">CV Online</span>
+        <span class="hero-tag">Kontak</span>
+      </div>
+      <div class="hero-btns">
+        <button class="btn-white" onclick="document.getElementById('kontak').scrollIntoView({behavior:'smooth'})">Hubungi Saya</button>
+      </div>
+    </div>
+
+    <!-- STATS -->
+    <div class="stats-row">
+      <div class="stat-card blue">
+        <div class="stat-num">3+</div>
+        <div class="stat-label">Tahun pengalaman</div>
+      </div>
+      <div class="stat-card green">
+        <div class="stat-num">PTP</div>
+        <div class="stat-label">Ahli Pertama</div>
+      </div>
+      <div class="stat-card orange">
+        <div class="stat-num">P4</div>
+        <div class="stat-label">Jakarta Pusat</div>
+      </div>
+    </div>
+
+    <!-- PORTFOLIO -->
+    <div id="portfolio">
+      <p class="section-label">Apa yang ada di sini</p>
+      <div class="cards-row">
+
+        <div class="feat-card green">
+          <h3>Portfolio</h3>
+          <p>Kumpulan karya dan proyek yang pernah saya kerjakan.</p>
+          <div class="feat-tags">
+            <span class="feat-tag g">Karya</span>
+            <span class="feat-tag g">Proyek</span>
+          </div>
+          <!-- Ganti URL di bawah dengan link Google Drive PDF kamu -->
+          <button class="card-btn" onclick="openPDF('GANTI_DENGAN_LINK_GOOGLE_DRIVE_PDF_PORTFOLIO', 'Portfolio')">Lihat Portfolio</button>
+        </div>
+
+        <!-- CV -->
+        <div id="cv" class="feat-card blue">
+          <h3>CV</h3>
+          <p>Riwayat pendidikan dan pengalaman saya selengkapnya.</p>
+          <div class="feat-tags">
+            <span class="feat-tag b">Pendidikan</span>
+            <span class="feat-tag b">Pengalaman</span>
+          </div>
+          <!-- Ganti URL di bawah dengan link Google Drive PDF CV kamu -->
+          <button class="card-btn" onclick="openPDF('GANTI_DENGAN_LINK_GOOGLE_DRIVE_PDF_CV', 'CV')">Lihat CV</button>
+        </div>
+
+        <!-- KONTAK -->
+        <div id="kontak" class="feat-card purple" style="grid-column: span 2;">
+          <h3>Kontak</h3>
+          <p>Mau ngobrol atau kolaborasi? Hubungi saya melalui email atau media sosial.</p>
+          <div class="contact-btns">
+            <!-- Ganti dengan email kamu -->
+            <a class="contact-btn" href="mailto:email@kamu.com">✉️ Email</a>
+            <!-- Ganti dengan link Instagram kamu -->
+            <a class="contact-btn" href="https://instagram.com/usernamekamu" target="_blank">📷 Instagram</a>
+            <!-- Ganti dengan link LinkedIn kamu -->
+            <a class="contact-btn" href="https://linkedin.com/in/usernamekamu" target="_blank">💼 LinkedIn</a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <footer>
+      <p>© 2025 Fazar Blog</p>
+      <div class="socials">
+        <a href="mailto:email@kamu.com">Email</a>
+        <a href="https://instagram.com/usernamekamu" target="_blank">Instagram</a>
+      </div>
+    </footer>
+
+  </div>
+
+  <!-- PDF MODAL -->
+  <div class="modal-overlay" id="pdfModal" onclick="closeModal(event)">
+    <div class="modal-box">
+      <div class="modal-header">
+        <span id="modalTitle">Dokumen</span>
+        <button class="modal-close" onclick="closePDF()">✕</button>
+      </div>
+      <div class="modal-body">
+        <iframe id="pdfFrame" src=""></iframe>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function openPDF(url, title) {
+      document.getElementById('modalTitle').textContent = title;
+      document.getElementById('pdfFrame').src = url;
+      document.getElementById('pdfModal').classList.add('open');
+    }
+    function closePDF() {
+      document.getElementById('pdfModal').classList.remove('open');
+      document.getElementById('pdfFrame').src = '';
+    }
+    function closeModal(e) {
+      if (e.target === document.getElementById('pdfModal')) closePDF();
+    }
+  </script>
+
+</body>
+</html>

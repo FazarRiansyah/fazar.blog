@@ -145,9 +145,9 @@
     .ctrl-pad { display: flex; flex-direction: column; align-items: center; gap: 5px; margin-top: 1rem; }
     .ctrl-row { display: flex; gap: 5px; }
     .ctrl-btn {
-      width: 40px; height: 40px; border-radius: 8px;
+      width: 56px; height: 56px; border-radius: 10px;
       border: 1px solid #e2e8f0; background: #fff;
-      font-size: 13px; cursor: pointer; color: #1a1a2e;
+      font-size: 18px; cursor: pointer; color: #1a1a2e;
       transition: background 0.15s, transform 0.1s; font-family: inherit;
     }
     .ctrl-btn:active { background: #f4f6fb; transform: scale(0.9); }
@@ -229,6 +229,34 @@
     .contact-option-icon.li    { background: #f0f9ff; }
     .contact-option-text strong { display: block; font-size: 13px; font-weight: 600; color: #1a1a2e; }
     .contact-option-text span   { font-size: 11px; color: #7a86a1; }
+
+    /* LEADERBOARD */
+    .lb-list { display: flex; flex-direction: column; gap: 6px; margin-top: 0.5rem; }
+    .lb-item {
+      display: flex; align-items: center; gap: 10px;
+      padding: 7px 10px; border-radius: 10px;
+      background: #f8fafc; border: 0.5px solid #e2e8f0;
+      font-size: 12px; transition: background 0.15s;
+    }
+    .lb-item.top1 { background: #fffbeb; border-color: #fde68a; }
+    .lb-item.top2 { background: #f8fafc; border-color: #e2e8f0; }
+    .lb-item.top3 { background: #fff7f0; border-color: #fed7aa; }
+    .lb-rank { font-size: 13px; width: 20px; text-align: center; flex-shrink: 0; }
+    .lb-name { flex: 1; font-weight: 500; color: #1a1a2e; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .lb-score { font-weight: 700; color: #2563eb; flex-shrink: 0; }
+    .lb-empty { font-size: 12px; color: #b0bac9; text-align: center; padding: 0.75rem 0; }
+
+    /* NAME INPUT in overlay */
+    .name-input-wrap { display: flex; flex-direction: column; align-items: center; gap: 8px; width: 100%; padding: 0 1.5rem; }
+    .name-input-wrap label { font-size: 11px; color: rgba(255,255,255,0.55); letter-spacing: 0.05em; text-transform: uppercase; }
+    #playerNameInput {
+      width: 100%; padding: 9px 14px; border-radius: 8px;
+      border: 1.5px solid rgba(255,255,255,0.2); background: rgba(255,255,255,0.1);
+      color: #fff; font-size: 13px; font-family: inherit; text-align: center;
+      outline: none; transition: border-color 0.2s;
+    }
+    #playerNameInput::placeholder { color: rgba(255,255,255,0.35); }
+    #playerNameInput:focus { border-color: rgba(255,255,255,0.5); background: rgba(255,255,255,0.15); }
 
     /* RESPONSIVE */
     @media (max-width: 860px) {
@@ -324,7 +352,11 @@
           <div id="overlayIcon">🐍</div>
           <div id="overlayTitle">Snake Game</div>
           <div id="overlayDesc">Arrow keys / WASD untuk bergerak</div>
-          <button id="startBtn" onclick="startGame()">Mulai Main</button>
+          <div class="name-input-wrap" id="nameInputWrap">
+            <label>Nama Kamu</label>
+            <input id="playerNameInput" type="text" maxlength="20" placeholder="Masukkan nama..." autocomplete="off" />
+          </div>
+          <button id="startBtn" onclick="handleStartBtn()">Mulai Main</button>
         </div>
       </div>
 
@@ -356,6 +388,12 @@
       <div class="info-card">
         <h4>Penilaian</h4>
         <p>Setiap makanan bernilai <strong>+10 poin</strong>. Skor tertinggi tersimpan selama sesi bermain.</p>
+      </div>
+      <div class="info-card">
+        <h4>🏆 Leaderboard</h4>
+        <div class="lb-list" id="leaderboardList">
+          <div class="lb-empty">Belum ada skor. Yuk main!</div>
+        </div>
       </div>
     </div>
 
@@ -433,7 +471,7 @@
   </div>
 </div>
 
-<script>
+<script type="module">
   // ── Modal functions ──
   function showDevNotice()  { document.getElementById('devModal').classList.add('open'); }
   function closeDevNotice() { document.getElementById('devModal').classList.remove('open'); }
@@ -453,7 +491,6 @@
   const canvas = document.getElementById('snakeCanvas');
   const ctx    = canvas.getContext('2d');
 
-  // Make canvas square based on its CSS width
   function resizeCanvas() {
     const w = canvas.offsetWidth;
     canvas.width  = w;
@@ -466,6 +503,86 @@
   function CELL() { return canvas.width / GRID; }
 
   let snake, dir, nextDir, food, score, highScore = 0, gameLoop, running = false;
+  let currentPlayerName = '';
+
+  // ── Firebase Setup ──
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+  import { getDatabase, ref, get, set, onValue } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyDrx9zz8wIOFktxlAHun7z4ttCx5-o7mo4",
+    authDomain: "tester-c9106.firebaseapp.com",
+    databaseURL: "https://tester-c9106.firebaseio.com",
+    projectId: "tester-c9106",
+    storageBucket: "tester-c9106.firebasestorage.app",
+    messagingSenderId: "18341905173",
+    appId: "1:18341905173:web:81f8323a41e1e8d40a1f1c"
+  };
+  const app = initializeApp(firebaseConfig);
+  const db  = getDatabase(app);
+
+  // ── Leaderboard ──
+  function sanitizeKey(name) {
+    // Firebase key cannot contain . # $ / [ ]
+    return name.replace(/[.#$\/\[\]]/g, '_').substring(0, 30);
+  }
+
+  function addScore(name, pts) {
+    if (pts <= 0) return;
+    const key     = sanitizeKey(name || 'Anonim');
+    const entryRef = ref(db, 'leaderboard/' + key);
+    get(entryRef).then(snap => {
+      const existing = snap.exists() ? snap.val().score : 0;
+      if (pts > existing) {
+        set(entryRef, { name: name || 'Anonim', score: pts });
+      }
+    }).catch(err => console.error('Firebase write error:', err));
+  }
+
+  function renderLeaderboard(data) {
+    const el     = document.getElementById('leaderboardList');
+    const medals = ['🥇','🥈','🥉'];
+    if (!data) {
+      el.innerHTML = '<div class="lb-empty">Belum ada skor. Yuk main!</div>';
+      return;
+    }
+    const entries = Object.values(data)
+      .sort((a, b) => b.score - a.score)
+      .slice(0, 5);
+    if (!entries.length) {
+      el.innerHTML = '<div class="lb-empty">Belum ada skor. Yuk main!</div>';
+      return;
+    }
+    el.innerHTML = entries.map((e, i) => `
+      <div class="lb-item ${i===0?'top1':i===1?'top2':i===2?'top3':''}">
+        <span class="lb-rank">${medals[i] || (i+1)}</span>
+        <span class="lb-name">${e.name}</span>
+        <span class="lb-score">${e.score}</span>
+      </div>`).join('');
+  }
+
+  // Listen real-time — updates semua device otomatis
+  onValue(ref(db, 'leaderboard'), snap => {
+    renderLeaderboard(snap.val());
+  }, err => console.error('Firebase read error:', err));
+
+  // ── Name input handling ──
+  function handleStartBtn() {
+    const nameInput = document.getElementById('playerNameInput');
+    const name = nameInput.value.trim();
+    if (!name) {
+      nameInput.style.borderColor = 'rgba(239,68,68,0.7)';
+      nameInput.placeholder = 'Nama wajib diisi!';
+      nameInput.focus();
+      setTimeout(() => {
+        nameInput.style.borderColor = '';
+        nameInput.placeholder = 'Masukkan nama...';
+      }, 1500);
+      return;
+    }
+    currentPlayerName = name;
+    startGame();
+  }
 
   function rand() { return Math.floor(Math.random() * GRID); }
 
@@ -491,7 +608,7 @@
     document.getElementById('gameOverlay').style.display = 'none';
     running = true;
     clearInterval(gameLoop);
-    gameLoop = setInterval(tick, 120);
+    gameLoop = setInterval(tick, 200);
   }
 
   function tick() {
@@ -505,7 +622,7 @@
       document.getElementById('score').textContent = score;
       if (score > highScore) { highScore = score; document.getElementById('highscore').textContent = highScore; }
       spawnFood();
-      if (score % 50 === 0) { clearInterval(gameLoop); gameLoop = setInterval(tick, Math.max(55, 120 - score)); }
+      if (score % 10 === 0) { clearInterval(gameLoop); gameLoop = setInterval(tick, Math.max(60, 200 - score * 1.2)); }
     } else { snake.pop(); }
     draw();
   }
@@ -513,10 +630,13 @@
   function gameOver() {
     clearInterval(gameLoop);
     running = false;
+    addScore(currentPlayerName, score);
     document.getElementById('overlayIcon').textContent  = '💀';
     document.getElementById('overlayTitle').textContent = 'Game Over!';
-    document.getElementById('overlayDesc').textContent  = `Skor kamu: ${score}`;
+    document.getElementById('overlayDesc').textContent  = `${currentPlayerName} — Skor: ${score}`;
     document.getElementById('startBtn').textContent     = 'Main Lagi';
+    // Show name input again for next round (keep name prefilled)
+    document.getElementById('nameInputWrap').style.display = 'flex';
     document.getElementById('gameOverlay').style.display = 'flex';
   }
 
@@ -589,6 +709,11 @@
 
   // keyboard
   document.addEventListener('keydown', e => {
+    // Allow typing in name input without triggering game controls
+    if (document.activeElement === document.getElementById('playerNameInput')) {
+      if (e.key === 'Enter') handleStartBtn();
+      return;
+    }
     const map = {
       ArrowUp:'u', w:'u', ArrowDown:'d', s:'d',
       ArrowLeft:'l', a:'l', ArrowRight:'r', d:'r'
@@ -602,6 +727,16 @@
   });
 
   drawIdleScreen();
+
+  // Expose ke global (diperlukan karena type="module")
+  window.showDevNotice  = showDevNotice;
+  window.closeDevNotice = closeDevNotice;
+  window.openPDF        = openPDF;
+  window.closePDF       = closePDF;
+  window.openContactModal = openContactModal;
+  window.closeContact   = closeContact;
+  window.handleStartBtn = handleStartBtn;
+  window.setDir         = setDir;
 </script>
 
 </body>

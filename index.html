@@ -28,7 +28,7 @@
       color: #1a1a2e;
     }
 
-    /* MAIN WRAPPER — full width dengan padding sisi */
+    /* WRAPPER */
     .wrapper {
       width: 100%;
       padding: 0 3rem 4rem;
@@ -68,22 +68,7 @@
       color: rgba(255,255,255,0.78);
       line-height: 1.75;
       max-width: 500px;
-      margin: 0 auto 1.5rem;
-    }
-    .hero-tags {
-      display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
-      justify-content: center;
-      margin-bottom: 1.75rem;
-    }
-    .hero-tag {
-      padding: 5px 16px;
-      border-radius: 20px;
-      font-size: 12px;
-      background: rgba(255,255,255,0.15);
-      color: #fff;
-      border: 1px solid rgba(255,255,255,0.25);
+      margin: 0 auto 2rem;
     }
     .btn-white {
       display: inline-block;
@@ -116,35 +101,33 @@
       background: #fff;
       box-shadow: 0 2px 8px rgba(0,0,0,0.04);
       transition: box-shadow 0.2s, transform 0.2s;
+      text-decoration: none;
+      display: block;
+      color: inherit;
     }
     .stat-card:hover {
       box-shadow: 0 8px 24px rgba(0,0,0,0.09);
       transform: translateY(-2px);
     }
     .stat-num {
-      font-size: 24px;
+      font-size: 22px;
       font-weight: 600;
       margin-bottom: 4px;
     }
-    .stat-label { font-size: 12px; color: #7a86a1; line-height: 1.5; }
+    .stat-sub {
+      font-size: 13px;
+      font-weight: 500;
+      color: #1a1a2e;
+    }
+    .stat-label { font-size: 11px; color: #7a86a1; line-height: 1.5; margin-top: 2px; }
     .stat-card.blue .stat-num   { color: #2563eb; }
     .stat-card.green .stat-num  { color: #16a34a; }
-    .stat-card.orange .stat-num { color: #ea580c; }
+    .stat-card.orange .stat-num { color: #ea580c; font-size: 17px; }
 
-    /* SECTION LABEL */
-    .section-label {
-      font-size: 11px;
-      color: #9aa5bd;
-      text-transform: uppercase;
-      letter-spacing: 0.09em;
-      margin-bottom: 1rem;
-      font-weight: 500;
-    }
-
-    /* CARDS ROW — 3 kolom */
+    /* CARDS ROW */
     .cards-row {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
+      grid-template-columns: repeat(2, 1fr);
       gap: 14px;
       margin-bottom: 1.75rem;
     }
@@ -163,9 +146,6 @@
     }
     .feat-card.green  { border-top-color: #16a34a; }
     .feat-card.blue   { border-top-color: #2563eb; }
-    .feat-card.purple { border-top-color: #7c3aed; }
-    .kontak-card { grid-column: 1 / -1; }
-
     .feat-card h3 {
       font-size: 15px;
       font-weight: 600;
@@ -193,7 +173,6 @@
     }
     .feat-tag.g { background: #dcfce7; color: #166534; }
     .feat-tag.b { background: #dbeafe; color: #1e40af; }
-    .feat-tag.p { background: #ede9fe; color: #5b21b6; }
 
     .card-btn {
       display: inline-block;
@@ -215,124 +194,20 @@
       transform: translateY(-1px);
     }
 
-    /* CONTACT BUTTONS */
-    .contact-btns {
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-      margin-top: 0.25rem;
-    }
-    .contact-btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      padding: 8px 18px;
-      font-size: 13px;
-      font-family: inherit;
-      font-weight: 500;
-      border-radius: 8px;
-      border: 1px solid #e2e8f0;
-      background: transparent;
-      color: #1a1a2e;
-      cursor: pointer;
-      text-decoration: none;
-      transition: background 0.2s, border-color 0.2s, transform 0.15s;
-    }
-    .contact-btn:hover {
-      background: #f4f6fb;
-      border-color: #c7d0e0;
-      transform: translateY(-1px);
-    }
-
-    /* INSTAGRAM SECTION */
-    .insta-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 14px;
-      margin-bottom: 1.75rem;
-    }
-    .insta-card {
-      border-radius: 16px;
-      background: #fff;
-      border: 0.5px solid #e2e8f0;
-      overflow: hidden;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
-      transition: box-shadow 0.2s, transform 0.2s;
-      text-decoration: none;
-      display: block;
-    }
-    .insta-card:hover {
-      box-shadow: 0 10px 28px rgba(0,0,0,0.10);
-      transform: translateY(-3px);
-    }
-    /* Embed container — rasio 1:1 */
-    .insta-embed-wrap {
-      width: 100%;
-      aspect-ratio: 1 / 1;
-      overflow: hidden;
-      background: #f0f2f8;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      position: relative;
-    }
-    /* Simulasi feed Instagram */
-    .insta-mock {
-      width: 100%;
-      height: 100%;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      background: linear-gradient(135deg, #f9a8d4 0%, #c084fc 50%, #818cf8 100%);
-      position: relative;
-    }
-    .insta-mock.green {
-      background: linear-gradient(135deg, #6ee7b7 0%, #3b82f6 100%);
-    }
-    .insta-mock.orange {
-      background: linear-gradient(135deg, #fcd34d 0%, #f97316 100%);
-    }
-    .insta-mock-icon {
-      font-size: 40px;
-      margin-bottom: 8px;
-      filter: drop-shadow(0 2px 4px rgba(0,0,0,0.15));
-    }
-    .insta-mock-label {
-      font-size: 11px;
-      color: rgba(255,255,255,0.85);
-      font-weight: 500;
-    }
-    .insta-body {
-      padding: 1rem 1.1rem;
-    }
-    .insta-meta {
-      font-size: 10px;
-      color: #9aa5bd;
-      margin-bottom: 5px;
-      font-weight: 500;
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-    }
-    .insta-caption {
-      font-size: 12.5px;
-      color: #5a6484;
-      line-height: 1.65;
-      text-align: justify;
-    }
-
-    /* PDF MODAL */
+    /* CONTACT MODAL */
     .modal-overlay {
       display: none;
       position: fixed;
       inset: 0;
-      background: rgba(0,0,0,0.55);
+      background: rgba(0,0,0,0.45);
       z-index: 999;
       align-items: center;
       justify-content: center;
     }
     .modal-overlay.open { display: flex; }
-    .modal-box {
+
+    /* PDF Modal */
+    .pdf-modal-box {
       background: #fff;
       border-radius: 16px;
       width: 90%;
@@ -363,6 +238,81 @@
     .modal-body { flex: 1; overflow: hidden; }
     .modal-body iframe { width: 100%; height: 100%; border: none; }
 
+    /* Contact Modal */
+    .contact-modal-box {
+      background: #fff;
+      border-radius: 20px;
+      width: 90%;
+      max-width: 400px;
+      padding: 2rem;
+      box-shadow: 0 24px 64px rgba(0,0,0,0.18);
+      animation: slideUp 0.25s ease;
+    }
+    @keyframes slideUp {
+      from { transform: translateY(20px); opacity: 0; }
+      to   { transform: translateY(0);    opacity: 1; }
+    }
+    .contact-modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.5rem;
+    }
+    .contact-modal-header h2 {
+      font-size: 16px;
+      font-weight: 600;
+      color: #1a1a2e;
+    }
+    .contact-modal-sub {
+      font-size: 12.5px;
+      color: #9aa5bd;
+      margin-bottom: 1.5rem;
+    }
+    .contact-options {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .contact-option {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 13px 16px;
+      border-radius: 12px;
+      border: 0.5px solid #e2e8f0;
+      background: #fff;
+      text-decoration: none;
+      color: #1a1a2e;
+      transition: background 0.18s, border-color 0.18s, transform 0.15s;
+      cursor: pointer;
+    }
+    .contact-option:hover {
+      background: #f4f6fb;
+      border-color: #c7d0e0;
+      transform: translateX(3px);
+    }
+    .contact-option-icon {
+      width: 38px; height: 38px;
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 18px;
+      flex-shrink: 0;
+    }
+    .contact-option-icon.wa     { background: #dcfce7; }
+    .contact-option-icon.email  { background: #dbeafe; }
+    .contact-option-icon.ig     { background: #fce7f3; }
+    .contact-option-icon.li     { background: #e0f2fe; }
+    .contact-option-text strong {
+      display: block;
+      font-size: 13px;
+      font-weight: 600;
+      color: #1a1a2e;
+    }
+    .contact-option-text span {
+      font-size: 11px;
+      color: #9aa5bd;
+    }
+
     /* FOOTER */
     footer {
       border-top: 0.5px solid #e2e8f0;
@@ -372,37 +322,21 @@
       justify-content: space-between;
       align-items: center;
     }
-    .footer-brand {
-      font-size: 14px;
-      font-weight: 600;
-      color: #1a1a2e;
-    }
-    .footer-sub {
-      font-size: 12px;
-      color: #9aa5bd;
-      margin-top: 3px;
-    }
-    .footer-right {
-      font-size: 12px;
-      color: #b0bac9;
-    }
+    .footer-brand { font-size: 14px; font-weight: 600; color: #1a1a2e; }
+    .footer-sub   { font-size: 12px; color: #9aa5bd; margin-top: 3px; }
+    .footer-copy  { font-size: 12px; color: #b0bac9; }
 
     /* RESPONSIVE */
     @media (max-width: 900px) {
       .wrapper { padding: 0 1.5rem 3rem; }
-      nav { padding: 1.25rem 1.5rem; }
-      footer { padding: 1.5rem; }
-      .cards-row  { grid-template-columns: repeat(2, 1fr); }
-      .insta-grid { grid-template-columns: repeat(2, 1fr); }
-      .kontak-card { grid-column: 1 / -1; }
+      nav, footer { padding: 1.25rem 1.5rem; }
     }
-    @media (max-width: 560px) {
+    @media (max-width: 600px) {
       .wrapper { padding: 0 1rem 2rem; }
       nav { padding: 1rem; }
       footer { padding: 1.25rem 1rem; flex-direction: column; gap: 0.5rem; align-items: flex-start; }
-      .stats-row  { grid-template-columns: 1fr; }
-      .cards-row  { grid-template-columns: 1fr; }
-      .insta-grid { grid-template-columns: 1fr; }
+      .stats-row { grid-template-columns: 1fr; }
+      .cards-row { grid-template-columns: 1fr; }
       .hero h1 { font-size: 24px; }
       .hero { padding: 2rem 1.25rem; }
     }
@@ -410,23 +344,15 @@
 </head>
 <body>
 
-  <nav>
-    <span class="logo">Fazar Site</span>
-  </nav>
+  <nav></nav>
 
   <div class="wrapper">
 
     <!-- HERO -->
     <div class="hero">
-      <h1>Fazar Site</h1>
+      <h1>Hi, Welcome to Fazar Site</h1>
       <p>PTP Ahli Pertama dengan pengalaman 3 tahun di bidang pendidikan dan pelatihan.</p>
-      <div class="hero-tags">
-        <span class="hero-tag">Portfolio</span>
-        <span class="hero-tag">CV Online</span>
-        <span class="hero-tag">Kontak</span>
-      </div>
-      <!-- Button langsung ke WhatsApp -->
-      <a class="btn-white" href="https://wa.me/6289601066548" target="_blank">Hubungi Saya</a>
+      <button class="btn-white" onclick="openContactModal()">Hubungi Saya</button>
     </div>
 
     <!-- STATS -->
@@ -439,99 +365,40 @@
         <div class="stat-num">PTP</div>
         <div class="stat-label">Ahli Pertama</div>
       </div>
-      <div class="stat-card orange">
-        <div class="stat-num">P4</div>
-        <div class="stat-label">Jakarta Pusat</div>
+      <a class="stat-card orange" href="https://share.google/ADIHPU8vpk26vTIMO" target="_blank">
+        <div class="stat-num">P4 Jakpus</div>
+        <div class="stat-label">Lihat Lokasi ↗</div>
+      </a>
+    </div>
+
+    <!-- CARDS: PORTFOLIO & CV -->
+    <div class="cards-row">
+
+      <div class="feat-card green">
+        <h3>Portfolio</h3>
+        <p>Kumpulan karya dan proyek yang pernah saya kerjakan selama bertugas di P4 Jakarta Pusat.</p>
+        <div class="feat-tags">
+          <span class="feat-tag g">Karya</span>
+          <span class="feat-tag g">Proyek</span>
+        </div>
+        <!-- Ganti URL dengan link Google Drive PDF Portfolio kamu -->
+        <button class="card-btn" onclick="openPDF('GANTI_DENGAN_LINK_GOOGLE_DRIVE_PDF_PORTFOLIO', 'Portfolio')">Lihat Portfolio</button>
       </div>
-    </div>
 
-    <!-- CARDS -->
-    <div id="portfolio">
-      <p class="section-label">Apa yang ada di sini</p>
-      <div class="cards-row">
-
-        <div class="feat-card green">
-          <h3>Portfolio</h3>
-          <p>Kumpulan karya dan proyek yang pernah saya kerjakan selama bertugas di P4 Jakarta Pusat.</p>
-          <div class="feat-tags">
-            <span class="feat-tag g">Karya</span>
-            <span class="feat-tag g">Proyek</span>
-          </div>
-          <!-- Ganti URL dengan link Google Drive PDF Portfolio kamu -->
-          <button class="card-btn" onclick="openPDF('GANTI_DENGAN_LINK_GOOGLE_DRIVE_PDF_PORTFOLIO', 'Portfolio')">Lihat Portfolio</button>
+      <div class="feat-card blue">
+        <h3>CV</h3>
+        <p>Riwayat pendidikan dan pengalaman saya secara lengkap dan terstruktur sebagai tenaga profesional.</p>
+        <div class="feat-tags">
+          <span class="feat-tag b">Pendidikan</span>
+          <span class="feat-tag b">Pengalaman</span>
         </div>
-
-        <div id="cv" class="feat-card blue">
-          <h3>CV</h3>
-          <p>Riwayat pendidikan dan pengalaman saya secara lengkap dan terstruktur sebagai tenaga profesional.</p>
-          <div class="feat-tags">
-            <span class="feat-tag b">Pendidikan</span>
-            <span class="feat-tag b">Pengalaman</span>
-          </div>
-          <!-- Ganti URL dengan link Google Drive PDF CV kamu -->
-          <button class="card-btn" onclick="openPDF('GANTI_DENGAN_LINK_GOOGLE_DRIVE_PDF_CV', 'CV')">Lihat CV</button>
-        </div>
-
-        <div id="kontak" class="feat-card purple kontak-card">
-          <h3>Kontak</h3>
-          <p>Mau ngobrol atau kolaborasi? Hubungi saya melalui salah satu platform berikut.</p>
-          <div class="contact-btns">
-            <a class="contact-btn" href="mailto:fazarriansyah@gmail.com">✉️ Kirim Email</a>
-            <a class="contact-btn" href="https://instagram.com/fazar.riansyah" target="_blank">📷 Instagram</a>
-            <a class="contact-btn" href="https://linkedin.com/in/fazarriansyah" target="_blank">💼 LinkedIn</a>
-          </div>
-        </div>
-
+        <!-- Ganti URL dengan link Google Drive PDF CV kamu -->
+        <button class="card-btn" onclick="openPDF('GANTI_DENGAN_LINK_GOOGLE_DRIVE_PDF_CV', 'CV')">Lihat CV</button>
       </div>
-    </div>
-
-    <!-- INSTAGRAM -->
-    <p class="section-label">Postingan Instagram Terbaru</p>
-    <div class="insta-grid">
-
-      <a class="insta-card" href="https://instagram.com/fazar.riansyah" target="_blank">
-        <div class="insta-embed-wrap">
-          <!-- Ganti div di bawah dengan <img src="URL_FOTO" style="width:100%;height:100%;object-fit:cover"> jika punya URL foto langsung -->
-          <div class="insta-mock">
-            <div class="insta-mock-icon">📝</div>
-            <div class="insta-mock-label">@fazar.riansyah</div>
-          </div>
-        </div>
-        <div class="insta-body">
-          <p class="insta-meta">@fazar.riansyah</p>
-          <p class="insta-caption">Ganti dengan caption postingan Instagram terbaru kamu di sini.</p>
-        </div>
-      </a>
-
-      <a class="insta-card" href="https://instagram.com/fazar.riansyah" target="_blank">
-        <div class="insta-embed-wrap">
-          <div class="insta-mock green">
-            <div class="insta-mock-icon">🌿</div>
-            <div class="insta-mock-label">@fazar.riansyah</div>
-          </div>
-        </div>
-        <div class="insta-body">
-          <p class="insta-meta">@fazar.riansyah</p>
-          <p class="insta-caption">Ganti dengan caption postingan Instagram kedua kamu di sini.</p>
-        </div>
-      </a>
-
-      <a class="insta-card" href="https://instagram.com/fazar.riansyah" target="_blank">
-        <div class="insta-embed-wrap">
-          <div class="insta-mock orange">
-            <div class="insta-mock-icon">✨</div>
-            <div class="insta-mock-label">@fazar.riansyah</div>
-          </div>
-        </div>
-        <div class="insta-body">
-          <p class="insta-meta">@fazar.riansyah</p>
-          <p class="insta-caption">Ganti dengan caption postingan Instagram ketiga kamu di sini.</p>
-        </div>
-      </a>
 
     </div>
 
-  </div><!-- end wrapper -->
+  </div>
 
   <!-- FOOTER -->
   <footer>
@@ -539,14 +406,14 @@
       <p class="footer-brand">Fazar Riansyah</p>
       <p class="footer-sub">PTP Ahli Pertama · P4 Jakarta Pusat</p>
     </div>
-    <p class="footer-right">Fazar Site</p>
+    <p class="footer-copy">© 2025 Fazar Site. All rights reserved.</p>
   </footer>
 
   <!-- PDF MODAL -->
-  <div class="modal-overlay" id="pdfModal" onclick="closeModal(event)">
-    <div class="modal-box">
+  <div class="modal-overlay" id="pdfModal" onclick="closePDFModal(event)">
+    <div class="pdf-modal-box">
       <div class="modal-header">
-        <span id="modalTitle">Dokumen</span>
+        <span id="pdfModalTitle">Dokumen</span>
         <button class="modal-close" onclick="closePDF()">✕</button>
       </div>
       <div class="modal-body">
@@ -555,9 +422,51 @@
     </div>
   </div>
 
+  <!-- CONTACT MODAL -->
+  <div class="modal-overlay" id="contactModal" onclick="closeContactModal(event)">
+    <div class="contact-modal-box">
+      <div class="contact-modal-header">
+        <h2>Hubungi Saya</h2>
+        <button class="modal-close" onclick="closeContact()">✕</button>
+      </div>
+      <p class="contact-modal-sub">Pilih platform yang kamu inginkan</p>
+      <div class="contact-options">
+        <a class="contact-option" href="https://wa.me/6289601066548" target="_blank">
+          <div class="contact-option-icon wa">💬</div>
+          <div class="contact-option-text">
+            <strong>WhatsApp</strong>
+            <span>Chat langsung via WhatsApp</span>
+          </div>
+        </a>
+        <a class="contact-option" href="mailto:fazarriansyah@gmail.com">
+          <div class="contact-option-icon email">✉️</div>
+          <div class="contact-option-text">
+            <strong>Email</strong>
+            <span>fazarriansyah@gmail.com</span>
+          </div>
+        </a>
+        <a class="contact-option" href="https://instagram.com/fazar.riansyah" target="_blank">
+          <div class="contact-option-icon ig">📷</div>
+          <div class="contact-option-text">
+            <strong>Instagram</strong>
+            <span>@fazar.riansyah</span>
+          </div>
+        </a>
+        <a class="contact-option" href="https://linkedin.com/in/fazarriansyah" target="_blank">
+          <div class="contact-option-icon li">💼</div>
+          <div class="contact-option-text">
+            <strong>LinkedIn</strong>
+            <span>Fazar Riansyah</span>
+          </div>
+        </a>
+      </div>
+    </div>
+  </div>
+
   <script>
+    // PDF Modal
     function openPDF(url, title) {
-      document.getElementById('modalTitle').textContent = title;
+      document.getElementById('pdfModalTitle').textContent = title;
       document.getElementById('pdfFrame').src = url;
       document.getElementById('pdfModal').classList.add('open');
     }
@@ -565,8 +474,19 @@
       document.getElementById('pdfModal').classList.remove('open');
       document.getElementById('pdfFrame').src = '';
     }
-    function closeModal(e) {
+    function closePDFModal(e) {
       if (e.target === document.getElementById('pdfModal')) closePDF();
+    }
+
+    // Contact Modal
+    function openContactModal() {
+      document.getElementById('contactModal').classList.add('open');
+    }
+    function closeContact() {
+      document.getElementById('contactModal').classList.remove('open');
+    }
+    function closeContactModal(e) {
+      if (e.target === document.getElementById('contactModal')) closeContact();
     }
   </script>
 

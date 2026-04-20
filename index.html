@@ -1,1145 +1,1563 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Fazar Site</title>
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>">
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
-  <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    html, body { height: 100%; }
-    body {
-      font-family: 'Plus Jakarta Sans', sans-serif;
-      background: #f4f6fb;
-      color: #1a1a2e;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-    }
-    .page-content { flex: 1; width: 100%; padding: 2rem 3rem 3rem; }
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>#JagaDokumen — Kelola Dokumen Aman di Browser</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🛡️</text></svg>">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet"/>
+<style>
+:root {
+  --blue-900: #0f2d6b;
+  --blue-800: #1a4fa0;
+  --blue-700: #1d4ed8;
+  --blue-600: #2563eb;
+  --blue-500: #3b82f6;
+  --blue-100: #dbeafe;
+  --blue-50:  #eff6ff;
+  --green:    #16a34a;
+  --green-bg: #dcfce7;
+  --orange:   #ea580c;
+  --orange-bg:#ffedd5;
+  --purple:   #7c3aed;
+  --purple-bg:#ede9fe;
+  --rose:     #e11d48;
+  --rose-bg:  #ffe4e6;
+  --teal:     #0d9488;
+  --teal-bg:  #ccfbf1;
+  --amber:    #d97706;
+  --amber-bg: #fef3c7;
+  --bg:       #f0f4fb;
+  --surface:  #ffffff;
+  --border:   #e2e8f0;
+  --text:     #0f172a;
+  --muted:    #64748b;
+  --light:    #94a3b8;
+  --radius:   16px;
+  --shadow:   0 2px 12px rgba(15,45,107,0.07);
+  --shadow-md:0 6px 24px rgba(15,45,107,0.12);
+  --shadow-lg:0 16px 48px rgba(15,45,107,0.16);
+}
 
-    /* ── HERO ── */
-    .hero {
-      background: linear-gradient(135deg, #1a4fa0 0%, #2563eb 55%, #1d4ed8 100%);
-      border-radius: 20px;
-      padding: 3rem 2rem;
-      text-align: center;
-      margin-bottom: 1.5rem;
-      position: relative;
-      overflow: hidden;
-    }
-    .hero::before {
-      content: ''; position: absolute; top: -60px; right: -60px;
-      width: 260px; height: 260px; border-radius: 50%;
-      background: rgba(255,255,255,0.06);
-    }
-    .hero::after {
-      content: ''; position: absolute; bottom: -50px; left: -50px;
-      width: 200px; height: 200px; border-radius: 50%;
-      background: rgba(255,255,255,0.05);
-    }
-    .hero h1 { font-size: 34px; font-weight: 700; color: #fff; line-height: 1.25; margin-bottom: 0.9rem; }
-    .hero-desc { font-size: 14.5px; color: rgba(255,255,255,0.75); line-height: 1.75; margin: 0 auto 2rem; }
-    .btn-white {
-      display: inline-block; padding: 11px 30px; font-size: 13px;
-      font-family: inherit; font-weight: 600; background: #fff; color: #1d4ed8;
-      border: none; border-radius: 10px; cursor: pointer; text-decoration: none;
-      transition: opacity 0.2s, transform 0.2s;
-    }
-    .btn-white:hover { opacity: 0.9; transform: translateY(-2px); }
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+}
 
-    /* ── STATS ── */
-    .stats-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-bottom: 1.5rem; }
-    .stat-card {
-      border-radius: 16px; padding: 1.4rem 1rem; text-align: center;
-      border: 0.5px solid #e2e8f0; background: #fff;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.04);
-      transition: box-shadow 0.2s, transform 0.2s;
-      text-decoration: none; display: block; color: inherit;
-    }
-    .stat-card:hover { box-shadow: 0 8px 24px rgba(0,0,0,0.09); transform: translateY(-2px); }
-    .stat-num { font-size: 24px; font-weight: 700; line-height: 1.2; margin-bottom: 5px; }
-    .stat-label { font-size: 12px; color: #7a86a1; line-height: 1.5; }
-    .stat-card.blue .stat-num   { color: #2563eb; }
-    .stat-card.green .stat-num  { color: #16a34a; }
-    .stat-card.orange .stat-num { color: #ea580c; font-size: 18px; }
+/* ─── SCROLLBAR ─── */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #c1cde3; border-radius: 10px; }
 
-    /* ── FEATURE CARDS ── */
-    .cards-row { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; margin-bottom: 1.5rem; }
-    .feat-card {
-      border-radius: 16px; padding: 1.6rem; background: #fff;
-      border: 0.5px solid #e2e8f0; border-top: 3px solid transparent;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.04);
-      transition: box-shadow 0.2s, transform 0.2s;
-    }
-    .feat-card:hover { box-shadow: 0 10px 28px rgba(0,0,0,0.10); transform: translateY(-3px); }
-    .feat-card.green { border-top-color: #16a34a; }
-    .feat-card.blue  { border-top-color: #2563eb; }
-    .feat-card h3 { font-size: 15px; font-weight: 600; color: #1a1a2e; margin-bottom: 0.5rem; }
-    .feat-card p  { font-size: 13px; color: #7a86a1; line-height: 1.75; margin-bottom: 1.1rem; text-align: justify; }
-    .feat-tags { display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 1.1rem; }
-    .feat-tag { font-size: 10px; padding: 3px 10px; border-radius: 10px; font-weight: 500; }
-    .feat-tag.g { background: #dcfce7; color: #166534; }
-    .feat-tag.b { background: #dbeafe; color: #1e40af; }
-    .card-btn {
-      display: inline-block; padding: 8px 20px; font-size: 12px;
-      font-family: inherit; font-weight: 500; border-radius: 8px;
-      border: 1px solid #e2e8f0; background: transparent; color: #1a1a2e;
-      cursor: pointer; transition: background 0.2s, border-color 0.2s, transform 0.15s;
-      text-decoration: none;
-    }
-    .card-btn:hover { background: #f4f6fb; border-color: #c7d0e0; transform: translateY(-1px); }
+/* ─── NAV ─── */
+nav {
+  position: sticky; top: 0; z-index: 100;
+  background: rgba(255,255,255,0.88);
+  backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--border);
+  padding: 0 2.5rem;
+  display: flex; align-items: center; gap: 1rem;
+  height: 60px;
+}
+.nav-logo {
+  display: flex; align-items: center; gap: 10px;
+  font-size: 17px; font-weight: 800; color: var(--blue-700);
+  text-decoration: none;
+}
+.nav-logo-icon {
+  width: 34px; height: 34px; border-radius: 10px;
+  background: linear-gradient(135deg, var(--blue-700), var(--blue-500));
+  display: flex; align-items: center; justify-content: center;
+  font-size: 17px; flex-shrink: 0;
+  box-shadow: 0 4px 12px rgba(37,99,235,0.35);
+}
+.nav-logo span.hash { color: var(--blue-500); }
+.nav-spacer { flex: 1; }
+.nav-badge {
+  font-size: 11px; font-weight: 600; padding: 4px 12px;
+  background: var(--blue-50); color: var(--blue-700);
+  border: 1px solid var(--blue-100); border-radius: 20px;
+  display: flex; align-items: center; gap: 5px;
+}
+.nav-badge .dot { width: 6px; height: 6px; background: var(--green); border-radius: 50%; animation: pulse 2s infinite; }
+@keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.6;transform:scale(1.3)} }
 
-    /* ── MINI GAME ACCORDION ── */
-    .accordion-bar {
-      display: flex; align-items: center; justify-content: space-between;
-      background: #fff; border: 0.5px solid #e2e8f0;
-      border-radius: 14px; padding: 0.9rem 1.25rem;
-      cursor: pointer; user-select: none;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.04);
-      transition: box-shadow 0.2s, border-color 0.2s, border-radius 0.1s;
-      margin-bottom: 0;
-    }
-    .accordion-bar:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.08); border-color: #c7d0e0; }
-    .accordion-bar.open {
-      border-radius: 14px 14px 0 0;
-      border-bottom-color: #f0f3f8;
-    }
-    .accordion-left { display: flex; align-items: center; gap: 10px; }
-    .accordion-emoji { font-size: 18px; line-height: 1; }
-    .accordion-label { font-size: 13px; font-weight: 600; color: #1a1a2e; }
-    .accordion-sublabel { font-size: 11px; color: #9aa5bd; margin-top: 1px; }
-    .accordion-arrow {
-      font-size: 11px; color: #b0bac9;
-      transition: transform 0.35s ease;
-    }
-    .accordion-bar.open .accordion-arrow { transform: rotate(180deg); }
+/* ─── MAIN LAYOUT ─── */
+.page { max-width: 1180px; margin: 0 auto; padding: 2rem 2.5rem 4rem; }
 
-    .accordion-body {
-      background: #fff;
-      border: 0.5px solid #e2e8f0; border-top: none;
-      border-radius: 0 0 14px 14px;
-      overflow: hidden;
-      max-height: 0;
-      opacity: 0;
-      transition: max-height 0.45s ease, opacity 0.3s ease;
-      margin-bottom: 1.5rem;
-    }
-    .accordion-body.open {
-      max-height: 1400px;
-      opacity: 1;
-    }
-    .accordion-inner { padding: 1.25rem; }
+/* ─── HERO ─── */
+.hero {
+  background: linear-gradient(135deg, var(--blue-900) 0%, var(--blue-700) 60%, #1e40af 100%);
+  border-radius: 22px; padding: 3rem 2.5rem;
+  position: relative; overflow: hidden;
+  margin-bottom: 1.75rem;
+  box-shadow: 0 20px 60px rgba(15,45,107,0.3);
+}
+.hero::before {
+  content:''; position:absolute; top:-80px; right:-80px;
+  width:320px; height:320px; border-radius:50%;
+  background: rgba(255,255,255,0.05);
+}
+.hero::after {
+  content:''; position:absolute; bottom:-60px; left:-40px;
+  width:240px; height:240px; border-radius:50%;
+  background: rgba(255,255,255,0.04);
+}
+.hero-inner { position: relative; z-index: 1; display: flex; align-items: center; gap: 2.5rem; }
+.hero-text { flex: 1; }
+.hero-tag {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: 11px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase;
+  color: rgba(255,255,255,0.7);
+  background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2);
+  padding: 5px 14px; border-radius: 20px; margin-bottom: 1rem;
+}
+.hero h1 { font-size: 36px; font-weight: 800; color: #fff; line-height: 1.2; margin-bottom: 0.9rem; }
+.hero h1 span { color: #93c5fd; }
+.hero-desc { font-size: 14.5px; color: rgba(255,255,255,0.72); line-height: 1.8; margin-bottom: 1.6rem; max-width: 520px; }
+.hero-btns { display: flex; gap: 10px; flex-wrap: wrap; }
+.btn-white {
+  padding: 11px 26px; font-size: 13px; font-weight: 700; font-family: inherit;
+  background: #fff; color: var(--blue-700); border: none; border-radius: 10px;
+  cursor: pointer; transition: all 0.2s; text-decoration: none; display: inline-flex; align-items: center; gap: 6px;
+}
+.btn-white:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(0,0,0,0.2); }
+.btn-outline-white {
+  padding: 11px 24px; font-size: 13px; font-weight: 600; font-family: inherit;
+  background: rgba(255,255,255,0.1); color: #fff;
+  border: 1px solid rgba(255,255,255,0.3); border-radius: 10px;
+  cursor: pointer; transition: all 0.2s; display: inline-flex; align-items: center; gap: 6px;
+}
+.btn-outline-white:hover { background: rgba(255,255,255,0.18); transform: translateY(-2px); }
+.hero-shield {
+  font-size: 90px; line-height: 1; flex-shrink: 0;
+  filter: drop-shadow(0 8px 24px rgba(0,0,0,0.3));
+  animation: float 4s ease-in-out infinite;
+}
+@keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-8px)} }
 
-    /* ── GAME LAYOUT ── */
-    .game-section {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 14px;
-      align-items: start;
-    }
-    .game-card {
-      border-radius: 12px; padding: 1.25rem; background: #f8fafc;
-      border: 0.5px solid #e2e8f0; border-top: 3px solid #2563eb;
-    }
-    .game-header {
-      display: flex; justify-content: space-between; align-items: center;
-      margin-bottom: 1rem;
-    }
-    .game-header h3 { font-size: 15px; font-weight: 600; color: #1a1a2e; }
-    .game-header p  { font-size: 11px; color: #9aa5bd; margin-top: 2px; }
-    .score-row { display: flex; gap: 1.25rem; }
-    .score-box { text-align: center; }
-    .score-label { font-size: 9px; color: #9aa5bd; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 2px; }
-    .score-num { font-size: 20px; font-weight: 700; line-height: 1; }
-    .score-num.blue  { color: #2563eb; }
-    .score-num.green { color: #16a34a; }
+/* ─── STATS ROW ─── */
+.stats-row { display: grid; grid-template-columns: repeat(4,1fr); gap: 14px; margin-bottom: 1.75rem; }
+.stat-card {
+  background: var(--surface); border-radius: var(--radius); padding: 1.3rem 1.2rem;
+  border: 1px solid var(--border); box-shadow: var(--shadow);
+  display: flex; align-items: center; gap: 14px;
+  transition: all 0.22s;
+}
+.stat-card:hover { box-shadow: var(--shadow-md); transform: translateY(-2px); }
+.stat-icon {
+  width: 46px; height: 46px; border-radius: 12px;
+  display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0;
+}
+.stat-icon.blue   { background: var(--blue-50); }
+.stat-icon.green  { background: var(--green-bg); }
+.stat-icon.orange { background: var(--orange-bg); }
+.stat-icon.purple { background: var(--purple-bg); }
+.stat-num { font-size: 22px; font-weight: 800; line-height: 1.1; }
+.stat-num.blue   { color: var(--blue-600); }
+.stat-num.green  { color: var(--green); }
+.stat-num.orange { color: var(--orange); }
+.stat-num.purple { color: var(--purple); }
+.stat-label { font-size: 12px; color: var(--muted); margin-top: 2px; }
 
-    .canvas-wrap { position: relative; display: block; }
-    #snakeCanvas { border-radius: 10px; background: #0f172a; display: block; width: 100%; aspect-ratio: 1/1; }
+/* ─── SECTION HEADER ─── */
+.section-header { display: flex; align-items: center; gap: 12px; margin-bottom: 1.2rem; }
+.section-header h2 { font-size: 18px; font-weight: 700; color: var(--text); }
+.section-header p { font-size: 13px; color: var(--muted); }
+.section-divider { flex: 1; height: 1px; background: var(--border); }
 
-    #gameOverlay {
-      position: absolute; inset: 0; border-radius: 10px;
-      background: rgba(15,23,42,0.88);
-      display: flex; flex-direction: column;
-      align-items: center; justify-content: center; gap: 0.6rem;
-    }
-    #overlayIcon  { font-size: 36px; }
-    #overlayTitle { font-size: 16px; font-weight: 700; color: #fff; }
-    #overlayDesc  { font-size: 11px; color: rgba(255,255,255,0.5); }
-    #startBtn {
-      margin-top: 4px; padding: 9px 24px; background: #2563eb; color: #fff;
-      border: none; border-radius: 8px; font-size: 13px; font-weight: 600;
-      font-family: inherit; cursor: pointer; transition: opacity 0.2s;
-    }
-    #startBtn:hover { opacity: 0.85; }
+/* ─── FILTER TABS ─── */
+.filter-tabs { display: flex; gap: 6px; margin-bottom: 1.2rem; flex-wrap: wrap; }
+.filter-tab {
+  padding: 7px 16px; border-radius: 20px; font-size: 12.5px; font-weight: 600;
+  border: 1.5px solid var(--border); background: var(--surface);
+  color: var(--muted); cursor: pointer; transition: all 0.18s; font-family: inherit;
+}
+.filter-tab:hover { border-color: var(--blue-500); color: var(--blue-600); }
+.filter-tab.active { background: var(--blue-600); color: #fff; border-color: var(--blue-600); }
 
-    .name-input-wrap { display: flex; flex-direction: column; align-items: center; gap: 8px; width: 100%; padding: 0 1.5rem; }
-    .name-input-wrap label { font-size: 11px; color: rgba(255,255,255,0.55); letter-spacing: 0.05em; text-transform: uppercase; }
-    #playerNameInput {
-      width: 100%; padding: 9px 14px; border-radius: 8px;
-      border: 1.5px solid rgba(255,255,255,0.2); background: rgba(255,255,255,0.1);
-      color: #fff; font-size: 13px; font-family: inherit; text-align: center;
-      outline: none; transition: border-color 0.2s;
-    }
-    #playerNameInput::placeholder { color: rgba(255,255,255,0.35); }
-    #playerNameInput:focus { border-color: rgba(255,255,255,0.5); background: rgba(255,255,255,0.15); }
+/* ─── TOOL GRID ─── */
+.tools-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-bottom: 1.75rem; }
+.tool-card {
+  background: var(--surface); border-radius: var(--radius); padding: 1.5rem;
+  border: 1px solid var(--border); border-top: 3px solid transparent;
+  box-shadow: var(--shadow); cursor: pointer;
+  transition: all 0.22s; display: flex; flex-direction: column; gap: 0; position: relative;
+  overflow: hidden;
+}
+.tool-card::after {
+  content: ''; position: absolute; inset: 0;
+  background: linear-gradient(135deg, rgba(37,99,235,0.03) 0%, transparent 60%);
+  opacity: 0; transition: opacity 0.22s;
+}
+.tool-card:hover { box-shadow: var(--shadow-lg); transform: translateY(-3px); }
+.tool-card:hover::after { opacity: 1; }
+.tool-card.blue   { border-top-color: var(--blue-600); }
+.tool-card.green  { border-top-color: var(--green); }
+.tool-card.orange { border-top-color: var(--orange); }
+.tool-card.purple { border-top-color: var(--purple); }
+.tool-card.rose   { border-top-color: var(--rose); }
+.tool-card.teal   { border-top-color: var(--teal); }
+.tool-card.amber  { border-top-color: var(--amber); }
 
-    .ctrl-pad { display: flex; flex-direction: column; align-items: center; gap: 5px; margin-top: 1rem; }
-    .ctrl-row { display: flex; gap: 5px; }
-    .ctrl-btn {
-      width: 56px; height: 56px; border-radius: 10px;
-      border: 1px solid #e2e8f0; background: #fff;
-      font-size: 18px; cursor: pointer; color: #1a1a2e;
-      transition: background 0.15s, transform 0.1s; font-family: inherit;
-    }
-    .ctrl-btn:active { background: #f4f6fb; transform: scale(0.9); }
-    .ctrl-btn.empty { border-color: transparent; background: transparent; cursor: default; }
+.tool-card-top { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 0.75rem; }
+.tool-icon-wrap { width: 48px; height: 48px; border-radius: 13px; display: flex; align-items: center; justify-content: center; font-size: 22px; }
+.tool-icon-wrap.blue   { background: var(--blue-50); }
+.tool-icon-wrap.green  { background: var(--green-bg); }
+.tool-icon-wrap.orange { background: var(--orange-bg); }
+.tool-icon-wrap.purple { background: var(--purple-bg); }
+.tool-icon-wrap.rose   { background: var(--rose-bg); }
+.tool-icon-wrap.teal   { background: var(--teal-bg); }
+.tool-icon-wrap.amber  { background: var(--amber-bg); }
 
-    /* ── GAME INFO PANEL ── */
-    .game-info { display: flex; flex-direction: column; gap: 12px; }
-    .info-card {
-      border-radius: 12px; padding: 1rem; background: #fff;
-      border: 0.5px solid #e2e8f0;
-    }
-    .info-card h4 { font-size: 13px; font-weight: 600; color: #1a1a2e; margin-bottom: 0.5rem; }
-    .info-card p  { font-size: 12px; color: #7a86a1; line-height: 1.7; }
-    .key-list { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 0.5rem; }
-    .key-badge {
-      padding: 3px 10px; border-radius: 6px; font-size: 11px; font-weight: 600;
-      background: #f4f6fb; color: #1a1a2e; border: 1px solid #e2e8f0;
-    }
+.tool-badge {
+  font-size: 10px; font-weight: 700; padding: 3px 9px;
+  border-radius: 10px; background: var(--blue-50); color: var(--blue-700);
+}
+.tool-badge.new { background: var(--green-bg); color: var(--green); }
+.tool-card h3 { font-size: 14.5px; font-weight: 700; color: var(--text); margin-bottom: 0.4rem; }
+.tool-card p { font-size: 12.5px; color: var(--muted); line-height: 1.7; flex: 1; margin-bottom: 1rem; }
+.tool-card-btn {
+  display: inline-flex; align-items: center; gap: 5px;
+  font-size: 12px; font-weight: 600; padding: 8px 16px;
+  border: 1.5px solid var(--border); border-radius: 9px;
+  background: transparent; color: var(--text); font-family: inherit;
+  cursor: pointer; transition: all 0.18s; align-self: flex-start;
+}
+.tool-card-btn:hover { background: var(--blue-50); border-color: var(--blue-200, #bfdbfe); color: var(--blue-700); }
 
-    /* ── LEADERBOARD ── */
-    .lb-list { display: flex; flex-direction: column; gap: 6px; margin-top: 0.5rem; }
-    .lb-item {
-      display: flex; align-items: center; gap: 10px;
-      padding: 7px 10px; border-radius: 10px;
-      background: #f8fafc; border: 0.5px solid #e2e8f0; font-size: 12px;
-    }
-    .lb-item.top1 { background: #fffbeb; border-color: #fde68a; }
-    .lb-item.top2 { background: #f8fafc; border-color: #e2e8f0; }
-    .lb-item.top3 { background: #fff7f0; border-color: #fed7aa; }
-    .lb-rank  { font-size: 13px; width: 20px; text-align: center; flex-shrink: 0; }
-    .lb-name  { flex: 1; font-weight: 500; color: #1a1a2e; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .lb-score { font-weight: 700; color: #2563eb; flex-shrink: 0; }
-    .lb-empty { font-size: 12px; color: #b0bac9; text-align: center; padding: 0.75rem 0; }
+/* ─── MODAL ─── */
+.modal-backdrop {
+  position: fixed; inset: 0; z-index: 1000;
+  background: rgba(10,20,50,0.55); backdrop-filter: blur(6px);
+  display: none; align-items: center; justify-content: center; padding: 1rem;
+}
+.modal-backdrop.open { display: flex; }
+.modal {
+  background: var(--surface); border-radius: 22px;
+  width: 100%; max-width: 640px; max-height: 90vh;
+  overflow-y: auto; box-shadow: var(--shadow-lg);
+  animation: slideUp 0.3s cubic-bezier(0.34,1.56,0.64,1);
+}
+@keyframes slideUp { from{opacity:0;transform:translateY(30px) scale(0.97)} to{opacity:1;transform:none} }
+.modal-header {
+  padding: 1.5rem 1.75rem 1.25rem;
+  border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; gap: 14px;
+}
+.modal-header-icon { font-size: 28px; }
+.modal-header h3 { font-size: 18px; font-weight: 700; }
+.modal-header p { font-size: 13px; color: var(--muted); margin-top: 2px; }
+.modal-close {
+  margin-left: auto; width: 34px; height: 34px; border-radius: 10px;
+  background: var(--bg); border: 1px solid var(--border);
+  font-size: 16px; cursor: pointer; display: flex; align-items: center; justify-content: center;
+  transition: all 0.18s; flex-shrink: 0;
+}
+.modal-close:hover { background: var(--rose-bg); border-color: var(--rose); color: var(--rose); }
+.modal-body { padding: 1.5rem 1.75rem; }
 
-    /* ── FOOTER ── */
-    footer {
-      width: 100%; padding: 1.25rem 3rem;
-      border-top: 0.5px solid #e2e8f0; background: #fff;
-      display: flex; justify-content: space-between; align-items: center;
-    }
-    .footer-brand { font-size: 14px; font-weight: 600; color: #1a1a2e; }
-    .footer-sub   { font-size: 12px; color: #9aa5bd; margin-top: 2px; }
-    .footer-copy  { font-size: 12px; color: #b0bac9; }
+/* ─── DROPZONE ─── */
+.dropzone {
+  border: 2px dashed var(--border); border-radius: 14px;
+  padding: 2.5rem 1.5rem; text-align: center; cursor: pointer;
+  transition: all 0.2s; background: var(--bg);
+  margin-bottom: 1.25rem;
+}
+.dropzone:hover, .dropzone.dragover {
+  border-color: var(--blue-500); background: var(--blue-50);
+}
+.dropzone-icon { font-size: 38px; margin-bottom: 0.6rem; }
+.dropzone h4 { font-size: 14.5px; font-weight: 600; margin-bottom: 0.3rem; }
+.dropzone p { font-size: 12.5px; color: var(--muted); }
+.dropzone input[type=file] { display: none; }
 
-    /* ── MODALS ── */
-    .modal-overlay {
-      display: none; position: fixed; inset: 0;
-      background: rgba(0,0,0,0.45); z-index: 999;
-      align-items: center; justify-content: center;
-    }
-    .modal-overlay.open { display: flex; }
-    .pdf-modal-box {
-      background: #fff; border-radius: 16px; width: 90%; max-width: 800px;
-      height: 85vh; overflow: hidden; display: flex; flex-direction: column;
-      box-shadow: 0 24px 64px rgba(0,0,0,0.22);
-    }
-    .modal-header {
-      display: flex; justify-content: space-between; align-items: center;
-      padding: 1rem 1.5rem; border-bottom: 0.5px solid #e2e8f0;
-    }
-    .modal-header span { font-size: 14px; font-weight: 600; color: #1a1a2e; }
-    .modal-close { font-size: 18px; background: none; border: none; cursor: pointer; color: #7a86a1; transition: color 0.2s; }
-    .modal-close:hover { color: #1a1a2e; }
-    .modal-body { flex: 1; overflow: hidden; }
-    .modal-body iframe { width: 100%; height: 100%; border: none; }
+/* ─── FORM ELEMENTS ─── */
+label.field-label { display: block; font-size: 12.5px; font-weight: 600; color: var(--text); margin-bottom: 6px; }
+input[type=text], input[type=password], input[type=number], textarea, select {
+  width: 100%; padding: 10px 14px; font-size: 13.5px; font-family: inherit;
+  border: 1.5px solid var(--border); border-radius: 10px;
+  background: var(--bg); color: var(--text); outline: none;
+  transition: border-color 0.18s;
+}
+input:focus, textarea:focus, select:focus { border-color: var(--blue-500); background: #fff; }
+textarea { resize: vertical; min-height: 120px; }
+.field-group { margin-bottom: 1rem; }
 
-    .contact-modal-box {
-      background: #fff; border-radius: 20px; width: 90%; max-width: 400px;
-      padding: 2rem; box-shadow: 0 24px 64px rgba(0,0,0,0.18);
-      animation: slideUp 0.25s ease; position: relative;
-    }
-    @keyframes slideUp {
-      from { transform: translateY(20px); opacity: 0; }
-      to   { transform: translateY(0);    opacity: 1; }
-    }
-    .contact-options { display: flex; flex-direction: column; gap: 10px; }
-    .contact-option {
-      display: flex; align-items: center; gap: 14px; padding: 13px 16px;
-      border-radius: 12px; border: 0.5px solid #e2e8f0; background: #fff;
-      text-decoration: none; color: #1a1a2e;
-      transition: background 0.18s, border-color 0.18s, transform 0.15s;
-    }
-    .contact-option:hover { background: #f4f6fb; border-color: #c7d0e0; transform: translateX(3px); }
-    .contact-option-icon {
-      width: 38px; height: 38px; border-radius: 10px;
-      display: flex; align-items: center; justify-content: center; flex-shrink: 0;
-    }
-    .contact-option-icon.wa    { background: #f0fdf4; }
-    .contact-option-icon.email { background: #eff6ff; }
-    .contact-option-icon.ig    { background: #fdf2f8; }
-    .contact-option-icon.li    { background: #f0f9ff; }
-    .contact-option-text strong { display: block; font-size: 13px; font-weight: 600; color: #1a1a2e; }
-    .contact-option-text span   { font-size: 11px; color: #7a86a1; }
+/* ─── BUTTONS ─── */
+.btn-primary {
+  padding: 11px 24px; font-size: 13px; font-weight: 700; font-family: inherit;
+  background: var(--blue-600); color: #fff; border: none; border-radius: 10px;
+  cursor: pointer; transition: all 0.2s; display: inline-flex; align-items: center; gap: 7px;
+}
+.btn-primary:hover { background: var(--blue-700); transform: translateY(-1px); box-shadow: 0 6px 16px rgba(37,99,235,0.35); }
+.btn-secondary {
+  padding: 11px 20px; font-size: 13px; font-weight: 600; font-family: inherit;
+  background: var(--bg); color: var(--text); border: 1.5px solid var(--border); border-radius: 10px;
+  cursor: pointer; transition: all 0.18s; display: inline-flex; align-items: center; gap: 6px;
+}
+.btn-secondary:hover { background: #e8edf7; }
+.btn-danger {
+  padding: 11px 20px; font-size: 13px; font-weight: 600; font-family: inherit;
+  background: var(--rose-bg); color: var(--rose); border: 1.5px solid #fecdd3; border-radius: 10px;
+  cursor: pointer; transition: all 0.18s;
+}
+.btn-danger:hover { background: #fecdd3; }
+.btn-row { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 1.25rem; }
+.btn-green {
+  padding: 11px 24px; font-size: 13px; font-weight: 700; font-family: inherit;
+  background: var(--green); color: #fff; border: none; border-radius: 10px;
+  cursor: pointer; transition: all 0.2s; display: inline-flex; align-items: center; gap: 7px;
+}
+.btn-green:hover { background: #15803d; transform: translateY(-1px); }
 
-    /* ── TAB NAV ── */
-    .tab-nav {
-      display: flex; align-items: center; justify-content: space-between;
-      background: #fff; border-bottom: 0.5px solid #e2e8f0;
-      padding: 0 3rem;
-      position: sticky; top: 0; z-index: 100;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.04);
-      height: 56px;
-    }
-    .tab-brand {
-      display: flex; align-items: center; gap: 8px;
-    }
-    .tab-brand-icon {
-      width: 28px; height: 28px; border-radius: 8px;
-      background: linear-gradient(135deg, #1a4fa0, #2563eb);
-      display: flex; align-items: center; justify-content: center;
-      font-size: 14px;
-    }
-    .tab-brand-name {
-      font-size: 14px; font-weight: 700; color: #1a1a2e; letter-spacing: -0.01em;
-    }
-    .tab-buttons { display: flex; gap: 4px; }
-    .tab-btn {
-      padding: 7px 16px; border-radius: 8px;
-      border: none; background: transparent; cursor: pointer;
-      font-family: inherit; font-size: 12.5px; font-weight: 600;
-      color: #7a86a1; transition: background 0.2s, color 0.2s;
-      display: flex; align-items: center; gap: 5px;
-    }
-    .tab-btn:hover { background: #f4f6fb; color: #1a1a2e; }
-    .tab-btn.active { background: #dbeafe; color: #2563eb; }
+/* ─── FILE LIST ─── */
+.file-list { display: flex; flex-direction: column; gap: 8px; margin-bottom: 1rem; }
+.file-item {
+  display: flex; align-items: center; gap: 10px;
+  background: var(--bg); border: 1px solid var(--border);
+  border-radius: 10px; padding: 10px 14px;
+  font-size: 13px;
+}
+.file-item-icon { font-size: 20px; flex-shrink: 0; }
+.file-item-name { flex: 1; font-weight: 500; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.file-item-size { font-size: 11.5px; color: var(--light); flex-shrink: 0; }
+.file-item-del { font-size: 14px; cursor: pointer; color: var(--light); transition: color 0.15s; flex-shrink: 0; background: none; border: none; }
+.file-item-del:hover { color: var(--rose); }
 
-    .tab-panel { display: none; }
-    .tab-panel.active { display: block; }
+/* ─── RESULT BOX ─── */
+.result-box {
+  background: var(--blue-50); border: 1.5px solid var(--blue-100);
+  border-radius: 12px; padding: 1.25rem 1.5rem;
+  display: none;
+}
+.result-box.show { display: block; }
+.result-box h4 { font-size: 14px; font-weight: 700; color: var(--blue-700); margin-bottom: 0.5rem; display: flex; align-items: center; gap: 7px; }
+.result-box p { font-size: 13px; color: var(--muted); line-height: 1.7; }
+.result-box .result-text {
+  font-family: monospace; font-size: 13px; background: #fff;
+  border: 1px solid var(--border); border-radius: 8px;
+  padding: 12px; margin-top: 10px; word-break: break-all; line-height: 1.7;
+  max-height: 200px; overflow-y: auto;
+}
 
-    /* ── RESPONSIVE ── */
-    @media (max-width: 860px) {
-      .tab-nav { padding: 0 1.5rem; }
-      .page-content { padding: 1.5rem; }
-      footer { padding: 1.25rem 1.5rem; }
-      .game-section { grid-template-columns: 1fr; }
-    }
-    @media (max-width: 580px) {
-      .page-content { padding: 1rem; }
-      footer { padding: 1rem; flex-direction: column; gap: 6px; align-items: flex-start; }
-      .stats-row { grid-template-columns: 1fr; }
-      .cards-row { grid-template-columns: 1fr; }
-      .hero h1 { font-size: 26px; }
-      .hero { padding: 2rem 1.25rem; }
-    }
-  </style>
+/* ─── CANVAS SIGN ─── */
+#signCanvas {
+  width: 100%; border: 2px solid var(--border); border-radius: 12px;
+  background: #fff; cursor: crosshair; display: block;
+  touch-action: none;
+}
+
+/* ─── TEXT EDITOR ─── */
+.toolbar {
+  display: flex; flex-wrap: wrap; gap: 4px;
+  padding: 8px 10px; background: var(--bg);
+  border: 1.5px solid var(--border); border-bottom: none;
+  border-radius: 12px 12px 0 0;
+}
+.tb-btn {
+  padding: 5px 10px; font-size: 12.5px; font-family: inherit; font-weight: 600;
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 7px; cursor: pointer; color: var(--text); transition: all 0.15s;
+  min-width: 34px; text-align: center;
+}
+.tb-btn:hover { background: var(--blue-50); border-color: var(--blue-300, #93c5fd); color: var(--blue-700); }
+.tb-btn.active { background: var(--blue-600); color: #fff; border-color: var(--blue-600); }
+.tb-sep { width: 1px; height: 26px; background: var(--border); margin: 0 2px; align-self: center; }
+#editorArea {
+  min-height: 240px; padding: 14px; font-size: 14px; line-height: 1.8;
+  border: 1.5px solid var(--border); border-top: none;
+  border-radius: 0 0 12px 12px; background: #fff;
+  outline: none; overflow-y: auto;
+}
+.editor-footer {
+  display: flex; align-items: center; justify-content: space-between;
+  font-size: 11.5px; color: var(--light); margin-top: 6px;
+}
+
+/* ─── CSV TABLE ─── */
+#csvTable {
+  width: 100%; border-collapse: collapse; font-size: 12.5px;
+  overflow: auto; display: block; max-height: 360px;
+}
+#csvTable th {
+  background: var(--blue-600); color: #fff; padding: 9px 12px;
+  text-align: left; font-weight: 600; position: sticky; top: 0;
+}
+#csvTable td { padding: 8px 12px; border-bottom: 1px solid var(--border); }
+#csvTable tr:hover td { background: var(--blue-50); }
+.csv-wrap { border: 1.5px solid var(--border); border-radius: 12px; overflow: hidden; }
+
+/* ─── ENCRYPT ─── */
+.strength-bar { height: 5px; border-radius: 3px; background: var(--border); margin-top: 6px; overflow: hidden; }
+.strength-fill { height: 100%; border-radius: 3px; width: 0%; transition: width 0.3s, background 0.3s; }
+
+/* ─── IMAGE PREVIEW ─── */
+.img-preview-wrap {
+  display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 1rem;
+}
+.img-preview {
+  width: 80px; height: 80px; border-radius: 10px; object-fit: cover;
+  border: 2px solid var(--border);
+}
+
+/* ─── PROGRESS ─── */
+.progress-bar { height: 8px; border-radius: 4px; background: var(--border); overflow: hidden; margin: 10px 0; }
+.progress-fill { height: 100%; border-radius: 4px; background: var(--blue-600); width: 0%; transition: width 0.5s; }
+
+/* ─── INFO CHIP ─── */
+.info-chip {
+  display: inline-flex; align-items: center; gap: 5px;
+  font-size: 11.5px; font-weight: 600; padding: 4px 12px;
+  background: var(--blue-50); color: var(--blue-700); border-radius: 20px;
+}
+
+/* ─── FOOTER ─── */
+footer {
+  text-align: center; padding: 2rem; font-size: 12.5px; color: var(--light);
+  border-top: 1px solid var(--border); background: var(--surface);
+}
+footer strong { color: var(--blue-600); }
+
+/* ─── HIDDEN ─── */
+.hidden { display: none !important; }
+
+/* ─── TOAST ─── */
+#toast {
+  position: fixed; bottom: 2rem; right: 2rem; z-index: 9999;
+  background: #1e293b; color: #fff; padding: 12px 20px; border-radius: 12px;
+  font-size: 13.5px; font-weight: 500; box-shadow: 0 8px 30px rgba(0,0,0,0.25);
+  display: flex; align-items: center; gap: 9px;
+  transform: translateY(80px); opacity: 0; transition: all 0.3s cubic-bezier(0.34,1.56,0.64,1);
+  pointer-events: none;
+}
+#toast.show { transform: translateY(0); opacity: 1; }
+
+/* ─── RESPONSIVE ─── */
+@media(max-width: 900px) {
+  .tools-grid { grid-template-columns: repeat(2,1fr); }
+  .stats-row  { grid-template-columns: repeat(2,1fr); }
+  .hero-shield { font-size: 60px; }
+  .hero h1 { font-size: 26px; }
+}
+@media(max-width: 600px) {
+  .page { padding: 1.25rem; }
+  nav   { padding: 0 1.25rem; }
+  .tools-grid { grid-template-columns: 1fr; }
+  .stats-row  { grid-template-columns: repeat(2,1fr); }
+  .hero-inner { flex-direction: column; text-align: center; }
+  .hero-shield { display: none; }
+  .hero-btns  { justify-content: center; }
+}
+</style>
 </head>
 <body>
 
-<!-- TAB NAVIGATION -->
-<div class="tab-nav">
-  <div class="tab-brand">
-    <div class="tab-brand-icon">⚡</div>
-    <span class="tab-brand-name">Fazar Site</span>
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-logo">
+    <div class="nav-logo-icon">🛡️</div>
+    <span><span class="hash">#</span>JagaDokumen</span>
+  </a>
+  <div class="nav-spacer"></div>
+  <div class="nav-badge">
+    <span class="dot"></span>
+    100% Lokal — Tanpa Upload Server
   </div>
-  <div class="tab-buttons">
-    <button class="tab-btn active" id="tabBtnHome" onclick="switchTab('home')">🏠 Beranda</button>
-    <button class="tab-btn" id="tabBtnEksperimen" onclick="switchTab('eksperimen')">🧪 Eksperimen</button>
-  </div>
-</div>
+</nav>
 
-<div class="page-content">
-
-  <!-- TAB: BERANDA -->
-  <div class="tab-panel active" id="tabHome">
+<!-- PAGE -->
+<div class="page">
 
   <!-- HERO -->
   <div class="hero">
-    <h1>Hi, Welcome to Fazar Site</h1>
-    <p class="hero-desc">PTP Ahli Pertama dengan pengalaman 3 tahun di bidang pendidikan dan pelatihan.</p>
-    <button class="btn-white" onclick="openContactModal()">Hubungi Saya</button>
+    <div class="hero-inner">
+      <div class="hero-text">
+        <div class="hero-tag">🔒 Keamanan Dokumen Anda adalah Prioritas</div>
+        <h1>Kelola Dokumen Anda<br><span>Tanpa Risiko Kebocoran Data</span></h1>
+        <p class="hero-desc">Semua alat pengolah dokumen berjalan 100% di browser Anda. File tidak pernah dikirim ke server manapun. Privasi terjaga sepenuhnya.</p>
+        <div class="hero-btns">
+          <button class="btn-white" onclick="scrollToTools()">⚡ Mulai Pakai Sekarang</button>
+          <button class="btn-outline-white" onclick="showPrivacyInfo()">🔍 Pelajari Cara Kerjanya</button>
+        </div>
+      </div>
+      <div class="hero-shield">🛡️</div>
+    </div>
   </div>
 
   <!-- STATS -->
   <div class="stats-row">
-    <div class="stat-card blue">
-      <div class="stat-num">3+</div>
-      <div class="stat-label">Tahun Pengalaman</div>
-    </div>
-    <div class="stat-card green">
-      <div class="stat-num">PTP</div>
-      <div class="stat-label">Ahli Pertama</div>
-    </div>
-    <a class="stat-card orange" href="https://share.google/ADIHPU8vpk26vTIMO" target="_blank">
-      <div class="stat-num">P4 Jakpus</div>
-      <div class="stat-label">Lihat Lokasi ↗</div>
-    </a>
-  </div>
-
-  <!-- PORTFOLIO & CV -->
-  <div class="cards-row">
-    <div class="feat-card green">
-      <h3>Portfolio</h3>
-      <p>Kumpulan karya dan proyek yang pernah saya kerjakan selama bertugas di P4 Jakarta Pusat.</p>
-      <div class="feat-tags">
-        <span class="feat-tag g">Karya</span>
-        <span class="feat-tag g">Proyek</span>
+    <div class="stat-card">
+      <div class="stat-icon blue">📄</div>
+      <div>
+        <div class="stat-num blue" id="statFiles">0</div>
+        <div class="stat-label">File Diproses</div>
       </div>
-      <button class="card-btn" onclick="showDevNotice()">Lihat Portfolio</button>
     </div>
-    <div class="feat-card blue">
-      <h3>CV</h3>
-      <p>Riwayat pendidikan dan pengalaman saya secara lengkap dan terstruktur sebagai tenaga profesional.</p>
-      <div class="feat-tags">
-        <span class="feat-tag b">Pendidikan</span>
-        <span class="feat-tag b">Pengalaman</span>
+    <div class="stat-card">
+      <div class="stat-icon green">✅</div>
+      <div>
+        <div class="stat-num green">12</div>
+        <div class="stat-label">Fitur Tersedia</div>
       </div>
-      <button class="card-btn" onclick="showDevNotice()">Lihat CV</button>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon orange">☁️</div>
+      <div>
+        <div class="stat-num orange" style="font-size:16px">0 Byte</div>
+        <div class="stat-label">Data Dikirim ke Server</div>
+      </div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon purple">⚡</div>
+      <div>
+        <div class="stat-num purple">100%</div>
+        <div class="stat-label">Proses di Browser</div>
+      </div>
     </div>
   </div>
 
-  </div><!-- end tab-home -->
+  <!-- FILTER -->
+  <div id="toolsSection">
+    <div class="section-header">
+      <h2>🧰 Semua Alat</h2>
+      <div class="section-divider"></div>
+      <p>12 alat tersedia</p>
+    </div>
+    <div class="filter-tabs">
+      <button class="filter-tab active" onclick="filterTools('semua',this)">Semua</button>
+      <button class="filter-tab" onclick="filterTools('pdf',this)">📄 PDF</button>
+      <button class="filter-tab" onclick="filterTools('teks',this)">📝 Teks</button>
+      <button class="filter-tab" onclick="filterTools('gambar',this)">🖼️ Gambar</button>
+      <button class="filter-tab" onclick="filterTools('keamanan',this)">🔒 Keamanan</button>
+      <button class="filter-tab" onclick="filterTools('lainnya',this)">✨ Lainnya</button>
+    </div>
+  </div>
 
-  <!-- TAB: EKSPERIMEN -->
-  <div class="tab-panel" id="tabEksperimen">
+  <!-- TOOLS GRID -->
+  <div class="tools-grid" id="toolsGrid">
 
-    <!-- GAME CARD STANDALONE -->
-    <div class="accordion-inner" style="padding:0;">
-      <div class="game-section">
-
-        <!-- LEFT: GAME CANVAS -->
-        <div class="game-card">
-          <div class="game-header">
-            <div>
-              <h3>🧠 Smart Snake</h3>
-              <p>Makan apel → Jawab kuis → Kumpulkan poin!</p>
-            </div>
-            <div class="score-row">
-              <div class="score-box">
-                <div class="score-label">Skor</div>
-                <div class="score-num blue" id="score">0</div>
-              </div>
-              <div class="score-box">
-                <div class="score-label">Tertinggi</div>
-                <div class="score-num green" id="highscore">0</div>
-              </div>
-            </div>
-          </div>
-
-          <div class="canvas-wrap">
-            <canvas id="snakeCanvas"></canvas>
-            <div id="gameOverlay">
-              <div id="overlayIcon">🧠</div>
-              <div id="overlayTitle">Smart Snake</div>
-              <div id="overlayDesc">Kumpulkan apel &amp; jawab kuis penalaran umum!</div>
-              <div class="name-input-wrap" id="nameInputWrap">
-                <label>Nama Kamu</label>
-                <input id="playerNameInput" type="text" maxlength="20" placeholder="Masukkan nama..." autocomplete="off" />
-              </div>
-              <button id="startBtn" onclick="handleStartBtn()">Mulai Main</button>
-            </div>
-          </div>
-
-          <div class="ctrl-pad">
-            <button class="ctrl-btn" onclick="setDir(0,-1)">▲</button>
-            <div class="ctrl-row">
-              <button class="ctrl-btn" onclick="setDir(-1,0)">◀</button>
-              <button class="ctrl-btn empty"></button>
-              <button class="ctrl-btn" onclick="setDir(1,0)">▶</button>
-            </div>
-            <button class="ctrl-btn" onclick="setDir(0,1)">▼</button>
-          </div>
-        </div>
-
-        <!-- RIGHT: INFO PANEL -->
-        <div class="game-info">
-          <div class="info-card">
-            <h4>🏆 Leaderboard</h4>
-            <div class="lb-list" id="leaderboardList">
-              <div class="lb-empty">Belum ada skor. Yuk main!</div>
-            </div>
-          </div>
-          <div class="info-card">
-            <h4>Cara Bermain</h4>
-            <p>Arahkan ular untuk memakan apel 🍎 dan hindari menabrak tembok atau tubuhmu sendiri. Setiap <strong>5 apel</strong>, kamu akan mendapat tantangan kuis!</p>
-            <div class="key-list">
-              <span class="key-badge">↑ ↓ ← →</span>
-              <span class="key-badge">W A S D</span>
-            </div>
-          </div>
-          <div class="info-card">
-            <h4>⚡ Sistem Kuis</h4>
-            <p>Setiap 5 apel dimakan, pilih tingkat kesulitan soal penalaran umum:</p>
-            <div style="margin-top:8px;display:flex;flex-direction:column;gap:5px;">
-              <div style="display:flex;justify-content:space-between;align-items:center;padding:5px 10px;background:#dcfce7;border-radius:8px;font-size:12px;">
-                <span>🟢 <strong>Mudah</strong></span><span style="color:#16a34a;font-weight:700;">+10 poin</span>
-              </div>
-              <div style="display:flex;justify-content:space-between;align-items:center;padding:5px 10px;background:#fef9c3;border-radius:8px;font-size:12px;">
-                <span>🟡 <strong>Sedang</strong></span><span style="color:#ca8a04;font-weight:700;">+20 poin</span>
-              </div>
-              <div style="display:flex;justify-content:space-between;align-items:center;padding:5px 10px;background:#fee2e2;border-radius:8px;font-size:12px;">
-                <span>🔴 <strong>Susah</strong></span><span style="color:#dc2626;font-weight:700;">+30 poin</span>
-              </div>
-            </div>
-          </div>
-          <div class="info-card">
-            <h4>🏅 Penilaian</h4>
-            <p>Setiap apel bernilai <strong>+10 poin</strong>. Jawaban kuis benar memberikan bonus poin sesuai tingkat kesulitan. Salah menjawab? Tidak ada pengurangan poin — tapi bonus hangus! Skor tertinggi tersimpan di leaderboard global.</p>
-          </div>
-        </div>
-
+    <!-- 1. Merge PDF -->
+    <div class="tool-card blue" data-cat="pdf">
+      <div class="tool-card-top">
+        <div class="tool-icon-wrap blue">📄</div>
+        <span class="tool-badge">PDF</span>
       </div>
+      <h3>Gabungkan PDF</h3>
+      <p>Satukan beberapa file PDF menjadi satu dokumen. Atur urutan sesuka Anda sebelum menggabungkan.</p>
+      <button class="tool-card-btn" onclick="openModal('mergePdfModal')">Buka Alat →</button>
     </div>
 
-  </div><!-- end tab-eksperimen -->
+    <!-- 2. Split PDF -->
+    <div class="tool-card orange" data-cat="pdf">
+      <div class="tool-card-top">
+        <div class="tool-icon-wrap orange">✂️</div>
+        <span class="tool-badge" style="background:var(--orange-bg);color:var(--orange)">PDF</span>
+      </div>
+      <h3>Pisahkan PDF</h3>
+      <p>Ekstrak halaman tertentu dari PDF Anda. Tentukan rentang halaman atau halaman spesifik yang ingin dipisah.</p>
+      <button class="tool-card-btn" onclick="openModal('splitPdfModal')">Buka Alat →</button>
+    </div>
 
-</div><!-- end page-content -->
+    <!-- 3. Gambar ke PDF -->
+    <div class="tool-card green" data-cat="pdf gambar">
+      <div class="tool-card-top">
+        <div class="tool-icon-wrap green">🖼️</div>
+        <span class="tool-badge" style="background:var(--green-bg);color:var(--green)">Gambar</span>
+      </div>
+      <h3>Gambar ke PDF</h3>
+      <p>Konversi satu atau lebih gambar (JPG, PNG, WebP) menjadi file PDF yang rapi dalam hitungan detik.</p>
+      <button class="tool-card-btn" onclick="openModal('imgToPdfModal')">Buka Alat →</button>
+    </div>
+
+    <!-- 4. Text Editor -->
+    <div class="tool-card blue" data-cat="teks">
+      <div class="tool-card-top">
+        <div class="tool-icon-wrap blue">📝</div>
+        <span class="tool-badge">Editor</span>
+      </div>
+      <h3>Editor Dokumen</h3>
+      <p>Tulis dan format teks dengan toolbar lengkap. Unduh hasil sebagai file TXT atau HTML. Semua offline.</p>
+      <button class="tool-card-btn" onclick="openModal('textEditorModal')">Buka Alat →</button>
+    </div>
+
+    <!-- 5. Enkripsi Teks -->
+    <div class="tool-card rose" data-cat="keamanan teks">
+      <div class="tool-card-top">
+        <div class="tool-icon-wrap rose">🔒</div>
+        <span class="tool-badge new">Keamanan</span>
+      </div>
+      <h3>Enkripsi Teks</h3>
+      <p>Amankan teks rahasia Anda dengan enkripsi berbasis password. Hanya yang tahu password bisa membacanya.</p>
+      <button class="tool-card-btn" onclick="openModal('encryptModal')">Buka Alat →</button>
+    </div>
+
+    <!-- 6. CSV Viewer -->
+    <div class="tool-card teal" data-cat="lainnya">
+      <div class="tool-card-top">
+        <div class="tool-icon-wrap teal">📊</div>
+        <span class="tool-badge" style="background:var(--teal-bg);color:var(--teal)">Data</span>
+      </div>
+      <h3>Tabel & CSV Viewer</h3>
+      <p>Buka dan baca file CSV sebagai tabel yang bersih dan mudah dibaca. Cari dan filter baris dengan cepat.</p>
+      <button class="tool-card-btn" onclick="openModal('csvModal')">Buka Alat →</button>
+    </div>
+
+    <!-- 7. Kompresi Gambar -->
+    <div class="tool-card amber" data-cat="gambar">
+      <div class="tool-card-top">
+        <div class="tool-icon-wrap amber">🗜️</div>
+        <span class="tool-badge" style="background:var(--amber-bg);color:var(--amber)">Gambar</span>
+      </div>
+      <h3>Kompres Gambar</h3>
+      <p>Kurangi ukuran file gambar tanpa kehilangan kualitas yang berarti. Mendukung JPG, PNG, dan WebP.</p>
+      <button class="tool-card-btn" onclick="openModal('compressModal')">Buka Alat →</button>
+    </div>
+
+    <!-- 8. Tanda Tangan Digital -->
+    <div class="tool-card purple" data-cat="keamanan lainnya">
+      <div class="tool-card-top">
+        <div class="tool-icon-wrap purple">✍️</div>
+        <span class="tool-badge" style="background:var(--purple-bg);color:var(--purple)">Signature</span>
+      </div>
+      <h3>Tanda Tangan Digital</h3>
+      <p>Gambar tanda tangan Anda langsung di browser lalu unduh sebagai gambar PNG transparan siap pakai.</p>
+      <button class="tool-card-btn" onclick="openModal('signModal')">Buka Alat →</button>
+    </div>
+
+    <!-- 9. Password Generator -->
+    <div class="tool-card rose" data-cat="keamanan">
+      <div class="tool-card-top">
+        <div class="tool-icon-wrap rose">🔑</div>
+        <span class="tool-badge new">Keamanan</span>
+      </div>
+      <h3>Generator Password</h3>
+      <p>Buat password kuat yang aman secara acak. Sesuaikan panjang dan karakter yang diinginkan.</p>
+      <button class="tool-card-btn" onclick="openModal('passGenModal')">Buka Alat →</button>
+    </div>
+
+    <!-- 10. Word Counter -->
+    <div class="tool-card blue" data-cat="teks">
+      <div class="tool-card-top">
+        <div class="tool-icon-wrap blue">🔢</div>
+        <span class="tool-badge">Teks</span>
+      </div>
+      <h3>Penghitung Kata & Karakter</h3>
+      <p>Analisis teks Anda: hitung kata, karakter, kalimat, paragraf, dan estimasi waktu baca secara real-time.</p>
+      <button class="tool-card-btn" onclick="openModal('wordCountModal')">Buka Alat →</button>
+    </div>
+
+    <!-- 11. Base64 -->
+    <div class="tool-card teal" data-cat="lainnya keamanan">
+      <div class="tool-card-top">
+        <div class="tool-icon-wrap teal">🔄</div>
+        <span class="tool-badge" style="background:var(--teal-bg);color:var(--teal)">Encode</span>
+      </div>
+      <h3>Base64 Encode/Decode</h3>
+      <p>Encode teks atau file ke format Base64 dan decode kembali. Berguna untuk berbagi data secara aman.</p>
+      <button class="tool-card-btn" onclick="openModal('base64Modal')">Buka Alat →</button>
+    </div>
+
+    <!-- 12. PDF Metadata Viewer -->
+    <div class="tool-card green" data-cat="pdf lainnya">
+      <div class="tool-card-top">
+        <div class="tool-icon-wrap green">🔍</div>
+        <span class="tool-badge new" style="background:var(--green-bg);color:var(--green)">Baru</span>
+      </div>
+      <h3>Penghapus Metadata</h3>
+      <p>Lihat dan bersihkan metadata tersembunyi dalam file Anda (nama penulis, tanggal, lokasi, dan lainnya).</p>
+      <button class="tool-card-btn" onclick="openModal('metaModal')">Buka Alat →</button>
+    </div>
+
+  </div>
+
+  <!-- PRIVACY BANNER -->
+  <div id="privacyBanner" style="background:linear-gradient(135deg,#f0f9ff,#e0f2fe);border:1.5px solid #bae6fd;border-radius:16px;padding:1.5rem 1.75rem;display:flex;gap:16px;align-items:flex-start;margin-bottom:1.75rem;">
+    <div style="font-size:32px;flex-shrink:0">🔐</div>
+    <div>
+      <h3 style="font-size:15px;font-weight:700;color:#0369a1;margin-bottom:4px;">Bagaimana #JagaDokumen Melindungi Privasi Anda?</h3>
+      <p style="font-size:13px;color:#0284c7;line-height:1.75;">Semua pemrosesan dilakukan menggunakan <strong>Web APIs</strong> bawaan browser (File API, Canvas API, dan sebagainya). File Anda <strong>tidak pernah meninggalkan perangkat Anda</strong>. Tidak ada backend, tidak ada database, tidak ada tracking. Anda dapat menggunakan alat ini bahkan dalam mode <strong>offline</strong>.</p>
+    </div>
+  </div>
+
+</div><!-- /page -->
 
 <!-- FOOTER -->
 <footer>
-  <div>
-    <p class="footer-brand">Fazar Riansyah</p>
-    <p class="footer-sub">PTP Ahli Pertama · P4 Jakarta Pusat</p>
-  </div>
-  <p class="footer-copy">© 2026 Fazar Site. All rights reserved.</p>
+  Dibuat dengan ❤️ oleh <strong>#JagaDokumen</strong> — Keamanan Dokumen Tanpa Kompromi &nbsp;•&nbsp; 100% Open & Transparan &nbsp;•&nbsp; Semua berjalan di browser Anda
 </footer>
 
-<!-- DEV NOTICE MODAL -->
-<div class="modal-overlay" id="devModal" onclick="if(event.target===this)closeDevNotice()">
-  <div class="contact-modal-box" style="text-align:center;max-width:360px;">
-    <div style="font-size:36px;margin-bottom:1rem;">🚧</div>
-    <h2 style="font-size:16px;font-weight:600;color:#1a1a2e;margin-bottom:0.5rem;">Sedang Dalam Pengembangan</h2>
-    <p style="font-size:13px;color:#7a86a1;line-height:1.7;margin-bottom:1.5rem;">Halaman ini masih dalam tahap pengembangan. Mohon ditunggu, konten akan segera tersedia. Terima kasih atas kesabarannya! 🙏</p>
-    <button class="btn-white" style="background:#2563eb;color:#fff;width:100%;" onclick="closeDevNotice()">Oke, Mengerti</button>
-  </div>
-</div>
+<!-- ─────────────────────────────────────────────
+     MODALS
+───────────────────────────────────────────── -->
 
-<!-- PDF MODAL -->
-<div class="modal-overlay" id="pdfModal" onclick="if(event.target===this)closePDF()">
-  <div class="pdf-modal-box">
+<!-- MERGE PDF -->
+<div class="modal-backdrop" id="mergePdfModal">
+  <div class="modal">
     <div class="modal-header">
-      <span id="pdfModalTitle">Dokumen</span>
-      <button class="modal-close" onclick="closePDF()">✕</button>
+      <div class="modal-header-icon">📄</div>
+      <div><h3>Gabungkan PDF</h3><p>Pilih beberapa PDF, atur urutan, lalu unduh hasilnya</p></div>
+      <button class="modal-close" onclick="closeModal('mergePdfModal')">✕</button>
     </div>
     <div class="modal-body">
-      <iframe id="pdfFrame" src=""></iframe>
-    </div>
-  </div>
-</div>
-
-<!-- CONTACT MODAL -->
-<div class="modal-overlay" id="contactModal" onclick="if(event.target===this)closeContact()">
-  <div class="contact-modal-box">
-    <div style="text-align:center;margin-bottom:1.25rem;">
-      <div style="font-size:36px;margin-bottom:0.75rem;">👋</div>
-      <h2 style="font-size:16px;font-weight:600;color:#1a1a2e;margin-bottom:0.3rem;">Hubungi Saya</h2>
-      <p style="font-size:12.5px;color:#9aa5bd;">Pilih platform yang kamu inginkan</p>
-    </div>
-    <button class="modal-close" onclick="closeContact()" style="position:absolute;top:1.25rem;right:1.25rem;">✕</button>
-    <div class="contact-options">
-      <a class="contact-option" href="https://wa.me/6289601066548" target="_blank">
-        <div class="contact-option-icon wa">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="#25D366"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-        </div>
-        <div class="contact-option-text"><strong>WhatsApp</strong><span>Chat langsung via WhatsApp</span></div>
-      </a>
-      <a class="contact-option" href="mailto:fazarriansyah@gmail.com">
-        <div class="contact-option-icon email">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" stroke="#2563eb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><polyline points="22,6 12,13 2,6" stroke="#2563eb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </div>
-        <div class="contact-option-text"><strong>Email</strong><span>fazarriansyah@gmail.com</span></div>
-      </a>
-      <a class="contact-option" href="https://instagram.com/fazar.riansyah" target="_blank">
-        <div class="contact-option-icon ig">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#be185d" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
-        </div>
-        <div class="contact-option-text"><strong>Instagram</strong><span>@fazar.riansyah</span></div>
-      </a>
-      <a class="contact-option" href="https://linkedin.com/in/fazarriansyah" target="_blank">
-        <div class="contact-option-icon li">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="#0369a1"><path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6zM2 9h4v12H2z"/><circle cx="4" cy="4" r="2"/></svg>
-        </div>
-        <div class="contact-option-text"><strong>LinkedIn</strong><span>Fazar Riansyah</span></div>
-      </a>
-    </div>
-  </div>
-</div>
-
-<!-- QUIZ MODAL -->
-<div class="modal-overlay" id="quizModal">
-  <div class="contact-modal-box" style="max-width:480px;padding:0;overflow:hidden;border-radius:20px;">
-    <!-- Header -->
-    <div id="quizHeader" style="padding:1.5rem 1.5rem 1rem;background:linear-gradient(135deg,#1a4fa0,#2563eb);text-align:center;">
-      <div style="font-size:28px;margin-bottom:6px;">🧠</div>
-      <div style="font-size:14px;font-weight:700;color:#fff;margin-bottom:3px;">Tantangan Kuis!</div>
-      <div style="font-size:11px;color:rgba(255,255,255,0.65);" id="quizAppleCount"></div>
-    </div>
-    <!-- Difficulty Pick -->
-    <div id="quizDiffPicker" style="padding:1.25rem;">
-      <div style="font-size:13px;font-weight:600;color:#1a1a2e;text-align:center;margin-bottom:1rem;">Pilih Tingkat Kesulitan</div>
-      <div style="display:flex;flex-direction:column;gap:10px;">
-        <button onclick="startQuiz('easy')" style="display:flex;justify-content:space-between;align-items:center;padding:12px 16px;border-radius:12px;border:1.5px solid #bbf7d0;background:#dcfce7;cursor:pointer;font-family:inherit;transition:transform 0.15s;" onmouseover="this.style.transform='translateX(4px)'" onmouseout="this.style.transform=''">
-          <span style="font-size:13px;font-weight:600;color:#166534;">🟢 Mudah</span>
-          <span style="font-size:12px;color:#16a34a;font-weight:700;">+10 Poin</span>
-        </button>
-        <button onclick="startQuiz('medium')" style="display:flex;justify-content:space-between;align-items:center;padding:12px 16px;border-radius:12px;border:1.5px solid #fef08a;background:#fef9c3;cursor:pointer;font-family:inherit;transition:transform 0.15s;" onmouseover="this.style.transform='translateX(4px)'" onmouseout="this.style.transform=''">
-          <span style="font-size:13px;font-weight:600;color:#854d0e;">🟡 Sedang</span>
-          <span style="font-size:12px;color:#ca8a04;font-weight:700;">+20 Poin</span>
-        </button>
-        <button onclick="startQuiz('hard')" style="display:flex;justify-content:space-between;align-items:center;padding:12px 16px;border-radius:12px;border:1.5px solid #fecaca;background:#fee2e2;cursor:pointer;font-family:inherit;transition:transform 0.15s;" onmouseover="this.style.transform='translateX(4px)'" onmouseout="this.style.transform=''">
-          <span style="font-size:13px;font-weight:600;color:#991b1b;">🔴 Susah</span>
-          <span style="font-size:12px;color:#dc2626;font-weight:700;">+30 Poin</span>
-        </button>
+      <div class="dropzone" id="mergeDrop" onclick="document.getElementById('mergeInput').click()" ondragover="dragOver(event,this)" ondragleave="dragLeave(this)" ondrop="dropFiles(event,'mergeInput','mergePdfList',true)">
+        <input type="file" id="mergeInput" accept=".pdf" multiple onchange="addFilesToList('mergeInput','mergePdfList',true)">
+        <div class="dropzone-icon">📂</div>
+        <h4>Klik atau seret file PDF di sini</h4>
+        <p>Pilih beberapa file PDF sekaligus</p>
       </div>
-      <div style="margin-top:12px;font-size:11px;color:#9aa5bd;text-align:center;">Ular berhenti sementara — ambil napas dulu 😄</div>
-    </div>
-    <!-- Question Area -->
-    <div id="quizQuestion" style="padding:1.25rem;display:none;">
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
-        <span id="quizDiffBadge" style="font-size:11px;font-weight:600;padding:3px 10px;border-radius:10px;"></span>
-        <span id="quizTimer" style="font-size:13px;font-weight:700;color:#2563eb;"></span>
+      <div class="file-list" id="mergePdfList"></div>
+      <div class="result-box" id="mergeResult">
+        <h4>✅ Simulasi Selesai</h4>
+        <p>File berhasil digabungkan. Dalam implementasi penuh dengan library PDF.js/pdf-lib, file PDF asli akan digabung dan dapat diunduh. Fitur ini mendemonstrasikan alur kerja lengkap.</p>
       </div>
-      <div id="quizQuestionText" style="font-size:13px;font-weight:600;color:#1a1a2e;line-height:1.65;margin-bottom:1rem;min-height:48px;"></div>
-      <div id="quizOptions" style="display:flex;flex-direction:column;gap:8px;"></div>
-    </div>
-    <!-- Result Area -->
-    <div id="quizResult" style="padding:1.5rem;text-align:center;display:none;">
-      <div id="quizResultIcon" style="font-size:40px;margin-bottom:10px;"></div>
-      <div id="quizResultTitle" style="font-size:15px;font-weight:700;color:#1a1a2e;margin-bottom:5px;"></div>
-      <div id="quizResultDesc" style="font-size:12px;color:#7a86a1;margin-bottom:10px;line-height:1.6;"></div>
-      <div id="quizResultExp" style="font-size:12px;color:#1a1a2e;background:#f0f7ff;border-left:3px solid #2563eb;border-radius:8px;padding:10px 12px;margin-bottom:16px;line-height:1.7;text-align:left;display:none;"></div>
-      <button onclick="closeQuiz()" style="padding:10px 28px;background:#2563eb;color:#fff;border:none;border-radius:10px;font-size:13px;font-weight:600;font-family:inherit;cursor:pointer;">Lanjut Main! 🐍</button>
+      <div class="btn-row">
+        <button class="btn-primary" onclick="simulateMerge()">📄 Gabungkan PDF</button>
+        <button class="btn-secondary" onclick="clearList('mergePdfList','mergeResult')">🗑️ Hapus Semua</button>
+      </div>
     </div>
   </div>
 </div>
 
-<script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-  import { getDatabase, ref, get, set, onValue } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+<!-- SPLIT PDF -->
+<div class="modal-backdrop" id="splitPdfModal">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-header-icon">✂️</div>
+      <div><h3>Pisahkan PDF</h3><p>Ekstrak halaman tertentu dari file PDF</p></div>
+      <button class="modal-close" onclick="closeModal('splitPdfModal')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="dropzone" id="splitDrop" onclick="document.getElementById('splitInput').click()" ondragover="dragOver(event,this)" ondragleave="dragLeave(this)" ondrop="dropFiles(event,'splitInput','splitFileList',false)">
+        <input type="file" id="splitInput" accept=".pdf" onchange="addFilesToList('splitInput','splitFileList',false)">
+        <div class="dropzone-icon">✂️</div>
+        <h4>Klik atau seret file PDF</h4>
+        <p>Pilih satu file PDF</p>
+      </div>
+      <div class="file-list" id="splitFileList"></div>
+      <div class="field-group">
+        <label class="field-label">Rentang Halaman (contoh: 1-3, 5, 7-9)</label>
+        <input type="text" id="splitRange" placeholder="1-3, 5, 7-9" value="1-3">
+      </div>
+      <div class="result-box" id="splitResult">
+        <h4>✅ Simulasi Selesai</h4>
+        <p id="splitResultText">Halaman berhasil diekstrak.</p>
+      </div>
+      <div class="btn-row">
+        <button class="btn-primary" onclick="simulateSplit()">✂️ Pisahkan PDF</button>
+      </div>
+    </div>
+  </div>
+</div>
 
-  // ── Firebase ──
-  const app = initializeApp({
-    apiKey: "AIzaSyDrx9zz8wIOFktxlAHun7z4ttCx5-o7mo4",
-    authDomain: "tester-c9106.firebaseapp.com",
-    databaseURL: "https://tester-c9106.firebaseio.com",
-    projectId: "tester-c9106",
-    storageBucket: "tester-c9106.firebasestorage.app",
-    messagingSenderId: "18341905173",
-    appId: "1:18341905173:web:81f8323a41e1e8d40a1f1c"
+<!-- IMG TO PDF -->
+<div class="modal-backdrop" id="imgToPdfModal">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-header-icon">🖼️</div>
+      <div><h3>Gambar ke PDF</h3><p>Konversi gambar menjadi file PDF</p></div>
+      <button class="modal-close" onclick="closeModal('imgToPdfModal')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="dropzone" onclick="document.getElementById('imgPdfInput').click()" ondragover="dragOver(event,this)" ondragleave="dragLeave(this)" ondrop="dropFiles(event,'imgPdfInput','imgPreviewWrap',true,'img')">
+        <input type="file" id="imgPdfInput" accept="image/*" multiple onchange="previewImages('imgPdfInput','imgPreviewWrap')">
+        <div class="dropzone-icon">🖼️</div>
+        <h4>Klik atau seret gambar di sini</h4>
+        <p>JPG, PNG, WebP, GIF — bisa banyak sekaligus</p>
+      </div>
+      <div class="img-preview-wrap" id="imgPreviewWrap"></div>
+      <div class="field-group">
+        <label class="field-label">Ukuran Halaman</label>
+        <select id="pdfPageSize">
+          <option value="a4">A4 (210 × 297 mm)</option>
+          <option value="letter">Letter (216 × 279 mm)</option>
+          <option value="fit">Sesuaikan ukuran gambar</option>
+        </select>
+      </div>
+      <div class="result-box" id="imgPdfResult">
+        <h4>✅ PDF Siap!</h4>
+        <p>Gambar berhasil dikonversi menjadi PDF. Tombol unduh akan tersedia (implementasi penuh memerlukan library pdf-lib atau jsPDF).</p>
+      </div>
+      <div class="btn-row">
+        <button class="btn-primary" onclick="simulateImgToPdf()">📄 Buat PDF</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TEXT EDITOR -->
+<div class="modal-backdrop" id="textEditorModal">
+  <div class="modal" style="max-width:760px">
+    <div class="modal-header">
+      <div class="modal-header-icon">📝</div>
+      <div><h3>Editor Dokumen</h3><p>Tulis, format, dan unduh dokumen Anda</p></div>
+      <button class="modal-close" onclick="closeModal('textEditorModal')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="toolbar">
+        <button class="tb-btn" onclick="execCmd('bold')" title="Bold"><b>B</b></button>
+        <button class="tb-btn" onclick="execCmd('italic')" title="Italic"><i>I</i></button>
+        <button class="tb-btn" onclick="execCmd('underline')" title="Underline"><u>U</u></button>
+        <button class="tb-btn" onclick="execCmd('strikeThrough')" title="Strikethrough"><s>S</s></button>
+        <div class="tb-sep"></div>
+        <button class="tb-btn" onclick="execCmd('justifyLeft')" title="Kiri">≡</button>
+        <button class="tb-btn" onclick="execCmd('justifyCenter')" title="Tengah">⊟</button>
+        <button class="tb-btn" onclick="execCmd('justifyRight')" title="Kanan">≡</button>
+        <div class="tb-sep"></div>
+        <button class="tb-btn" onclick="execCmd('insertUnorderedList')" title="Bullet">• Daftar</button>
+        <button class="tb-btn" onclick="execCmd('insertOrderedList')" title="Numbered">1. Urutan</button>
+        <div class="tb-sep"></div>
+        <select onchange="execCmd('fontSize',this.value);this.value=''" style="font-size:12px;padding:4px 8px;border-radius:7px;border:1px solid var(--border);font-family:inherit;">
+          <option value="">Ukuran Font</option>
+          <option value="1">Kecil</option>
+          <option value="3">Normal</option>
+          <option value="5">Besar</option>
+          <option value="7">Sangat Besar</option>
+        </select>
+        <input type="color" title="Warna teks" onchange="execCmd('foreColor',this.value)" style="width:34px;height:28px;border:1px solid var(--border);border-radius:7px;cursor:pointer;padding:2px;">
+        <div class="tb-sep"></div>
+        <button class="tb-btn" onclick="document.getElementById('editorArea').innerHTML=''" title="Bersihkan">🗑️</button>
+      </div>
+      <div id="editorArea" contenteditable="true" spellcheck="true">
+        <p>Mulai ketik dokumen Anda di sini...</p>
+      </div>
+      <div class="editor-footer">
+        <span id="editorStats">0 kata • 0 karakter</span>
+        <span>Format: Rich Text</span>
+      </div>
+      <div class="btn-row">
+        <button class="btn-primary" onclick="downloadEditor('html')">⬇️ Unduh HTML</button>
+        <button class="btn-secondary" onclick="downloadEditor('txt')">⬇️ Unduh TXT</button>
+        <button class="btn-secondary" onclick="printEditor()">🖨️ Cetak</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ENKRIPSI -->
+<div class="modal-backdrop" id="encryptModal">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-header-icon">🔒</div>
+      <div><h3>Enkripsi Teks</h3><p>Amankan pesan rahasia dengan password</p></div>
+      <button class="modal-close" onclick="closeModal('encryptModal')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="field-group">
+        <label class="field-label">Teks yang Ingin Dienkripsi</label>
+        <textarea id="encryptInput" placeholder="Masukkan teks rahasia Anda..."></textarea>
+      </div>
+      <div class="field-group">
+        <label class="field-label">Password</label>
+        <input type="password" id="encryptPass" placeholder="Buat password yang kuat..." oninput="updateStrength(this.value)">
+        <div class="strength-bar"><div class="strength-fill" id="strengthFill"></div></div>
+        <div style="font-size:11.5px;color:var(--muted);margin-top:4px" id="strengthLabel">Kekuatan password akan tampil di sini</div>
+      </div>
+      <div class="result-box" id="encryptResult">
+        <h4>🔐 Hasil Enkripsi (XOR + Base64)</h4>
+        <div class="result-text" id="encryptOutput"></div>
+      </div>
+      <div class="btn-row">
+        <button class="btn-primary" onclick="encryptText()">🔒 Enkripsi</button>
+        <button class="btn-secondary" onclick="decryptText()">🔓 Dekripsi</button>
+        <button class="btn-secondary" onclick="copyResult('encryptOutput')">📋 Salin</button>
+      </div>
+      <p style="font-size:11.5px;color:var(--light);margin-top:12px">ℹ️ Menggunakan enkripsi XOR + Base64. Simpan password Anda — tidak bisa dipulihkan jika lupa.</p>
+    </div>
+  </div>
+</div>
+
+<!-- CSV VIEWER -->
+<div class="modal-backdrop" id="csvModal">
+  <div class="modal" style="max-width:800px">
+    <div class="modal-header">
+      <div class="modal-header-icon">📊</div>
+      <div><h3>Tabel & CSV Viewer</h3><p>Buka dan analisis file CSV sebagai tabel</p></div>
+      <button class="modal-close" onclick="closeModal('csvModal')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="dropzone" onclick="document.getElementById('csvInput').click()" ondragover="dragOver(event,this)" ondragleave="dragLeave(this)" ondrop="dropFiles(event,'csvInput',null,false,'csv')">
+        <input type="file" id="csvInput" accept=".csv,.tsv,.txt" onchange="loadCSV()">
+        <div class="dropzone-icon">📊</div>
+        <h4>Klik atau seret file CSV</h4>
+        <p>Mendukung format CSV dan TSV</p>
+      </div>
+      <div class="field-group" style="display:flex;gap:10px;align-items:flex-end">
+        <div style="flex:1">
+          <label class="field-label">Cari data</label>
+          <input type="text" id="csvSearch" placeholder="Ketik untuk mencari..." oninput="filterCSV(this.value)">
+        </div>
+        <div id="csvInfo" class="info-chip" style="flex-shrink:0;margin-bottom:1px">Belum ada file</div>
+      </div>
+      <div class="csv-wrap" id="csvWrap" style="display:none">
+        <table id="csvTable"></table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- KOMPRES GAMBAR -->
+<div class="modal-backdrop" id="compressModal">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-header-icon">🗜️</div>
+      <div><h3>Kompres Gambar</h3><p>Kurangi ukuran file tanpa kehilangan kualitas</p></div>
+      <button class="modal-close" onclick="closeModal('compressModal')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="dropzone" onclick="document.getElementById('compressInput').click()" ondragover="dragOver(event,this)" ondragleave="dragLeave(this)" ondrop="dropFiles(event,'compressInput',null,false,'compress')">
+        <input type="file" id="compressInput" accept="image/*" onchange="loadCompressPreview()">
+        <div class="dropzone-icon">🗜️</div>
+        <h4>Klik atau seret gambar</h4>
+        <p>JPG, PNG, WebP</p>
+      </div>
+      <div id="compressPreviewArea" style="display:none">
+        <div style="display:flex;gap:12px;margin-bottom:1rem">
+          <div style="flex:1;text-align:center">
+            <img id="compressOrigImg" style="width:100%;border-radius:10px;border:1px solid var(--border)">
+            <p style="font-size:12px;color:var(--muted);margin-top:5px">Original: <strong id="origSize">-</strong></p>
+          </div>
+          <div style="flex:1;text-align:center">
+            <img id="compressResultImg" style="width:100%;border-radius:10px;border:1px solid var(--border)">
+            <p style="font-size:12px;color:var(--muted);margin-top:5px">Hasil: <strong id="compSize">-</strong></p>
+          </div>
+        </div>
+        <div class="field-group">
+          <label class="field-label">Kualitas: <span id="qualityVal">80</span>%</label>
+          <input type="range" id="qualitySlider" min="10" max="100" value="80" oninput="updateQuality(this.value)" style="width:100%;accent-color:var(--blue-600)">
+        </div>
+        <div class="progress-bar"><div class="progress-fill" id="compressProgress"></div></div>
+        <div class="btn-row">
+          <button class="btn-green" onclick="downloadCompressed()">⬇️ Unduh Gambar Terkompresi</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TANDA TANGAN -->
+<div class="modal-backdrop" id="signModal">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-header-icon">✍️</div>
+      <div><h3>Tanda Tangan Digital</h3><p>Gambar tanda tangan dan unduh sebagai PNG</p></div>
+      <button class="modal-close" onclick="closeModal('signModal')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="field-group">
+        <div style="display:flex;gap:10px;margin-bottom:10px;align-items:center">
+          <label class="field-label" style="margin:0">Warna Tinta:</label>
+          <input type="color" id="signColor" value="#1d4ed8" style="width:36px;height:30px;border:1px solid var(--border);border-radius:8px;cursor:pointer;padding:2px;">
+          <label class="field-label" style="margin:0">Ketebalan:</label>
+          <input type="range" id="signSize" min="1" max="10" value="3" style="accent-color:var(--blue-600)">
+          <button class="btn-secondary" onclick="clearSign()" style="padding:7px 14px;font-size:12px;margin-left:auto">🗑️ Bersih</button>
+        </div>
+        <canvas id="signCanvas" width="560" height="200"></canvas>
+      </div>
+      <div class="btn-row">
+        <button class="btn-primary" onclick="downloadSign()">⬇️ Unduh PNG Transparan</button>
+        <button class="btn-secondary" onclick="copySignToClipboard()">📋 Salin ke Clipboard</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PASSWORD GENERATOR -->
+<div class="modal-backdrop" id="passGenModal">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-header-icon">🔑</div>
+      <div><h3>Generator Password</h3><p>Buat password acak yang kuat</p></div>
+      <button class="modal-close" onclick="closeModal('passGenModal')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="field-group">
+        <label class="field-label">Panjang Password: <span id="passLenVal">16</span> karakter</label>
+        <input type="range" id="passLen" min="8" max="64" value="16" oninput="generatePass();document.getElementById('passLenVal').textContent=this.value" style="width:100%;accent-color:var(--blue-600)">
+      </div>
+      <div style="display:flex;gap:1rem;flex-wrap:wrap;margin-bottom:1rem">
+        <label style="display:flex;gap:6px;align-items:center;font-size:13px;cursor:pointer"><input type="checkbox" id="passUpper" checked> Huruf Besar (A-Z)</label>
+        <label style="display:flex;gap:6px;align-items:center;font-size:13px;cursor:pointer"><input type="checkbox" id="passLower" checked> Huruf Kecil (a-z)</label>
+        <label style="display:flex;gap:6px;align-items:center;font-size:13px;cursor:pointer"><input type="checkbox" id="passNum" checked> Angka (0-9)</label>
+        <label style="display:flex;gap:6px;align-items:center;font-size:13px;cursor:pointer"><input type="checkbox" id="passSymbol" checked> Simbol (!@#$)</label>
+      </div>
+      <div style="display:flex;gap:8px;align-items:center">
+        <input type="text" id="passOutput" readonly style="font-family:monospace;font-size:15px;font-weight:600;letter-spacing:1px;flex:1">
+        <button class="btn-primary" onclick="generatePass()" style="flex-shrink:0">🔄 Generate</button>
+        <button class="btn-secondary" onclick="copyResult('passOutput')" style="flex-shrink:0">📋 Salin</button>
+      </div>
+      <div class="strength-bar" style="margin-top:10px"><div class="strength-fill" id="passStrengthFill"></div></div>
+      <div style="font-size:11.5px;color:var(--muted);margin-top:4px" id="passStrengthLabel"></div>
+      <div style="margin-top:1.25rem">
+        <h4 style="font-size:13px;font-weight:700;margin-bottom:8px">📋 Riwayat Password (sesi ini)</h4>
+        <div id="passHistory" style="display:flex;flex-direction:column;gap:5px;max-height:140px;overflow-y:auto"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- WORD COUNTER -->
+<div class="modal-backdrop" id="wordCountModal">
+  <div class="modal" style="max-width:680px">
+    <div class="modal-header">
+      <div class="modal-header-icon">🔢</div>
+      <div><h3>Penghitung Kata & Karakter</h3><p>Analisis teks Anda secara real-time</p></div>
+      <button class="modal-close" onclick="closeModal('wordCountModal')">✕</button>
+    </div>
+    <div class="modal-body">
+      <textarea id="wordCountInput" placeholder="Tempelkan atau ketik teks di sini..." style="min-height:200px" oninput="updateWordCount()"></textarea>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:1rem">
+        <div style="background:var(--blue-50);border-radius:12px;padding:1rem;text-align:center">
+          <div style="font-size:24px;font-weight:800;color:var(--blue-600)" id="wcWords">0</div>
+          <div style="font-size:12px;color:var(--muted)">Kata</div>
+        </div>
+        <div style="background:var(--green-bg);border-radius:12px;padding:1rem;text-align:center">
+          <div style="font-size:24px;font-weight:800;color:var(--green)" id="wcChars">0</div>
+          <div style="font-size:12px;color:var(--muted)">Karakter</div>
+        </div>
+        <div style="background:var(--orange-bg);border-radius:12px;padding:1rem;text-align:center">
+          <div style="font-size:24px;font-weight:800;color:var(--orange)" id="wcSentences">0</div>
+          <div style="font-size:12px;color:var(--muted)">Kalimat</div>
+        </div>
+        <div style="background:var(--purple-bg);border-radius:12px;padding:1rem;text-align:center">
+          <div style="font-size:24px;font-weight:800;color:var(--purple)" id="wcParagraphs">0</div>
+          <div style="font-size:12px;color:var(--muted)">Paragraf</div>
+        </div>
+        <div style="background:var(--teal-bg);border-radius:12px;padding:1rem;text-align:center">
+          <div style="font-size:18px;font-weight:800;color:var(--teal)" id="wcReadTime">0 dtk</div>
+          <div style="font-size:12px;color:var(--muted)">Estimasi Baca</div>
+        </div>
+        <div style="background:var(--amber-bg);border-radius:12px;padding:1rem;text-align:center">
+          <div style="font-size:24px;font-weight:800;color:var(--amber)" id="wcLines">0</div>
+          <div style="font-size:12px;color:var(--muted)">Baris</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- BASE64 -->
+<div class="modal-backdrop" id="base64Modal">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-header-icon">🔄</div>
+      <div><h3>Base64 Encode / Decode</h3><p>Konversi teks atau file ke dan dari Base64</p></div>
+      <button class="modal-close" onclick="closeModal('base64Modal')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="field-group">
+        <label class="field-label">Teks Input</label>
+        <textarea id="b64Input" placeholder="Masukkan teks biasa atau Base64 di sini..." style="min-height:130px"></textarea>
+      </div>
+      <div class="btn-row" style="margin-top:0;margin-bottom:1rem">
+        <button class="btn-primary" onclick="doBase64('encode')">🔄 Encode ke Base64</button>
+        <button class="btn-secondary" onclick="doBase64('decode')">🔄 Decode dari Base64</button>
+      </div>
+      <div class="field-group">
+        <label class="field-label">Hasil</label>
+        <textarea id="b64Output" readonly style="min-height:100px;font-family:monospace;font-size:12px;background:#f8fafc"></textarea>
+      </div>
+      <div class="btn-row" style="margin-top:0">
+        <button class="btn-secondary" onclick="copyResult('b64Output')">📋 Salin Hasil</button>
+        <button class="btn-secondary" onclick="swapBase64()">⇅ Tukar Input/Output</button>
+      </div>
+      <hr style="border:none;border-top:1px solid var(--border);margin:1.25rem 0">
+      <div class="field-group">
+        <label class="field-label">Atau encode file ke Base64</label>
+        <input type="file" id="b64FileInput" onchange="encodeFileBase64()" style="font-size:13px;padding:8px 12px;width:100%;border:1.5px solid var(--border);border-radius:10px;background:var(--bg)">
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- METADATA -->
+<div class="modal-backdrop" id="metaModal">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-header-icon">🔍</div>
+      <div><h3>Penghapus & Pembaca Metadata</h3><p>Lihat informasi tersembunyi dalam file Anda</p></div>
+      <button class="modal-close" onclick="closeModal('metaModal')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="dropzone" onclick="document.getElementById('metaInput').click()" ondragover="dragOver(event,this)" ondragleave="dragLeave(this)" ondrop="dropFiles(event,'metaInput',null,false,'meta')">
+        <input type="file" id="metaInput" accept="image/*,.pdf,.docx" onchange="readMeta()">
+        <div class="dropzone-icon">🔍</div>
+        <h4>Klik atau seret file apa saja</h4>
+        <p>Gambar, PDF, atau dokumen lainnya</p>
+      </div>
+      <div id="metaResult" style="display:none">
+        <h4 style="font-size:14px;font-weight:700;margin-bottom:10px">📋 Metadata Terdeteksi</h4>
+        <div id="metaList" style="display:flex;flex-direction:column;gap:6px"></div>
+        <div class="btn-row">
+          <button class="btn-danger" onclick="clearMeta()">🗑️ Simulasi Hapus Metadata</button>
+        </div>
+        <div class="result-box" id="metaClearResult">
+          <h4>✅ Metadata Dihapus!</h4>
+          <p>Dalam implementasi penuh, file baru tanpa metadata akan siap diunduh. Fitur ini menunjukkan data apa saja yang biasanya tersimpan dalam file Anda.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PRIVACY INFO MODAL -->
+<div class="modal-backdrop" id="privacyModal">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-header-icon">🔐</div>
+      <div><h3>Cara Kerja #JagaDokumen</h3><p>Transparansi penuh tentang keamanan Anda</p></div>
+      <button class="modal-close" onclick="closeModal('privacyModal')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div style="display:flex;flex-direction:column;gap:14px">
+        <div style="display:flex;gap:12px;background:var(--blue-50);padding:1rem;border-radius:12px">
+          <span style="font-size:24px">🌐</span>
+          <div><strong style="font-size:14px">File API & Canvas API</strong><p style="font-size:13px;color:var(--muted);margin-top:3px">Browser modern memiliki API bawaan untuk membaca, memproses, dan memanipulasi file. Semua terjadi di memori RAM komputer Anda.</p></div>
+        </div>
+        <div style="display:flex;gap:12px;background:var(--green-bg);padding:1rem;border-radius:12px">
+          <span style="font-size:24px">🔒</span>
+          <div><strong style="font-size:14px">Tidak Ada Transmisi Data</strong><p style="font-size:13px;color:var(--muted);margin-top:3px">Setiap operasi bersifat lokal. Tidak ada request ke server luar. Anda bisa memverifikasi ini dengan membuka DevTools → Network.</p></div>
+        </div>
+        <div style="display:flex;gap:12px;background:var(--amber-bg);padding:1rem;border-radius:12px">
+          <span style="font-size:24px">📵</span>
+          <div><strong style="font-size:14px">Bisa Offline</strong><p style="font-size:13px;color:var(--muted);margin-top:3px">Setelah halaman termuat, Anda dapat memutus koneksi internet dan semua fitur tetap berfungsi normal.</p></div>
+        </div>
+        <div style="display:flex;gap:12px;background:var(--purple-bg);padding:1rem;border-radius:12px">
+          <span style="font-size:24px">🗑️</span>
+          <div><strong style="font-size:14px">Data Hilang Saat Halaman Ditutup</strong><p style="font-size:13px;color:var(--muted);margin-top:3px">Tidak ada data yang disimpan secara permanen. Refresh halaman = semua data hilang dari memori.</p></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div id="toast">
+  <span id="toastIcon">✅</span>
+  <span id="toastMsg">Berhasil disalin!</span>
+</div>
+
+<!-- ─── SCRIPTS ─── -->
+<script>
+/* ─── UTILS ─── */
+let processedCount = 0;
+function bumpStat() {
+  processedCount++;
+  document.getElementById('statFiles').textContent = processedCount;
+}
+function toast(msg, icon='✅') {
+  const t = document.getElementById('toast');
+  document.getElementById('toastMsg').textContent = msg;
+  document.getElementById('toastIcon').textContent = icon;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3000);
+}
+function openModal(id) { document.getElementById(id).classList.add('open'); }
+function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+document.querySelectorAll('.modal-backdrop').forEach(b => b.addEventListener('click', e => { if(e.target===b) b.classList.remove('open'); }));
+
+/* ─── FILTER ─── */
+function filterTools(cat, btn) {
+  document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('.tool-card').forEach(c => {
+    if(cat==='semua') { c.style.display='flex'; return; }
+    const cats = c.dataset.cat || '';
+    c.style.display = cats.includes(cat) ? 'flex' : 'none';
   });
-  const db = getDatabase(app);
+}
 
-  // ── Modal functions ──
-  function showDevNotice()    { document.getElementById('devModal').classList.add('open'); }
-  function closeDevNotice()   { document.getElementById('devModal').classList.remove('open'); }
-  function openContactModal() { document.getElementById('contactModal').classList.add('open'); }
-  function closeContact()     { document.getElementById('contactModal').classList.remove('open'); }
-  function openPDF(url, title) {
-    document.getElementById('pdfModalTitle').textContent = title;
-    document.getElementById('pdfFrame').src = url;
-    document.getElementById('pdfModal').classList.add('open');
-  }
-  function closePDF() {
-    document.getElementById('pdfModal').classList.remove('open');
-    document.getElementById('pdfFrame').src = '';
-  }
+/* ─── SCROLL ─── */
+function scrollToTools() { document.getElementById('toolsSection').scrollIntoView({behavior:'smooth', block:'start'}); }
+function showPrivacyInfo() { openModal('privacyModal'); }
 
-  // ── Tab Switching ──
-  function switchTab(tab) {
-    document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
-    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-    document.getElementById('tabBtn' + tab.charAt(0).toUpperCase() + tab.slice(1)).classList.add('active');
-    document.getElementById('tab' + tab.charAt(0).toUpperCase() + tab.slice(1)).classList.add('active');
+/* ─── DRAG DROP ─── */
+function dragOver(e, el) { e.preventDefault(); el.classList.add('dragover'); }
+function dragLeave(el) { el.classList.remove('dragover'); }
+function dropFiles(e, inputId, listId, multi, type='pdf') {
+  e.preventDefault();
+  e.currentTarget.classList.remove('dragover');
+  const files = e.dataTransfer.files;
+  const input = document.getElementById(inputId);
+  const dt = new DataTransfer();
+  [...files].forEach(f => dt.items.add(f));
+  input.files = dt.files;
+  if(listId) addFilesToList(inputId, listId, multi);
+  if(type==='img') previewImages(inputId, 'imgPreviewWrap');
+  if(type==='compress') loadCompressPreview();
+  if(type==='csv') loadCSV();
+  if(type==='meta') readMeta();
+}
 
-    if (tab === 'eksperimen') {
-      setTimeout(() => { resizeCanvas(); if (!running) drawIdleScreen(); }, 50);
-    } else {
-      // Pause game when leaving eksperimen tab
-      if (running) {
-        clearInterval(gameLoop);
-        running = false;
-        document.getElementById('gameOverlay').style.display = 'flex';
-      }
-    }
-  }
-  window.switchTab = switchTab;
+/* ─── FILE LIST ─── */
+function addFilesToList(inputId, listId, multi) {
+  const input = document.getElementById(inputId);
+  const list  = document.getElementById(listId);
+  if(!input.files.length) return;
+  if(!multi) list.innerHTML = '';
+  [...input.files].forEach(f => {
+    const item = document.createElement('div');
+    item.className = 'file-item';
+    const ext = f.name.split('.').pop().toUpperCase();
+    item.innerHTML = `<span class="file-item-icon">${ext==='PDF'?'📄':'📁'}</span>
+      <span class="file-item-name">${f.name}</span>
+      <span class="file-item-size">${formatSize(f.size)}</span>
+      <button class="file-item-del" onclick="this.parentElement.remove()">✕</button>`;
+    list.appendChild(item);
+  });
+}
+function clearList(listId, resultId) {
+  document.getElementById(listId).innerHTML='';
+  if(resultId) document.getElementById(resultId).classList.remove('show');
+}
+function formatSize(b) {
+  if(b<1024) return b+'B';
+  if(b<1048576) return (b/1024).toFixed(1)+'KB';
+  return (b/1048576).toFixed(2)+'MB';
+}
 
-  // ── Leaderboard ──
-  function sanitizeKey(name) {
-    return name.replace(/[.#$/\[\]]/g, '_').substring(0, 30);
-  }
-  function addScore(name, pts) {
-    if (pts <= 0) return;
-    const key      = sanitizeKey(name || 'Anonim');
-    const entryRef = ref(db, 'leaderboard/' + key);
-    get(entryRef).then(snap => {
-      const existing = snap.exists() ? snap.val().score : 0;
-      if (pts > existing) set(entryRef, { name: name || 'Anonim', score: pts });
-    }).catch(err => console.error('Firebase write error:', err));
-  }
-  function renderLeaderboard(data) {
-    const el     = document.getElementById('leaderboardList');
-    const medals = ['🥇','🥈','🥉'];
-    if (!data) { el.innerHTML = '<div class="lb-empty">Belum ada skor. Yuk main!</div>'; return; }
-    const entries = Object.values(data).sort((a,b) => b.score - a.score).slice(0, 5);
-    if (!entries.length) { el.innerHTML = '<div class="lb-empty">Belum ada skor. Yuk main!</div>'; return; }
-    el.innerHTML = entries.map((e,i) => `
-      <div class="lb-item ${i===0?'top1':i===1?'top2':i===2?'top3':''}">
-        <span class="lb-rank">${medals[i] || (i+1)}</span>
-        <span class="lb-name">${e.name}</span>
-        <span class="lb-score">${e.score}</span>
-      </div>`).join('');
-  }
-  onValue(ref(db, 'leaderboard'), snap => renderLeaderboard(snap.val()),
-    err => console.error('Firebase read error:', err));
+/* ─── MERGE SIMULATE ─── */
+function simulateMerge() {
+  const list = document.getElementById('mergePdfList');
+  const items = list.querySelectorAll('.file-item');
+  if(!items.length) { toast('Tambahkan setidaknya 1 file PDF dulu!','⚠️'); return; }
+  bumpStat();
+  document.getElementById('mergeResult').classList.add('show');
+  toast(`${items.length} PDF berhasil digabungkan! 🎉`,'📄');
+}
 
-  // ── Smart Snake Game ──
-  const canvas = document.getElementById('snakeCanvas');
-  const ctx    = canvas.getContext('2d');
-  const GRID   = 20;
-  function CELL() { return canvas.width / GRID; }
+/* ─── SPLIT SIMULATE ─── */
+function simulateSplit() {
+  const list = document.getElementById('splitFileList');
+  const range = document.getElementById('splitRange').value.trim();
+  if(!list.querySelectorAll('.file-item').length) { toast('Pilih file PDF dulu!','⚠️'); return; }
+  bumpStat();
+  document.getElementById('splitResultText').textContent = `Halaman "${range}" berhasil diekstrak dari PDF.`;
+  document.getElementById('splitResult').classList.add('show');
+  toast('PDF berhasil dipisahkan!','✂️');
+}
 
-  let snake, dir, nextDir, food, score, highScore = 0, gameLoop, running = false;
-  let currentPlayerName = '';
-  let appleCount = 0;          // total apples eaten this session
-  let quizPending = false;     // game paused for quiz
-  let quizTimerInterval = null;
+/* ─── IMG TO PDF ─── */
+function previewImages(inputId, wrapId) {
+  const input = document.getElementById(inputId);
+  const wrap  = document.getElementById(wrapId);
+  wrap.innerHTML='';
+  [...input.files].forEach(f => {
+    const url = URL.createObjectURL(f);
+    const img = document.createElement('img');
+    img.src = url; img.className='img-preview';
+    wrap.appendChild(img);
+  });
+}
+function simulateImgToPdf() {
+  const input = document.getElementById('imgPdfInput');
+  if(!input.files.length) { toast('Pilih gambar dulu!','⚠️'); return; }
+  bumpStat();
+  document.getElementById('imgPdfResult').classList.add('show');
+  toast(`${input.files.length} gambar dikonversi ke PDF!`,'📄');
+}
 
-  // ── Quiz Bank ──
-  const quizBank = {
-    easy: [
-      { q:"Siapa proklamator kemerdekaan Indonesia?", opts:["Soekarno & Hatta","Soekarno & Sjahrir","Hatta & Sjahrir","Soeharto & Hatta"], a:0, exp:"Soekarno dan Mohammad Hatta memproklamasikan kemerdekaan Indonesia pada 17 Agustus 1945. Keduanya dikenal sebagai Dwitunggal — simbol persatuan pemimpin Indonesia dalam meraih kemerdekaan." },
-      { q:"Indonesia merdeka pada tanggal berapa?", opts:["16 Agustus 1945","17 Agustus 1945","18 Agustus 1945","17 Agustus 1944"], a:1, exp:"Proklamasi kemerdekaan dibacakan Soekarno pada 17 Agustus 1945 pukul 10.00 WIB di Pegangsaan Timur 56, Jakarta — sehari setelah Jepang menyerah kepada Sekutu." },
-      { q:"Tembok Besar ada di negara mana?", opts:["Jepang","Korea","China","Mongolia"], a:2, exp:"Tembok Besar China (Great Wall) dibangun sejak Dinasti Qin untuk melindungi dari serangan bangsa nomaden utara. Panjang totalnya mencapai lebih dari 21.000 km." },
-      { q:"Siapa yang menemukan bola lampu?", opts:["Einstein","Newton","Edison","Bell"], a:2, exp:"Thomas Alva Edison menyempurnakan bola lampu pijar pada 1879. Ia juga dikenal sebagai penemu fonograf dan memiliki lebih dari 1.000 paten atas namanya sepanjang hidupnya." },
-      { q:"Perang Dunia II berakhir pada tahun?", opts:["1943","1944","1945","1946"], a:2, exp:"PD II berakhir 1945: Jerman menyerah 8 Mei (V-E Day), Jepang menyerah 15 Agustus setelah bom atom dijatuhkan di Hiroshima (6 Agustus) dan Nagasaki (9 Agustus)." },
-      { q:"Ibu kota Australia adalah?", opts:["Sydney","Melbourne","Canberra","Brisbane"], a:2, exp:"Canberra adalah ibu kota Australia sejak 1927 — sengaja dibangun sebagai kompromi antara Sydney dan Melbourne yang sama-sama ingin jadi ibu kota. Banyak yang salah mengira ibu kotanya adalah Sydney." },
-      { q:"Gunung tertinggi di dunia adalah?", opts:["K2","Everest","Kilimanjaro","Elbrus"], a:1, exp:"Gunung Everest di perbatasan Nepal-Tibet memiliki ketinggian 8.849 meter. K2 adalah yang tertinggi kedua (8.611 m) dan dikenal sebagai gunung paling berbahaya untuk didaki." },
-      { q:"Sungai terpanjang di dunia adalah?", opts:["Amazon","Mississippi","Nil","Yangtze"], a:2, exp:"Sungai Nil di Afrika (sekitar 6.650 km) secara tradisional dianggap terpanjang. Beberapa penelitian terbaru memperdebatkan Amazon sebagai yang terpanjang, namun Nil masih jadi jawaban umum yang diakui." },
-      { q:"Pulau terbesar di Indonesia adalah?", opts:["Jawa","Sumatera","Kalimantan","Papua"], a:2, exp:"Kalimantan (Borneo) adalah pulau terbesar di Indonesia dan ketiga terbesar di dunia (±743.330 km²). Pulau ini dibagi antara Indonesia, Malaysia, dan Brunei Darussalam." },
-      { q:"Negara dengan jumlah penduduk terbanyak di dunia saat ini adalah?", opts:["Amerika","China","India","Indonesia"], a:2, exp:"India melampaui China sebagai negara berpenduduk terbanyak sejak 2023, dengan lebih dari 1,4 miliar jiwa. China mulai mengalami penurunan populasi akibat dampak kebijakan satu anak di masa lalu." },
-      { q:"Siapa vokalis band Queen?", opts:["David Bowie","Freddie Mercury","Mick Jagger","Elton John"], a:1, exp:"Freddie Mercury (nama asli Farrokh Bulsara) adalah vokalis legendaris Queen, dikenal dengan suara 4 oktaf dan penampilan panggung yang spektakuler. Ia wafat tahun 1991 akibat komplikasi AIDS." },
-      { q:"Lagu 'Bohemian Rhapsody' dibawakan oleh band?", opts:["Led Zeppelin","The Beatles","Queen","Pink Floyd"], a:2, exp:"'Bohemian Rhapsody' (1975) ditulis Freddie Mercury, memadukan rock, opera, dan balada dalam satu lagu berdurasi 6 menit — revolusioner di zamannya dan masih jadi salah satu lagu terpopuler sepanjang masa." },
-      { q:"Siapa yang dijuluki 'The King of Pop'?", opts:["Elvis Presley","Prince","Michael Jackson","Justin Timberlake"], a:2, exp:"Michael Jackson dijuluki 'The King of Pop' atas pengaruh luar biasanya terhadap musik dan budaya dunia. Album 'Thriller' (1982) adalah album terlaris sepanjang masa dengan lebih dari 66 juta kopi terjual." },
-      { q:"Alat musik gamelan berasal dari?", opts:["Sunda","Bali","Jawa","Kalimantan"], a:2, exp:"Gamelan adalah ansambel musik tradisional asal Jawa yang terdiri dari gong, kenong, saron, dan instrumen perkusi lainnya. Gamelan Jawa dan Bali telah diakui UNESCO sebagai Warisan Budaya Takbenda." },
-      { q:"Siapa penyanyi 'Shape of You'?", opts:["Justin Bieber","Ed Sheeran","Sam Smith","Harry Styles"], a:1, exp:"'Shape of You' (2017) adalah hit terbesar Ed Sheeran dari album '÷' (Divide). Lagu ini memecahkan rekor streaming Spotify dan menjadi salah satu single terlaris dalam sejarah musik rekaman." },
-      { q:"Film animasi 'The Lion King' bercerita tentang hewan apa?", opts:["Harimau","Cheetah","Singa","Leopard"], a:2, exp:"The Lion King (1994) bercerita tentang Simba, anak singa yang harus merebut kembali tahtanya dari pamannya Scar. Film ini terinspirasi dari drama Hamlet karya Shakespeare." },
-      { q:"Siapa sutradara film 'Titanic' (1997)?", opts:["Steven Spielberg","James Cameron","Christopher Nolan","Ridley Scott"], a:1, exp:"James Cameron menyutradarai Titanic (1997) yang memenangkan 11 Oscar termasuk Best Picture. Cameron juga terkenal sebagai sutradara Avatar dan sangat terobsesi dengan laut dalam kehidupan nyatanya." },
-      { q:"Film superhero 'Iron Man' diperankan oleh?", opts:["Chris Evans","Robert Downey Jr.","Chris Hemsworth","Mark Ruffalo"], a:1, exp:"Robert Downey Jr. memerankan Tony Stark/Iron Man sejak 2008 dan memulai Marvel Cinematic Universe. Chris Evans memerankan Captain America, Chris Hemsworth memerankan Thor." },
-      { q:"'Harry Potter' adalah karya dari penulis?", opts:["J.R.R. Tolkien","C.S. Lewis","J.K. Rowling","Roald Dahl"], a:2, exp:"J.K. Rowling menulis 7 buku Harry Potter (1997–2007). Ide ceritanya muncul saat menunggu kereta di London. Seri ini terjual lebih dari 500 juta eksemplar dan menjadi waralaba terlaris di dunia." },
-      { q:"Film 'Avengers: Endgame' dirilis tahun?", opts:["2017","2018","2019","2020"], a:2, exp:"Avengers: Endgame (April 2019) pernah menjadi film dengan pendapatan box office tertinggi sepanjang masa, meraup lebih dari $2,79 miliar secara global — mengalahkan rekor Avatar saat itu." },
-      { q:"Piala Dunia FIFA diadakan setiap berapa tahun?", opts:["2 tahun","3 tahun","4 tahun","5 tahun"], a:2, exp:"Piala Dunia FIFA diadakan setiap 4 tahun sekali sejak 1930. Siklus 4 tahunan ini sengaja dibuat tidak bertabrakan dengan Olimpiade yang juga berlangsung setiap 4 tahun." },
-      { q:"Siapa pemegang rekor gol terbanyak di Piala Dunia sepanjang masa?", opts:["Pele","Ronaldo","Messi","Klose"], a:3, exp:"Miroslav Klose dari Jerman mencetak 16 gol di Piala Dunia (2002–2014). Ia mencetak gol ke-16 di semifinal Piala Dunia 2014 saat Jerman menghancurkan Brasil 7-1 di kandang sendiri." },
-      { q:"Olahraga bulu tangkis berasal dari negara?", opts:["Cina","Indonesia","India","Inggris"], a:3, exp:"Bulu tangkis modern berasal dari Inggris, dikembangkan di Poona (India kolonial) dan dipopulerkan di Badminton House, Gloucestershire — dari situlah nama 'badminton' berasal pada abad ke-19." },
-      { q:"Olimpiade musim panas 2020 diadakan di kota?", opts:["Paris","Los Angeles","Tokyo","Seoul"], a:2, exp:"Olimpiade Tokyo 2020 tetap bernama '2020' meski digelar Juli–Agustus 2021 karena pandemi COVID-19. Ini adalah pertama kalinya dalam sejarah modern Olimpiade ditunda (bukan dibatalkan)." },
-      { q:"Planet terdekat dengan Matahari adalah?", opts:["Venus","Bumi","Merkurius","Mars"], a:2, exp:"Merkurius adalah planet terdekat Matahari (57,9 juta km). Menariknya, meski paling dekat, Merkurius bukan terpanas — Venus lebih panas karena efek rumah kaca ekstrem dari atmosfer tebalnya." },
-      { q:"Air mendidih pada suhu berapa derajat Celsius?", opts:["90°C","95°C","100°C","105°C"], a:2, exp:"Air murni mendidih pada 100°C di permukaan laut. Di pegunungan tinggi, titik didih lebih rendah karena tekanan udara berkurang — itulah mengapa memasak di dataran tinggi membutuhkan waktu lebih lama." },
-      { q:"Gas apa yang paling banyak di atmosfer Bumi?", opts:["Oksigen","Karbon dioksida","Nitrogen","Argon"], a:2, exp:"Nitrogen (N₂) menyusun sekitar 78% atmosfer Bumi, diikuti Oksigen (21%), dan Argon (0,93%). Banyak yang mengira Oksigen paling banyak, padahal Nitrogen mendominasi jauh." },
-      { q:"Berapa jumlah planet di tata surya kita?", opts:["7","8","9","10"], a:1, exp:"Tata surya memiliki 8 planet sejak 2006 ketika IAU mendefinisikan ulang 'planet' dan menurunkan status Pluto menjadi 'planet kerdil'. Kedelapan: Merkurius, Venus, Bumi, Mars, Jupiter, Saturnus, Uranus, Neptunus." },
-      { q:"Hewan apa yang memiliki sidik jari mirip manusia?", opts:["Gorila","Simpanse","Koala","Orangutan"], a:2, exp:"Koala memiliki sidik jari hampir identik dengan manusia — bahkan pernah membingungkan tim forensik. Ini adalah evolusi konvergen: dua spesies tak berkerabat yang mengembangkan ciri serupa secara independen." },
-      { q:"Aplikasi berbagi video pendek yang sangat populer bernama?", opts:["Instagram","TikTok","Snapchat","YouTube Shorts"], a:1, exp:"TikTok dikembangkan ByteDance (China) dan diluncurkan global pada 2018. Aplikasi ini merevolusi konsumsi konten dengan video 15–60 detik dan algoritma rekomendasi yang sangat personal dan adiktif." },
-      { q:"Siapa CEO Tesla saat ini?", opts:["Bill Gates","Mark Zuckerberg","Elon Musk","Jeff Bezos"], a:2, exp:"Elon Musk adalah CEO Tesla sekaligus SpaceX dan xAI. Ia sempat menjadi orang terkaya dunia versi Forbes (2021). Musk juga mengakuisisi Twitter pada 2022 dan mengubah namanya menjadi X." },
-      { q:"'Pizza' adalah makanan khas dari negara?", opts:["Perancis","Spanyol","Italia","Portugal"], a:2, exp:"Pizza berasal dari Naples (Napoli), Italia, abad ke-18. Pizza Margherita — saus tomat, mozzarella, basil — dibuat untuk menghormati Ratu Margherita pada 1889, dengan warna bendera Italia: merah, putih, hijau." },
-      { q:"Bahasa pemrograman yang bernama seperti ular piton adalah?", opts:["Java","Ruby","Python","Cobra"], a:2, exp:"Python diciptakan Guido van Rossum (1991). Namanya bukan dari ular, melainkan dari serial komedi BBC 'Monty Python's Flying Circus'. Kini Python menjadi bahasa pemrograman terpopuler di dunia, terutama untuk AI dan data science." },
-      { q:"Siapa pencipta Facebook?", opts:["Steve Jobs","Bill Gates","Mark Zuckerberg","Larry Page"], a:2, exp:"Mark Zuckerberg bersama 4 rekannya mendirikan Facebook pada 2004 di Harvard. Kisahnya diceritakan dalam film 'The Social Network' (2010). Kini perusahaannya berganti nama menjadi Meta." },
-      { q:"Sushi adalah makanan khas dari negara?", opts:["Korea","China","Jepang","Thailand"], a:2, exp:"Sushi adalah hidangan Jepang berupa nasi cuka (shari) dengan berbagai topping, umumnya makanan laut segar. Sushi modern berkembang di Tokyo (Edo) pada abad ke-19 sebagai makanan cepat saji jalanan." },
-      { q:"Batik telah diakui UNESCO sebagai warisan budaya dari negara?", opts:["Malaysia","Brunei","Indonesia","Filipina"], a:2, exp:"UNESCO menetapkan Batik Indonesia sebagai Intangible Cultural Heritage of Humanity pada 2 Oktober 2009. Tanggal ini kini diperingati sebagai Hari Batik Nasional. Malaysia pernah mengklaim batik, memicu kontroversi diplomatik." },
-      { q:"Angka berapa yang dianggap sial di sebagian besar negara Barat?", opts:["11","12","13","14"], a:2, exp:"Angka 13 dianggap sial di budaya Barat (triskaidekaphobia). Banyak gedung tidak memiliki lantai 13. Sementara di China, angka 4 yang dianggap sial karena pelafalannya mirip kata 'mati'." },
-      { q:"Minuman teh berasal dari negara?", opts:["India","Jepang","China","Sri Lanka"], a:2, exp:"Teh berasal dari China — legenda menyebut Kaisar Shennong menemukannya sekitar 2737 SM. China adalah produsen dan konsumen teh terbesar. Teh kemudian menyebar ke Jepang, lalu ke Eropa melalui jalur perdagangan." },
-      { q:"Warna bendera Indonesia adalah?", opts:["Merah-Putih-Biru","Merah-Putih","Merah-Kuning","Merah-Putih-Hijau"], a:1, exp:"Bendera Indonesia: merah (atas) dan putih (bawah). Merah = keberanian, putih = kesucian. Identik dengan bendera Monaco, namun dengan proporsi berbeda. Pertama dikibarkan saat Proklamasi 17 Agustus 1945." },
-      { q:"Siapa artis wanita dengan album terlaris sepanjang masa?", opts:["Beyoncé","Adele","Madonna","Taylor Swift"], a:2, exp:"Madonna memegang rekor artis wanita dengan penjualan album terbanyak, lebih dari 300 juta album secara global. Ia dijuluki 'Queen of Pop' dan terkenal dengan kemampuannya berevolusi mengikuti tren musik setiap era." },
-      { q:"Game 'Minecraft' dibuat oleh siapa?", opts:["Notch (Markus Persson)","Valve","Mojang CEO","Jens Bergensten"], a:0, exp:"Minecraft dibuat Markus 'Notch' Persson (2011). Microsoft membeli Mojang Studios seharga $2,5 miliar pada 2014. Kini Minecraft adalah game terlaris sepanjang masa dengan 238+ juta kopi terjual." },
-      { q:"Berapa jumlah warna dalam pelangi?", opts:["5","6","7","8"], a:2, exp:"Pelangi punya 7 warna: merah, jingga, kuning, hijau, biru, nila, ungu (mejikuhibiniu). Pembagian ini dipopulerkan Isaac Newton. Sebenarnya pelangi adalah spektrum kontinu, bukan 7 warna terpisah." },
-      { q:"'WhatsApp' dimiliki oleh perusahaan?", opts:["Google","Twitter","Meta (Facebook)","Microsoft"], a:2, exp:"Meta mengakuisisi WhatsApp pada 2014 seharga $19 miliar — salah satu akuisisi teknologi terbesar saat itu. WhatsApp didirikan Jan Koum dan Brian Acton (2009), keduanya mantan karyawan Yahoo." },
-      { q:"Kata 'Robot' pertama kali digunakan dalam karya dari negara mana?", opts:["Amerika","Ceko","Jerman","Inggris"], a:1, exp:"'Robot' berasal dari drama Ceko 'R.U.R.' (1920) karya Karel Čapek. Kata ini dari bahasa Ceko 'robota' (kerja paksa). Adik Čapek, Josef, sebenarnya yang pertama menyarankan kata tersebut." },
-      { q:"Siapa penulis novel 'Laskar Pelangi'?", opts:["Pramoedya Ananta Toer","Habiburrahman El Shirazy","Andrea Hirata","Dee Lestari"], a:2, exp:"Andrea Hirata menulis Laskar Pelangi (2005) berdasarkan kisah nyata masa kecilnya di Belitung. Terjual 5+ juta eksemplar dan diadaptasi jadi film laris (2008). Novel ini membangkitkan kesadaran pendidikan di Indonesia." },
-      { q:"Pulau Bali dikenal sebagai 'Pulau...'?", opts:["Naga","Dewa","Surga","Dewata"], a:3, exp:"Bali dijuluki 'Pulau Dewata' karena mayoritas penduduknya beragama Hindu dan kaya tradisi keagamaan. Julukan lain: 'Island of the Gods' dan 'Morning of the World' yang dipopulerkan Presiden AS John F. Kennedy." },
-      { q:"Berapa jumlah provinsi di Indonesia (2024)?", opts:["34","37","38","40"], a:2, exp:"Indonesia memiliki 38 provinsi sejak 2022 setelah pemekaran 4 provinsi baru di Papua: Papua Selatan, Papua Tengah, Papua Pegunungan, dan Papua Barat Daya — menambah Papua Barat yang sudah ada." },
-      { q:"Siapa yang menjadi Presiden Indonesia pertama?", opts:["Soeharto","B.J. Habibie","Soekarno","Megawati"], a:2, exp:"Ir. Soekarno adalah Presiden pertama RI (1945–1967). Bersama Mohammad Hatta (Wapres pertama), keduanya disebut Dwitunggal. Soeharto adalah Presiden kedua, menjabat selama 32 tahun (1967–1998)." },
-    ],
-    medium: [
-      { q:"Kerajaan Majapahit mencapai puncak kejayaannya di bawah pimpinan?", opts:["Hayam Wuruk","Gajah Mada","Ken Arok","Raden Wijaya"], a:0, exp:"Raja Hayam Wuruk (1350–1389) memimpin Majapahit di era keemasannya, didampingi Mahapatih Gajah Mada yang bersumpah (Sumpah Palapa) untuk menyatukan Nusantara. Di bawah keduanya, Majapahit menguasai hampir seluruh Nusantara." },
-      { q:"Perjanjian apakah yang mengakhiri Perang Dunia I?", opts:["Perjanjian Berlin","Perjanjian Versailles","Perjanjian Paris","Perjanjian London"], a:1, exp:"Perjanjian Versailles (28 Juni 1919) mengakhiri PD I. Perjanjian ini membebani Jerman dengan hukuman berat (reparasi perang, kehilangan wilayah, pembatasan militer) yang kemudian menjadi salah satu faktor pemicu PD II." },
-      { q:"Siapa pemimpin Uni Soviet pertama?", opts:["Stalin","Lenin","Trotsky","Khrushchev"], a:1, exp:"Vladimir Lenin memimpin Revolusi Bolshevik 1917 dan mendirikan negara komunis pertama di dunia. Setelah Lenin wafat (1924), Stalin berhasil merebut kekuasaan dari saingan-saingannya termasuk Trotsky." },
-      { q:"Revolusi Perancis terjadi pada tahun?", opts:["1776","1789","1800","1815"], a:1, exp:"Revolusi Perancis dimulai 1789 dengan penyerbuan penjara Bastille pada 14 Juli. Revolusi ini menghapus monarki absolut dan melahirkan semboyan 'Liberté, Égalité, Fraternité' yang menginspirasi demokrasi modern." },
-      { q:"Siapakah 'Bapak Geografi' yang pertama menggunakan kata 'geography'?", opts:["Ptolemy","Eratosthenes","Aristoteles","Herodotus"], a:1, exp:"Eratosthenes (276–194 SM) adalah orang pertama yang menggunakan kata 'geographia' dan berhasil menghitung keliling Bumi hanya dengan tongkat dan bayangan matahari — dengan akurasi yang menakjubkan untuk zamannya." },
-      { q:"Negara mana yang memiliki garis pantai terpanjang di dunia?", opts:["Rusia","Australia","Kanada","Indonesia"], a:2, exp:"Kanada memiliki garis pantai terpanjang di dunia (±202.080 km), mencakup Atlantik, Pasifik, dan Arktik. Ini hampir 15% dari seluruh garis pantai dunia. Indonesia berada di urutan keempat dengan sekitar 54.720 km." },
-      { q:"Selat yang memisahkan Jawa dan Sumatera bernama?", opts:["Selat Lombok","Selat Bali","Selat Sunda","Selat Madura"], a:2, exp:"Selat Sunda memisahkan Jawa dan Sumatera dengan lebar minimum ±24 km. Di sinilah Gunung Krakatau yang terkenal berada. Erupsi Krakatau 1883 adalah salah satu letusan gunung berapi terdahsyat dalam sejarah modern." },
-      { q:"Danau terdalam di dunia adalah?", opts:["Danau Superior","Danau Baikal","Danau Tanganyika","Danau Titicaca"], a:1, exp:"Danau Baikal di Siberia, Rusia, adalah danau terdalam (1.642 m) sekaligus terbesar berdasarkan volume air tawar — menyimpan sekitar 20% air tawar permukaan Bumi. Usianya diperkirakan 25–30 juta tahun." },
-      { q:"Negara terkecil di dunia berdasarkan luas wilayah adalah?", opts:["Monaco","San Marino","Liechtenstein","Vatikan"], a:3, exp:"Vatikan adalah negara terkecil di dunia (0,44 km²) dengan sekitar 800 penduduk. Terletak di dalam kota Roma, Vatikan adalah pusat kepemimpinan Gereja Katolik Roma dan dipimpin Paus." },
-      { q:"Gurun Sahara berada di benua?", opts:["Asia","Amerika","Afrika","Australia"], a:2, exp:"Gurun Sahara adalah gurun panas terbesar di dunia (±9,2 juta km²) yang membentang di 11 negara Afrika Utara. Menariknya, hanya sekitar 25% Sahara berupa bukit pasir — sisanya adalah bebatuan dan kerikil." },
-      { q:"Band 'The Beatles' berasal dari kota?", opts:["London","Manchester","Liverpool","Birmingham"], a:2, exp:"The Beatles berasal dari Liverpool, Inggris. John Lennon, Paul McCartney, George Harrison, dan Ringo Starr mengubah dunia musik di era 1960-an. Liverpool kini memiliki museum 'The Beatles Story' sebagai penghormatan." },
-      { q:"Siapa komposer 'Symphony No. 9' yang terkenal meski tuli?", opts:["Mozart","Bach","Beethoven","Chopin"], a:2, exp:"Ludwig van Beethoven menggubah Symphony No. 9 (1824) saat hampir sepenuhnya tuli — ia tidak pernah mendengar karyanya sendiri. Bagian keempat 'Ode to Joy' kini menjadi lagu kebangsaan Uni Eropa." },
-      { q:"Genre musik 'K-pop' berasal dari negara?", opts:["Jepang","China","Korea Selatan","Taiwan"], a:2, exp:"K-pop (Korean Pop) berasal dari Korea Selatan dan berkembang pesat sejak 1990-an. Kini menjadi fenomena global dengan grup seperti BTS (pernah masuk Billboard Hot 100 nomor 1) dan BLACKPINK." },
-      { q:"Siapa penyanyi 'Rolling in the Deep'?", opts:["Beyoncé","Rihanna","Adele","Amy Winehouse"], a:2, exp:"'Rolling in the Deep' adalah single Adele dari album '21' (2011) yang memenangkan Grammy Record of the Year dan Song of the Year. Album '21' sendiri terjual lebih dari 31 juta kopi di seluruh dunia." },
-      { q:"Alat musik 'Sasando' berasal dari daerah?", opts:["Nusa Tenggara Timur","Bali","Sulawesi","Maluku"], a:0, exp:"Sasando adalah alat musik petik tradisional dari Pulau Rote, Nusa Tenggara Timur. Terbuat dari bambu dan daun lontar, cara memainkannya mirip harpa. Sasando telah menjadi simbol budaya Indonesia di kancah internasional." },
-      { q:"Film 'Parasite' yang memenangkan Oscar Best Picture 2020 berasal dari?", opts:["Jepang","China","Korea Selatan","Thailand"], a:2, exp:"'Parasite' (기생충) karya Bong Joon-ho adalah film berbahasa non-Inggris pertama yang memenangkan Oscar Best Picture dalam 92 tahun sejarahnya (2020). Film ini juga memenangkan Best Director, Best Original Screenplay, dan Best International Feature." },
-      { q:"Siapa pemeran Joker dalam film 'Joker' (2019)?", opts:["Heath Ledger","Jack Nicholson","Joaquin Phoenix","Jared Leto"], a:2, exp:"Joaquin Phoenix memenangkan Oscar Best Actor untuk peran Arthur Fleck/Joker (2019), menurunkan berat badan 23 kg untuk peran ini. Heath Ledger memenangkan Oscar secara anumerta untuk Joker-nya di The Dark Knight (2008)." },
-      { q:"Waralaba film dengan pendapatan tertinggi sepanjang masa adalah?", opts:["Harry Potter","Star Wars","Marvel Cinematic Universe","James Bond"], a:2, exp:"Marvel Cinematic Universe (MCU) meraup lebih dari $29 miliar dari 33+ film sejak Iron Man (2008). MCU merevolusi cara industri film membangun dunia sinematik yang saling terhubung antar film." },
-      { q:"Siapa sutradara trilogi 'The Dark Knight'?", opts:["Tim Burton","Joel Schumacher","Zack Snyder","Christopher Nolan"], a:3, exp:"Christopher Nolan menyutradarai Batman Begins (2005), The Dark Knight (2008), dan The Dark Knight Rises (2012). The Dark Knight sering disebut sebagai film superhero terbaik sepanjang masa berkat penampilan luar biasa Heath Ledger." },
-      { q:"Film animasi pertama yang memenangkan Academy Award adalah?", opts:["Shrek","Beauty and the Beast","Spirited Away","Bambi"], a:1, exp:"Beauty and the Beast (1991) adalah film animasi pertama yang dinominasikan Oscar Best Picture. Kategori Oscar Best Animated Feature baru ada sejak 2002, langsung dimenangkan Shrek. Spirited Away menang di tahun kedua (2003)." },
-      { q:"Klub sepak bola mana yang berjuluk 'Los Blancos'?", opts:["Barcelona","Real Madrid","Juventus","Bayern Munich"], a:1, exp:"Real Madrid dijuluki 'Los Blancos' (Si Putih) karena seragam putih ikoniknya. Mereka adalah klub paling sukses dalam sejarah Liga Champions dengan lebih dari 15 gelar — termasuk 3 gelar berturut-turut (2016–2018)." },
-      { q:"Siapa petinju yang dijuluki 'The Greatest'?", opts:["Mike Tyson","Joe Frazier","Muhammad Ali","George Foreman"], a:2, exp:"Muhammad Ali dijuluki 'The Greatest' atas dominasinya di kelas berat. Terkenal dengan gaya 'float like a butterfly, sting like a bee'. Di luar ring, ia juga berani menentang wajib militer Vietnam — sebuah sikap kontroversial namun dihormati." },
-      { q:"Dalam olahraga tenis, istilah 'love' berarti angka?", opts:["1","0","15","30"], a:1, exp:"Dalam tenis, 'love' berarti skor nol (0). Urutan: 0 (love) → 15 → 30 → 40 → game. Asal kata 'love' masih diperdebatkan — salah satu teori menyebut dari bahasa Prancis 'l'oeuf' (telur, bentuknya seperti angka 0)." },
-      { q:"Renang gaya apa yang paling cepat?", opts:["Gaya Dada","Gaya Bebas","Gaya Punggung","Gaya Kupu-kupu"], a:1, exp:"Gaya bebas (freestyle/front crawl) adalah gaya tercepat karena gerakan tangan dan kaki yang paling efisien dengan hambatan air minimal. Dalam kompetisi bebas, hampir semua perenang menggunakan gaya bebas." },
-      { q:"Indonesia pertama kali meraih medali emas Olimpiade pada tahun?", opts:["1988","1992","1996","2000"], a:1, exp:"Indonesia meraih emas Olimpiade pertama di Barcelona 1992 dari dua atlet sekaligus: Alan Budi Kusuma (bulu tangkis tunggal putra) dan Susi Susanti (bulu tangkis tunggal putri) — pasangan kekasih yang menikah setelah Olimpiade." },
-      { q:"Unsur kimia dengan simbol 'Au' adalah?", opts:["Perak","Tembaga","Emas","Aluminium"], a:2, exp:"Simbol 'Au' untuk Emas berasal dari bahasa Latin 'Aurum'. Simbol kimia banyak yang berasal dari Latin: Perak = Ag (Argentum), Tembaga = Cu (Cuprum), Timbal = Pb (Plumbum), Besi = Fe (Ferrum)." },
-      { q:"Siapa yang mengembangkan Teori Relativitas?", opts:["Newton","Bohr","Einstein","Hawking"], a:2, exp:"Albert Einstein mengembangkan Relativitas Khusus (1905) dan Relativitas Umum (1915). Rumus E=mc² menjadi dasar energi nuklir. Einstein memenangkan Nobel Fisika 1921 — bukan untuk relativitas, melainkan untuk efek fotoelektrik." },
-      { q:"DNA singkatan dari?", opts:["Deoxyribonucleic Acid","Dinitrogen Acid","Dynamic Nuclear Atom","Diribose Nucleic Acid"], a:0, exp:"DNA (Deoxyribonucleic Acid) adalah molekul pembawa informasi genetik semua makhluk hidup. Struktur double helix-nya ditemukan Watson & Crick pada 1953 — salah satu penemuan terpenting dalam sejarah biologi." },
-      { q:"Planet manakah yang memiliki cincin paling terkenal?", opts:["Jupiter","Uranus","Neptunus","Saturnus"], a:3, exp:"Saturnus terkenal dengan sistem cincinnya yang spektakuler, terdiri dari es dan bebatuan. Meski Jupiter, Uranus, dan Neptunus juga memiliki cincin, cincin Saturnus jauh lebih besar dan terlihat jelas dengan teleskop kecil sekalipun." },
-      { q:"Kecepatan cahaya kira-kira berapa km/detik?", opts:["100.000","200.000","300.000","400.000"], a:2, exp:"Kecepatan cahaya dalam ruang hampa adalah tepat 299.792 km/detik. Dalam satu tahun, cahaya menempuh ±9,46 triliun km — inilah 'tahun cahaya'. Tidak ada yang bisa melampaui kecepatan cahaya menurut relativitas Einstein." },
-      { q:"Serial Netflix 'Squid Game' berasal dari negara?", opts:["Jepang","Thailand","Korea Selatan","China"], a:2, exp:"Squid Game (2021) karya Hwang Dong-hyuk dari Korea Selatan menjadi serial non-Inggris pertama yang paling ditonton di Netflix secara global. Serial ini mendorong lonjakan minat belajar bahasa Korea di seluruh dunia." },
-      { q:"Siapa yang menciptakan karakter 'Sherlock Holmes'?", opts:["Agatha Christie","Arthur Conan Doyle","Edgar Allan Poe","Charles Dickens"], a:1, exp:"Sir Arthur Conan Doyle menciptakan Sherlock Holmes, pertama muncul dalam 'A Study in Scarlet' (1887). Holmes adalah karakter fiksi dengan jumlah adaptasi terbanyak di dunia. Ironisnya, Doyle sendiri pernah lelah dengan Holmes dan mematikannya — lalu menghidupkannya kembali karena desakan publik." },
-      { q:"Platform streaming musik 'Spotify' berasal dari negara?", opts:["Amerika","Inggris","Swedia","Jerman"], a:2, exp:"Spotify didirikan Daniel Ek dan Martin Lorentzon di Stockholm, Swedia (2008). Kini menjadi layanan streaming musik terbesar di dunia dengan 600+ juta pengguna aktif. Spotify mengubah industri musik dari model beli album ke streaming." },
-      { q:"Siapa karakter utama (yang dikendalikan pemain) dalam game 'The Legend of Zelda'?", opts:["Zelda","Link","Ganon","Epona"], a:1, exp:"Link adalah karakter yang dikendalikan pemain, bukan Zelda! Zelda adalah putri yang sering harus diselamatkan. Kesalahpahaman ini begitu umum sehingga Nintendo sendiri pernah membuat lelucon tentangnya dalam game." },
-      { q:"'Emoji' pertama kali diciptakan di negara?", opts:["Amerika","Korea","Jepang","China"], a:2, exp:"Emoji diciptakan Shigetaka Kurita di Jepang pada 1999 untuk platform NTT DoCoMo. Set pertama terdiri dari 176 emoji berukuran 12×12 pixel. Kata 'emoji' dari bahasa Jepang: 'e' (gambar) + 'moji' (karakter)." },
-      { q:"Makanan 'Rendang' berasal dari daerah?", opts:["Jawa","Sunda","Minangkabau","Bali"], a:2, exp:"Rendang adalah masakan tradisional Minangkabau (Sumatera Barat), berbahan dasar daging sapi dengan bumbu rempah kaya. CNN International dua kali menempatkan Rendang sebagai makanan terenak di dunia (2011, 2017)." },
-      { q:"Festival 'Holi' adalah perayaan dari agama dan negara?", opts:["Islam - Pakistan","Hindu - India","Buddha - Nepal","Sikh - Punjab"], a:1, exp:"Holi adalah festival Hindu di India dan Nepal, dikenal sebagai 'Festival of Colors'. Merayakan tibanya musim semi dan kemenangan kebaikan atas kejahatan. Tradisi melempar bubuk warna-warni kini populer di seluruh dunia." },
-      { q:"Minuman 'Sake' adalah minuman tradisional dari negara?", opts:["China","Korea","Jepang","Vietnam"], a:2, exp:"Sake adalah minuman beralkohol Jepang dari fermentasi beras yang telah diproduksi selama lebih dari 2.000 tahun. Proses pembuatannya lebih mirip bir daripada anggur, dan bisa disajikan hangat atau dingin." },
-      { q:"Tarian 'Saman' berasal dari provinsi?", opts:["Sumatera Barat","Aceh","Sumatera Utara","Riau"], a:1, exp:"Tari Saman berasal dari suku Gayo, Aceh, dan diakui UNESCO sebagai Warisan Budaya Takbenda yang memerlukan perlindungan mendesak (2011). Gerakannya yang cepat dan sinkron dari banyak penari adalah keunikan utamanya." },
-      { q:"Siapa penulis 'Romeo and Juliet'?", opts:["Charles Dickens","Jane Austen","William Shakespeare","Oscar Wilde"], a:2, exp:"William Shakespeare menulis Romeo and Juliet (sekitar 1594–1596), drama tragis yang menjadi karya sastra paling terkenal di dunia. Kisah ini diadaptasi ratusan kali dalam film, opera, balet, musikal, dan teater hingga hari ini." },
-      { q:"Berapakah jumlah gigi permanen pada orang dewasa (tanpa gigi bungsu)?", opts:["28","30","32","34"], a:0, exp:"Manusia dewasa memiliki 28 gigi permanen tanpa gigi bungsu. Dengan 4 gigi bungsu (geraham ketiga), totalnya bisa 32. Tidak semua orang memiliki gigi bungsu — sekitar 35% populasi tidak pernah tumbuh gigi bungsu sama sekali." },
-      { q:"Siapa yang melukis 'Mona Lisa'?", opts:["Michelangelo","Raphael","Leonardo da Vinci","Caravaggio"], a:2, exp:"Mona Lisa dilukis Leonardo da Vinci antara 1503–1519. Tersimpan di Musée du Louvre, Paris, ini adalah karya seni paling terkenal dan paling banyak dikunjungi di dunia. Senyuman misteriusnya masih menjadi subjek perdebatan ilmiah." },
-      { q:"Negara mana yang pertama kali mendaratkan manusia di Bulan?", opts:["Rusia","Amerika Serikat","China","Perancis"], a:1, exp:"Amerika Serikat mendaratkan manusia pertama di Bulan pada 20 Juli 1969 melalui misi Apollo 11. Neil Armstrong menjadi manusia pertama di Bulan, terkenal dengan kalimat: 'That's one small step for man, one giant leap for mankind.'" },
-      { q:"Siapa penemu telepon?", opts:["Edison","Tesla","Bell","Marconi"], a:2, exp:"Alexander Graham Bell mendapatkan paten telepon pada 7 Maret 1876. Meski ada kontroversi dengan Elisha Gray yang mengajukan paten di hari yang sama, Bell lebih dulu diakui secara hukum. Marconi adalah penemu radio, bukan telepon." },
-      { q:"Berapa jumlah tulang pada tubuh manusia dewasa?", opts:["186","196","206","216"], a:2, exp:"Tubuh manusia dewasa memiliki 206 tulang. Bayi lahir dengan sekitar 270–300 tulang yang menyatu seiring pertumbuhan. Tulang terkecil ada di telinga (tulang martil/malleus, 3 mm), terbesar adalah tulang paha (femur)." },
-      { q:"Piramida Giza berada di negara?", opts:["Irak","Mesir","Libya","Sudan"], a:1, exp:"Piramida Giza berada di pinggiran Kairo, Mesir. Piramida Khufu (Cheops) adalah satu-satunya dari Tujuh Keajaiban Dunia Kuno yang masih berdiri hingga kini, dibangun sekitar 2560 SM oleh sekitar 20.000 pekerja." },
-      { q:"Siapa penulis 'Bumi Manusia'?", opts:["Chairil Anwar","W.S. Rendra","Pramoedya Ananta Toer","Sitor Situmorang"], a:2, exp:"Pramoedya Ananta Toer menulis 'Bumi Manusia' (1980), novel pertama dari Tetralogi Pulau Buru. Ditulis saat ia dipenjara tanpa alat tulis, ia mendiktekan kisahnya kepada sesama tahanan. Novel ini diadaptasi menjadi film pada 2019." },
-      { q:"Istana Buckingham adalah kediaman resmi dari?", opts:["Perdana Menteri Inggris","Raja/Ratu Inggris","Presiden Inggris","Gubernur Bank Inggris"], a:1, exp:"Buckingham Palace adalah kediaman resmi Monarki Inggris sejak 1837. Memiliki 775 kamar. PM Inggris berkantor di 10 Downing Street. Upacara pergantian penjaga (Changing of the Guard) di sini menjadi daya tarik wisata ikonik." },
-      { q:"Bahasa resmi negara Brazil adalah?", opts:["Spanyol","Inggris","Portugis","Prancis"], a:2, exp:"Brazil menggunakan Bahasa Portugis karena merupakan bekas koloni Portugal. Berbeda dari sebagian besar negara Amerika Latin yang berbahasa Spanyol. Ini diatur melalui Perjanjian Tordesillas (1494) yang membagi 'dunia baru' antara Spanyol dan Portugal." },
-    ],
-    hard: [
-      { q:"Konferensi Asia-Afrika 1955 diadakan di kota?", opts:["Jakarta","Surabaya","Bandung","Yogyakarta"], a:2, exp:"KAA diadakan di Bandung, 18–24 April 1955. Diinisiasi Soekarno bersama India, Pakistan, Burma, dan Sri Lanka, KAA melahirkan 'Semangat Bandung' dan Gerakan Non-Blok — solidaritas negara berkembang melawan kolonialisme dan hegemoni Blok Barat/Timur." },
-      { q:"Kerajaan Romawi Timur (Bizantium) runtuh pada tahun?", opts:["1215","1348","1453","1517"], a:2, exp:"Kekaisaran Romawi Timur runtuh pada 29 Mei 1453 saat Konstantinopel jatuh ke tangan Ottoman pimpinan Sultan Mehmed II. Kejadian ini menandai akhir Abad Pertengahan dan mendorong para ilmuwan Byzantium melarikan diri ke Italia — mempercepat era Renaissance." },
-      { q:"Siapa pemimpin Kekaisaran Mongol yang mendirikan kekaisaran terbesar dalam sejarah?", opts:["Kublai Khan","Timur Lenk","Genghis Khan","Hulagu Khan"], a:2, exp:"Genghis Khan mendirikan Kekaisaran Mongol yang pada puncaknya (di bawah penerusnya) mencakup 24 juta km². Ia menyatukan suku Mongol (1206) lalu menaklukkan wilayah dari China hingga Eropa Timur dengan strategi militer revolusioner." },
-      { q:"Perjanjian Westfalen 1648 mengakhiri perang apa?", opts:["Perang Seratus Tahun","Perang Tiga Puluh Tahun","Perang Salib Ketiga","Perang Napoleon"], a:1, exp:"Perjanjian Westfalen (1648) mengakhiri Perang Tiga Puluh Tahun di Eropa Tengah. Sangat penting karena meletakkan dasar sistem negara-bangsa modern dengan prinsip kedaulatan nasional yang menjadi fondasi hukum internasional hingga hari ini." },
-      { q:"Siapakah Kaisar pertama China yang mempersatukan seluruh China?", opts:["Han Wudi","Tang Taizong","Qin Shi Huang","Liu Bang"], a:2, exp:"Qin Shi Huang menyatukan China (221 SM) dan menjadi kaisar pertama. Ia menstandardisasi tulisan, mata uang, dan sistem pengukuran. Ia memulai Tembok Besar dan membangun makam berisi 8.000 Prajurit Terakota untuk menjaganya di akhirat." },
-      { q:"Titik paling selatan di Bumi yang dapat diakses manusia berada di benua?", opts:["Amerika Selatan","Afrika","Australia","Antartika"], a:3, exp:"Kutub Selatan berada di Antartika. Stasiun Amundsen-Scott milik AS berdiri tepat di Kutub Selatan (90°S). Roald Amundsen (Norwegia) adalah orang pertama yang mencapainya pada 14 Desember 1911, mengalahkan ekspedisi Scott yang tragis." },
-      { q:"Sesar San Andreas yang terkenal berada di negara bagian?", opts:["Texas","Florida","California","Nevada"], a:2, exp:"Sesar San Andreas adalah batas antara Lempeng Pasifik dan Amerika Utara, sepanjang 1.300 km di California. Pergeseran lempeng ini menyebabkan gempa besar, termasuk Gempa San Francisco 1906 yang menghancurkan kota dan menewaskan ribuan orang." },
-      { q:"Pulau manakah yang terbagi antara Indonesia, Malaysia, dan Brunei?", opts:["Sumatera","Papua","Kalimantan","Sulawesi"], a:2, exp:"Kalimantan (Borneo) terbagi antara Indonesia (73%), Malaysia (Sabah & Sarawak), dan Brunei. Ini adalah salah satu pusat keanekaragaman hayati terkaya: orangutan, beruang madu, dan ribuan spesies endemik hidup di hutan hujannya yang tersisa." },
-      { q:"Zona waktu paling banyak dimiliki oleh negara?", opts:["Rusia","Amerika Serikat","China","Prancis"], a:3, exp:"Prancis memiliki 12 zona waktu — terbanyak di dunia — karena wilayah seberang laut yang tersebar: Guyana Prancis, Polinesia Prancis, Martinique, Réunion, dll. Rusia memiliki 11 zona waktu, Amerika Serikat 6 zona waktu daratan." },
-      { q:"Sungai Amazon mengalir ke samudra?", opts:["Pasifik","Atlantik","Hindia","Arktik"], a:1, exp:"Sungai Amazon bermuara ke Samudra Atlantik di Brazil. Amazon adalah sungai terbesar berdasarkan debit air, melepaskan 20% air tawar dunia ke lautan. Hutan Amazon yang mengelilinginya sering disebut 'paru-paru dunia' karena menghasilkan 20% oksigen Bumi." },
-      { q:"Siapa komposer opera 'The Magic Flute' (Die Zauberflöte)?", opts:["Beethoven","Bach","Haydn","Mozart"], a:3, exp:"Wolfgang Amadeus Mozart menggubah 'The Magic Flute' (1791) — salah satu opera Jerman paling dicintai. Mozart meninggal hanya dua bulan setelahnya pada usia 35 tahun, meninggalkan Requiem yang tidak selesai dan menjadi misteri sejarah musik." },
-      { q:"Album 'Thriller' oleh Michael Jackson dirilis tahun?", opts:["1980","1982","1984","1986"], a:1, exp:"Thriller dirilis November 1982. Dengan 66+ juta kopi, ini adalah album terlaris sepanjang masa. Menghasilkan 7 single Top-10 Billboard. Video klip 'Thriller' (14 menit, 1983) merevolusi video musik dan masuk Guinness World Records." },
-      { q:"Genre musik 'Bossa Nova' berasal dari negara?", opts:["Argentina","Kuba","Brasil","Meksiko"], a:2, exp:"Bossa Nova lahir di Rio de Janeiro, Brasil, akhir 1950-an — perpaduan samba Brasil dan jazz Amerika. 'The Girl from Ipanema' (1962) karya Tom Jobim adalah bossa nova paling dikenal, menjadi lagu yang paling banyak direkam ulang di dunia." },
-      { q:"Siapa bassist The Beatles yang meninggal sebelum band ini terkenal?", opts:["Pete Best","Stuart Sutcliffe","Colin Hanton","Rod Davis"], a:1, exp:"Stuart Sutcliffe memilih tinggal di Hamburg bersama tunangannya Astrid Kirchherr dan menekuni seni lukis. Ia meninggal akibat perdarahan otak pada April 1962, sebelum The Beatles meledak secara global dengan 'Love Me Do'." },
-      { q:"Penghargaan Grammy pertama diberikan pada tahun?", opts:["1954","1959","1962","1965"], a:1, exp:"Grammy Awards pertama diadakan 4 Mei 1959 untuk musik yang dirilis 1958. Nama 'Grammy' dari kata 'gramophone'. Di antara pemenang pertama: Henry Mancini (komposer Pink Panther) dan Domenico Modugno dengan 'Volare'." },
-      { q:"Film mana yang memenangkan Oscar pertama sebagai Best Picture (1928)?", opts:["Sunrise","Wings","The Jazz Singer","Ben-Hur"], a:1, exp:"'Wings' (1927) memenangkan Oscar Best Picture pertama di upacara Academy Awards pertama (1929). Film perang epis tentang pilot PD I ini juga satu-satunya film bisu yang memenangkan Best Picture — semua pemenang setelahnya adalah film bersuara." },
-      { q:"Siapa sutradara film 'Schindler's List'?", opts:["Martin Scorsese","Francis Ford Coppola","Stanley Kubrick","Steven Spielberg"], a:3, exp:"Steven Spielberg menyutradarai Schindler's List (1993), memenangkan 7 Oscar termasuk Best Picture dan Best Director. Spielberg menolak bayaran untuk film ini dan mendonasikan keuntungannya ke yayasan pendidikan Holocaust." },
-      { q:"Dalam film 'The Matrix', pil warna apa yang dipilih Neo untuk tetap di dunia simulasi?", opts:["Merah","Hijau","Biru","Kuning"], a:2, exp:"Morpheus menawarkan pil merah (kebenaran pahit) atau pil biru (tetap dalam ilusi). Neo memilih pil merah. 'Blue pill/red pill' kini jadi metafora budaya populer untuk memilih antara kenyataan yang menyakitkan dan ilusi yang nyaman." },
-      { q:"Film animasi Jepang 'Spirited Away' dibuat oleh studio?", opts:["Toei Animation","Gainax","Studio Ghibli","Madhouse"], a:2, exp:"Spirited Away (2001) karya Hayao Miyazaki dari Studio Ghibli adalah satu-satunya anime yang memenangkan Oscar Best Animated Feature (2003). Ia juga sempat menjadi film terlaris sepanjang masa di Jepang sebelum digeser Demon Slayer (2021)." },
-      { q:"Siapakah villain utama dalam trilogi 'The Lord of the Rings'?", opts:["Saruman","Gollum","Sauron","Shelob"], a:2, exp:"Sauron adalah Dark Lord yang menciptakan One Ring untuk menguasai semua makhluk di Middle-earth. Meski tidak pernah tampil dalam wujud penuh, ia diwakili Mata Api dari Menara Barad-dûr. Saruman adalah mantan sekutunya yang berkhianat." },
-      { q:"Siapa pemain sepak bola pertama yang memenangkan Ballon d'Or sebanyak 8 kali?", opts:["Ronaldo","Messi","Zidane","Ronaldinho"], a:1, exp:"Lionel Messi memenangkan Ballon d'Or 8 kali (2009, 2010, 2011, 2012, 2015, 2019, 2021, 2023). Penghargaan ke-8 didapat setelah membawa Argentina meraih Piala Dunia 2022 — trofi yang melengkapi legenda kariernya." },
-      { q:"Dalam olahraga kriket, berapa wicket yang dimiliki satu tim dalam satu innings?", opts:["8","9","10","11"], a:2, exp:"Dalam kriket, satu innings berakhir ketika 10 batsman sudah 'out' (10 wicket jatuh). Tim memiliki 11 pemain, tapi selalu harus ada 2 batsman di lapangan — jadi 10 wicket diperlukan untuk mengakhiri innings, bukan 11." },
-      { q:"Formula 1: Siapa pembalap dengan gelar juara dunia terbanyak?", opts:["Ayrton Senna","Michael Schumacher","Lewis Hamilton","Sebastian Vettel"], a:2, exp:"Lewis Hamilton dan Michael Schumacher sama-sama meraih 7 gelar juara dunia F1. Hamilton memiliki rekor menang race terbanyak (103 kemenangan) dan pole position terbanyak. Schumacher meraih 5 gelar berturut-turut (2000–2004)." },
-      { q:"Olimpiade pertama era modern diadakan di kota mana pada 1896?", opts:["Paris","London","Athena","Berlin"], a:2, exp:"Olimpiade modern pertama diadakan di Athena, Yunani, April 1896 — sebagai penghormatan kepada Yunani kuno. Diprakarsai Pierre de Coubertin. 241 atlet dari 14 negara berpartisipasi. Olimpiade Paris 1900 adalah yang pertama mengizinkan atlet wanita." },
-      { q:"Dalam basket NBA, berapa poin untuk lemparan di luar garis tiga angka?", opts:["2","3","4","5"], a:1, exp:"Lemparan dari luar garis tiga angka bernilai 3 poin. Garis ini berjarak 7,24 m dari ring. Lemparan dalam garis = 2 poin, free throw = 1 poin. Garis tiga angka baru ditambahkan di NBA pada musim 1979–1980." },
-      { q:"Partikel subatomik manakah yang tidak memiliki muatan listrik?", opts:["Proton","Elektron","Neutron","Positron"], a:2, exp:"Neutron adalah partikel subatomik netral (tidak bermuatan) yang berada di inti atom bersama proton. Proton bermuatan positif (+1), elektron negatif (-1). Jumlah neutron dalam inti menentukan isotop suatu unsur." },
-      { q:"Siapakah yang mengembangkan 'World Wide Web' (WWW)?", opts:["Bill Gates","Steve Jobs","Tim Berners-Lee","Vint Cerf"], a:2, exp:"Tim Berners-Lee mengembangkan WWW di CERN (1989) dan meluncurkannya pada 1991. WWW ≠ Internet: internet adalah infrastruktur jaringan, WWW adalah sistem dokumen hypertext di atasnya. Berners-Lee tidak mematenkan penemuannya agar tersedia gratis untuk semua." },
-      { q:"Hukum termodinamika keberapa yang menyatakan bahwa entropi alam semesta selalu meningkat?", opts:["Pertama","Kedua","Ketiga","Nol"], a:1, exp:"Hukum Termodinamika Kedua menyatakan entropi (ketidakteraturan) sistem tertutup selalu meningkat. Artinya segala proses alami menuju ketidakteraturan — es mencair, bukan sebaliknya. Ini juga menjelaskan mengapa tidak ada mesin yang 100% efisien." },
-      { q:"Berapa jumlah kromosom pada sel manusia yang normal?", opts:["23","44","46","48"], a:2, exp:"Sel tubuh manusia normal memiliki 46 kromosom (23 pasang). Sel kelamin hanya memiliki 23 kromosom (haploid). Kelainan jumlah kromosom seperti Down Syndrome (trisomi 21) terjadi saat ada kromosom ke-47." },
-      { q:"Teori 'Big Bang' pertama kali diusulkan oleh siapa?", opts:["Edwin Hubble","Georges Lemaître","Albert Einstein","Stephen Hawking"], a:1, exp:"Georges Lemaître, fisikawan dan pastor Belgia, mengusulkan teori Big Bang (1927) — disebutnya 'hipotesis atom primordial'. Ironisnya, nama 'Big Bang' diberikan oleh Fred Hoyle yang justru menentang teori ini sebagai ejekan." },
-      { q:"Lukisan 'The Starry Night' dibuat oleh?", opts:["Monet","Picasso","Van Gogh","Dalí"], a:2, exp:"'The Starry Night' dilukis Van Gogh pada Juni 1889 dari kamarnya di rumah sakit jiwa Saint-Paul-de-Mausole, Prancis. Kini di MoMA, New York. Van Gogh hanya menjual satu lukisan semasa hidup — 'The Red Vineyard' — namun karyanya kini tak ternilai harganya." },
-      { q:"Novel '1984' yang berbicara tentang distopia ditulis oleh?", opts:["Aldous Huxley","George Orwell","Ray Bradbury","Kurt Vonnegut"], a:1, exp:"George Orwell (nama asli Eric Blair) menulis '1984' (1949) tentang negara totaliter 'Oceania' yang dipimpin 'Big Brother'. Novel ini memperkenalkan istilah 'Orwellian', 'doublethink', 'thoughtcrime', dan 'Room 101' ke dalam bahasa sehari-hari." },
-      { q:"Siapakah penulis 'Don Quixote', novel modern pertama di dunia?", opts:["Lope de Vega","Francisco de Quevedo","Miguel de Cervantes","Calderón de la Barca"], a:2, exp:"Miguel de Cervantes menulis 'Don Quixote de la Mancha' (1605, 1615) — sering disebut novel modern pertama di dunia. Kisah bangsawan tua yang membayangkan dirinya ksatria ini menginspirasi konsep 'quixotic' (idealis hingga tidak realistis) dalam bahasa Inggris." },
-      { q:"Penghargaan Nobel terbagi menjadi berapa kategori?", opts:["4","5","6","7"], a:2, exp:"Nobel diberikan dalam 6 kategori: Fisika, Kimia, Fisiologi/Kedokteran, Sastra, Perdamaian, dan Ekonomi. Lima pertama ditetapkan Alfred Nobel dalam wasiatnya (1895). Nobel Ekonomi ditambahkan Bank Swedia pada 1968 sebagai 'memorial prize'." },
-      { q:"Karya seni instalasi 'The Floating Piers' yang viral dibuat oleh seniman?", opts:["Banksy","Jeff Koons","Christo","Ai Weiwei"], a:2, exp:"'The Floating Piers' (2016) adalah instalasi Christo di Danau Iseo, Italia — jembatan kain kuning mengapung sepanjang 3 km. Christo dikenal dengan karya-karya spektakuler seperti membungkus Reichstag Berlin (1995) dengan kain perak." },
-      { q:"Tradisi 'Potlatch' berasal dari budaya masyarakat adat di?", opts:["Afrika Selatan","Amerika Utara","Australia","Selandia Baru"], a:1, exp:"Potlatch adalah upacara adat masyarakat pribumi Pantai Barat Laut Amerika Utara (Haida, Tlingit, Kwakwaka'wakw) di mana tuan rumah mendistribusikan kekayaannya ke tamu. Ini kebalikan dari akumulasi kekayaan — status didapat dari memberi, bukan memiliki." },
-      { q:"Makanan fermentasi 'Kimchi' adalah makanan khas dari?", opts:["Jepang","Korea","Vietnam","China"], a:1, exp:"Kimchi adalah makanan fermentasi Korea dari kubis dan sayuran dengan bumbu cabai, bawang putih, dan jahe — telah ada lebih dari 2.000 tahun. Kaya probiotik, kimchi diakui sebagai salah satu makanan paling menyehatkan di dunia." },
-      { q:"Sistem penulisan 'Aksara Jawa' terinspirasi dari aksara?", opts:["Arab","Sansekerta (Brahmi)","Cina","Tamil"], a:1, exp:"Aksara Jawa (Hanacaraka) berasal dari aksara Brahmi India kuno melalui aksara Pallawa dan Kawi. Aksara ini adalah 'induk' berbagai aksara Nusantara: Bali, Sunda Kuno, Bugis-Makassar, Batak, Rejang, dan banyak lagi." },
-      { q:"Festival 'Carnival Rio de Janeiro' adalah perayaan sebelum periode?", opts:["Natal","Paskah (Pra-Paskah/Lent)","Ramadan","Tahun Baru"], a:1, exp:"Carnival Rio adalah 'pesta terakhir' sebelum Lent (40 hari puasa Katolik menjelang Paskah). Kata 'carnival' dari Latin 'carne vale' (selamat tinggal, daging) — merujuk pada pantang makan daging selama Lent yang dimulai setelahnya." },
-      { q:"Sake, mirin, dan shoyu adalah bumbu dasar dari masakan negara?", opts:["Korea","Vietnam","Thailand","Jepang"], a:3, exp:"Trio sake-mirin-shoyu adalah fondasi rasa masakan Jepang, menciptakan profil umami yang khas. Kombinasi ini muncul dalam hampir semua masakan Jepang: teriyaki, sukiyaki, ramen, hingga nasi onigiri. Shoyu adalah kecap Jepang yang berbeda dari kecap Asia lainnya." },
-      { q:"Siapa ekonom yang menulis 'The Wealth of Nations' (1776)?", opts:["Karl Marx","John Maynard Keynes","Adam Smith","Milton Friedman"], a:2, exp:"Adam Smith menulis 'The Wealth of Nations' (1776), fondasi ekonomi modern dan kapitalisme. Ia memperkenalkan 'invisible hand' (tangan tak terlihat pasar) dan pembagian kerja. Terbit di tahun yang sama dengan Deklarasi Kemerdekaan AS — bukan kebetulan, keduanya berbagi semangat liberalisme." },
-      { q:"Filsuf Socrates berasal dari kota-negara mana di Yunani kuno?", opts:["Sparta","Korinth","Athena","Thebes"], a:2, exp:"Socrates (470–399 SM) berasal dari Athena. Ia tidak pernah menulis — semua ajarannya direkam muridnya Plato. Dihukum mati dengan minum racun hemlock atas tuduhan merusak moral pemuda dan tidak mengakui dewa-dewa Athena." },
-      { q:"Siapa pemenang Nobel Perdamaian pertama dari Indonesia?", opts:["Soekarno","B.J. Habibie","Indonesia belum pernah menang","Abdurrahman Wahid"], a:2, exp:"Hingga saat ini, Indonesia belum pernah memiliki pemenang Nobel Perdamaian. Timor-Leste pernah menghasilkan pemenang: Uskup Carlos Belo dan José Ramos-Horta pada 1996, saat Timor Timur masih jadi bagian Indonesia." },
-      { q:"Dalam fisika, 'Prinsip Ketidakpastian Heisenberg' menyatakan kita tidak dapat secara bersamaan mengetahui dengan presisi penuh...?", opts:["Massa dan Energi","Posisi dan Momentum","Waktu dan Ruang","Spin dan Muatan"], a:1, exp:"Prinsip Heisenberg (1927) menyatakan: semakin tepat posisi partikel diketahui, semakin tidak pasti momentumnya, dan sebaliknya. Ini bukan keterbatasan teknologi — melainkan sifat fundamental realitas kuantum itu sendiri." },
-      { q:"Bahasa dengan jumlah penutur asli (native speaker) terbanyak di dunia adalah?", opts:["Inggris","Spanyol","Mandarin","Hindi"], a:2, exp:"Mandarin memiliki sekitar 920 juta penutur asli — terbanyak di dunia. Bahasa Inggris lebih banyak penutur total (termasuk penutur kedua/asing), namun penutur aslinya jauh di bawah Mandarin. Spanyol berada di posisi kedua untuk penutur asli." },
-      { q:"Teater 'Globe Theatre' yang terkenal berkaitan dengan penulis drama?", opts:["Christopher Marlowe","Ben Jonson","William Shakespeare","John Webster"], a:2, exp:"Globe Theatre (1599) di London dimiliki bersama oleh rombongan 'Lord Chamberlain's Men' termasuk Shakespeare sebagai pemegang saham. Hampir semua karya besar Shakespeare dipentaskan di sini sebelum terbakar pada 1613 dan direkonstruksi pada 1997." },
-      { q:"Algoritma 'PageRank' yang menjadi dasar Google Search dikembangkan oleh?", opts:["Larry Page & Sergey Brin","Bill Gates & Paul Allen","Steve Jobs & Wozniak","Zuckerberg & Moskovitz"], a:0, exp:"PageRank dikembangkan Larry Page dan Sergey Brin saat kuliah S3 di Stanford (1996). Algoritma ini menilai halaman web berdasarkan jumlah dan kualitas tautan masuk. Nama 'PageRank' juga merupakan permainan kata dari nama 'Larry Page'." },
-      { q:"Kota 'Istanbul' pernah dikenal dengan nama?", opts:["Konstantinopel & Byzantium","Alexandria & Memphis","Carthago & Tunis","Antioch & Seleucia"], a:0, exp:"Istanbul memiliki dua nama historis: Byzantium (didirikan kolonis Yunani, 657 SM) dan Konstantinopel (dinamai Kaisar Konstantin I yang menjadikannya ibu kota Romawi pada 330 M). Nama 'Istanbul' secara resmi digunakan sejak 1930 atas permintaan pemerintah Turki kepada komunitas internasional." },
-      { q:"Siapa yang pertama kali mengelilingi dunia dengan kapal (ekspedisi 1519–1522)?", opts:["Christopher Columbus","Vasco da Gama","Ferdinand Magellan","Francis Drake"], a:2, exp:"Magellan memimpin ekspedisi (1519) namun terbunuh di Filipina (1521). Juan Sebastián Elcano melanjutkan dan kembali ke Spanyol (1522) — dialah yang pertama benar-benar mengelilingi dunia. Magellan tetap diakui sebagai pemimpin ekspedisi bersejarah ini." },
-      { q:"Dalam mitologi Yunani, dewa perang bernama?", opts:["Apollo","Hermes","Ares","Hephaestus"], a:2, exp:"Ares adalah dewa perang dalam mitologi Yunani, setara Mars dalam mitologi Romawi. Berbeda dari Athena (strategi perang), Ares mewakili kekerasan brutal. Ironisnya, meski dewa perang, Ares sering kalah dalam pertempuran di mitologi — termasuk dikalahkan Athena." },
-    ]
+/* ─── TEXT EDITOR ─── */
+function execCmd(cmd, val=null) {
+  document.getElementById('editorArea').focus();
+  document.execCommand(cmd, false, val);
+}
+document.addEventListener('DOMContentLoaded', () => {
+  const ea = document.getElementById('editorArea');
+  if(ea) ea.addEventListener('input', updateEditorStats);
+});
+function updateEditorStats() {
+  const ea = document.getElementById('editorArea');
+  const text = ea.innerText || '';
+  const words = text.trim() ? text.trim().split(/\s+/).length : 0;
+  document.getElementById('editorStats').textContent = `${words} kata • ${text.length} karakter`;
+}
+function downloadEditor(fmt) {
+  const ea = document.getElementById('editorArea');
+  let content, mime, ext;
+  if(fmt==='html') { content=`<!DOCTYPE html><html><body>${ea.innerHTML}</body></html>`; mime='text/html'; ext='html'; }
+  else { content=ea.innerText; mime='text/plain'; ext='txt'; }
+  dlBlob(content, mime, `dokumen.${ext}`);
+  bumpStat(); toast('Dokumen berhasil diunduh!','⬇️');
+}
+function printEditor() { window.print(); }
+
+/* ─── ENKRIPSI (XOR + Base64) ─── */
+function xorEncrypt(text, key) {
+  let result='';
+  for(let i=0;i<text.length;i++) result += String.fromCharCode(text.charCodeAt(i) ^ key.charCodeAt(i % key.length));
+  return btoa(unescape(encodeURIComponent(result)));
+}
+function xorDecrypt(encoded, key) {
+  try {
+    const raw = decodeURIComponent(escape(atob(encoded)));
+    let result='';
+    for(let i=0;i<raw.length;i++) result += String.fromCharCode(raw.charCodeAt(i) ^ key.charCodeAt(i % key.length));
+    return result;
+  } catch(e) { return 'ERROR: Format tidak valid atau password salah'; }
+}
+function encryptText() {
+  const text=document.getElementById('encryptInput').value;
+  const pass=document.getElementById('encryptPass').value;
+  if(!text||!pass) { toast('Isi teks dan password dulu!','⚠️'); return; }
+  const result = xorEncrypt(text, pass);
+  document.getElementById('encryptOutput').textContent = result;
+  document.getElementById('encryptResult').classList.add('show');
+  bumpStat(); toast('Teks berhasil dienkripsi!','🔒');
+}
+function decryptText() {
+  const text=document.getElementById('encryptInput').value.trim();
+  const pass=document.getElementById('encryptPass').value;
+  if(!text||!pass) { toast('Isi teks terenkripsi dan password!','⚠️'); return; }
+  const result = xorDecrypt(text, pass);
+  document.getElementById('encryptOutput').textContent = result;
+  document.getElementById('encryptResult').classList.add('show');
+  toast('Teks berhasil didekripsi!','🔓');
+}
+function updateStrength(val) {
+  const fill=document.getElementById('strengthFill');
+  const label=document.getElementById('strengthLabel');
+  let score=0;
+  if(val.length>=8) score++;
+  if(val.length>=14) score++;
+  if(/[A-Z]/.test(val)) score++;
+  if(/[0-9]/.test(val)) score++;
+  if(/[^A-Za-z0-9]/.test(val)) score++;
+  const colors=['#ef4444','#f97316','#eab308','#22c55e','#16a34a'];
+  const labels=['Sangat Lemah','Lemah','Sedang','Kuat','Sangat Kuat'];
+  fill.style.width=(score*20)+'%';
+  fill.style.background=colors[score-1]||'#ef4444';
+  label.textContent=val?labels[score-1]||'Sangat Lemah':'';
+}
+
+/* ─── CSV VIEWER ─── */
+let csvData=[], csvHeaders=[];
+function loadCSV() {
+  const f=document.getElementById('csvInput').files[0];
+  if(!f) return;
+  const reader=new FileReader();
+  reader.onload=e=>{
+    const text=e.target.result;
+    const sep=text.includes('\t')?'\t':',';
+    const rows=text.trim().split('\n').map(r=>r.split(sep).map(c=>c.replace(/^"|"$/g,'')));
+    csvHeaders=rows[0]; csvData=rows.slice(1);
+    renderCSV(csvData);
+    document.getElementById('csvInfo').textContent=`${csvData.length} baris • ${csvHeaders.length} kolom`;
+    bumpStat();
   };
+  reader.readAsText(f);
+}
+function renderCSV(data) {
+  const tbl=document.getElementById('csvTable');
+  tbl.innerHTML='';
+  const thead=document.createElement('thead');
+  const hr=document.createElement('tr');
+  csvHeaders.forEach(h=>{ const th=document.createElement('th'); th.textContent=h; hr.appendChild(th); });
+  thead.appendChild(hr); tbl.appendChild(thead);
+  const tbody=document.createElement('tbody');
+  data.forEach(row=>{ const tr=document.createElement('tr'); row.forEach(cell=>{ const td=document.createElement('td'); td.textContent=cell; tr.appendChild(td); }); tbody.appendChild(tr); });
+  tbl.appendChild(tbody);
+  document.getElementById('csvWrap').style.display='block';
+}
+function filterCSV(q) {
+  if(!csvData.length) return;
+  const filtered=q?csvData.filter(r=>r.some(c=>c.toLowerCase().includes(q.toLowerCase()))):csvData;
+  renderCSV(filtered);
+}
 
-  // Track used indices per difficulty per session
-  let usedIdx = { easy: [], medium: [], hard: [] };
-  let currentDiff = 'easy';
-  let currentQuestion = null;
-  let quizTimeLeft = 0;
+/* ─── KOMPRES GAMBAR ─── */
+let compressFile=null;
+function loadCompressPreview() {
+  const input=document.getElementById('compressInput');
+  if(!input.files[0]) return;
+  compressFile=input.files[0];
+  const url=URL.createObjectURL(compressFile);
+  document.getElementById('compressOrigImg').src=url;
+  document.getElementById('origSize').textContent=formatSize(compressFile.size);
+  document.getElementById('compressPreviewArea').style.display='block';
+  updateQuality(document.getElementById('qualitySlider').value);
+}
+function updateQuality(val) {
+  document.getElementById('qualityVal').textContent=val;
+  if(!compressFile) return;
+  const p=document.getElementById('compressProgress');
+  p.style.width='0%';
+  setTimeout(()=>{ p.style.width='100%'; },100);
+  const img=new Image();
+  img.onload=()=>{
+    const canvas=document.createElement('canvas');
+    canvas.width=img.width; canvas.height=img.height;
+    const ctx=canvas.getContext('2d');
+    ctx.drawImage(img,0,0);
+    const q=parseFloat(val)/100;
+    const dataUrl=canvas.toDataURL('image/jpeg',q);
+    document.getElementById('compressResultImg').src=dataUrl;
+    const bytes=Math.round((dataUrl.length-22)*3/4);
+    document.getElementById('compSize').textContent=formatSize(bytes);
+    window._compressedDataUrl=dataUrl;
+  };
+  img.src=URL.createObjectURL(compressFile);
+}
+function downloadCompressed() {
+  if(!window._compressedDataUrl) { toast('Kompres gambar dulu!','⚠️'); return; }
+  const a=document.createElement('a');
+  a.href=window._compressedDataUrl;
+  a.download='compressed.jpg';
+  a.click();
+  bumpStat(); toast('Gambar terkompresi diunduh!','⬇️');
+}
 
-  function getRandomQuestion(diff) {
-    const pool = quizBank[diff];
-    let available = pool.map((_,i)=>i).filter(i => !usedIdx[diff].includes(i));
-    if (!available.length) { usedIdx[diff] = []; available = pool.map((_,i)=>i); }
-    const idx = available[Math.floor(Math.random() * available.length)];
-    usedIdx[diff].push(idx);
-    return pool[idx];
+/* ─── TANDA TANGAN ─── */
+let signDrawing=false, signCtx=null;
+function initSign() {
+  const canvas=document.getElementById('signCanvas');
+  signCtx=canvas.getContext('2d');
+  canvas.addEventListener('mousedown', e=>{ signDrawing=true; signCtx.beginPath(); const r=canvas.getBoundingClientRect(); signCtx.moveTo(e.clientX-r.left, e.clientY-r.top); });
+  canvas.addEventListener('mousemove', e=>{ if(!signDrawing) return; const r=canvas.getBoundingClientRect(); signCtx.lineWidth=document.getElementById('signSize').value; signCtx.strokeStyle=document.getElementById('signColor').value; signCtx.lineCap='round'; signCtx.lineJoin='round'; signCtx.lineTo(e.clientX-r.left, e.clientY-r.top); signCtx.stroke(); });
+  canvas.addEventListener('mouseup', ()=>signDrawing=false);
+  canvas.addEventListener('mouseleave', ()=>signDrawing=false);
+  canvas.addEventListener('touchstart', e=>{ e.preventDefault(); signDrawing=true; signCtx.beginPath(); const r=canvas.getBoundingClientRect(); const t=e.touches[0]; signCtx.moveTo(t.clientX-r.left, t.clientY-r.top); });
+  canvas.addEventListener('touchmove', e=>{ e.preventDefault(); if(!signDrawing) return; const r=canvas.getBoundingClientRect(); const t=e.touches[0]; signCtx.lineWidth=document.getElementById('signSize').value; signCtx.strokeStyle=document.getElementById('signColor').value; signCtx.lineCap='round'; signCtx.lineJoin='round'; signCtx.lineTo(t.clientX-r.left, t.clientY-r.top); signCtx.stroke(); });
+  canvas.addEventListener('touchend', ()=>signDrawing=false);
+}
+document.addEventListener('DOMContentLoaded', initSign);
+function clearSign() { const c=document.getElementById('signCanvas'); signCtx.clearRect(0,0,c.width,c.height); }
+function downloadSign() {
+  const canvas=document.getElementById('signCanvas'); const a=document.createElement('a');
+  a.href=canvas.toDataURL('image/png'); a.download='tanda-tangan.png'; a.click();
+  bumpStat(); toast('Tanda tangan diunduh!','✍️');
+}
+async function copySignToClipboard() {
+  const canvas=document.getElementById('signCanvas');
+  canvas.toBlob(async blob=>{ try{ await navigator.clipboard.write([new ClipboardItem({'image/png':blob})]); toast('Tanda tangan disalin!','📋'); } catch(e){ toast('Browser tidak mendukung fitur ini','⚠️'); } });
+}
+
+/* ─── PASSWORD GEN ─── */
+const passHistory=[];
+function generatePass() {
+  const len=parseInt(document.getElementById('passLen').value);
+  let chars='';
+  if(document.getElementById('passUpper').checked) chars+='ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+  if(document.getElementById('passLower').checked) chars+='abcdefghijklmnopqrstuvwxyz';
+  if(document.getElementById('passNum').checked)   chars+='0123456789';
+  if(document.getElementById('passSymbol').checked) chars+='!@#$%^&*()_+-=[]{}|;:,.<>?';
+  if(!chars) { toast('Pilih setidaknya satu jenis karakter!','⚠️'); return; }
+  let pass='';
+  const arr=new Uint32Array(len);
+  crypto.getRandomValues(arr);
+  arr.forEach(n=>{ pass+=chars[n%chars.length]; });
+  document.getElementById('passOutput').value=pass;
+  evalPassStrength(pass);
+  passHistory.unshift(pass);
+  if(passHistory.length>5) passHistory.pop();
+  renderPassHistory();
+}
+function evalPassStrength(pass) {
+  let s=0;
+  if(pass.length>=12) s++; if(pass.length>=18) s++;
+  if(/[A-Z]/.test(pass)) s++; if(/[0-9]/.test(pass)) s++; if(/[^A-Za-z0-9]/.test(pass)) s++;
+  const colors=['#ef4444','#f97316','#eab308','#22c55e','#16a34a'];
+  const labels=['Sangat Lemah','Lemah','Sedang','Kuat','Sangat Kuat'];
+  document.getElementById('passStrengthFill').style.width=(s*20)+'%';
+  document.getElementById('passStrengthFill').style.background=colors[Math.max(0,s-1)];
+  document.getElementById('passStrengthLabel').textContent=labels[Math.min(4,s)];
+}
+function renderPassHistory() {
+  const h=document.getElementById('passHistory');
+  h.innerHTML=passHistory.map(p=>`<div style="display:flex;align-items:center;gap:8px;background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:7px 12px;font-family:monospace;font-size:12.5px">
+    <span style="flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${p}</span>
+    <button onclick="navigator.clipboard.writeText('${p}').then(()=>toast('Password disalin!','📋'))" style="font-size:11px;padding:3px 8px;border-radius:6px;border:1px solid var(--border);background:var(--surface);cursor:pointer">📋</button>
+  </div>`).join('');
+}
+document.addEventListener('DOMContentLoaded', generatePass);
+
+/* ─── WORD COUNTER ─── */
+function updateWordCount() {
+  const text=document.getElementById('wordCountInput').value;
+  const words=text.trim()?text.trim().split(/\s+/).length:0;
+  const chars=text.length;
+  const sentences=(text.match(/[.!?]+/g)||[]).length;
+  const paras=text.trim()?text.trim().split(/\n\s*\n/).length:0;
+  const lines=(text.match(/\n/g)||[]).length+1;
+  const readSec=Math.ceil(words/200*60);
+  document.getElementById('wcWords').textContent=words;
+  document.getElementById('wcChars').textContent=chars;
+  document.getElementById('wcSentences').textContent=sentences;
+  document.getElementById('wcParagraphs').textContent=paras;
+  document.getElementById('wcLines').textContent=lines;
+  document.getElementById('wcReadTime').textContent=readSec<60?readSec+' dtk':Math.ceil(readSec/60)+' mnt';
+}
+
+/* ─── BASE64 ─── */
+function doBase64(mode) {
+  const input=document.getElementById('b64Input').value;
+  try {
+    let result = mode==='encode' ? btoa(unescape(encodeURIComponent(input))) : decodeURIComponent(escape(atob(input)));
+    document.getElementById('b64Output').value=result;
+    bumpStat(); toast(mode==='encode'?'Berhasil di-encode!':'Berhasil di-decode!','🔄');
+  } catch(e) { document.getElementById('b64Output').value='ERROR: '+e.message; toast('Gagal! Cek format input','❌'); }
+}
+function swapBase64() {
+  const a=document.getElementById('b64Input').value;
+  const b=document.getElementById('b64Output').value;
+  document.getElementById('b64Input').value=b;
+  document.getElementById('b64Output').value=a;
+}
+function encodeFileBase64() {
+  const f=document.getElementById('b64FileInput').files[0];
+  if(!f) return;
+  const reader=new FileReader();
+  reader.onload=e=>{ document.getElementById('b64Output').value=e.target.result.split(',')[1]; bumpStat(); toast('File berhasil di-encode!','🔄'); };
+  reader.readAsDataURL(f);
+}
+
+/* ─── METADATA ─── */
+function readMeta() {
+  const f=document.getElementById('metaInput').files[0];
+  if(!f) return;
+  const meta=[
+    { label:'Nama File', value:f.name },
+    { label:'Tipe File', value:f.type||'Tidak diketahui' },
+    { label:'Ukuran', value:formatSize(f.size) },
+    { label:'Tanggal Modifikasi', value:new Date(f.lastModified).toLocaleString('id-ID') },
+    { label:'Tanggal Sekarang', value:new Date().toLocaleString('id-ID') },
+  ];
+  if(f.type.startsWith('image/')) {
+    meta.push({ label:'Kemungkinan EXIF Data', value:'GPS, Kamera, ISO, Focal Length, dll' });
+    meta.push({ label:'Status EXIF', value:'⚠️ Mungkin mengandung lokasi GPS!' });
   }
+  const list=document.getElementById('metaList');
+  list.innerHTML=meta.map(m=>`<div style="display:flex;gap:10px;background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:9px 14px;font-size:13px">
+    <span style="font-weight:600;min-width:160px;color:var(--text)">${m.label}</span>
+    <span style="color:var(--muted)">${m.value}</span>
+  </div>`).join('');
+  document.getElementById('metaResult').style.display='block';
+  document.getElementById('metaClearResult').classList.remove('show');
+  bumpStat();
+}
+function clearMeta() {
+  document.getElementById('metaClearResult').classList.add('show');
+  toast('Metadata dihapus (simulasi)!','🗑️');
+}
 
-  function openQuizModal() {
-    quizPending = true;
-    clearInterval(gameLoop);
-    document.getElementById('quizAppleCount').textContent = `🍎 ${appleCount} apel dimakan — bonus menanti!`;
-    document.getElementById('quizModal').classList.add('open');
-    document.getElementById('quizDiffPicker').style.display = 'block';
-    document.getElementById('quizQuestion').style.display = 'none';
-    document.getElementById('quizResult').style.display = 'none';
-  }
+/* ─── COPY ─── */
+function copyResult(id) {
+  const el=document.getElementById(id);
+  navigator.clipboard.writeText(el.textContent||el.value).then(()=>toast('Berhasil disalin ke clipboard!','📋')).catch(()=>toast('Gagal menyalin','❌'));
+}
 
-  function startQuiz(diff) {
-    currentDiff = diff;
-    currentQuestion = getRandomQuestion(diff);
-    document.getElementById('quizDiffPicker').style.display = 'none';
-    document.getElementById('quizQuestion').style.display = 'block';
-    document.getElementById('quizResult').style.display = 'none';
-
-    const badge = document.getElementById('quizDiffBadge');
-    const colors = { easy:['#dcfce7','#166534','🟢 Mudah'], medium:['#fef9c3','#854d0e','🟡 Sedang'], hard:['#fee2e2','#991b1b','🔴 Susah'] };
-    badge.style.background = colors[diff][0];
-    badge.style.color = colors[diff][1];
-    badge.textContent = colors[diff][2];
-
-    document.getElementById('quizQuestionText').textContent = currentQuestion.q;
-
-    const optsEl = document.getElementById('quizOptions');
-    optsEl.innerHTML = '';
-    currentQuestion.opts.forEach((opt, i) => {
-      const btn = document.createElement('button');
-      btn.textContent = `${['A','B','C','D'][i]}. ${opt}`;
-      btn.style.cssText = 'width:100%;padding:10px 14px;border-radius:10px;border:1.5px solid #e2e8f0;background:#f8fafc;font-size:12.5px;font-family:inherit;cursor:pointer;text-align:left;transition:background 0.15s,border-color 0.15s;';
-      btn.onmouseover = () => { btn.style.background='#eff6ff'; btn.style.borderColor='#bfdbfe'; };
-      btn.onmouseout  = () => { btn.style.background='#f8fafc'; btn.style.borderColor='#e2e8f0'; };
-      btn.onclick = () => answerQuiz(i);
-      optsEl.appendChild(btn);
-    });
-
-    // Timer: easy=30s, medium=25s, hard=20s
-    quizTimeLeft = diff==='easy' ? 30 : diff==='medium' ? 25 : 20;
-    updateTimerDisplay();
-    clearInterval(quizTimerInterval);
-    quizTimerInterval = setInterval(() => {
-      quizTimeLeft--;
-      updateTimerDisplay();
-      if (quizTimeLeft <= 0) { clearInterval(quizTimerInterval); answerQuiz(-1); }
-    }, 1000);
-  }
-
-  function updateTimerDisplay() {
-    const el = document.getElementById('quizTimer');
-    el.textContent = `⏱ ${quizTimeLeft}s`;
-    el.style.color = quizTimeLeft <= 5 ? '#dc2626' : '#2563eb';
-  }
-
-  function answerQuiz(chosen) {
-    clearInterval(quizTimerInterval);
-    const pts = { easy:10, medium:20, hard:30 };
-    const correct = chosen === currentQuestion.a;
-    const bonus = correct ? pts[currentDiff] : 0;
-
-    document.getElementById('quizQuestion').style.display = 'none';
-    document.getElementById('quizResult').style.display = 'block';
-
-    if (correct) {
-      score += bonus;
-      document.getElementById('score').textContent = score;
-      if (score > highScore) { highScore = score; document.getElementById('highscore').textContent = highScore; }
-      document.getElementById('quizResultIcon').textContent = '🎉';
-      document.getElementById('quizResultTitle').textContent = `Jawaban Benar! +${bonus} Poin`;
-      document.getElementById('quizResultDesc').textContent = `Jawaban: ${currentQuestion.opts[currentQuestion.a]}`;
-    } else if (chosen === -1) {
-      document.getElementById('quizResultIcon').textContent = '⏰';
-      document.getElementById('quizResultTitle').textContent = 'Waktu Habis!';
-      document.getElementById('quizResultDesc').textContent = `Jawaban yang benar: ${currentQuestion.opts[currentQuestion.a]}`;
-    } else {
-      document.getElementById('quizResultIcon').textContent = '😅';
-      document.getElementById('quizResultTitle').textContent = 'Kurang Tepat!';
-      document.getElementById('quizResultDesc').textContent = `Jawaban yang benar: ${currentQuestion.opts[currentQuestion.a]}`;
-    }
-    // Always show explanation
-    const expEl = document.getElementById('quizResultExp');
-    expEl.textContent = '💡 ' + currentQuestion.exp;
-    expEl.style.display = 'block';
-  }
-
-  function closeQuiz() {
-    document.getElementById('quizModal').classList.remove('open');
-    quizPending = false;
-    if (running) {
-      gameLoop = setInterval(tick, Math.max(60, 200 - (appleCount * 2)));
-    }
-  }
-
-  function resizeCanvas() {
-    const w = canvas.offsetWidth;
-    canvas.width = canvas.height = w;
-  }
-  window.addEventListener('resize', () => { resizeCanvas(); if (!running) drawIdleScreen(); });
-
-  function rand() { return Math.floor(Math.random() * GRID); }
-  function spawnFood() {
-    do { food = { x: rand(), y: rand() }; }
-    while (snake.some(s => s.x === food.x && s.y === food.y));
-  }
-  function setDir(x, y) {
-    if (!running || quizPending) return;
-    if (x === -dir.x && y === -dir.y) return;
-    nextDir = { x, y };
-  }
-
-  function handleStartBtn() {
-    const input = document.getElementById('playerNameInput');
-    const name  = input.value.trim();
-    if (!name) {
-      input.style.borderColor = 'rgba(239,68,68,0.7)';
-      input.placeholder = 'Nama wajib diisi!';
-      input.focus();
-      setTimeout(() => { input.style.borderColor = ''; input.placeholder = 'Masukkan nama...'; }, 1500);
-      return;
-    }
-    currentPlayerName = name;
-    startGame();
-  }
-
-  function startGame() {
-    resizeCanvas();
-    snake     = [{ x:10,y:10 }, { x:9,y:10 }, { x:8,y:10 }];
-    dir       = { x:1, y:0 };
-    nextDir   = { x:1, y:0 };
-    score     = 0;
-    appleCount = 0;
-    usedIdx   = { easy: [], medium: [], hard: [] };
-    document.getElementById('score').textContent = 0;
-    spawnFood();
-    document.getElementById('gameOverlay').style.display = 'none';
-    running = true;
-    clearInterval(gameLoop);
-    gameLoop = setInterval(tick, 200);
-  }
-
-  function tick() {
-    if (quizPending) return;
-    dir = nextDir;
-    const head = { x: snake[0].x + dir.x, y: snake[0].y + dir.y };
-    if (head.x < 0 || head.x >= GRID || head.y < 0 || head.y >= GRID) return gameOver();
-    if (snake.some(s => s.x === head.x && s.y === head.y)) return gameOver();
-    snake.unshift(head);
-    if (head.x === food.x && head.y === food.y) {
-      score += 10;
-      appleCount++;
-      document.getElementById('score').textContent = score;
-      if (score > highScore) { highScore = score; document.getElementById('highscore').textContent = highScore; }
-      spawnFood();
-      // Speed up every apple
-      clearInterval(gameLoop);
-      if (appleCount % 5 === 0) {
-        // Trigger quiz after slight delay
-        setTimeout(openQuizModal, 150);
-      } else {
-        gameLoop = setInterval(tick, Math.max(60, 200 - (appleCount * 2)));
-      }
-    } else { snake.pop(); }
-    draw();
-  }
-
-  function gameOver() {
-    clearInterval(gameLoop);
-    clearInterval(quizTimerInterval);
-    running = false;
-    quizPending = false;
-    addScore(currentPlayerName, score);
-    document.getElementById('overlayIcon').textContent  = '💀';
-    document.getElementById('overlayTitle').textContent = 'Game Over!';
-    document.getElementById('overlayDesc').textContent  = `${currentPlayerName} — Skor: ${score} | 🍎 ${appleCount} apel`;
-    document.getElementById('startBtn').textContent     = 'Main Lagi';
-    document.getElementById('nameInputWrap').style.display = 'flex';
-    document.getElementById('gameOverlay').style.display   = 'flex';
-    // Close quiz if open
-    document.getElementById('quizModal').classList.remove('open');
-  }
-
-  function drawRoundRect(x, y, w, h, r, fill) {
-    ctx.beginPath(); ctx.roundRect(x, y, w, h, r);
-    ctx.fillStyle = fill; ctx.fill();
-  }
-
-  function draw() {
-    const C = CELL();
-    ctx.fillStyle = '#0f172a';
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-    ctx.strokeStyle = 'rgba(255,255,255,0.03)'; ctx.lineWidth = 0.5;
-    for (let i = 0; i <= GRID; i++) {
-      ctx.beginPath(); ctx.moveTo(i*C,0); ctx.lineTo(i*C,canvas.height); ctx.stroke();
-      ctx.beginPath(); ctx.moveTo(0,i*C); ctx.lineTo(canvas.width,i*C); ctx.stroke();
-    }
-    const fx = food.x*C + C/2, fy = food.y*C + C/2;
-    const glow = ctx.createRadialGradient(fx,fy,2,fx,fy,C/2);
-    glow.addColorStop(0,'rgba(249,115,22,0.45)'); glow.addColorStop(1,'rgba(249,115,22,0)');
-    ctx.beginPath(); ctx.arc(fx,fy,C/2,0,Math.PI*2); ctx.fillStyle=glow; ctx.fill();
-    drawRoundRect(food.x*C+3, food.y*C+3, C-6, C-6, 4, '#f97316');
-    ctx.fillStyle='rgba(255,255,255,0.22)';
-    ctx.beginPath(); ctx.ellipse(fx-2, food.y*C+6, 3, 2, -0.5, 0, Math.PI*2); ctx.fill();
-    snake.forEach((seg,i) => {
-      const x=seg.x*C, y=seg.y*C, pad=i===0?1:2, size=C-pad*2;
-      const g=ctx.createLinearGradient(x,y,x+C,y+C);
-      if(i===0){g.addColorStop(0,'#60a5fa');g.addColorStop(1,'#2563eb');}
-      else      {g.addColorStop(0,'#34d399');g.addColorStop(1,'#059669');}
-      drawRoundRect(x+pad,y+pad,size,size,i===0?6:4,g);
-      if(i===0){
-        const ex=dir.x===1?x+C-8:dir.x===-1?x+5:x+C/2-5;
-        const ey=dir.y===1?y+C-8:dir.y===-1?y+5:y+C/2-5;
-        const ex2=dir.x!==0?ex:ex+10, ey2=dir.y!==0?ey+8:ey;
-        ctx.fillStyle='#fff';
-        ctx.beginPath();ctx.arc(ex,ey,2.5,0,Math.PI*2);ctx.fill();
-        ctx.beginPath();ctx.arc(ex2,ey2,2.5,0,Math.PI*2);ctx.fill();
-        ctx.fillStyle='#0f172a';
-        ctx.beginPath();ctx.arc(ex+0.5,ey+0.5,1.2,0,Math.PI*2);ctx.fill();
-        ctx.beginPath();ctx.arc(ex2+0.5,ey2+0.5,1.2,0,Math.PI*2);ctx.fill();
-      }
-    });
-  }
-
-  function drawIdleScreen() {
-    const C = CELL();
-    ctx.fillStyle = '#0f172a'; ctx.fillRect(0,0,canvas.width,canvas.height);
-    ctx.strokeStyle='rgba(255,255,255,0.03)'; ctx.lineWidth=0.5;
-    for(let i=0;i<=GRID;i++){
-      ctx.beginPath();ctx.moveTo(i*C,0);ctx.lineTo(i*C,canvas.height);ctx.stroke();
-      ctx.beginPath();ctx.moveTo(0,i*C);ctx.lineTo(canvas.width,i*C);ctx.stroke();
-    }
-  }
-
-  document.addEventListener('keydown', e => {
-    if (document.activeElement === document.getElementById('playerNameInput')) {
-      if (e.key === 'Enter') handleStartBtn();
-      return;
-    }
-    const map = { ArrowUp:'u', w:'u', ArrowDown:'d', s:'d', ArrowLeft:'l', a:'l', ArrowRight:'r', d:'r' };
-    if (!map[e.key]) return;
-    e.preventDefault();
-    if (map[e.key]==='u') setDir(0,-1);
-    if (map[e.key]==='d') setDir(0, 1);
-    if (map[e.key]==='l') setDir(-1,0);
-    if (map[e.key]==='r') setDir(1, 0);
-  });
-
-  // Expose to global scope
-  window.showDevNotice    = showDevNotice;
-  window.closeDevNotice   = closeDevNotice;
-  window.openContactModal = openContactModal;
-  window.closeContact     = closeContact;
-  window.openPDF          = openPDF;
-  window.closePDF         = closePDF;
-  window.handleStartBtn   = handleStartBtn;
-  window.setDir           = setDir;
-  window.startQuiz        = startQuiz;
-  window.answerQuiz       = answerQuiz;
-  window.closeQuiz        = closeQuiz;
+/* ─── DOWNLOAD BLOB ─── */
+function dlBlob(content, mime, filename) {
+  const blob=new Blob([content],{type:mime});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');
+  a.href=url; a.download=filename; a.click();
+  URL.revokeObjectURL(url);
+}
 </script>
-
 </body>
 </html>

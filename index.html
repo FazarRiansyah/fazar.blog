@@ -1,532 +1,159 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-<meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>#JagaDokumen — Kelola Dokumen Aman di Browser</title>
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🛡️</text></svg>">
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet"/>
+
 <style>
-:root {
-  --blue-900: #0f2d6b;
-  --blue-800: #1a4fa0;
-  --blue-700: #1d4ed8;
-  --blue-600: #2563eb;
-  --blue-500: #3b82f6;
-  --blue-100: #dbeafe;
-  --blue-50:  #eff6ff;
-  --green:    #16a34a;
-  --green-bg: #dcfce7;
-  --orange:   #ea580c;
-  --orange-bg:#ffedd5;
-  --purple:   #7c3aed;
-  --purple-bg:#ede9fe;
-  --rose:     #e11d48;
-  --rose-bg:  #ffe4e6;
-  --teal:     #0d9488;
-  --teal-bg:  #ccfbf1;
-  --amber:    #d97706;
-  --amber-bg: #fef3c7;
-  --bg:       #f0f4fb;
-  --surface:  #ffffff;
-  --border:   #e2e8f0;
-  --text:     #0f172a;
-  --muted:    #64748b;
-  --light:    #94a3b8;
-  --radius:   16px;
-  --shadow:   0 2px 12px rgba(15,45,107,0.07);
-  --shadow-md:0 6px 24px rgba(15,45,107,0.12);
-  --shadow-lg:0 16px 48px rgba(15,45,107,0.16);
-}
-
-*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
-html { scroll-behavior: smooth; }
-body {
-  font-family: 'Plus Jakarta Sans', sans-serif;
-  background: var(--bg);
-  color: var(--text);
-  min-height: 100vh;
-}
-
-/* ─── SCROLLBAR ─── */
-::-webkit-scrollbar { width: 6px; }
-::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: #c1cde3; border-radius: 10px; }
-
-/* ─── NAV ─── */
-nav {
-  position: sticky; top: 0; z-index: 100;
-  background: rgba(255,255,255,0.88);
-  backdrop-filter: blur(16px);
-  border-bottom: 1px solid var(--border);
-  padding: 0 2.5rem;
-  display: flex; align-items: center; gap: 1rem;
-  height: 60px;
-}
-.nav-logo {
-  display: flex; align-items: center; gap: 10px;
-  font-size: 17px; font-weight: 800; color: var(--blue-700);
-  text-decoration: none;
-}
-.nav-logo-icon {
-  width: 34px; height: 34px; border-radius: 10px;
-  background: linear-gradient(135deg, var(--blue-700), var(--blue-500));
-  display: flex; align-items: center; justify-content: center;
-  font-size: 17px; flex-shrink: 0;
-  box-shadow: 0 4px 12px rgba(37,99,235,0.35);
-}
-.nav-logo span.hash { color: var(--blue-500); }
-.nav-spacer { flex: 1; }
-.nav-badge {
-  font-size: 11px; font-weight: 600; padding: 4px 12px;
-  background: var(--blue-50); color: var(--blue-700);
-  border: 1px solid var(--blue-100); border-radius: 20px;
-  display: flex; align-items: center; gap: 5px;
-}
-.nav-badge .dot { width: 6px; height: 6px; background: var(--green); border-radius: 50%; animation: pulse 2s infinite; }
-@keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.6;transform:scale(1.3)} }
-
-/* ─── MAIN LAYOUT ─── */
-.page { max-width: 1180px; margin: 0 auto; padding: 2rem 2.5rem 4rem; }
-
-/* ─── HERO ─── */
-.hero {
-  background: linear-gradient(135deg, var(--blue-900) 0%, var(--blue-700) 60%, #1e40af 100%);
-  border-radius: 22px; padding: 3rem 2.5rem;
-  position: relative; overflow: hidden;
-  margin-bottom: 1.75rem;
-  box-shadow: 0 20px 60px rgba(15,45,107,0.3);
-}
-.hero::before {
-  content:''; position:absolute; top:-80px; right:-80px;
-  width:320px; height:320px; border-radius:50%;
-  background: rgba(255,255,255,0.05);
-}
-.hero::after {
-  content:''; position:absolute; bottom:-60px; left:-40px;
-  width:240px; height:240px; border-radius:50%;
-  background: rgba(255,255,255,0.04);
-}
-.hero-inner { position: relative; z-index: 1; display: flex; align-items: center; gap: 2.5rem; }
-.hero-text { flex: 1; }
-.hero-tag {
-  display: inline-flex; align-items: center; gap: 6px;
-  font-size: 11px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase;
-  color: rgba(255,255,255,0.7);
-  background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2);
-  padding: 5px 14px; border-radius: 20px; margin-bottom: 1rem;
-}
-.hero h1 { font-size: 36px; font-weight: 800; color: #fff; line-height: 1.2; margin-bottom: 0.9rem; }
-.hero h1 span { color: #93c5fd; }
-.hero-desc { font-size: 14.5px; color: rgba(255,255,255,0.72); line-height: 1.8; margin-bottom: 1.6rem; max-width: 520px; }
-.hero-btns { display: flex; gap: 10px; flex-wrap: wrap; }
-.btn-white {
-  padding: 11px 26px; font-size: 13px; font-weight: 700; font-family: inherit;
-  background: #fff; color: var(--blue-700); border: none; border-radius: 10px;
-  cursor: pointer; transition: all 0.2s; text-decoration: none; display: inline-flex; align-items: center; gap: 6px;
-}
-.btn-white:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(0,0,0,0.2); }
-.btn-outline-white {
-  padding: 11px 24px; font-size: 13px; font-weight: 600; font-family: inherit;
-  background: rgba(255,255,255,0.1); color: #fff;
-  border: 1px solid rgba(255,255,255,0.3); border-radius: 10px;
-  cursor: pointer; transition: all 0.2s; display: inline-flex; align-items: center; gap: 6px;
-}
-.btn-outline-white:hover { background: rgba(255,255,255,0.18); transform: translateY(-2px); }
-.hero-shield {
-  font-size: 90px; line-height: 1; flex-shrink: 0;
-  filter: drop-shadow(0 8px 24px rgba(0,0,0,0.3));
-  animation: float 4s ease-in-out infinite;
-}
-@keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-8px)} }
-
-/* ─── STATS ROW ─── */
-.stats-row { display: grid; grid-template-columns: repeat(4,1fr); gap: 14px; margin-bottom: 1.75rem; }
-.stat-card {
-  background: var(--surface); border-radius: var(--radius); padding: 1.3rem 1.2rem;
-  border: 1px solid var(--border); box-shadow: var(--shadow);
-  display: flex; align-items: center; gap: 14px;
-  transition: all 0.22s;
-}
-.stat-card:hover { box-shadow: var(--shadow-md); transform: translateY(-2px); }
-.stat-icon {
-  width: 46px; height: 46px; border-radius: 12px;
-  display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0;
-}
-.stat-icon.blue   { background: var(--blue-50); }
-.stat-icon.green  { background: var(--green-bg); }
-.stat-icon.orange { background: var(--orange-bg); }
-.stat-icon.purple { background: var(--purple-bg); }
-.stat-num { font-size: 22px; font-weight: 800; line-height: 1.1; }
-.stat-num.blue   { color: var(--blue-600); }
-.stat-num.green  { color: var(--green); }
-.stat-num.orange { color: var(--orange); }
-.stat-num.purple { color: var(--purple); }
-.stat-label { font-size: 12px; color: var(--muted); margin-top: 2px; }
-
-/* ─── SECTION HEADER ─── */
-.section-header { display: flex; align-items: center; gap: 12px; margin-bottom: 1.2rem; }
-.section-header h2 { font-size: 18px; font-weight: 700; color: var(--text); }
-.section-header p { font-size: 13px; color: var(--muted); }
-.section-divider { flex: 1; height: 1px; background: var(--border); }
-
-/* ─── FILTER TABS ─── */
-.filter-tabs { display: flex; gap: 6px; margin-bottom: 1.2rem; flex-wrap: wrap; }
-.filter-tab {
-  padding: 7px 16px; border-radius: 20px; font-size: 12.5px; font-weight: 600;
-  border: 1.5px solid var(--border); background: var(--surface);
-  color: var(--muted); cursor: pointer; transition: all 0.18s; font-family: inherit;
-}
-.filter-tab:hover { border-color: var(--blue-500); color: var(--blue-600); }
-.filter-tab.active { background: var(--blue-600); color: #fff; border-color: var(--blue-600); }
-
-/* ─── TOOL GRID ─── */
-.tools-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-bottom: 1.75rem; }
-.tool-card {
-  background: var(--surface); border-radius: var(--radius); padding: 1.5rem;
-  border: 1px solid var(--border); border-top: 3px solid transparent;
-  box-shadow: var(--shadow); cursor: pointer;
-  transition: all 0.22s; display: flex; flex-direction: column; gap: 0; position: relative;
-  overflow: hidden;
-}
-.tool-card::after {
-  content: ''; position: absolute; inset: 0;
-  background: linear-gradient(135deg, rgba(37,99,235,0.03) 0%, transparent 60%);
-  opacity: 0; transition: opacity 0.22s;
-}
-.tool-card:hover { box-shadow: var(--shadow-lg); transform: translateY(-3px); }
-.tool-card:hover::after { opacity: 1; }
-.tool-card.blue   { border-top-color: var(--blue-600); }
-.tool-card.green  { border-top-color: var(--green); }
-.tool-card.orange { border-top-color: var(--orange); }
-.tool-card.purple { border-top-color: var(--purple); }
-.tool-card.rose   { border-top-color: var(--rose); }
-.tool-card.teal   { border-top-color: var(--teal); }
-.tool-card.amber  { border-top-color: var(--amber); }
-
-.tool-card-top { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 0.75rem; }
-.tool-icon-wrap { width: 48px; height: 48px; border-radius: 13px; display: flex; align-items: center; justify-content: center; font-size: 22px; }
-.tool-icon-wrap.blue   { background: var(--blue-50); }
-.tool-icon-wrap.green  { background: var(--green-bg); }
-.tool-icon-wrap.orange { background: var(--orange-bg); }
-.tool-icon-wrap.purple { background: var(--purple-bg); }
-.tool-icon-wrap.rose   { background: var(--rose-bg); }
-.tool-icon-wrap.teal   { background: var(--teal-bg); }
-.tool-icon-wrap.amber  { background: var(--amber-bg); }
-
-.tool-badge {
-  font-size: 10px; font-weight: 700; padding: 3px 9px;
-  border-radius: 10px; background: var(--blue-50); color: var(--blue-700);
-}
-.tool-badge.new { background: var(--green-bg); color: var(--green); }
-.tool-card h3 { font-size: 14.5px; font-weight: 700; color: var(--text); margin-bottom: 0.4rem; }
-.tool-card p { font-size: 12.5px; color: var(--muted); line-height: 1.7; flex: 1; margin-bottom: 1rem; }
-.tool-card-btn {
-  display: inline-flex; align-items: center; gap: 5px;
-  font-size: 12px; font-weight: 600; padding: 8px 16px;
-  border: 1.5px solid var(--border); border-radius: 9px;
-  background: transparent; color: var(--text); font-family: inherit;
-  cursor: pointer; transition: all 0.18s; align-self: flex-start;
-}
-.tool-card-btn:hover { background: var(--blue-50); border-color: var(--blue-200, #bfdbfe); color: var(--blue-700); }
-
-/* ─── MODAL ─── */
-.modal-backdrop {
-  position: fixed; inset: 0; z-index: 1000;
-  background: rgba(10,20,50,0.55); backdrop-filter: blur(6px);
-  display: none; align-items: center; justify-content: center; padding: 1rem;
-}
-.modal-backdrop.open { display: flex; }
-.modal {
-  background: var(--surface); border-radius: 22px;
-  width: 100%; max-width: 640px; max-height: 90vh;
-  overflow-y: auto; box-shadow: var(--shadow-lg);
-  animation: slideUp 0.3s cubic-bezier(0.34,1.56,0.64,1);
-}
-@keyframes slideUp { from{opacity:0;transform:translateY(30px) scale(0.97)} to{opacity:1;transform:none} }
-.modal-header {
-  padding: 1.5rem 1.75rem 1.25rem;
-  border-bottom: 1px solid var(--border);
-  display: flex; align-items: center; gap: 14px;
-}
-.modal-header-icon { font-size: 28px; }
-.modal-header h3 { font-size: 18px; font-weight: 700; }
-.modal-header p { font-size: 13px; color: var(--muted); margin-top: 2px; }
-.modal-close {
-  margin-left: auto; width: 34px; height: 34px; border-radius: 10px;
-  background: var(--bg); border: 1px solid var(--border);
-  font-size: 16px; cursor: pointer; display: flex; align-items: center; justify-content: center;
-  transition: all 0.18s; flex-shrink: 0;
-}
-.modal-close:hover { background: var(--rose-bg); border-color: var(--rose); color: var(--rose); }
-.modal-body { padding: 1.5rem 1.75rem; }
-
-/* ─── DROPZONE ─── */
-.dropzone {
-  border: 2px dashed var(--border); border-radius: 14px;
-  padding: 2.5rem 1.5rem; text-align: center; cursor: pointer;
-  transition: all 0.2s; background: var(--bg);
-  margin-bottom: 1.25rem;
-}
-.dropzone:hover, .dropzone.dragover {
-  border-color: var(--blue-500); background: var(--blue-50);
-}
-.dropzone-icon { font-size: 38px; margin-bottom: 0.6rem; }
-.dropzone h4 { font-size: 14.5px; font-weight: 600; margin-bottom: 0.3rem; }
-.dropzone p { font-size: 12.5px; color: var(--muted); }
-.dropzone input[type=file] { display: none; }
-
-/* ─── FORM ELEMENTS ─── */
-label.field-label { display: block; font-size: 12.5px; font-weight: 600; color: var(--text); margin-bottom: 6px; }
-input[type=text], input[type=password], input[type=number], textarea, select {
-  width: 100%; padding: 10px 14px; font-size: 13.5px; font-family: inherit;
-  border: 1.5px solid var(--border); border-radius: 10px;
-  background: var(--bg); color: var(--text); outline: none;
-  transition: border-color 0.18s;
-}
-input:focus, textarea:focus, select:focus { border-color: var(--blue-500); background: #fff; }
-textarea { resize: vertical; min-height: 120px; }
-.field-group { margin-bottom: 1rem; }
-
-/* ─── BUTTONS ─── */
-.btn-primary {
-  padding: 11px 24px; font-size: 13px; font-weight: 700; font-family: inherit;
-  background: var(--blue-600); color: #fff; border: none; border-radius: 10px;
-  cursor: pointer; transition: all 0.2s; display: inline-flex; align-items: center; gap: 7px;
-}
-.btn-primary:hover { background: var(--blue-700); transform: translateY(-1px); box-shadow: 0 6px 16px rgba(37,99,235,0.35); }
-.btn-secondary {
-  padding: 11px 20px; font-size: 13px; font-weight: 600; font-family: inherit;
-  background: var(--bg); color: var(--text); border: 1.5px solid var(--border); border-radius: 10px;
-  cursor: pointer; transition: all 0.18s; display: inline-flex; align-items: center; gap: 6px;
-}
-.btn-secondary:hover { background: #e8edf7; }
-.btn-danger {
-  padding: 11px 20px; font-size: 13px; font-weight: 600; font-family: inherit;
-  background: var(--rose-bg); color: var(--rose); border: 1.5px solid #fecdd3; border-radius: 10px;
-  cursor: pointer; transition: all 0.18s;
-}
-.btn-danger:hover { background: #fecdd3; }
-.btn-row { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 1.25rem; }
-.btn-green {
-  padding: 11px 24px; font-size: 13px; font-weight: 700; font-family: inherit;
-  background: var(--green); color: #fff; border: none; border-radius: 10px;
-  cursor: pointer; transition: all 0.2s; display: inline-flex; align-items: center; gap: 7px;
-}
-.btn-green:hover { background: #15803d; transform: translateY(-1px); }
-
-/* ─── FILE LIST ─── */
-.file-list { display: flex; flex-direction: column; gap: 8px; margin-bottom: 1rem; }
-.file-item {
-  display: flex; align-items: center; gap: 10px;
-  background: var(--bg); border: 1px solid var(--border);
-  border-radius: 10px; padding: 10px 14px;
-  font-size: 13px;
-}
-.file-item-icon { font-size: 20px; flex-shrink: 0; }
-.file-item-name { flex: 1; font-weight: 500; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.file-item-size { font-size: 11.5px; color: var(--light); flex-shrink: 0; }
-.file-item-del { font-size: 14px; cursor: pointer; color: var(--light); transition: color 0.15s; flex-shrink: 0; background: none; border: none; }
-.file-item-del:hover { color: var(--rose); }
-
-/* ─── RESULT BOX ─── */
-.result-box {
-  background: var(--blue-50); border: 1.5px solid var(--blue-100);
-  border-radius: 12px; padding: 1.25rem 1.5rem;
-  display: none;
-}
-.result-box.show { display: block; }
-.result-box h4 { font-size: 14px; font-weight: 700; color: var(--blue-700); margin-bottom: 0.5rem; display: flex; align-items: center; gap: 7px; }
-.result-box p { font-size: 13px; color: var(--muted); line-height: 1.7; }
-.result-box .result-text {
-  font-family: monospace; font-size: 13px; background: #fff;
-  border: 1px solid var(--border); border-radius: 8px;
-  padding: 12px; margin-top: 10px; word-break: break-all; line-height: 1.7;
-  max-height: 200px; overflow-y: auto;
-}
-
-/* ─── CANVAS SIGN ─── */
-#signCanvas {
-  width: 100%; border: 2px solid var(--border); border-radius: 12px;
-  background: #fff; cursor: crosshair; display: block;
-  touch-action: none;
-}
-
-/* ─── TEXT EDITOR ─── */
-.toolbar {
-  display: flex; flex-wrap: wrap; gap: 4px;
-  padding: 8px 10px; background: var(--bg);
-  border: 1.5px solid var(--border); border-bottom: none;
-  border-radius: 12px 12px 0 0;
-}
-.tb-btn {
-  padding: 5px 10px; font-size: 12.5px; font-family: inherit; font-weight: 600;
-  background: var(--surface); border: 1px solid var(--border);
-  border-radius: 7px; cursor: pointer; color: var(--text); transition: all 0.15s;
-  min-width: 34px; text-align: center;
-}
-.tb-btn:hover { background: var(--blue-50); border-color: var(--blue-300, #93c5fd); color: var(--blue-700); }
-.tb-btn.active { background: var(--blue-600); color: #fff; border-color: var(--blue-600); }
-.tb-sep { width: 1px; height: 26px; background: var(--border); margin: 0 2px; align-self: center; }
-#editorArea {
-  min-height: 240px; padding: 14px; font-size: 14px; line-height: 1.8;
-  border: 1.5px solid var(--border); border-top: none;
-  border-radius: 0 0 12px 12px; background: #fff;
-  outline: none; overflow-y: auto;
-}
-.editor-footer {
-  display: flex; align-items: center; justify-content: space-between;
-  font-size: 11.5px; color: var(--light); margin-top: 6px;
-}
-
-/* ─── CSV TABLE ─── */
-#csvTable {
-  width: 100%; border-collapse: collapse; font-size: 12.5px;
-  overflow: auto; display: block; max-height: 360px;
-}
-#csvTable th {
-  background: var(--blue-600); color: #fff; padding: 9px 12px;
-  text-align: left; font-weight: 600; position: sticky; top: 0;
-}
-#csvTable td { padding: 8px 12px; border-bottom: 1px solid var(--border); }
-#csvTable tr:hover td { background: var(--blue-50); }
-.csv-wrap { border: 1.5px solid var(--border); border-radius: 12px; overflow: hidden; }
-
-/* ─── ENCRYPT ─── */
-.strength-bar { height: 5px; border-radius: 3px; background: var(--border); margin-top: 6px; overflow: hidden; }
-.strength-fill { height: 100%; border-radius: 3px; width: 0%; transition: width 0.3s, background 0.3s; }
-
-/* ─── IMAGE PREVIEW ─── */
-.img-preview-wrap {
-  display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 1rem;
-}
-.img-preview {
-  width: 80px; height: 80px; border-radius: 10px; object-fit: cover;
-  border: 2px solid var(--border);
-}
-
-/* ─── PROGRESS ─── */
-.progress-bar { height: 8px; border-radius: 4px; background: var(--border); overflow: hidden; margin: 10px 0; }
-.progress-fill { height: 100%; border-radius: 4px; background: var(--blue-600); width: 0%; transition: width 0.5s; }
-
-/* ─── INFO CHIP ─── */
-.info-chip {
-  display: inline-flex; align-items: center; gap: 5px;
-  font-size: 11.5px; font-weight: 600; padding: 4px 12px;
-  background: var(--blue-50); color: var(--blue-700); border-radius: 20px;
-}
-
-/* ─── FOOTER ─── */
-footer {
-  text-align: center; padding: 2rem; font-size: 12.5px; color: var(--light);
-  border-top: 1px solid var(--border); background: var(--surface);
-}
-footer strong { color: var(--blue-600); }
-
-/* ─── HIDDEN ─── */
-.hidden { display: none !important; }
-
-/* ─── TOAST ─── */
-#toast {
-  position: fixed; bottom: 2rem; right: 2rem; z-index: 9999;
-  background: #1e293b; color: #fff; padding: 12px 20px; border-radius: 12px;
-  font-size: 13.5px; font-weight: 500; box-shadow: 0 8px 30px rgba(0,0,0,0.25);
-  display: flex; align-items: center; gap: 9px;
-  transform: translateY(80px); opacity: 0; transition: all 0.3s cubic-bezier(0.34,1.56,0.64,1);
-  pointer-events: none;
-}
-#toast.show { transform: translateY(0); opacity: 1; }
-
-/* ─── RESPONSIVE ─── */
-@media(max-width: 900px) {
-  .tools-grid { grid-template-columns: repeat(2,1fr); }
-  .stats-row  { grid-template-columns: repeat(2,1fr); }
-  .hero-shield { font-size: 60px; }
-  .hero h1 { font-size: 26px; }
-}
-@media(max-width: 600px) {
-  .page { padding: 1.25rem; }
-  nav   { padding: 0 1.25rem; }
-  .tools-grid { grid-template-columns: 1fr; }
-  .stats-row  { grid-template-columns: repeat(2,1fr); }
-  .hero-inner { flex-direction: column; text-align: center; }
-  .hero-shield { display: none; }
-  .hero-btns  { justify-content: center; }
-}
+:root{--blue-900:#0f2d6b;--blue-800:#1a4fa0;--blue-700:#1d4ed8;--blue-600:#2563eb;--blue-500:#3b82f6;--blue-100:#dbeafe;--blue-50:#eff6ff;--green:#16a34a;--green-bg:#dcfce7;--orange:#ea580c;--orange-bg:#ffedd5;--purple:#7c3aed;--purple-bg:#ede9fe;--rose:#e11d48;--rose-bg:#ffe4e6;--teal:#0d9488;--teal-bg:#ccfbf1;--amber:#d97706;--amber-bg:#fef3c7;--bg:#f0f4fb;--surface:#ffffff;--border:#e2e8f0;--text:#0f172a;--muted:#64748b;--light:#94a3b8;--radius:16px;--shadow:0 2px 12px rgba(15,45,107,0.07);--shadow-md:0 6px 24px rgba(15,45,107,0.12);--shadow-lg:0 16px 48px rgba(15,45,107,0.16)}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+body{font-family:system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+nav{background:rgba(255,255,255,0.95);border-bottom:1px solid var(--border);padding:0 1.5rem;display:flex;align-items:center;gap:1rem;height:56px}
+.nav-logo{display:flex;align-items:center;gap:8px;font-size:16px;font-weight:800;color:var(--blue-700)}
+.nav-logo-icon{width:32px;height:32px;border-radius:9px;background:linear-gradient(135deg,var(--blue-700),var(--blue-500));display:flex;align-items:center;justify-content:center;font-size:16px}
+.nav-spacer{flex:1}
+.nav-badge{font-size:11px;font-weight:600;padding:4px 12px;background:var(--blue-50);color:var(--blue-700);border:1px solid var(--blue-100);border-radius:20px;display:flex;align-items:center;gap:5px}
+.dot{width:6px;height:6px;background:var(--green);border-radius:50%;animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.5}}
+.page{padding:1.5rem 1.5rem 3rem}
+.hero{background:linear-gradient(135deg,var(--blue-900) 0%,var(--blue-700) 100%);border-radius:20px;padding:2.5rem 2rem;position:relative;overflow:hidden;margin-bottom:1.5rem}
+.hero h1{font-size:28px;font-weight:800;color:#fff;line-height:1.25;margin-bottom:.75rem}
+.hero h1 span{color:#93c5fd}
+.hero-desc{font-size:13.5px;color:rgba(255,255,255,0.75);line-height:1.75;margin-bottom:1.25rem}
+.hero-btns{display:flex;gap:8px;flex-wrap:wrap}
+.btn-white{padding:10px 22px;font-size:13px;font-weight:700;background:#fff;color:var(--blue-700);border:none;border-radius:9px;cursor:pointer;display:inline-flex;align-items:center;gap:6px}
+.btn-white:hover{opacity:.9}
+.btn-outline-white{padding:10px 20px;font-size:13px;font-weight:600;background:rgba(255,255,255,0.12);color:#fff;border:1px solid rgba(255,255,255,0.3);border-radius:9px;cursor:pointer;display:inline-flex;align-items:center;gap:6px}
+.btn-outline-white:hover{background:rgba(255,255,255,0.2)}
+.stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:1.5rem}
+.stat-card{background:var(--surface);border-radius:var(--radius);padding:1.1rem;border:1px solid var(--border);display:flex;align-items:center;gap:12px}
+.stat-icon{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
+.stat-icon.blue{background:var(--blue-50)}
+.stat-icon.green{background:var(--green-bg)}
+.stat-icon.orange{background:var(--orange-bg)}
+.stat-icon.purple{background:var(--purple-bg)}
+.stat-num{font-size:20px;font-weight:800;line-height:1.1}
+.stat-num.blue{color:var(--blue-600)}
+.stat-num.green{color:var(--green)}
+.stat-num.orange{color:var(--orange)}
+.stat-num.purple{color:var(--purple)}
+.stat-label{font-size:11.5px;color:var(--muted);margin-top:1px}
+.section-header{display:flex;align-items:center;gap:10px;margin-bottom:1rem}
+.section-header h2{font-size:17px;font-weight:700}
+.section-divider{flex:1;height:1px;background:var(--border)}
+.filter-tabs{display:flex;gap:6px;margin-bottom:1.1rem;flex-wrap:wrap}
+.filter-tab{padding:6px 15px;border-radius:20px;font-size:12px;font-weight:600;border:1.5px solid var(--border);background:var(--surface);color:var(--muted);cursor:pointer}
+.filter-tab.active{background:var(--blue-600);color:#fff;border-color:var(--blue-600)}
+.tools-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:1.5rem}
+.tool-card{background:var(--surface);border-radius:var(--radius);padding:1.25rem;border:1px solid var(--border);border-top:3px solid transparent;cursor:pointer;transition:box-shadow .2s,transform .2s;display:flex;flex-direction:column}
+.tool-card:hover{box-shadow:var(--shadow-md);transform:translateY(-2px)}
+.tool-card.blue{border-top-color:var(--blue-600)}
+.tool-card.green{border-top-color:var(--green)}
+.tool-card.orange{border-top-color:var(--orange)}
+.tool-card.purple{border-top-color:var(--purple)}
+.tool-card.rose{border-top-color:var(--rose)}
+.tool-card.teal{border-top-color:var(--teal)}
+.tool-card.amber{border-top-color:var(--amber)}
+.tool-card-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:.7rem}
+.tool-icon-wrap{width:46px;height:46px;border-radius:13px;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0}
+.tool-icon-wrap.blue{background:var(--blue-50)}
+.tool-icon-wrap.green{background:var(--green-bg)}
+.tool-icon-wrap.orange{background:var(--orange-bg)}
+.tool-icon-wrap.purple{background:var(--purple-bg)}
+.tool-icon-wrap.rose{background:var(--rose-bg)}
+.tool-icon-wrap.teal{background:var(--teal-bg)}
+.tool-icon-wrap.amber{background:var(--amber-bg)}
+.tool-badge{font-size:10px;font-weight:700;padding:3px 9px;border-radius:10px;background:var(--blue-50);color:var(--blue-700)}
+.tool-badge.new{background:var(--green-bg);color:var(--green)}
+.tool-card h3{font-size:14px;font-weight:700;margin-bottom:.35rem}
+.tool-card p{font-size:12px;color:var(--muted);line-height:1.65;flex:1;margin-bottom:.85rem}
+.tool-card-btn{display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:600;padding:7px 14px;border:1.5px solid var(--border);border-radius:8px;background:transparent;color:var(--text);cursor:pointer;transition:all .15s;align-self:flex-start}
+.tool-card-btn:hover{background:var(--blue-50);border-color:#bfdbfe;color:var(--blue-700)}
+.modal-backdrop{position:fixed;inset:0;z-index:1000;background:rgba(10,20,50,0.6);display:none;align-items:center;justify-content:center;padding:1rem}
+.modal-backdrop.open{display:flex}
+.modal{background:var(--surface);border-radius:20px;width:100%;max-width:620px;max-height:90vh;overflow-y:auto;box-shadow:var(--shadow-lg);animation:slideUp .25s ease}
+@keyframes slideUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:none}}
+.modal-header{padding:1.25rem 1.5rem 1rem;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:12px}
+.modal-header-icon{font-size:26px}
+.modal-header h3{font-size:17px;font-weight:700}
+.modal-header p{font-size:12.5px;color:var(--muted);margin-top:1px}
+.modal-close{margin-left:auto;width:32px;height:32px;border-radius:9px;background:var(--bg);border:1px solid var(--border);font-size:15px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.modal-close:hover{background:var(--rose-bg);color:var(--rose)}
+.modal-body{padding:1.25rem 1.5rem}
+.dropzone{border:2px dashed var(--border);border-radius:12px;padding:2rem 1rem;text-align:center;cursor:pointer;transition:all .18s;background:var(--bg);margin-bottom:1rem}
+.dropzone:hover,.dropzone.dragover{border-color:var(--blue-500);background:var(--blue-50)}
+.dropzone-icon{font-size:34px;margin-bottom:.5rem}
+.dropzone h4{font-size:14px;font-weight:600;margin-bottom:.25rem}
+.dropzone p{font-size:12px;color:var(--muted)}
+label.field-label{display:block;font-size:12px;font-weight:600;margin-bottom:5px}
+input[type=text],input[type=password],input[type=number],textarea,select{width:100%;padding:9px 12px;font-size:13px;font-family:inherit;border:1.5px solid var(--border);border-radius:9px;background:var(--bg);color:var(--text);outline:none}
+input:focus,textarea:focus,select:focus{border-color:var(--blue-500)}
+textarea{resize:vertical;min-height:120px}
+.field-group{margin-bottom:.9rem}
+.btn-primary{padding:10px 22px;font-size:13px;font-weight:700;font-family:inherit;background:var(--blue-600);color:#fff;border:none;border-radius:9px;cursor:pointer;display:inline-flex;align-items:center;gap:6px}
+.btn-primary:hover{background:var(--blue-700)}
+.btn-primary:disabled{opacity:.5;cursor:not-allowed}
+.btn-secondary{padding:10px 18px;font-size:13px;font-weight:600;font-family:inherit;background:var(--bg);color:var(--text);border:1.5px solid var(--border);border-radius:9px;cursor:pointer;display:inline-flex;align-items:center;gap:6px}
+.btn-secondary:hover{background:#e8edf7}
+.btn-green{padding:10px 22px;font-size:13px;font-weight:700;font-family:inherit;background:var(--green);color:#fff;border:none;border-radius:9px;cursor:pointer;display:inline-flex;align-items:center;gap:6px}
+.btn-green:hover{background:#15803d}
+.btn-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:1rem}
+.file-list{display:flex;flex-direction:column;gap:7px;margin-bottom:.9rem}
+.file-item{display:flex;align-items:center;gap:9px;background:var(--bg);border:1px solid var(--border);border-radius:9px;padding:9px 12px;font-size:13px}
+.file-item-icon{font-size:18px;flex-shrink:0}
+.file-item-name{flex:1;font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.file-item-size{font-size:11px;color:var(--light);flex-shrink:0}
+.file-item-del{font-size:13px;cursor:pointer;color:var(--light);background:none;border:none}
+.file-item-del:hover{color:var(--rose)}
+.img-preview-wrap{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:.9rem}
+.img-preview{width:76px;height:76px;border-radius:9px;object-fit:cover;border:2px solid var(--border)}
+.loading-overlay{display:none;align-items:center;justify-content:center;gap:10px;background:var(--blue-50);border:1px solid var(--blue-100);border-radius:10px;padding:.9rem;margin:8px 0;font-size:13px;font-weight:600;color:var(--blue-700)}
+.loading-overlay.show{display:flex}
+.spinner{width:17px;height:17px;border:2.5px solid rgba(37,99,235,0.25);border-top-color:var(--blue-600);border-radius:50%;animation:spin .7s linear infinite;display:inline-block}
+@keyframes spin{to{transform:rotate(360deg)}}
+.compress-compare{display:flex;gap:10px;margin-bottom:.9rem}
+.compress-compare>div{flex:1;text-align:center}
+.compress-compare img{width:100%;border-radius:9px;border:1px solid var(--border);max-height:180px;object-fit:contain}
+#signCanvas{width:100%;border:2px solid var(--border);border-radius:11px;background:#fff;cursor:crosshair;display:block;touch-action:none}
+.toolbar{display:flex;flex-wrap:wrap;gap:3px;padding:7px 8px;background:var(--bg);border:1.5px solid var(--border);border-bottom:none;border-radius:11px 11px 0 0}
+.tb-btn{padding:4px 9px;font-size:12px;font-family:inherit;font-weight:600;background:var(--surface);border:1px solid var(--border);border-radius:6px;cursor:pointer;min-width:30px;text-align:center}
+.tb-btn:hover{background:var(--blue-50);color:var(--blue-700)}
+.tb-sep{width:1px;height:24px;background:var(--border);margin:0 2px;align-self:center}
+#editorArea{min-height:240px;padding:12px;font-size:14px;line-height:1.8;border:1.5px solid var(--border);border-top:none;border-radius:0 0 11px 11px;background:#fff;outline:none;overflow-y:auto}
+#toast{position:fixed;bottom:1.5rem;right:1.5rem;z-index:9999;background:#1e293b;color:#fff;padding:11px 18px;border-radius:11px;font-size:13px;font-weight:500;display:flex;align-items:center;gap:8px;transform:translateY(80px);opacity:0;transition:all .3s ease;pointer-events:none;max-width:300px}
+#toast.show{transform:translateY(0);opacity:1}
+#toast.error{background:#7f1d1d}
+#toast.success{background:#14532d}
+@media(max-width:900px){.tools-grid{grid-template-columns:repeat(2,1fr)}.stats-row{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:580px){.tools-grid{grid-template-columns:1fr}}
 </style>
-</head>
-<body>
 
-<!-- NAV -->
 <nav>
-  <a href="#" class="nav-logo">
+  <div class="nav-logo">
     <div class="nav-logo-icon">🛡️</div>
-    <span><span class="hash">#</span>JagaDokumen</span>
-  </a>
-  <div class="nav-spacer"></div>
-  <div class="nav-badge">
-    <span class="dot"></span>
-    100% Lokal — Tanpa Upload Server
+    <span>#JagaDokumen</span>
   </div>
+  <div class="nav-spacer"></div>
+  <div class="nav-badge"><span class="dot"></span>100% Lokal — Tanpa Upload Server</div>
 </nav>
 
-<!-- PAGE -->
 <div class="page">
-
-  <!-- HERO -->
   <div class="hero">
-    <div class="hero-inner">
-      <div class="hero-text">
-        <div class="hero-tag">🔒 Keamanan Dokumen Anda adalah Prioritas</div>
-        <h1>Kelola Dokumen Anda<br><span>Tanpa Risiko Kebocoran Data</span></h1>
-        <p class="hero-desc">Semua alat pengolah dokumen berjalan 100% di browser Anda. File tidak pernah dikirim ke server manapun. Privasi terjaga sepenuhnya.</p>
-        <div class="hero-btns">
-          <button class="btn-white" onclick="scrollToTools()">⚡ Mulai Pakai Sekarang</button>
-          <button class="btn-outline-white" onclick="showPrivacyInfo()">🔍 Pelajari Cara Kerjanya</button>
-        </div>
-      </div>
-      <div class="hero-shield">🛡️</div>
+    <h1>Kelola Dokumen Anda<br><span>Tanpa Risiko Kebocoran Data</span></h1>
+    <p class="hero-desc">Semua alat berjalan 100% di browser. File tidak pernah dikirim ke server. Privasi terjaga sepenuhnya.</p>
+    <div class="hero-btns">
+      <button class="btn-white" onclick="document.getElementById('toolsSection').scrollIntoView({behavior:'smooth'})">⚡ Mulai Pakai</button>
+      <button class="btn-outline-white" onclick="openModal('privacyModal')">🔍 Cara Kerjanya</button>
     </div>
   </div>
 
-  <!-- STATS -->
   <div class="stats-row">
-    <div class="stat-card">
-      <div class="stat-icon blue">📄</div>
-      <div>
-        <div class="stat-num blue" id="statFiles">0</div>
-        <div class="stat-label">File Diproses</div>
-      </div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-icon green">✅</div>
-      <div>
-        <div class="stat-num green">12</div>
-        <div class="stat-label">Fitur Tersedia</div>
-      </div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-icon orange">☁️</div>
-      <div>
-        <div class="stat-num orange" style="font-size:16px">0 Byte</div>
-        <div class="stat-label">Data Dikirim ke Server</div>
-      </div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-icon purple">⚡</div>
-      <div>
-        <div class="stat-num purple">100%</div>
-        <div class="stat-label">Proses di Browser</div>
-      </div>
-    </div>
+    <div class="stat-card"><div class="stat-icon blue">📄</div><div><div class="stat-num blue" id="statFiles">0</div><div class="stat-label">File Diproses</div></div></div>
+    <div class="stat-card"><div class="stat-icon green">✅</div><div><div class="stat-num green">10</div><div class="stat-label">Fitur Tersedia</div></div></div>
+    <div class="stat-card"><div class="stat-icon orange">☁️</div><div><div class="stat-num orange" style="font-size:15px">0 Byte</div><div class="stat-label">Data ke Server</div></div></div>
+    <div class="stat-card"><div class="stat-icon purple">⚡</div><div><div class="stat-num purple">100%</div><div class="stat-label">Proses di Browser</div></div></div>
   </div>
 
-  <!-- FILTER -->
   <div id="toolsSection">
     <div class="section-header">
       <h2>🧰 Semua Alat</h2>
       <div class="section-divider"></div>
-      <p>12 alat tersedia</p>
+      <p style="font-size:13px;color:var(--muted)">10 alat tersedia</p>
     </div>
     <div class="filter-tabs">
       <button class="filter-tab active" onclick="filterTools('semua',this)">Semua</button>
@@ -534,190 +161,43 @@ footer strong { color: var(--blue-600); }
       <button class="filter-tab" onclick="filterTools('teks',this)">📝 Teks</button>
       <button class="filter-tab" onclick="filterTools('gambar',this)">🖼️ Gambar</button>
       <button class="filter-tab" onclick="filterTools('keamanan',this)">🔒 Keamanan</button>
-      <button class="filter-tab" onclick="filterTools('lainnya',this)">✨ Lainnya</button>
+      <button class="filter-tab" onclick="filterTools('utilitas',this)">🔧 Utilitas</button>
     </div>
   </div>
 
-  <!-- TOOLS GRID -->
   <div class="tools-grid" id="toolsGrid">
-
-    <!-- 1. Merge PDF -->
-    <div class="tool-card blue" data-cat="pdf">
-      <div class="tool-card-top">
-        <div class="tool-icon-wrap blue">📄</div>
-        <span class="tool-badge">PDF</span>
-      </div>
-      <h3>Gabungkan PDF</h3>
-      <p>Satukan beberapa file PDF menjadi satu dokumen. Atur urutan sesuka Anda sebelum menggabungkan.</p>
-      <button class="tool-card-btn" onclick="openModal('mergePdfModal')">Buka Alat →</button>
-    </div>
-
-    <!-- 2. Split PDF -->
-    <div class="tool-card orange" data-cat="pdf">
-      <div class="tool-card-top">
-        <div class="tool-icon-wrap orange">✂️</div>
-        <span class="tool-badge" style="background:var(--orange-bg);color:var(--orange)">PDF</span>
-      </div>
-      <h3>Pisahkan PDF</h3>
-      <p>Ekstrak halaman tertentu dari PDF Anda. Tentukan rentang halaman atau halaman spesifik yang ingin dipisah.</p>
-      <button class="tool-card-btn" onclick="openModal('splitPdfModal')">Buka Alat →</button>
-    </div>
-
-    <!-- 3. Gambar ke PDF -->
-    <div class="tool-card green" data-cat="pdf gambar">
-      <div class="tool-card-top">
-        <div class="tool-icon-wrap green">🖼️</div>
-        <span class="tool-badge" style="background:var(--green-bg);color:var(--green)">Gambar</span>
-      </div>
-      <h3>Gambar ke PDF</h3>
-      <p>Konversi satu atau lebih gambar (JPG, PNG, WebP) menjadi file PDF yang rapi dalam hitungan detik.</p>
-      <button class="tool-card-btn" onclick="openModal('imgToPdfModal')">Buka Alat →</button>
-    </div>
-
-    <!-- 4. Text Editor -->
-    <div class="tool-card blue" data-cat="teks">
-      <div class="tool-card-top">
-        <div class="tool-icon-wrap blue">📝</div>
-        <span class="tool-badge">Editor</span>
-      </div>
-      <h3>Editor Dokumen</h3>
-      <p>Tulis dan format teks dengan toolbar lengkap. Unduh hasil sebagai file TXT atau HTML. Semua offline.</p>
-      <button class="tool-card-btn" onclick="openModal('textEditorModal')">Buka Alat →</button>
-    </div>
-
-    <!-- 5. Enkripsi Teks -->
-    <div class="tool-card rose" data-cat="keamanan teks">
-      <div class="tool-card-top">
-        <div class="tool-icon-wrap rose">🔒</div>
-        <span class="tool-badge new">Keamanan</span>
-      </div>
-      <h3>Enkripsi Teks</h3>
-      <p>Amankan teks rahasia Anda dengan enkripsi berbasis password. Hanya yang tahu password bisa membacanya.</p>
-      <button class="tool-card-btn" onclick="openModal('encryptModal')">Buka Alat →</button>
-    </div>
-
-    <!-- 6. CSV Viewer -->
-    <div class="tool-card teal" data-cat="lainnya">
-      <div class="tool-card-top">
-        <div class="tool-icon-wrap teal">📊</div>
-        <span class="tool-badge" style="background:var(--teal-bg);color:var(--teal)">Data</span>
-      </div>
-      <h3>Tabel & CSV Viewer</h3>
-      <p>Buka dan baca file CSV sebagai tabel yang bersih dan mudah dibaca. Cari dan filter baris dengan cepat.</p>
-      <button class="tool-card-btn" onclick="openModal('csvModal')">Buka Alat →</button>
-    </div>
-
-    <!-- 7. Kompresi Gambar -->
-    <div class="tool-card amber" data-cat="gambar">
-      <div class="tool-card-top">
-        <div class="tool-icon-wrap amber">🗜️</div>
-        <span class="tool-badge" style="background:var(--amber-bg);color:var(--amber)">Gambar</span>
-      </div>
-      <h3>Kompres Gambar</h3>
-      <p>Kurangi ukuran file gambar tanpa kehilangan kualitas yang berarti. Mendukung JPG, PNG, dan WebP.</p>
-      <button class="tool-card-btn" onclick="openModal('compressModal')">Buka Alat →</button>
-    </div>
-
-    <!-- 8. Tanda Tangan Digital -->
-    <div class="tool-card purple" data-cat="keamanan lainnya">
-      <div class="tool-card-top">
-        <div class="tool-icon-wrap purple">✍️</div>
-        <span class="tool-badge" style="background:var(--purple-bg);color:var(--purple)">Signature</span>
-      </div>
-      <h3>Tanda Tangan Digital</h3>
-      <p>Gambar tanda tangan Anda langsung di browser lalu unduh sebagai gambar PNG transparan siap pakai.</p>
-      <button class="tool-card-btn" onclick="openModal('signModal')">Buka Alat →</button>
-    </div>
-
-    <!-- 9. Password Generator -->
-    <div class="tool-card rose" data-cat="keamanan">
-      <div class="tool-card-top">
-        <div class="tool-icon-wrap rose">🔑</div>
-        <span class="tool-badge new">Keamanan</span>
-      </div>
-      <h3>Generator Password</h3>
-      <p>Buat password kuat yang aman secara acak. Sesuaikan panjang dan karakter yang diinginkan.</p>
-      <button class="tool-card-btn" onclick="openModal('passGenModal')">Buka Alat →</button>
-    </div>
-
-    <!-- 10. Word Counter -->
-    <div class="tool-card blue" data-cat="teks">
-      <div class="tool-card-top">
-        <div class="tool-icon-wrap blue">🔢</div>
-        <span class="tool-badge">Teks</span>
-      </div>
-      <h3>Penghitung Kata & Karakter</h3>
-      <p>Analisis teks Anda: hitung kata, karakter, kalimat, paragraf, dan estimasi waktu baca secara real-time.</p>
-      <button class="tool-card-btn" onclick="openModal('wordCountModal')">Buka Alat →</button>
-    </div>
-
-    <!-- 11. Base64 -->
-    <div class="tool-card teal" data-cat="lainnya keamanan">
-      <div class="tool-card-top">
-        <div class="tool-icon-wrap teal">🔄</div>
-        <span class="tool-badge" style="background:var(--teal-bg);color:var(--teal)">Encode</span>
-      </div>
-      <h3>Base64 Encode/Decode</h3>
-      <p>Encode teks atau file ke format Base64 dan decode kembali. Berguna untuk berbagi data secara aman.</p>
-      <button class="tool-card-btn" onclick="openModal('base64Modal')">Buka Alat →</button>
-    </div>
-
-    <!-- 12. PDF Metadata Viewer -->
-    <div class="tool-card green" data-cat="pdf lainnya">
-      <div class="tool-card-top">
-        <div class="tool-icon-wrap green">🔍</div>
-        <span class="tool-badge new" style="background:var(--green-bg);color:var(--green)">Baru</span>
-      </div>
-      <h3>Penghapus Metadata</h3>
-      <p>Lihat dan bersihkan metadata tersembunyi dalam file Anda (nama penulis, tanggal, lokasi, dan lainnya).</p>
-      <button class="tool-card-btn" onclick="openModal('metaModal')">Buka Alat →</button>
-    </div>
-
+    <div class="tool-card blue" data-cat="pdf"><div class="tool-card-top"><div class="tool-icon-wrap blue">📄</div><span class="tool-badge">PDF</span></div><h3>Gabungkan PDF</h3><p>Satukan beberapa file PDF menjadi satu dokumen. Atur urutan sesuka Anda.</p><button class="tool-card-btn" onclick="openModal('mergePdfModal')">Buka Alat →</button></div>
+    <div class="tool-card orange" data-cat="pdf"><div class="tool-card-top"><div class="tool-icon-wrap orange">✂️</div><span class="tool-badge" style="background:var(--orange-bg);color:var(--orange)">PDF</span></div><h3>Pisahkan PDF</h3><p>Ekstrak halaman tertentu dari PDF Anda dengan rentang halaman kustom.</p><button class="tool-card-btn" onclick="openModal('splitPdfModal')">Buka Alat →</button></div>
+    <div class="tool-card green" data-cat="pdf gambar"><div class="tool-card-top"><div class="tool-icon-wrap green">🖼️</div><span class="tool-badge" style="background:var(--green-bg);color:var(--green)">Gambar</span></div><h3>Gambar ke PDF</h3><p>Konversi JPG, PNG, WebP menjadi file PDF dalam hitungan detik.</p><button class="tool-card-btn" onclick="openModal('imgToPdfModal')">Buka Alat →</button></div>
+    <div class="tool-card blue" data-cat="teks"><div class="tool-card-top"><div class="tool-icon-wrap blue">📝</div><span class="tool-badge">Editor</span></div><h3>Editor Dokumen</h3><p>Tulis dan format teks dengan toolbar lengkap. Unduh sebagai TXT atau HTML.</p><button class="tool-card-btn" onclick="openModal('textEditorModal')">Buka Alat →</button></div>
+    <div class="tool-card amber" data-cat="gambar"><div class="tool-card-top"><div class="tool-icon-wrap amber">🗜️</div><span class="tool-badge" style="background:var(--amber-bg);color:var(--amber)">Gambar</span></div><h3>Kompres Gambar</h3><p>Kurangi ukuran file gambar. Preview before/after secara langsung.</p><button class="tool-card-btn" onclick="openModal('compressModal')">Buka Alat →</button></div>
+    <div class="tool-card purple" data-cat="keamanan"><div class="tool-card-top"><div class="tool-icon-wrap purple">✍️</div><span class="tool-badge" style="background:var(--purple-bg);color:var(--purple)">Signature</span></div><h3>Tanda Tangan Digital</h3><p>Gambar tanda tangan langsung di browser, unduh sebagai PNG transparan.</p><button class="tool-card-btn" onclick="openModal('signModal')">Buka Alat →</button></div>
+    <div class="tool-card teal" data-cat="teks utilitas"><div class="tool-card-top"><div class="tool-icon-wrap teal">🔢</div><span class="tool-badge" style="background:var(--teal-bg);color:var(--teal)">Teks</span></div><h3>Penghitung Kata</h3><p>Hitung kata, karakter, kalimat, paragraf, dan estimasi waktu baca.</p><button class="tool-card-btn" onclick="openModal('wordCountModal')">Buka Alat →</button></div>
+    <div class="tool-card rose" data-cat="pdf utilitas"><div class="tool-card-top"><div class="tool-icon-wrap rose">🔄</div><span class="tool-badge" style="background:var(--rose-bg);color:var(--rose)">PDF</span></div><h3>Putar Halaman PDF</h3><p>Putar satu atau semua halaman PDF ke kiri, kanan, atau 180°.</p><button class="tool-card-btn" onclick="openModal('rotatePdfModal')">Buka Alat →</button></div>
+    <div class="tool-card blue" data-cat="pdf keamanan"><div class="tool-card-top"><div class="tool-icon-wrap blue">💧</div><span class="tool-badge">PDF</span></div><h3>Watermark PDF</h3><p>Tambahkan teks watermark ke semua halaman PDF. Atur warna dan transparansi.</p><button class="tool-card-btn" onclick="openModal('watermarkModal')">Buka Alat →</button></div>
+    <div class="tool-card purple" data-cat="utilitas teks"><div class="tool-card-top"><div class="tool-icon-wrap purple">🔤</div><span class="tool-badge new">Baru</span></div><h3>Base64 Encoder/Decoder</h3><p>Enkripsi teks ke Base64 atau dekode kembali ke teks asli.</p><button class="tool-card-btn" onclick="openModal('base64Modal')">Buka Alat →</button></div>
   </div>
 
-  <!-- PRIVACY BANNER -->
-  <div id="privacyBanner" style="background:linear-gradient(135deg,#f0f9ff,#e0f2fe);border:1.5px solid #bae6fd;border-radius:16px;padding:1.5rem 1.75rem;display:flex;gap:16px;align-items:flex-start;margin-bottom:1.75rem;">
-    <div style="font-size:32px;flex-shrink:0">🔐</div>
-    <div>
-      <h3 style="font-size:15px;font-weight:700;color:#0369a1;margin-bottom:4px;">Bagaimana #JagaDokumen Melindungi Privasi Anda?</h3>
-      <p style="font-size:13px;color:#0284c7;line-height:1.75;">Semua pemrosesan dilakukan menggunakan <strong>Web APIs</strong> bawaan browser (File API, Canvas API, dan sebagainya). File Anda <strong>tidak pernah meninggalkan perangkat Anda</strong>. Tidak ada backend, tidak ada database, tidak ada tracking. Anda dapat menggunakan alat ini bahkan dalam mode <strong>offline</strong>.</p>
-    </div>
+  <div style="background:linear-gradient(135deg,#f0f9ff,#e0f2fe);border:1.5px solid #bae6fd;border-radius:14px;padding:1.25rem 1.5rem;display:flex;gap:14px;align-items:flex-start">
+    <div style="font-size:28px">🔐</div>
+    <div><h3 style="font-size:14px;font-weight:700;color:#0369a1;margin-bottom:3px">Bagaimana #JagaDokumen Melindungi Privasi Anda?</h3><p style="font-size:12.5px;color:#0284c7;line-height:1.7">Semua pemrosesan dilakukan di browser. File Anda tidak pernah meninggalkan perangkat. Tidak ada backend, tidak ada tracking.</p></div>
   </div>
-
-</div><!-- /page -->
-
-<!-- FOOTER -->
-<footer>
-  Dibuat dengan ❤️ oleh <strong>#JagaDokumen</strong> — Keamanan Dokumen Tanpa Kompromi &nbsp;•&nbsp; 100% Open & Transparan &nbsp;•&nbsp; Semua berjalan di browser Anda
-</footer>
-
-<!-- ─────────────────────────────────────────────
-     MODALS
-───────────────────────────────────────────── -->
+</div>
 
 <!-- MERGE PDF -->
 <div class="modal-backdrop" id="mergePdfModal">
   <div class="modal">
-    <div class="modal-header">
-      <div class="modal-header-icon">📄</div>
-      <div><h3>Gabungkan PDF</h3><p>Pilih beberapa PDF, atur urutan, lalu unduh hasilnya</p></div>
-      <button class="modal-close" onclick="closeModal('mergePdfModal')">✕</button>
-    </div>
+    <div class="modal-header"><div class="modal-header-icon">📄</div><div><h3>Gabungkan PDF</h3><p>Pilih beberapa PDF, atur urutan, lalu unduh hasilnya</p></div><button class="modal-close" onclick="closeModal('mergePdfModal')">✕</button></div>
     <div class="modal-body">
       <div class="dropzone" id="mergeDrop" onclick="document.getElementById('mergeInput').click()" ondragover="dragOver(event,this)" ondragleave="dragLeave(this)" ondrop="dropFiles(event,'mergeInput','mergePdfList',true)">
-        <input type="file" id="mergeInput" accept=".pdf" multiple onchange="addFilesToList('mergeInput','mergePdfList',true)">
-        <div class="dropzone-icon">📂</div>
-        <h4>Klik atau seret file PDF di sini</h4>
-        <p>Pilih beberapa file PDF sekaligus</p>
+        <input type="file" id="mergeInput" accept=".pdf" multiple style="display:none" onchange="addFilesToList('mergeInput','mergePdfList',true)">
+        <div class="dropzone-icon">📂</div><h4>Klik atau seret file PDF</h4><p>Pilih beberapa file PDF sekaligus</p>
       </div>
       <div class="file-list" id="mergePdfList"></div>
-      <div class="result-box" id="mergeResult">
-        <h4>✅ Simulasi Selesai</h4>
-        <p>File berhasil digabungkan. Dalam implementasi penuh dengan library PDF.js/pdf-lib, file PDF asli akan digabung dan dapat diunduh. Fitur ini mendemonstrasikan alur kerja lengkap.</p>
-      </div>
+      <div class="loading-overlay" id="mergeLoading"><div class="spinner"></div> Menggabungkan PDF…</div>
       <div class="btn-row">
-        <button class="btn-primary" onclick="simulateMerge()">📄 Gabungkan PDF</button>
-        <button class="btn-secondary" onclick="clearList('mergePdfList','mergeResult')">🗑️ Hapus Semua</button>
+        <button class="btn-primary" id="mergePdfBtn" onclick="mergePdfs()">📄 Gabungkan & Unduh</button>
+        <button class="btn-secondary" onclick="clearList('mergePdfList')">🗑️ Hapus Semua</button>
       </div>
     </div>
   </div>
@@ -726,30 +206,17 @@ footer strong { color: var(--blue-600); }
 <!-- SPLIT PDF -->
 <div class="modal-backdrop" id="splitPdfModal">
   <div class="modal">
-    <div class="modal-header">
-      <div class="modal-header-icon">✂️</div>
-      <div><h3>Pisahkan PDF</h3><p>Ekstrak halaman tertentu dari file PDF</p></div>
-      <button class="modal-close" onclick="closeModal('splitPdfModal')">✕</button>
-    </div>
+    <div class="modal-header"><div class="modal-header-icon">✂️</div><div><h3>Pisahkan PDF</h3><p>Ekstrak halaman tertentu dari file PDF</p></div><button class="modal-close" onclick="closeModal('splitPdfModal')">✕</button></div>
     <div class="modal-body">
-      <div class="dropzone" id="splitDrop" onclick="document.getElementById('splitInput').click()" ondragover="dragOver(event,this)" ondragleave="dragLeave(this)" ondrop="dropFiles(event,'splitInput','splitFileList',false)">
-        <input type="file" id="splitInput" accept=".pdf" onchange="addFilesToList('splitInput','splitFileList',false)">
-        <div class="dropzone-icon">✂️</div>
-        <h4>Klik atau seret file PDF</h4>
-        <p>Pilih satu file PDF</p>
+      <div class="dropzone" onclick="document.getElementById('splitInput').click()" ondragover="dragOver(event,this)" ondragleave="dragLeave(this)" ondrop="dropFiles(event,'splitInput','splitFileList',false)">
+        <input type="file" id="splitInput" accept=".pdf" style="display:none" onchange="addFilesToList('splitInput','splitFileList',false);loadSplitInfo()">
+        <div class="dropzone-icon">✂️</div><h4>Klik atau seret file PDF</h4><p>Satu file PDF</p>
       </div>
       <div class="file-list" id="splitFileList"></div>
-      <div class="field-group">
-        <label class="field-label">Rentang Halaman (contoh: 1-3, 5, 7-9)</label>
-        <input type="text" id="splitRange" placeholder="1-3, 5, 7-9" value="1-3">
-      </div>
-      <div class="result-box" id="splitResult">
-        <h4>✅ Simulasi Selesai</h4>
-        <p id="splitResultText">Halaman berhasil diekstrak.</p>
-      </div>
-      <div class="btn-row">
-        <button class="btn-primary" onclick="simulateSplit()">✂️ Pisahkan PDF</button>
-      </div>
+      <div id="splitPageInfo" style="display:none;font-size:13px;color:var(--muted);margin-bottom:10px;background:var(--bg);padding:8px 12px;border-radius:9px;border:1px solid var(--border)">📄 Total halaman: <strong id="splitTotalPages">0</strong></div>
+      <div class="field-group"><label class="field-label">Rentang Halaman (contoh: 1-3, 5, 7-9)</label><input type="text" id="splitRange" placeholder="1-3, 5" value="1"></div>
+      <div class="loading-overlay" id="splitLoading"><div class="spinner"></div> Memisahkan halaman…</div>
+      <div class="btn-row"><button class="btn-primary" id="splitPdfBtn" onclick="splitPdf()">✂️ Pisahkan & Unduh</button></div>
     </div>
   </div>
 </div>
@@ -757,78 +224,46 @@ footer strong { color: var(--blue-600); }
 <!-- IMG TO PDF -->
 <div class="modal-backdrop" id="imgToPdfModal">
   <div class="modal">
-    <div class="modal-header">
-      <div class="modal-header-icon">🖼️</div>
-      <div><h3>Gambar ke PDF</h3><p>Konversi gambar menjadi file PDF</p></div>
-      <button class="modal-close" onclick="closeModal('imgToPdfModal')">✕</button>
-    </div>
+    <div class="modal-header"><div class="modal-header-icon">🖼️</div><div><h3>Gambar ke PDF</h3><p>Konversi gambar menjadi file PDF</p></div><button class="modal-close" onclick="closeModal('imgToPdfModal')">✕</button></div>
     <div class="modal-body">
-      <div class="dropzone" onclick="document.getElementById('imgPdfInput').click()" ondragover="dragOver(event,this)" ondragleave="dragLeave(this)" ondrop="dropFiles(event,'imgPdfInput','imgPreviewWrap',true,'img')">
-        <input type="file" id="imgPdfInput" accept="image/*" multiple onchange="previewImages('imgPdfInput','imgPreviewWrap')">
-        <div class="dropzone-icon">🖼️</div>
-        <h4>Klik atau seret gambar di sini</h4>
-        <p>JPG, PNG, WebP, GIF — bisa banyak sekaligus</p>
+      <div class="dropzone" onclick="document.getElementById('imgPdfInput').click()" ondragover="dragOver(event,this)" ondragleave="dragLeave(this)" ondrop="dropImgFiles(event)">
+        <input type="file" id="imgPdfInput" accept="image/*" multiple style="display:none" onchange="previewImages('imgPdfInput','imgPreviewWrap')">
+        <div class="dropzone-icon">🖼️</div><h4>Klik atau seret gambar</h4><p>JPG, PNG, WebP — bisa banyak sekaligus</p>
       </div>
       <div class="img-preview-wrap" id="imgPreviewWrap"></div>
-      <div class="field-group">
-        <label class="field-label">Ukuran Halaman</label>
-        <select id="pdfPageSize">
-          <option value="a4">A4 (210 × 297 mm)</option>
-          <option value="letter">Letter (216 × 279 mm)</option>
-          <option value="fit">Sesuaikan ukuran gambar</option>
-        </select>
-      </div>
-      <div class="result-box" id="imgPdfResult">
-        <h4>✅ PDF Siap!</h4>
-        <p>Gambar berhasil dikonversi menjadi PDF. Tombol unduh akan tersedia (implementasi penuh memerlukan library pdf-lib atau jsPDF).</p>
-      </div>
-      <div class="btn-row">
-        <button class="btn-primary" onclick="simulateImgToPdf()">📄 Buat PDF</button>
-      </div>
+      <div class="field-group"><label class="field-label">Ukuran Halaman</label><select id="pdfPageSize"><option value="a4">A4 (210×297mm)</option><option value="letter">Letter (216×279mm)</option><option value="fit">Sesuaikan ukuran gambar</option></select></div>
+      <div class="loading-overlay" id="imgPdfLoading"><div class="spinner"></div> Mengonversi gambar ke PDF…</div>
+      <div class="btn-row"><button class="btn-primary" onclick="convertImgToPdf()">📄 Buat & Unduh PDF</button></div>
     </div>
   </div>
 </div>
 
 <!-- TEXT EDITOR -->
 <div class="modal-backdrop" id="textEditorModal">
-  <div class="modal" style="max-width:760px">
-    <div class="modal-header">
-      <div class="modal-header-icon">📝</div>
-      <div><h3>Editor Dokumen</h3><p>Tulis, format, dan unduh dokumen Anda</p></div>
-      <button class="modal-close" onclick="closeModal('textEditorModal')">✕</button>
-    </div>
+  <div class="modal" style="max-width:780px">
+    <div class="modal-header"><div class="modal-header-icon">📝</div><div><h3>Editor Dokumen</h3><p>Tulis, format, dan unduh dokumen</p></div><button class="modal-close" onclick="closeModal('textEditorModal')">✕</button></div>
     <div class="modal-body">
       <div class="toolbar">
-        <button class="tb-btn" onclick="execCmd('bold')" title="Bold"><b>B</b></button>
-        <button class="tb-btn" onclick="execCmd('italic')" title="Italic"><i>I</i></button>
-        <button class="tb-btn" onclick="execCmd('underline')" title="Underline"><u>U</u></button>
-        <button class="tb-btn" onclick="execCmd('strikeThrough')" title="Strikethrough"><s>S</s></button>
+        <button class="tb-btn" onmousedown="event.preventDefault();execCmd('bold')"><b>B</b></button>
+        <button class="tb-btn" onmousedown="event.preventDefault();execCmd('italic')"><i>I</i></button>
+        <button class="tb-btn" onmousedown="event.preventDefault();execCmd('underline')"><u>U</u></button>
+        <button class="tb-btn" onmousedown="event.preventDefault();execCmd('strikeThrough')"><s>S</s></button>
         <div class="tb-sep"></div>
-        <button class="tb-btn" onclick="execCmd('justifyLeft')" title="Kiri">≡</button>
-        <button class="tb-btn" onclick="execCmd('justifyCenter')" title="Tengah">⊟</button>
-        <button class="tb-btn" onclick="execCmd('justifyRight')" title="Kanan">≡</button>
+        <button class="tb-btn" onmousedown="event.preventDefault();execCmd('justifyLeft')">⬅</button>
+        <button class="tb-btn" onmousedown="event.preventDefault();execCmd('justifyCenter')">⊟</button>
+        <button class="tb-btn" onmousedown="event.preventDefault();execCmd('justifyRight')">➡</button>
         <div class="tb-sep"></div>
-        <button class="tb-btn" onclick="execCmd('insertUnorderedList')" title="Bullet">• Daftar</button>
-        <button class="tb-btn" onclick="execCmd('insertOrderedList')" title="Numbered">1. Urutan</button>
+        <button class="tb-btn" onmousedown="event.preventDefault();execCmd('insertUnorderedList')">• List</button>
+        <button class="tb-btn" onmousedown="event.preventDefault();execCmd('insertOrderedList')">1. List</button>
         <div class="tb-sep"></div>
-        <select onchange="execCmd('fontSize',this.value);this.value=''" style="font-size:12px;padding:4px 8px;border-radius:7px;border:1px solid var(--border);font-family:inherit;">
-          <option value="">Ukuran Font</option>
-          <option value="1">Kecil</option>
-          <option value="3">Normal</option>
-          <option value="5">Besar</option>
-          <option value="7">Sangat Besar</option>
-        </select>
-        <input type="color" title="Warna teks" onchange="execCmd('foreColor',this.value)" style="width:34px;height:28px;border:1px solid var(--border);border-radius:7px;cursor:pointer;padding:2px;">
+        <select onchange="execCmd('formatBlock',this.value);this.value=''" style="font-size:12px;padding:3px 7px;border-radius:6px;border:1px solid var(--border);font-family:inherit"><option value="">Heading</option><option value="h1">H1</option><option value="h2">H2</option><option value="h3">H3</option><option value="p">Paragraf</option></select>
+        <input type="color" title="Warna Teks" onchange="execCmd('foreColor',this.value)" style="width:32px;height:26px;border:1px solid var(--border);border-radius:6px;cursor:pointer;padding:2px" value="#0f172a">
         <div class="tb-sep"></div>
-        <button class="tb-btn" onclick="document.getElementById('editorArea').innerHTML=''" title="Bersihkan">🗑️</button>
+        <button class="tb-btn" onmousedown="event.preventDefault();execCmd('removeFormat')">✕ Format</button>
+        <button class="tb-btn" onmousedown="event.preventDefault();document.getElementById('editorArea').innerHTML='<p><br></p>'">🗑️</button>
       </div>
-      <div id="editorArea" contenteditable="true" spellcheck="true">
-        <p>Mulai ketik dokumen Anda di sini...</p>
-      </div>
-      <div class="editor-footer">
-        <span id="editorStats">0 kata • 0 karakter</span>
-        <span>Format: Rich Text</span>
-      </div>
+      <div id="editorArea" contenteditable="true" spellcheck="true" oninput="updateEditorStats()" onkeyup="updateEditorStats()"><p>Mulai ketik di sini...</p></div>
+      <div style="display:flex;justify-content:space-between;font-size:11.5px;color:var(--light);margin-top:5px"><span id="editorStats">0 kata • 0 karakter</span><span>Rich Text Editor</span></div>
       <div class="btn-row">
         <button class="btn-primary" onclick="downloadEditor('html')">⬇️ Unduh HTML</button>
         <button class="btn-secondary" onclick="downloadEditor('txt')">⬇️ Unduh TXT</button>
@@ -838,102 +273,23 @@ footer strong { color: var(--blue-600); }
   </div>
 </div>
 
-<!-- ENKRIPSI -->
-<div class="modal-backdrop" id="encryptModal">
-  <div class="modal">
-    <div class="modal-header">
-      <div class="modal-header-icon">🔒</div>
-      <div><h3>Enkripsi Teks</h3><p>Amankan pesan rahasia dengan password</p></div>
-      <button class="modal-close" onclick="closeModal('encryptModal')">✕</button>
-    </div>
-    <div class="modal-body">
-      <div class="field-group">
-        <label class="field-label">Teks yang Ingin Dienkripsi</label>
-        <textarea id="encryptInput" placeholder="Masukkan teks rahasia Anda..."></textarea>
-      </div>
-      <div class="field-group">
-        <label class="field-label">Password</label>
-        <input type="password" id="encryptPass" placeholder="Buat password yang kuat..." oninput="updateStrength(this.value)">
-        <div class="strength-bar"><div class="strength-fill" id="strengthFill"></div></div>
-        <div style="font-size:11.5px;color:var(--muted);margin-top:4px" id="strengthLabel">Kekuatan password akan tampil di sini</div>
-      </div>
-      <div class="result-box" id="encryptResult">
-        <h4>🔐 Hasil Enkripsi (XOR + Base64)</h4>
-        <div class="result-text" id="encryptOutput"></div>
-      </div>
-      <div class="btn-row">
-        <button class="btn-primary" onclick="encryptText()">🔒 Enkripsi</button>
-        <button class="btn-secondary" onclick="decryptText()">🔓 Dekripsi</button>
-        <button class="btn-secondary" onclick="copyResult('encryptOutput')">📋 Salin</button>
-      </div>
-      <p style="font-size:11.5px;color:var(--light);margin-top:12px">ℹ️ Menggunakan enkripsi XOR + Base64. Simpan password Anda — tidak bisa dipulihkan jika lupa.</p>
-    </div>
-  </div>
-</div>
-
-<!-- CSV VIEWER -->
-<div class="modal-backdrop" id="csvModal">
-  <div class="modal" style="max-width:800px">
-    <div class="modal-header">
-      <div class="modal-header-icon">📊</div>
-      <div><h3>Tabel & CSV Viewer</h3><p>Buka dan analisis file CSV sebagai tabel</p></div>
-      <button class="modal-close" onclick="closeModal('csvModal')">✕</button>
-    </div>
-    <div class="modal-body">
-      <div class="dropzone" onclick="document.getElementById('csvInput').click()" ondragover="dragOver(event,this)" ondragleave="dragLeave(this)" ondrop="dropFiles(event,'csvInput',null,false,'csv')">
-        <input type="file" id="csvInput" accept=".csv,.tsv,.txt" onchange="loadCSV()">
-        <div class="dropzone-icon">📊</div>
-        <h4>Klik atau seret file CSV</h4>
-        <p>Mendukung format CSV dan TSV</p>
-      </div>
-      <div class="field-group" style="display:flex;gap:10px;align-items:flex-end">
-        <div style="flex:1">
-          <label class="field-label">Cari data</label>
-          <input type="text" id="csvSearch" placeholder="Ketik untuk mencari..." oninput="filterCSV(this.value)">
-        </div>
-        <div id="csvInfo" class="info-chip" style="flex-shrink:0;margin-bottom:1px">Belum ada file</div>
-      </div>
-      <div class="csv-wrap" id="csvWrap" style="display:none">
-        <table id="csvTable"></table>
-      </div>
-    </div>
-  </div>
-</div>
-
 <!-- KOMPRES GAMBAR -->
 <div class="modal-backdrop" id="compressModal">
-  <div class="modal">
-    <div class="modal-header">
-      <div class="modal-header-icon">🗜️</div>
-      <div><h3>Kompres Gambar</h3><p>Kurangi ukuran file tanpa kehilangan kualitas</p></div>
-      <button class="modal-close" onclick="closeModal('compressModal')">✕</button>
-    </div>
+  <div class="modal" style="max-width:660px">
+    <div class="modal-header"><div class="modal-header-icon">🗜️</div><div><h3>Kompres Gambar</h3><p>Kurangi ukuran file tanpa kehilangan kualitas berarti</p></div><button class="modal-close" onclick="closeModal('compressModal')">✕</button></div>
     <div class="modal-body">
-      <div class="dropzone" onclick="document.getElementById('compressInput').click()" ondragover="dragOver(event,this)" ondragleave="dragLeave(this)" ondrop="dropFiles(event,'compressInput',null,false,'compress')">
-        <input type="file" id="compressInput" accept="image/*" onchange="loadCompressPreview()">
-        <div class="dropzone-icon">🗜️</div>
-        <h4>Klik atau seret gambar</h4>
-        <p>JPG, PNG, WebP</p>
+      <div class="dropzone" onclick="document.getElementById('compressInput').click()" ondragover="dragOver(event,this)" ondragleave="dragLeave(this)" ondrop="dropCompressFile(event)">
+        <input type="file" id="compressInput" accept="image/*" style="display:none" onchange="loadCompressPreview()">
+        <div class="dropzone-icon">🗜️</div><h4>Klik atau seret gambar</h4><p>JPG, PNG, WebP</p>
       </div>
       <div id="compressPreviewArea" style="display:none">
-        <div style="display:flex;gap:12px;margin-bottom:1rem">
-          <div style="flex:1;text-align:center">
-            <img id="compressOrigImg" style="width:100%;border-radius:10px;border:1px solid var(--border)">
-            <p style="font-size:12px;color:var(--muted);margin-top:5px">Original: <strong id="origSize">-</strong></p>
-          </div>
-          <div style="flex:1;text-align:center">
-            <img id="compressResultImg" style="width:100%;border-radius:10px;border:1px solid var(--border)">
-            <p style="font-size:12px;color:var(--muted);margin-top:5px">Hasil: <strong id="compSize">-</strong></p>
-          </div>
+        <div class="compress-compare">
+          <div><img id="compressOrigImg" alt="Original"><p style="font-size:12px;color:var(--muted);margin-top:4px">Original: <strong id="origSize">-</strong></p></div>
+          <div><img id="compressResultImg" alt="Hasil"><p style="font-size:12px;color:var(--muted);margin-top:4px">Hasil: <strong id="compSize">-</strong> <span id="compRatio" style="color:var(--green);font-weight:700"></span></p></div>
         </div>
-        <div class="field-group">
-          <label class="field-label">Kualitas: <span id="qualityVal">80</span>%</label>
-          <input type="range" id="qualitySlider" min="10" max="100" value="80" oninput="updateQuality(this.value)" style="width:100%;accent-color:var(--blue-600)">
-        </div>
-        <div class="progress-bar"><div class="progress-fill" id="compressProgress"></div></div>
-        <div class="btn-row">
-          <button class="btn-green" onclick="downloadCompressed()">⬇️ Unduh Gambar Terkompresi</button>
-        </div>
+        <div class="field-group"><label class="field-label">Kualitas: <span id="qualityVal">80</span>%</label><input type="range" id="qualitySlider" min="5" max="100" value="80" oninput="updateQuality(this.value)" style="width:100%;accent-color:var(--blue-600)"></div>
+        <div class="field-group"><label class="field-label">Format Output</label><select id="compressFormat" onchange="reCompress()"><option value="jpeg">JPEG</option><option value="png">PNG</option><option value="webp">WebP</option></select></div>
+        <div class="btn-row"><button class="btn-green" onclick="downloadCompressed()">⬇️ Unduh Gambar</button></div>
       </div>
     </div>
   </div>
@@ -941,60 +297,22 @@ footer strong { color: var(--blue-600); }
 
 <!-- TANDA TANGAN -->
 <div class="modal-backdrop" id="signModal">
-  <div class="modal">
-    <div class="modal-header">
-      <div class="modal-header-icon">✍️</div>
-      <div><h3>Tanda Tangan Digital</h3><p>Gambar tanda tangan dan unduh sebagai PNG</p></div>
-      <button class="modal-close" onclick="closeModal('signModal')">✕</button>
-    </div>
+  <div class="modal" style="max-width:660px">
+    <div class="modal-header"><div class="modal-header-icon">✍️</div><div><h3>Tanda Tangan Digital</h3><p>Gambar tanda tangan dan unduh sebagai PNG</p></div><button class="modal-close" onclick="closeModal('signModal')">✕</button></div>
     <div class="modal-body">
-      <div class="field-group">
-        <div style="display:flex;gap:10px;margin-bottom:10px;align-items:center">
-          <label class="field-label" style="margin:0">Warna Tinta:</label>
-          <input type="color" id="signColor" value="#1d4ed8" style="width:36px;height:30px;border:1px solid var(--border);border-radius:8px;cursor:pointer;padding:2px;">
-          <label class="field-label" style="margin:0">Ketebalan:</label>
-          <input type="range" id="signSize" min="1" max="10" value="3" style="accent-color:var(--blue-600)">
-          <button class="btn-secondary" onclick="clearSign()" style="padding:7px 14px;font-size:12px;margin-left:auto">🗑️ Bersih</button>
-        </div>
-        <canvas id="signCanvas" width="560" height="200"></canvas>
+      <div style="display:flex;gap:10px;margin-bottom:10px;align-items:center;flex-wrap:wrap">
+        <label class="field-label" style="margin:0">Warna:</label>
+        <input type="color" id="signColor" value="#1d4ed8" style="width:34px;height:28px;border:1px solid var(--border);border-radius:7px;cursor:pointer;padding:2px">
+        <label class="field-label" style="margin:0">Ketebalan:</label>
+        <input type="range" id="signSize" min="1" max="12" value="3" style="accent-color:var(--blue-600);flex:1;min-width:80px" oninput="document.getElementById('signSizeVal').textContent=this.value+'px'">
+        <span id="signSizeVal" style="font-size:12px;color:var(--muted);min-width:24px">3px</span>
+        <button class="btn-secondary" onclick="clearSign()" style="padding:6px 12px;font-size:12px;margin-left:auto">🗑️ Bersih</button>
       </div>
+      <canvas id="signCanvas" width="580" height="220"></canvas>
+      <p style="font-size:11.5px;color:var(--light);margin-top:5px">Gunakan mouse atau jari untuk menggambar tanda tangan</p>
       <div class="btn-row">
-        <button class="btn-primary" onclick="downloadSign()">⬇️ Unduh PNG Transparan</button>
+        <button class="btn-primary" onclick="downloadSign()">⬇️ Unduh PNG</button>
         <button class="btn-secondary" onclick="copySignToClipboard()">📋 Salin ke Clipboard</button>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- PASSWORD GENERATOR -->
-<div class="modal-backdrop" id="passGenModal">
-  <div class="modal">
-    <div class="modal-header">
-      <div class="modal-header-icon">🔑</div>
-      <div><h3>Generator Password</h3><p>Buat password acak yang kuat</p></div>
-      <button class="modal-close" onclick="closeModal('passGenModal')">✕</button>
-    </div>
-    <div class="modal-body">
-      <div class="field-group">
-        <label class="field-label">Panjang Password: <span id="passLenVal">16</span> karakter</label>
-        <input type="range" id="passLen" min="8" max="64" value="16" oninput="generatePass();document.getElementById('passLenVal').textContent=this.value" style="width:100%;accent-color:var(--blue-600)">
-      </div>
-      <div style="display:flex;gap:1rem;flex-wrap:wrap;margin-bottom:1rem">
-        <label style="display:flex;gap:6px;align-items:center;font-size:13px;cursor:pointer"><input type="checkbox" id="passUpper" checked> Huruf Besar (A-Z)</label>
-        <label style="display:flex;gap:6px;align-items:center;font-size:13px;cursor:pointer"><input type="checkbox" id="passLower" checked> Huruf Kecil (a-z)</label>
-        <label style="display:flex;gap:6px;align-items:center;font-size:13px;cursor:pointer"><input type="checkbox" id="passNum" checked> Angka (0-9)</label>
-        <label style="display:flex;gap:6px;align-items:center;font-size:13px;cursor:pointer"><input type="checkbox" id="passSymbol" checked> Simbol (!@#$)</label>
-      </div>
-      <div style="display:flex;gap:8px;align-items:center">
-        <input type="text" id="passOutput" readonly style="font-family:monospace;font-size:15px;font-weight:600;letter-spacing:1px;flex:1">
-        <button class="btn-primary" onclick="generatePass()" style="flex-shrink:0">🔄 Generate</button>
-        <button class="btn-secondary" onclick="copyResult('passOutput')" style="flex-shrink:0">📋 Salin</button>
-      </div>
-      <div class="strength-bar" style="margin-top:10px"><div class="strength-fill" id="passStrengthFill"></div></div>
-      <div style="font-size:11.5px;color:var(--muted);margin-top:4px" id="passStrengthLabel"></div>
-      <div style="margin-top:1.25rem">
-        <h4 style="font-size:13px;font-weight:700;margin-bottom:8px">📋 Riwayat Password (sesi ini)</h4>
-        <div id="passHistory" style="display:flex;flex-direction:column;gap:5px;max-height:140px;overflow-y:auto"></div>
       </div>
     </div>
   </div>
@@ -1002,562 +320,581 @@ footer strong { color: var(--blue-600); }
 
 <!-- WORD COUNTER -->
 <div class="modal-backdrop" id="wordCountModal">
-  <div class="modal" style="max-width:680px">
-    <div class="modal-header">
-      <div class="modal-header-icon">🔢</div>
-      <div><h3>Penghitung Kata & Karakter</h3><p>Analisis teks Anda secara real-time</p></div>
-      <button class="modal-close" onclick="closeModal('wordCountModal')">✕</button>
-    </div>
+  <div class="modal" style="max-width:660px">
+    <div class="modal-header"><div class="modal-header-icon">🔢</div><div><h3>Penghitung Kata & Karakter</h3><p>Analisis teks secara real-time</p></div><button class="modal-close" onclick="closeModal('wordCountModal')">✕</button></div>
     <div class="modal-body">
-      <textarea id="wordCountInput" placeholder="Tempelkan atau ketik teks di sini..." style="min-height:200px" oninput="updateWordCount()"></textarea>
-      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:1rem">
-        <div style="background:var(--blue-50);border-radius:12px;padding:1rem;text-align:center">
-          <div style="font-size:24px;font-weight:800;color:var(--blue-600)" id="wcWords">0</div>
-          <div style="font-size:12px;color:var(--muted)">Kata</div>
-        </div>
-        <div style="background:var(--green-bg);border-radius:12px;padding:1rem;text-align:center">
-          <div style="font-size:24px;font-weight:800;color:var(--green)" id="wcChars">0</div>
-          <div style="font-size:12px;color:var(--muted)">Karakter</div>
-        </div>
-        <div style="background:var(--orange-bg);border-radius:12px;padding:1rem;text-align:center">
-          <div style="font-size:24px;font-weight:800;color:var(--orange)" id="wcSentences">0</div>
-          <div style="font-size:12px;color:var(--muted)">Kalimat</div>
-        </div>
-        <div style="background:var(--purple-bg);border-radius:12px;padding:1rem;text-align:center">
-          <div style="font-size:24px;font-weight:800;color:var(--purple)" id="wcParagraphs">0</div>
-          <div style="font-size:12px;color:var(--muted)">Paragraf</div>
-        </div>
-        <div style="background:var(--teal-bg);border-radius:12px;padding:1rem;text-align:center">
-          <div style="font-size:18px;font-weight:800;color:var(--teal)" id="wcReadTime">0 dtk</div>
-          <div style="font-size:12px;color:var(--muted)">Estimasi Baca</div>
-        </div>
-        <div style="background:var(--amber-bg);border-radius:12px;padding:1rem;text-align:center">
-          <div style="font-size:24px;font-weight:800;color:var(--amber)" id="wcLines">0</div>
-          <div style="font-size:12px;color:var(--muted)">Baris</div>
+      <textarea id="wordCountInput" placeholder="Tempelkan atau ketik teks di sini..." style="min-height:180px" oninput="updateWordCount()"></textarea>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:.9rem">
+        <div style="background:var(--blue-50);border-radius:11px;padding:.9rem;text-align:center"><div style="font-size:22px;font-weight:800;color:var(--blue-600)" id="wcWords">0</div><div style="font-size:11.5px;color:var(--muted)">Kata</div></div>
+        <div style="background:var(--green-bg);border-radius:11px;padding:.9rem;text-align:center"><div style="font-size:22px;font-weight:800;color:var(--green)" id="wcChars">0</div><div style="font-size:11.5px;color:var(--muted)">Karakter (dgn spasi)</div></div>
+        <div style="background:var(--orange-bg);border-radius:11px;padding:.9rem;text-align:center"><div style="font-size:22px;font-weight:800;color:var(--orange)" id="wcCharsNoSpace">0</div><div style="font-size:11.5px;color:var(--muted)">Tanpa spasi</div></div>
+        <div style="background:var(--purple-bg);border-radius:11px;padding:.9rem;text-align:center"><div style="font-size:22px;font-weight:800;color:var(--purple)" id="wcSentences">0</div><div style="font-size:11.5px;color:var(--muted)">Kalimat</div></div>
+        <div style="background:var(--rose-bg);border-radius:11px;padding:.9rem;text-align:center"><div style="font-size:22px;font-weight:800;color:var(--rose)" id="wcParagraphs">0</div><div style="font-size:11.5px;color:var(--muted)">Paragraf</div></div>
+        <div style="background:var(--teal-bg);border-radius:11px;padding:.9rem;text-align:center"><div style="font-size:18px;font-weight:800;color:var(--teal)" id="wcReadTime">0 dtk</div><div style="font-size:11.5px;color:var(--muted)">Est. Baca</div></div>
+      </div>
+      <div style="margin-top:8px;background:var(--amber-bg);border-radius:11px;padding:.8rem 1rem;display:flex;gap:20px;flex-wrap:wrap">
+        <span style="font-size:13px;color:var(--amber)">📏 Baris: <strong id="wcLines">0</strong></span>
+        <span style="font-size:13px;color:var(--amber)">📄 Halaman: <strong id="wcPages">0</strong></span>
+      </div>
+      <div class="btn-row"><button class="btn-secondary" onclick="document.getElementById('wordCountInput').value='';updateWordCount()">🗑️ Bersih</button></div>
+    </div>
+  </div>
+</div>
+
+<!-- ROTATE PDF -->
+<div class="modal-backdrop" id="rotatePdfModal">
+  <div class="modal" style="max-width:580px">
+    <div class="modal-header"><div class="modal-header-icon">🔄</div><div><h3>Putar Halaman PDF</h3><p>Pilih halaman dan arah putaran</p></div><button class="modal-close" onclick="closeModal('rotatePdfModal')">✕</button></div>
+    <div class="modal-body">
+      <div class="dropzone" onclick="document.getElementById('rotateInput').click()" ondragover="dragOver(event,this)" ondragleave="dragLeave(this)" ondrop="dropFiles(event,'rotateInput','rotateFileList',false)">
+        <input type="file" id="rotateInput" accept=".pdf" style="display:none" onchange="addFilesToList('rotateInput','rotateFileList',false);loadRotateInfo()">
+        <div class="dropzone-icon">🔄</div><h4>Klik atau seret file PDF</h4><p>Satu file PDF</p>
+      </div>
+      <div class="file-list" id="rotateFileList"></div>
+      <div id="rotatePageInfo" style="display:none;font-size:13px;color:var(--muted);margin-bottom:12px;background:var(--bg);padding:8px 12px;border-radius:9px;border:1px solid var(--border)">📄 Total halaman: <strong id="rotateTotalPages">0</strong></div>
+      <div class="field-group">
+        <label class="field-label">Halaman yang diputar</label>
+        <select id="rotateScope" style="margin-bottom:7px" onchange="document.getElementById('rotatePages').style.display=this.value==='specific'?'block':'none'">
+          <option value="all">Semua halaman</option>
+          <option value="specific">Halaman tertentu (contoh: 1,3,5)</option>
+        </select>
+        <input type="text" id="rotatePages" placeholder="contoh: 1,2,5" style="display:none">
+      </div>
+      <div class="field-group">
+        <label class="field-label">Arah Putaran</label>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <label style="display:flex;align-items:center;gap:5px;cursor:pointer;font-size:13px;padding:7px 12px;border:1.5px solid var(--border);border-radius:8px;background:var(--bg)"><input type="radio" name="rotDir" value="90" checked> ↻ 90° kanan</label>
+          <label style="display:flex;align-items:center;gap:5px;cursor:pointer;font-size:13px;padding:7px 12px;border:1.5px solid var(--border);border-radius:8px;background:var(--bg)"><input type="radio" name="rotDir" value="-90"> ↺ 90° kiri</label>
+          <label style="display:flex;align-items:center;gap:5px;cursor:pointer;font-size:13px;padding:7px 12px;border:1.5px solid var(--border);border-radius:8px;background:var(--bg)"><input type="radio" name="rotDir" value="180"> ↕ 180°</label>
         </div>
       </div>
+      <div class="loading-overlay" id="rotateLoading"><div class="spinner"></div> Memutar halaman…</div>
+      <div class="btn-row"><button class="btn-primary" id="rotatePdfBtn" onclick="rotatePdf()">🔄 Putar & Unduh</button></div>
+    </div>
+  </div>
+</div>
+
+<!-- WATERMARK PDF -->
+<div class="modal-backdrop" id="watermarkModal">
+  <div class="modal" style="max-width:600px">
+    <div class="modal-header"><div class="modal-header-icon">💧</div><div><h3>Watermark PDF</h3><p>Tambahkan tanda air teks ke PDF</p></div><button class="modal-close" onclick="closeModal('watermarkModal')">✕</button></div>
+    <div class="modal-body">
+      <div class="dropzone" onclick="document.getElementById('watermarkInput').click()" ondragover="dragOver(event,this)" ondragleave="dragLeave(this)" ondrop="dropFiles(event,'watermarkInput','watermarkFileList',false)">
+        <input type="file" id="watermarkInput" accept=".pdf" style="display:none" onchange="addFilesToList('watermarkInput','watermarkFileList',false)">
+        <div class="dropzone-icon">💧</div><h4>Klik atau seret file PDF</h4><p>Satu file PDF</p>
+      </div>
+      <div class="file-list" id="watermarkFileList"></div>
+      <div class="field-group"><label class="field-label">Teks Watermark</label><input type="text" id="watermarkText" placeholder="RAHASIA, DRAFT, © 2025…" value="RAHASIA"></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+        <div class="field-group"><label class="field-label">Warna Teks</label><input type="color" id="watermarkColor" value="#c0392b" style="width:100%;height:36px;border:1.5px solid var(--border);border-radius:9px;cursor:pointer;padding:3px"></div>
+        <div class="field-group"><label class="field-label">Ukuran Font (pt)</label><input type="number" id="watermarkSize" value="48" min="10" max="120"></div>
+        <div class="field-group"><label class="field-label">Transparansi: <span id="watermarkOpacityVal">40</span>%</label><input type="range" id="watermarkOpacity" min="5" max="100" value="40" oninput="document.getElementById('watermarkOpacityVal').textContent=this.value" style="width:100%;accent-color:var(--blue-600)"></div>
+        <div class="field-group"><label class="field-label">Rotasi (°)</label><input type="number" id="watermarkAngle" value="-45" min="-90" max="90"></div>
+      </div>
+      <div class="loading-overlay" id="watermarkLoading"><div class="spinner"></div> Menambahkan watermark…</div>
+      <div class="btn-row"><button class="btn-primary" id="watermarkBtn" onclick="addWatermark()">💧 Tambah Watermark & Unduh</button></div>
     </div>
   </div>
 </div>
 
 <!-- BASE64 -->
 <div class="modal-backdrop" id="base64Modal">
-  <div class="modal">
-    <div class="modal-header">
-      <div class="modal-header-icon">🔄</div>
-      <div><h3>Base64 Encode / Decode</h3><p>Konversi teks atau file ke dan dari Base64</p></div>
-      <button class="modal-close" onclick="closeModal('base64Modal')">✕</button>
-    </div>
+  <div class="modal" style="max-width:660px">
+    <div class="modal-header"><div class="modal-header-icon">🔤</div><div><h3>Base64 Encoder / Decoder</h3><p>Enkode atau dekode teks & file ke Base64</p></div><button class="modal-close" onclick="closeModal('base64Modal')">✕</button></div>
     <div class="modal-body">
-      <div class="field-group">
-        <label class="field-label">Teks Input</label>
-        <textarea id="b64Input" placeholder="Masukkan teks biasa atau Base64 di sini..." style="min-height:130px"></textarea>
+      <div style="display:flex;gap:7px;margin-bottom:.9rem">
+        <button id="b64TabEncode" class="filter-tab active" onclick="switchB64Tab('encode')">🔒 Encode</button>
+        <button id="b64TabDecode" class="filter-tab" onclick="switchB64Tab('decode')">🔓 Decode</button>
+        <button id="b64TabFile" class="filter-tab" onclick="switchB64Tab('file')">📄 File→Base64</button>
       </div>
-      <div class="btn-row" style="margin-top:0;margin-bottom:1rem">
-        <button class="btn-primary" onclick="doBase64('encode')">🔄 Encode ke Base64</button>
-        <button class="btn-secondary" onclick="doBase64('decode')">🔄 Decode dari Base64</button>
-      </div>
-      <div class="field-group">
-        <label class="field-label">Hasil</label>
-        <textarea id="b64Output" readonly style="min-height:100px;font-family:monospace;font-size:12px;background:#f8fafc"></textarea>
-      </div>
-      <div class="btn-row" style="margin-top:0">
-        <button class="btn-secondary" onclick="copyResult('b64Output')">📋 Salin Hasil</button>
-        <button class="btn-secondary" onclick="swapBase64()">⇅ Tukar Input/Output</button>
-      </div>
-      <hr style="border:none;border-top:1px solid var(--border);margin:1.25rem 0">
-      <div class="field-group">
-        <label class="field-label">Atau encode file ke Base64</label>
-        <input type="file" id="b64FileInput" onchange="encodeFileBase64()" style="font-size:13px;padding:8px 12px;width:100%;border:1.5px solid var(--border);border-radius:10px;background:var(--bg)">
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- METADATA -->
-<div class="modal-backdrop" id="metaModal">
-  <div class="modal">
-    <div class="modal-header">
-      <div class="modal-header-icon">🔍</div>
-      <div><h3>Penghapus & Pembaca Metadata</h3><p>Lihat informasi tersembunyi dalam file Anda</p></div>
-      <button class="modal-close" onclick="closeModal('metaModal')">✕</button>
-    </div>
-    <div class="modal-body">
-      <div class="dropzone" onclick="document.getElementById('metaInput').click()" ondragover="dragOver(event,this)" ondragleave="dragLeave(this)" ondrop="dropFiles(event,'metaInput',null,false,'meta')">
-        <input type="file" id="metaInput" accept="image/*,.pdf,.docx" onchange="readMeta()">
-        <div class="dropzone-icon">🔍</div>
-        <h4>Klik atau seret file apa saja</h4>
-        <p>Gambar, PDF, atau dokumen lainnya</p>
-      </div>
-      <div id="metaResult" style="display:none">
-        <h4 style="font-size:14px;font-weight:700;margin-bottom:10px">📋 Metadata Terdeteksi</h4>
-        <div id="metaList" style="display:flex;flex-direction:column;gap:6px"></div>
+      <div id="b64PanelEncode">
+        <div class="field-group"><label class="field-label">Teks Input</label><textarea id="b64InputEncode" placeholder="Ketik teks di sini…" style="min-height:120px" oninput="doBase64Encode()"></textarea></div>
+        <div class="field-group"><label class="field-label">Hasil Base64</label><textarea id="b64OutputEncode" readonly style="min-height:90px;background:#f8fafc"></textarea></div>
         <div class="btn-row">
-          <button class="btn-danger" onclick="clearMeta()">🗑️ Simulasi Hapus Metadata</button>
+          <button class="btn-primary" onclick="doBase64Encode()">🔒 Encode</button>
+          <button class="btn-secondary" onclick="copyResult('b64OutputEncode')">📋 Salin</button>
+          <button class="btn-secondary" onclick="document.getElementById('b64InputEncode').value='';document.getElementById('b64OutputEncode').value=''">🗑️</button>
         </div>
-        <div class="result-box" id="metaClearResult">
-          <h4>✅ Metadata Dihapus!</h4>
-          <p>Dalam implementasi penuh, file baru tanpa metadata akan siap diunduh. Fitur ini menunjukkan data apa saja yang biasanya tersimpan dalam file Anda.</p>
+      </div>
+      <div id="b64PanelDecode" style="display:none">
+        <div class="field-group"><label class="field-label">Base64 Input</label><textarea id="b64InputDecode" placeholder="Tempel Base64 di sini…" style="min-height:120px" oninput="doBase64Decode()"></textarea></div>
+        <div class="field-group"><label class="field-label">Hasil Teks</label><textarea id="b64OutputDecode" readonly style="min-height:90px;background:#f8fafc"></textarea></div>
+        <div id="b64DecodeError" style="display:none;color:var(--rose);font-size:12.5px;margin-top:4px">⚠️ String Base64 tidak valid.</div>
+        <div class="btn-row">
+          <button class="btn-primary" onclick="doBase64Decode()">🔓 Decode</button>
+          <button class="btn-secondary" onclick="copyResult('b64OutputDecode')">📋 Salin</button>
+          <button class="btn-secondary" onclick="document.getElementById('b64InputDecode').value='';document.getElementById('b64OutputDecode').value=''">🗑️</button>
+        </div>
+      </div>
+      <div id="b64PanelFile" style="display:none">
+        <div class="dropzone" onclick="document.getElementById('b64FileInput').click()">
+          <input type="file" id="b64FileInput" style="display:none" onchange="fileToBase64Fn()">
+          <div class="dropzone-icon">📄</div><h4>Klik untuk pilih file</h4><p>Semua jenis file didukung</p>
+        </div>
+        <div id="b64FileResult" style="display:none">
+          <div class="field-group"><label class="field-label">Base64 Output</label><textarea id="b64FileOutput" readonly style="min-height:110px;font-size:11px;font-family:monospace;background:#f8fafc"></textarea></div>
+          <div class="btn-row">
+            <button class="btn-primary" onclick="copyResult('b64FileOutput')">📋 Salin Base64</button>
+            <button class="btn-secondary" onclick="downloadBase64File()">⬇️ Unduh .txt</button>
+          </div>
         </div>
       </div>
     </div>
   </div>
 </div>
 
-<!-- PRIVACY INFO MODAL -->
+<!-- PRIVACY MODAL -->
 <div class="modal-backdrop" id="privacyModal">
   <div class="modal">
-    <div class="modal-header">
-      <div class="modal-header-icon">🔐</div>
-      <div><h3>Cara Kerja #JagaDokumen</h3><p>Transparansi penuh tentang keamanan Anda</p></div>
-      <button class="modal-close" onclick="closeModal('privacyModal')">✕</button>
-    </div>
+    <div class="modal-header"><div class="modal-header-icon">🔐</div><div><h3>Cara Kerja #JagaDokumen</h3><p>Transparansi penuh tentang keamanan Anda</p></div><button class="modal-close" onclick="closeModal('privacyModal')">✕</button></div>
     <div class="modal-body">
-      <div style="display:flex;flex-direction:column;gap:14px">
-        <div style="display:flex;gap:12px;background:var(--blue-50);padding:1rem;border-radius:12px">
-          <span style="font-size:24px">🌐</span>
-          <div><strong style="font-size:14px">File API & Canvas API</strong><p style="font-size:13px;color:var(--muted);margin-top:3px">Browser modern memiliki API bawaan untuk membaca, memproses, dan memanipulasi file. Semua terjadi di memori RAM komputer Anda.</p></div>
-        </div>
-        <div style="display:flex;gap:12px;background:var(--green-bg);padding:1rem;border-radius:12px">
-          <span style="font-size:24px">🔒</span>
-          <div><strong style="font-size:14px">Tidak Ada Transmisi Data</strong><p style="font-size:13px;color:var(--muted);margin-top:3px">Setiap operasi bersifat lokal. Tidak ada request ke server luar. Anda bisa memverifikasi ini dengan membuka DevTools → Network.</p></div>
-        </div>
-        <div style="display:flex;gap:12px;background:var(--amber-bg);padding:1rem;border-radius:12px">
-          <span style="font-size:24px">📵</span>
-          <div><strong style="font-size:14px">Bisa Offline</strong><p style="font-size:13px;color:var(--muted);margin-top:3px">Setelah halaman termuat, Anda dapat memutus koneksi internet dan semua fitur tetap berfungsi normal.</p></div>
-        </div>
-        <div style="display:flex;gap:12px;background:var(--purple-bg);padding:1rem;border-radius:12px">
-          <span style="font-size:24px">🗑️</span>
-          <div><strong style="font-size:14px">Data Hilang Saat Halaman Ditutup</strong><p style="font-size:13px;color:var(--muted);margin-top:3px">Tidak ada data yang disimpan secara permanen. Refresh halaman = semua data hilang dari memori.</p></div>
-        </div>
+      <div style="display:flex;flex-direction:column;gap:12px">
+        <div style="display:flex;gap:12px;background:var(--blue-50);padding:.9rem;border-radius:11px"><span style="font-size:22px">🌐</span><div><strong style="font-size:13.5px">File API & pdf-lib</strong><p style="font-size:12.5px;color:var(--muted);margin-top:2px">Library berjalan sepenuhnya di browser. Semua proses di RAM komputer Anda.</p></div></div>
+        <div style="display:flex;gap:12px;background:var(--green-bg);padding:.9rem;border-radius:11px"><span style="font-size:22px">🔒</span><div><strong style="font-size:13.5px">Tidak Ada Transmisi Data</strong><p style="font-size:12.5px;color:var(--muted);margin-top:2px">Verifikasi di DevTools → Network. Tidak ada request ke server.</p></div></div>
+        <div style="display:flex;gap:12px;background:var(--amber-bg);padding:.9rem;border-radius:11px"><span style="font-size:22px">📵</span><div><strong style="font-size:13.5px">Bisa Offline</strong><p style="font-size:12.5px;color:var(--muted);margin-top:2px">Setelah dimuat, semua fitur tetap berfungsi tanpa internet.</p></div></div>
       </div>
     </div>
   </div>
 </div>
 
-<!-- TOAST -->
-<div id="toast">
-  <span id="toastIcon">✅</span>
-  <span id="toastMsg">Berhasil disalin!</span>
-</div>
+<div id="toast"><span id="toastIcon">✅</span><span id="toastMsg">Berhasil!</span></div>
 
-<!-- ─── SCRIPTS ─── -->
+<script src="https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script>
-/* ─── UTILS ─── */
+'use strict';
+
 let processedCount = 0;
-function bumpStat() {
-  processedCount++;
-  document.getElementById('statFiles').textContent = processedCount;
-}
-function toast(msg, icon='✅') {
-  const t = document.getElementById('toast');
-  document.getElementById('toastMsg').textContent = msg;
-  document.getElementById('toastIcon').textContent = icon;
-  t.classList.add('show');
-  setTimeout(() => t.classList.remove('show'), 3000);
-}
-function openModal(id) { document.getElementById(id).classList.add('open'); }
-function closeModal(id) { document.getElementById(id).classList.remove('open'); }
-document.querySelectorAll('.modal-backdrop').forEach(b => b.addEventListener('click', e => { if(e.target===b) b.classList.remove('open'); }));
+const _fileLists = {};
 
-/* ─── FILTER ─── */
-function filterTools(cat, btn) {
-  document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
-  btn.classList.add('active');
-  document.querySelectorAll('.tool-card').forEach(c => {
-    if(cat==='semua') { c.style.display='flex'; return; }
-    const cats = c.dataset.cat || '';
-    c.style.display = cats.includes(cat) ? 'flex' : 'none';
-  });
+function bumpStat(n){processedCount+=(n||1);document.getElementById('statFiles').textContent=processedCount}
+
+function toast(msg,icon,type){
+  const t=document.getElementById('toast');
+  document.getElementById('toastMsg').textContent=msg;
+  document.getElementById('toastIcon').textContent=icon||'✅';
+  t.className=type?'show '+type:'show';
+  clearTimeout(t._t);
+  t._t=setTimeout(()=>t.className='',3500);
 }
 
-/* ─── SCROLL ─── */
-function scrollToTools() { document.getElementById('toolsSection').scrollIntoView({behavior:'smooth', block:'start'}); }
-function showPrivacyInfo() { openModal('privacyModal'); }
+function openModal(id){document.getElementById(id).classList.add('open')}
+function closeModal(id){document.getElementById(id).classList.remove('open')}
 
-/* ─── DRAG DROP ─── */
-function dragOver(e, el) { e.preventDefault(); el.classList.add('dragover'); }
-function dragLeave(el) { el.classList.remove('dragover'); }
-function dropFiles(e, inputId, listId, multi, type='pdf') {
-  e.preventDefault();
-  e.currentTarget.classList.remove('dragover');
-  const files = e.dataTransfer.files;
-  const input = document.getElementById(inputId);
-  const dt = new DataTransfer();
-  [...files].forEach(f => dt.items.add(f));
-  input.files = dt.files;
-  if(listId) addFilesToList(inputId, listId, multi);
-  if(type==='img') previewImages(inputId, 'imgPreviewWrap');
-  if(type==='compress') loadCompressPreview();
-  if(type==='csv') loadCSV();
-  if(type==='meta') readMeta();
-}
-
-/* ─── FILE LIST ─── */
-function addFilesToList(inputId, listId, multi) {
-  const input = document.getElementById(inputId);
-  const list  = document.getElementById(listId);
-  if(!input.files.length) return;
-  if(!multi) list.innerHTML = '';
-  [...input.files].forEach(f => {
-    const item = document.createElement('div');
-    item.className = 'file-item';
-    const ext = f.name.split('.').pop().toUpperCase();
-    item.innerHTML = `<span class="file-item-icon">${ext==='PDF'?'📄':'📁'}</span>
-      <span class="file-item-name">${f.name}</span>
-      <span class="file-item-size">${formatSize(f.size)}</span>
-      <button class="file-item-del" onclick="this.parentElement.remove()">✕</button>`;
-    list.appendChild(item);
-  });
-}
-function clearList(listId, resultId) {
-  document.getElementById(listId).innerHTML='';
-  if(resultId) document.getElementById(resultId).classList.remove('show');
-}
-function formatSize(b) {
-  if(b<1024) return b+'B';
-  if(b<1048576) return (b/1024).toFixed(1)+'KB';
-  return (b/1048576).toFixed(2)+'MB';
-}
-
-/* ─── MERGE SIMULATE ─── */
-function simulateMerge() {
-  const list = document.getElementById('mergePdfList');
-  const items = list.querySelectorAll('.file-item');
-  if(!items.length) { toast('Tambahkan setidaknya 1 file PDF dulu!','⚠️'); return; }
-  bumpStat();
-  document.getElementById('mergeResult').classList.add('show');
-  toast(`${items.length} PDF berhasil digabungkan! 🎉`,'📄');
-}
-
-/* ─── SPLIT SIMULATE ─── */
-function simulateSplit() {
-  const list = document.getElementById('splitFileList');
-  const range = document.getElementById('splitRange').value.trim();
-  if(!list.querySelectorAll('.file-item').length) { toast('Pilih file PDF dulu!','⚠️'); return; }
-  bumpStat();
-  document.getElementById('splitResultText').textContent = `Halaman "${range}" berhasil diekstrak dari PDF.`;
-  document.getElementById('splitResult').classList.add('show');
-  toast('PDF berhasil dipisahkan!','✂️');
-}
-
-/* ─── IMG TO PDF ─── */
-function previewImages(inputId, wrapId) {
-  const input = document.getElementById(inputId);
-  const wrap  = document.getElementById(wrapId);
-  wrap.innerHTML='';
-  [...input.files].forEach(f => {
-    const url = URL.createObjectURL(f);
-    const img = document.createElement('img');
-    img.src = url; img.className='img-preview';
-    wrap.appendChild(img);
-  });
-}
-function simulateImgToPdf() {
-  const input = document.getElementById('imgPdfInput');
-  if(!input.files.length) { toast('Pilih gambar dulu!','⚠️'); return; }
-  bumpStat();
-  document.getElementById('imgPdfResult').classList.add('show');
-  toast(`${input.files.length} gambar dikonversi ke PDF!`,'📄');
-}
-
-/* ─── TEXT EDITOR ─── */
-function execCmd(cmd, val=null) {
-  document.getElementById('editorArea').focus();
-  document.execCommand(cmd, false, val);
-}
-document.addEventListener('DOMContentLoaded', () => {
-  const ea = document.getElementById('editorArea');
-  if(ea) ea.addEventListener('input', updateEditorStats);
+document.addEventListener('click',function(e){
+  if(e.target.classList.contains('modal-backdrop'))e.target.classList.remove('open');
 });
-function updateEditorStats() {
-  const ea = document.getElementById('editorArea');
-  const text = ea.innerText || '';
-  const words = text.trim() ? text.trim().split(/\s+/).length : 0;
-  document.getElementById('editorStats').textContent = `${words} kata • ${text.length} karakter`;
-}
-function downloadEditor(fmt) {
-  const ea = document.getElementById('editorArea');
-  let content, mime, ext;
-  if(fmt==='html') { content=`<!DOCTYPE html><html><body>${ea.innerHTML}</body></html>`; mime='text/html'; ext='html'; }
-  else { content=ea.innerText; mime='text/plain'; ext='txt'; }
-  dlBlob(content, mime, `dokumen.${ext}`);
-  bumpStat(); toast('Dokumen berhasil diunduh!','⬇️');
-}
-function printEditor() { window.print(); }
+document.addEventListener('keydown',function(e){
+  if(e.key==='Escape')document.querySelectorAll('.modal-backdrop.open').forEach(b=>b.classList.remove('open'));
+});
 
-/* ─── ENKRIPSI (XOR + Base64) ─── */
-function xorEncrypt(text, key) {
-  let result='';
-  for(let i=0;i<text.length;i++) result += String.fromCharCode(text.charCodeAt(i) ^ key.charCodeAt(i % key.length));
-  return btoa(unescape(encodeURIComponent(result)));
-}
-function xorDecrypt(encoded, key) {
-  try {
-    const raw = decodeURIComponent(escape(atob(encoded)));
-    let result='';
-    for(let i=0;i<raw.length;i++) result += String.fromCharCode(raw.charCodeAt(i) ^ key.charCodeAt(i % key.length));
-    return result;
-  } catch(e) { return 'ERROR: Format tidak valid atau password salah'; }
-}
-function encryptText() {
-  const text=document.getElementById('encryptInput').value;
-  const pass=document.getElementById('encryptPass').value;
-  if(!text||!pass) { toast('Isi teks dan password dulu!','⚠️'); return; }
-  const result = xorEncrypt(text, pass);
-  document.getElementById('encryptOutput').textContent = result;
-  document.getElementById('encryptResult').classList.add('show');
-  bumpStat(); toast('Teks berhasil dienkripsi!','🔒');
-}
-function decryptText() {
-  const text=document.getElementById('encryptInput').value.trim();
-  const pass=document.getElementById('encryptPass').value;
-  if(!text||!pass) { toast('Isi teks terenkripsi dan password!','⚠️'); return; }
-  const result = xorDecrypt(text, pass);
-  document.getElementById('encryptOutput').textContent = result;
-  document.getElementById('encryptResult').classList.add('show');
-  toast('Teks berhasil didekripsi!','🔓');
-}
-function updateStrength(val) {
-  const fill=document.getElementById('strengthFill');
-  const label=document.getElementById('strengthLabel');
-  let score=0;
-  if(val.length>=8) score++;
-  if(val.length>=14) score++;
-  if(/[A-Z]/.test(val)) score++;
-  if(/[0-9]/.test(val)) score++;
-  if(/[^A-Za-z0-9]/.test(val)) score++;
-  const colors=['#ef4444','#f97316','#eab308','#22c55e','#16a34a'];
-  const labels=['Sangat Lemah','Lemah','Sedang','Kuat','Sangat Kuat'];
-  fill.style.width=(score*20)+'%';
-  fill.style.background=colors[score-1]||'#ef4444';
-  label.textContent=val?labels[score-1]||'Sangat Lemah':'';
-}
+function formatSize(b){if(b<1024)return b+' B';if(b<1048576)return (b/1024).toFixed(1)+' KB';return (b/1048576).toFixed(2)+' MB'}
 
-/* ─── CSV VIEWER ─── */
-let csvData=[], csvHeaders=[];
-function loadCSV() {
-  const f=document.getElementById('csvInput').files[0];
-  if(!f) return;
-  const reader=new FileReader();
-  reader.onload=e=>{
-    const text=e.target.result;
-    const sep=text.includes('\t')?'\t':',';
-    const rows=text.trim().split('\n').map(r=>r.split(sep).map(c=>c.replace(/^"|"$/g,'')));
-    csvHeaders=rows[0]; csvData=rows.slice(1);
-    renderCSV(csvData);
-    document.getElementById('csvInfo').textContent=`${csvData.length} baris • ${csvHeaders.length} kolom`;
-    bumpStat();
-  };
-  reader.readAsText(f);
-}
-function renderCSV(data) {
-  const tbl=document.getElementById('csvTable');
-  tbl.innerHTML='';
-  const thead=document.createElement('thead');
-  const hr=document.createElement('tr');
-  csvHeaders.forEach(h=>{ const th=document.createElement('th'); th.textContent=h; hr.appendChild(th); });
-  thead.appendChild(hr); tbl.appendChild(thead);
-  const tbody=document.createElement('tbody');
-  data.forEach(row=>{ const tr=document.createElement('tr'); row.forEach(cell=>{ const td=document.createElement('td'); td.textContent=cell; tr.appendChild(td); }); tbody.appendChild(tr); });
-  tbl.appendChild(tbody);
-  document.getElementById('csvWrap').style.display='block';
-}
-function filterCSV(q) {
-  if(!csvData.length) return;
-  const filtered=q?csvData.filter(r=>r.some(c=>c.toLowerCase().includes(q.toLowerCase()))):csvData;
-  renderCSV(filtered);
-}
-
-/* ─── KOMPRES GAMBAR ─── */
-let compressFile=null;
-function loadCompressPreview() {
-  const input=document.getElementById('compressInput');
-  if(!input.files[0]) return;
-  compressFile=input.files[0];
-  const url=URL.createObjectURL(compressFile);
-  document.getElementById('compressOrigImg').src=url;
-  document.getElementById('origSize').textContent=formatSize(compressFile.size);
-  document.getElementById('compressPreviewArea').style.display='block';
-  updateQuality(document.getElementById('qualitySlider').value);
-}
-function updateQuality(val) {
-  document.getElementById('qualityVal').textContent=val;
-  if(!compressFile) return;
-  const p=document.getElementById('compressProgress');
-  p.style.width='0%';
-  setTimeout(()=>{ p.style.width='100%'; },100);
-  const img=new Image();
-  img.onload=()=>{
-    const canvas=document.createElement('canvas');
-    canvas.width=img.width; canvas.height=img.height;
-    const ctx=canvas.getContext('2d');
-    ctx.drawImage(img,0,0);
-    const q=parseFloat(val)/100;
-    const dataUrl=canvas.toDataURL('image/jpeg',q);
-    document.getElementById('compressResultImg').src=dataUrl;
-    const bytes=Math.round((dataUrl.length-22)*3/4);
-    document.getElementById('compSize').textContent=formatSize(bytes);
-    window._compressedDataUrl=dataUrl;
-  };
-  img.src=URL.createObjectURL(compressFile);
-}
-function downloadCompressed() {
-  if(!window._compressedDataUrl) { toast('Kompres gambar dulu!','⚠️'); return; }
-  const a=document.createElement('a');
-  a.href=window._compressedDataUrl;
-  a.download='compressed.jpg';
-  a.click();
-  bumpStat(); toast('Gambar terkompresi diunduh!','⬇️');
-}
-
-/* ─── TANDA TANGAN ─── */
-let signDrawing=false, signCtx=null;
-function initSign() {
-  const canvas=document.getElementById('signCanvas');
-  signCtx=canvas.getContext('2d');
-  canvas.addEventListener('mousedown', e=>{ signDrawing=true; signCtx.beginPath(); const r=canvas.getBoundingClientRect(); signCtx.moveTo(e.clientX-r.left, e.clientY-r.top); });
-  canvas.addEventListener('mousemove', e=>{ if(!signDrawing) return; const r=canvas.getBoundingClientRect(); signCtx.lineWidth=document.getElementById('signSize').value; signCtx.strokeStyle=document.getElementById('signColor').value; signCtx.lineCap='round'; signCtx.lineJoin='round'; signCtx.lineTo(e.clientX-r.left, e.clientY-r.top); signCtx.stroke(); });
-  canvas.addEventListener('mouseup', ()=>signDrawing=false);
-  canvas.addEventListener('mouseleave', ()=>signDrawing=false);
-  canvas.addEventListener('touchstart', e=>{ e.preventDefault(); signDrawing=true; signCtx.beginPath(); const r=canvas.getBoundingClientRect(); const t=e.touches[0]; signCtx.moveTo(t.clientX-r.left, t.clientY-r.top); });
-  canvas.addEventListener('touchmove', e=>{ e.preventDefault(); if(!signDrawing) return; const r=canvas.getBoundingClientRect(); const t=e.touches[0]; signCtx.lineWidth=document.getElementById('signSize').value; signCtx.strokeStyle=document.getElementById('signColor').value; signCtx.lineCap='round'; signCtx.lineJoin='round'; signCtx.lineTo(t.clientX-r.left, t.clientY-r.top); signCtx.stroke(); });
-  canvas.addEventListener('touchend', ()=>signDrawing=false);
-}
-document.addEventListener('DOMContentLoaded', initSign);
-function clearSign() { const c=document.getElementById('signCanvas'); signCtx.clearRect(0,0,c.width,c.height); }
-function downloadSign() {
-  const canvas=document.getElementById('signCanvas'); const a=document.createElement('a');
-  a.href=canvas.toDataURL('image/png'); a.download='tanda-tangan.png'; a.click();
-  bumpStat(); toast('Tanda tangan diunduh!','✍️');
-}
-async function copySignToClipboard() {
-  const canvas=document.getElementById('signCanvas');
-  canvas.toBlob(async blob=>{ try{ await navigator.clipboard.write([new ClipboardItem({'image/png':blob})]); toast('Tanda tangan disalin!','📋'); } catch(e){ toast('Browser tidak mendukung fitur ini','⚠️'); } });
-}
-
-/* ─── PASSWORD GEN ─── */
-const passHistory=[];
-function generatePass() {
-  const len=parseInt(document.getElementById('passLen').value);
-  let chars='';
-  if(document.getElementById('passUpper').checked) chars+='ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-  if(document.getElementById('passLower').checked) chars+='abcdefghijklmnopqrstuvwxyz';
-  if(document.getElementById('passNum').checked)   chars+='0123456789';
-  if(document.getElementById('passSymbol').checked) chars+='!@#$%^&*()_+-=[]{}|;:,.<>?';
-  if(!chars) { toast('Pilih setidaknya satu jenis karakter!','⚠️'); return; }
-  let pass='';
-  const arr=new Uint32Array(len);
-  crypto.getRandomValues(arr);
-  arr.forEach(n=>{ pass+=chars[n%chars.length]; });
-  document.getElementById('passOutput').value=pass;
-  evalPassStrength(pass);
-  passHistory.unshift(pass);
-  if(passHistory.length>5) passHistory.pop();
-  renderPassHistory();
-}
-function evalPassStrength(pass) {
-  let s=0;
-  if(pass.length>=12) s++; if(pass.length>=18) s++;
-  if(/[A-Z]/.test(pass)) s++; if(/[0-9]/.test(pass)) s++; if(/[^A-Za-z0-9]/.test(pass)) s++;
-  const colors=['#ef4444','#f97316','#eab308','#22c55e','#16a34a'];
-  const labels=['Sangat Lemah','Lemah','Sedang','Kuat','Sangat Kuat'];
-  document.getElementById('passStrengthFill').style.width=(s*20)+'%';
-  document.getElementById('passStrengthFill').style.background=colors[Math.max(0,s-1)];
-  document.getElementById('passStrengthLabel').textContent=labels[Math.min(4,s)];
-}
-function renderPassHistory() {
-  const h=document.getElementById('passHistory');
-  h.innerHTML=passHistory.map(p=>`<div style="display:flex;align-items:center;gap:8px;background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:7px 12px;font-family:monospace;font-size:12.5px">
-    <span style="flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${p}</span>
-    <button onclick="navigator.clipboard.writeText('${p}').then(()=>toast('Password disalin!','📋'))" style="font-size:11px;padding:3px 8px;border-radius:6px;border:1px solid var(--border);background:var(--surface);cursor:pointer">📋</button>
-  </div>`).join('');
-}
-document.addEventListener('DOMContentLoaded', generatePass);
-
-/* ─── WORD COUNTER ─── */
-function updateWordCount() {
-  const text=document.getElementById('wordCountInput').value;
-  const words=text.trim()?text.trim().split(/\s+/).length:0;
-  const chars=text.length;
-  const sentences=(text.match(/[.!?]+/g)||[]).length;
-  const paras=text.trim()?text.trim().split(/\n\s*\n/).length:0;
-  const lines=(text.match(/\n/g)||[]).length+1;
-  const readSec=Math.ceil(words/200*60);
-  document.getElementById('wcWords').textContent=words;
-  document.getElementById('wcChars').textContent=chars;
-  document.getElementById('wcSentences').textContent=sentences;
-  document.getElementById('wcParagraphs').textContent=paras;
-  document.getElementById('wcLines').textContent=lines;
-  document.getElementById('wcReadTime').textContent=readSec<60?readSec+' dtk':Math.ceil(readSec/60)+' mnt';
-}
-
-/* ─── BASE64 ─── */
-function doBase64(mode) {
-  const input=document.getElementById('b64Input').value;
-  try {
-    let result = mode==='encode' ? btoa(unescape(encodeURIComponent(input))) : decodeURIComponent(escape(atob(input)));
-    document.getElementById('b64Output').value=result;
-    bumpStat(); toast(mode==='encode'?'Berhasil di-encode!':'Berhasil di-decode!','🔄');
-  } catch(e) { document.getElementById('b64Output').value='ERROR: '+e.message; toast('Gagal! Cek format input','❌'); }
-}
-function swapBase64() {
-  const a=document.getElementById('b64Input').value;
-  const b=document.getElementById('b64Output').value;
-  document.getElementById('b64Input').value=b;
-  document.getElementById('b64Output').value=a;
-}
-function encodeFileBase64() {
-  const f=document.getElementById('b64FileInput').files[0];
-  if(!f) return;
-  const reader=new FileReader();
-  reader.onload=e=>{ document.getElementById('b64Output').value=e.target.result.split(',')[1]; bumpStat(); toast('File berhasil di-encode!','🔄'); };
-  reader.readAsDataURL(f);
-}
-
-/* ─── METADATA ─── */
-function readMeta() {
-  const f=document.getElementById('metaInput').files[0];
-  if(!f) return;
-  const meta=[
-    { label:'Nama File', value:f.name },
-    { label:'Tipe File', value:f.type||'Tidak diketahui' },
-    { label:'Ukuran', value:formatSize(f.size) },
-    { label:'Tanggal Modifikasi', value:new Date(f.lastModified).toLocaleString('id-ID') },
-    { label:'Tanggal Sekarang', value:new Date().toLocaleString('id-ID') },
-  ];
-  if(f.type.startsWith('image/')) {
-    meta.push({ label:'Kemungkinan EXIF Data', value:'GPS, Kamera, ISO, Focal Length, dll' });
-    meta.push({ label:'Status EXIF', value:'⚠️ Mungkin mengandung lokasi GPS!' });
-  }
-  const list=document.getElementById('metaList');
-  list.innerHTML=meta.map(m=>`<div style="display:flex;gap:10px;background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:9px 14px;font-size:13px">
-    <span style="font-weight:600;min-width:160px;color:var(--text)">${m.label}</span>
-    <span style="color:var(--muted)">${m.value}</span>
-  </div>`).join('');
-  document.getElementById('metaResult').style.display='block';
-  document.getElementById('metaClearResult').classList.remove('show');
-  bumpStat();
-}
-function clearMeta() {
-  document.getElementById('metaClearResult').classList.add('show');
-  toast('Metadata dihapus (simulasi)!','🗑️');
-}
-
-/* ─── COPY ─── */
-function copyResult(id) {
-  const el=document.getElementById(id);
-  navigator.clipboard.writeText(el.textContent||el.value).then(()=>toast('Berhasil disalin ke clipboard!','📋')).catch(()=>toast('Gagal menyalin','❌'));
-}
-
-/* ─── DOWNLOAD BLOB ─── */
-function dlBlob(content, mime, filename) {
+function dlBlob(content,mime,name){
   const blob=new Blob([content],{type:mime});
   const url=URL.createObjectURL(blob);
   const a=document.createElement('a');
-  a.href=url; a.download=filename; a.click();
-  URL.revokeObjectURL(url);
+  a.href=url;a.download=name;a.click();
+  setTimeout(()=>URL.revokeObjectURL(url),1000);
+}
+
+function filterTools(cat,btn){
+  document.querySelectorAll('.filter-tab').forEach(t=>t.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('.tool-card').forEach(c=>{
+    c.style.display=(cat==='semua'||(c.dataset.cat||'').includes(cat))?'flex':'none';
+  });
+}
+
+function dragOver(e,el){e.preventDefault();el.classList.add('dragover')}
+function dragLeave(el){el.classList.remove('dragover')}
+
+function dropFiles(e,inputId,listId,multi){
+  e.preventDefault();e.currentTarget.classList.remove('dragover');
+  const input=document.getElementById(inputId);
+  const dt=new DataTransfer();
+  [...e.dataTransfer.files].forEach(f=>dt.items.add(f));
+  input.files=dt.files;
+  addFilesToList(inputId,listId,multi);
+  if(inputId==='splitInput')loadSplitInfo();
+  if(inputId==='rotateInput')loadRotateInfo();
+}
+
+function dropImgFiles(e){
+  e.preventDefault();e.currentTarget.classList.remove('dragover');
+  const input=document.getElementById('imgPdfInput');
+  const dt=new DataTransfer();
+  [...e.dataTransfer.files].forEach(f=>dt.items.add(f));
+  input.files=dt.files;
+  previewImages('imgPdfInput','imgPreviewWrap');
+}
+
+function dropCompressFile(e){
+  e.preventDefault();e.currentTarget.classList.remove('dragover');
+  const input=document.getElementById('compressInput');
+  const dt=new DataTransfer();
+  [...e.dataTransfer.files].slice(0,1).forEach(f=>dt.items.add(f));
+  input.files=dt.files;
+  loadCompressPreview();
+}
+
+function addFilesToList(inputId,listId,multi){
+  const input=document.getElementById(inputId);
+  if(!input.files.length)return;
+  if(!multi)_fileLists[listId]=[];
+  if(!_fileLists[listId])_fileLists[listId]=[];
+  [...input.files].forEach(f=>_fileLists[listId].push(f));
+  renderFileList(listId);
+}
+
+function renderFileList(listId){
+  const list=document.getElementById(listId);
+  if(!list)return;
+  const files=_fileLists[listId]||[];
+  list.innerHTML=files.map((f,i)=>`<div class="file-item"><span class="file-item-icon">📄</span><span class="file-item-name">${f.name}</span><span class="file-item-size">${formatSize(f.size)}</span><button class="file-item-del" onclick="removeFile('${listId}',${i})">✕</button></div>`).join('');
+}
+
+function removeFile(listId,idx){_fileLists[listId].splice(idx,1);renderFileList(listId)}
+function clearList(listId){_fileLists[listId]=[];renderFileList(listId)}
+
+function previewImages(inputId,wrapId){
+  const input=document.getElementById(inputId);
+  const wrap=document.getElementById(wrapId);
+  wrap.innerHTML='';
+  [...input.files].forEach(f=>{
+    const url=URL.createObjectURL(f);
+    const img=document.createElement('img');
+    img.className='img-preview';img.src=url;
+    img.onload=()=>URL.revokeObjectURL(url);
+    wrap.appendChild(img);
+  });
+}
+
+async function mergePdfs(){
+  const files=_fileLists['mergePdfList']||[];
+  if(files.length<2){toast('Pilih minimal 2 file PDF!','⚠️');return}
+  const btn=document.getElementById('mergePdfBtn');
+  const loading=document.getElementById('mergeLoading');
+  btn.disabled=true;loading.classList.add('show');
+  try{
+    const {PDFDocument}=PDFLib;
+    const merged=await PDFDocument.create();
+    for(const file of files){
+      const ab=await file.arrayBuffer();
+      const pdf=await PDFDocument.load(ab);
+      const pages=await merged.copyPages(pdf,pdf.getPageIndices());
+      pages.forEach(p=>merged.addPage(p));
+    }
+    const bytes=await merged.save();
+    const blob=new Blob([bytes],{type:'application/pdf'});
+    const url=URL.createObjectURL(blob);
+    const a=document.createElement('a');a.href=url;a.download='merged.pdf';a.click();
+    setTimeout(()=>URL.revokeObjectURL(url),2000);
+    bumpStat(files.length);
+    toast(files.length+' PDF berhasil digabungkan!','📄','success');
+  }catch(err){toast('Gagal: '+err.message,'❌','error')}
+  finally{btn.disabled=false;loading.classList.remove('show')}
+}
+
+async function loadSplitInfo(){
+  const files=_fileLists['splitFileList'];
+  if(!files||!files.length)return;
+  try{
+    const ab=await files[0].arrayBuffer();
+    const pdf=await PDFLib.PDFDocument.load(ab);
+    document.getElementById('splitTotalPages').textContent=pdf.getPageCount();
+    document.getElementById('splitPageInfo').style.display='block';
+  }catch(e){}
+}
+
+function parsePageRanges(str,total){
+  const idx=new Set();
+  str.split(',').map(s=>s.trim()).filter(Boolean).forEach(part=>{
+    if(part.includes('-')){const[a,b]=part.split('-').map(Number);for(let i=Math.max(1,a);i<=Math.min(total,b);i++)idx.add(i-1)}
+    else{const n=parseInt(part);if(n>=1&&n<=total)idx.add(n-1)}
+  });
+  return [...idx].sort((a,b)=>a-b);
+}
+
+async function splitPdf(){
+  const files=_fileLists['splitFileList']||[];
+  if(!files.length){toast('Pilih file PDF!','⚠️');return}
+  const rangeStr=document.getElementById('splitRange').value.trim();
+  if(!rangeStr){toast('Masukkan rentang halaman!','⚠️');return}
+  const btn=document.getElementById('splitPdfBtn');
+  const loading=document.getElementById('splitLoading');
+  btn.disabled=true;loading.classList.add('show');
+  try{
+    const {PDFDocument}=PDFLib;
+    const ab=await files[0].arrayBuffer();
+    const src=await PDFDocument.load(ab);
+    const total=src.getPageCount();
+    const indices=parsePageRanges(rangeStr,total);
+    if(!indices.length){toast('Rentang tidak valid!','⚠️');return}
+    const newPdf=await PDFDocument.create();
+    const pages=await newPdf.copyPages(src,indices);
+    pages.forEach(p=>newPdf.addPage(p));
+    const bytes=await newPdf.save();
+    const blob=new Blob([bytes],{type:'application/pdf'});
+    const url=URL.createObjectURL(blob);
+    const a=document.createElement('a');a.href=url;a.download='split.pdf';a.click();
+    setTimeout(()=>URL.revokeObjectURL(url),2000);
+    bumpStat();toast(indices.length+' halaman diekstrak!','✂️','success');
+  }catch(err){toast('Gagal: '+err.message,'❌','error')}
+  finally{btn.disabled=false;loading.classList.remove('show')}
+}
+
+function fileToDataUrl(file){return new Promise((res,rej)=>{const r=new FileReader();r.onload=e=>res(e.target.result);r.onerror=rej;r.readAsDataURL(file)})}
+function loadImage(src){return new Promise((res,rej)=>{const img=new Image();img.onload=()=>res(img);img.onerror=rej;img.src=src})}
+
+async function convertImgToPdf(){
+  const input=document.getElementById('imgPdfInput');
+  if(!input.files.length){toast('Pilih gambar!','⚠️');return}
+  const loading=document.getElementById('imgPdfLoading');
+  loading.classList.add('show');
+  try{
+    const {jsPDF}=window.jspdf;
+    const pageSize=document.getElementById('pdfPageSize').value;
+    let doc=null,first=true;
+    for(const file of input.files){
+      const dataUrl=await fileToDataUrl(file);
+      const img=await loadImage(dataUrl);
+      let pw,ph;
+      if(pageSize==='a4'){pw=210;ph=297}
+      else if(pageSize==='letter'){pw=216;ph=279}
+      else{pw=img.width*0.264583;ph=img.height*0.264583}
+      const orient=pw>ph?'l':'p';
+      if(first){doc=new jsPDF({orientation:orient,unit:'mm',format:[pw,ph]});first=false}
+      else doc.addPage([pw,ph],orient);
+      const ratio=Math.min(pw/img.width,ph/img.height);
+      const iw=img.width*ratio,ih=img.height*ratio;
+      const x=(pw-iw)/2,y=(ph-ih)/2;
+      doc.addImage(dataUrl,file.type==='image/png'?'PNG':'JPEG',x,y,iw,ih);
+    }
+    doc.save('images.pdf');
+    bumpStat(input.files.length);
+    toast(input.files.length+' gambar dikonversi!','🖼️','success');
+  }catch(err){toast('Gagal: '+err.message,'❌','error')}
+  finally{loading.classList.remove('show')}
+}
+
+let _compressFile=null;
+function loadCompressPreview(){
+  const input=document.getElementById('compressInput');
+  if(!input.files.length)return;
+  _compressFile=input.files[0];
+  const url=URL.createObjectURL(_compressFile);
+  const origImg=document.getElementById('compressOrigImg');
+  origImg.src=url;
+  origImg.onload=()=>{URL.revokeObjectURL(url);document.getElementById('origSize').textContent=formatSize(_compressFile.size);document.getElementById('compressPreviewArea').style.display='block';reCompress()};
+}
+
+function updateQuality(val){document.getElementById('qualityVal').textContent=val;reCompress()}
+
+function reCompress(){
+  if(!_compressFile)return;
+  const quality=parseFloat(document.getElementById('qualitySlider').value)/100;
+  const format=document.getElementById('compressFormat').value;
+  const url=URL.createObjectURL(_compressFile);
+  const img=new Image();
+  img.onload=()=>{
+    URL.revokeObjectURL(url);
+    const canvas=document.createElement('canvas');
+    canvas.width=img.width;canvas.height=img.height;
+    canvas.getContext('2d').drawImage(img,0,0);
+    const mime='image/'+format;
+    const dataUrl=canvas.toDataURL(mime,quality);
+    document.getElementById('compressResultImg').src=dataUrl;
+    const bytes=Math.round((dataUrl.length-22)*3/4);
+    document.getElementById('compSize').textContent=formatSize(bytes);
+    const ratio=((1-bytes/_compressFile.size)*100).toFixed(1);
+    const el=document.getElementById('compRatio');
+    if(bytes<_compressFile.size){el.textContent='(−'+ratio+'%)';el.style.color='var(--green)'}
+    else{el.textContent='(+'+Math.abs(ratio)+'%)';el.style.color='var(--rose)'}
+    window._compDataUrl=dataUrl;window._compFmt=format;
+  };
+  img.src=url;
+}
+
+function downloadCompressed(){
+  if(!window._compDataUrl){toast('Kompres dulu!','⚠️');return}
+  const a=document.createElement('a');a.href=window._compDataUrl;a.download='compressed.'+window._compFmt;a.click();
+  bumpStat();toast('Gambar diunduh!','⬇️','success');
+}
+
+let signDrawing=false,signCtx=null;
+function initSign(){
+  const canvas=document.getElementById('signCanvas');
+  if(!canvas)return;
+  signCtx=canvas.getContext('2d');
+  signCtx.lineCap='round';signCtx.lineJoin='round';
+  function getPos(e,canvas){
+    const r=canvas.getBoundingClientRect();
+    const sx=canvas.width/r.width,sy=canvas.height/r.height;
+    const src=e.touches?e.touches[0]:e;
+    return{x:(src.clientX-r.left)*sx,y:(src.clientY-r.top)*sy};
+  }
+  canvas.addEventListener('mousedown',e=>{signDrawing=true;const p=getPos(e,canvas);signCtx.beginPath();signCtx.moveTo(p.x,p.y)});
+  canvas.addEventListener('mousemove',e=>{if(!signDrawing)return;const p=getPos(e,canvas);signCtx.lineWidth=parseInt(document.getElementById('signSize').value);signCtx.strokeStyle=document.getElementById('signColor').value;signCtx.lineTo(p.x,p.y);signCtx.stroke()});
+  canvas.addEventListener('mouseup',()=>signDrawing=false);
+  canvas.addEventListener('mouseleave',()=>signDrawing=false);
+  canvas.addEventListener('touchstart',e=>{e.preventDefault();signDrawing=true;const p=getPos(e,canvas);signCtx.beginPath();signCtx.moveTo(p.x,p.y)},{passive:false});
+  canvas.addEventListener('touchmove',e=>{e.preventDefault();if(!signDrawing)return;const p=getPos(e,canvas);signCtx.lineWidth=parseInt(document.getElementById('signSize').value);signCtx.strokeStyle=document.getElementById('signColor').value;signCtx.lineTo(p.x,p.y);signCtx.stroke()},{passive:false});
+  canvas.addEventListener('touchend',()=>signDrawing=false);
+}
+initSign();
+
+function clearSign(){const c=document.getElementById('signCanvas');signCtx.clearRect(0,0,c.width,c.height)}
+function downloadSign(){const a=document.createElement('a');a.href=document.getElementById('signCanvas').toDataURL('image/png');a.download='tanda-tangan.png';a.click();bumpStat();toast('Tanda tangan diunduh!','✍️','success')}
+async function copySignToClipboard(){
+  try{const blob=await new Promise(res=>document.getElementById('signCanvas').toBlob(res,'image/png'));await navigator.clipboard.write([new ClipboardItem({'image/png':blob})]);toast('Disalin ke clipboard!','📋','success')}
+  catch(e){toast('Browser tidak mendukung copy gambar.','⚠️')}
+}
+
+function execCmd(cmd,val){document.getElementById('editorArea').focus();document.execCommand(cmd,false,val||null);updateEditorStats()}
+function updateEditorStats(){const el=document.getElementById('editorArea');const text=el.innerText||'';const words=text.trim()?text.trim().split(/\s+/).length:0;document.getElementById('editorStats').textContent=words+' kata • '+text.length+' karakter'}
+function downloadEditor(fmt){
+  const el=document.getElementById('editorArea');
+  if(fmt==='html'){dlBlob('<!DOCTYPE html><html><head><meta charset="UTF-8"><style>body{font-family:sans-serif;max-width:800px;margin:2rem auto;line-height:1.8}</style></head><body>'+el.innerHTML+'</body></html>','text/html','dokumen.html')}
+  else dlBlob(el.innerText,'text/plain','dokumen.txt');
+  bumpStat();toast('Dokumen diunduh!','⬇️','success');
+}
+function printEditor(){const win=window.open('','_blank');win.document.write('<html><head><style>body{font-family:sans-serif;line-height:1.8;margin:2rem}</style></head><body>'+document.getElementById('editorArea').innerHTML+'</body></html>');win.document.close();win.print()}
+
+function updateWordCount(){
+  const text=document.getElementById('wordCountInput').value;
+  const words=text.trim()?text.trim().split(/\s+/).length:0;
+  document.getElementById('wcWords').textContent=words;
+  document.getElementById('wcChars').textContent=text.length;
+  document.getElementById('wcCharsNoSpace').textContent=text.replace(/\s/g,'').length;
+  document.getElementById('wcSentences').textContent=(text.match(/[.!?]+/g)||[]).length;
+  document.getElementById('wcParagraphs').textContent=text.trim()?text.trim().split(/\n\s*\n/).length:0;
+  document.getElementById('wcLines').textContent=text?(text.match(/\n/g)||[]).length+1:0;
+  document.getElementById('wcPages').textContent=Math.ceil(words/250)||0;
+  const sec=Math.ceil(words/200*60);
+  document.getElementById('wcReadTime').textContent=sec<60?sec+' dtk':Math.ceil(sec/60)+' mnt';
+}
+
+function copyResult(id){
+  const el=document.getElementById(id);
+  navigator.clipboard.writeText(el.textContent||el.value).then(()=>toast('Disalin!','📋','success')).catch(()=>toast('Gagal menyalin','❌','error'));
+}
+
+async function loadRotateInfo(){
+  const files=_fileLists['rotateFileList'];
+  if(!files||!files.length)return;
+  try{
+    const ab=await files[0].arrayBuffer();
+    const pdf=await PDFLib.PDFDocument.load(ab);
+    document.getElementById('rotateTotalPages').textContent=pdf.getPageCount();
+    document.getElementById('rotatePageInfo').style.display='block';
+  }catch(e){}
+}
+
+async function rotatePdf(){
+  const files=_fileLists['rotateFileList']||[];
+  if(!files.length){toast('Pilih file PDF!','⚠️');return}
+  const degrees=parseInt(document.querySelector('input[name="rotDir"]:checked').value);
+  const scope=document.getElementById('rotateScope').value;
+  const pagesInput=document.getElementById('rotatePages').value;
+  const btn=document.getElementById('rotatePdfBtn');
+  const loading=document.getElementById('rotateLoading');
+  btn.disabled=true;loading.classList.add('show');
+  try{
+    const {PDFDocument,degrees:deg}=PDFLib;
+    const ab=await files[0].arrayBuffer();
+    const pdf=await PDFDocument.load(ab);
+    const total=pdf.getPageCount();
+    let pageIndices=scope==='all'?[...Array(total).keys()]:pagesInput.split(',').map(s=>parseInt(s.trim())-1).filter(i=>i>=0&&i<total);
+    if(!pageIndices.length){toast('Halaman tidak valid!','⚠️');return}
+    pageIndices.forEach(i=>{const page=pdf.getPage(i);const cur=page.getRotation().angle;page.setRotation(PDFLib.degrees((cur+degrees+360)%360))});
+    const bytes=await pdf.save();
+    const blob=new Blob([bytes],{type:'application/pdf'});
+    const url=URL.createObjectURL(blob);
+    const a=document.createElement('a');a.href=url;a.download='rotated.pdf';a.click();
+    setTimeout(()=>URL.revokeObjectURL(url),2000);
+    bumpStat();toast(pageIndices.length+' halaman diputar!','🔄','success');
+  }catch(err){toast('Gagal: '+err.message,'❌','error')}
+  finally{btn.disabled=false;loading.classList.remove('show')}
+}
+
+async function addWatermark(){
+  const files=_fileLists['watermarkFileList']||[];
+  if(!files.length){toast('Pilih file PDF!','⚠️');return}
+  const text=document.getElementById('watermarkText').value.trim();
+  if(!text){toast('Masukkan teks watermark!','⚠️');return}
+  const colorHex=document.getElementById('watermarkColor').value;
+  const fontSize=parseInt(document.getElementById('watermarkSize').value);
+  const opacity=parseFloat(document.getElementById('watermarkOpacity').value)/100;
+  const angleDeg=parseFloat(document.getElementById('watermarkAngle').value);
+  const btn=document.getElementById('watermarkBtn');
+  const loading=document.getElementById('watermarkLoading');
+  btn.disabled=true;loading.classList.add('show');
+  try{
+    const {PDFDocument,rgb,degrees}=PDFLib;
+    const ab=await files[0].arrayBuffer();
+    const pdf=await PDFDocument.load(ab);
+    const font=await pdf.embedFont(PDFLib.StandardFonts.HelveticaBold);
+    const r=parseInt(colorHex.slice(1,3),16)/255,g=parseInt(colorHex.slice(3,5),16)/255,b=parseInt(colorHex.slice(5,7),16)/255;
+    const color=rgb(r,g,b);
+    const pages=pdf.getPages();
+    pages.forEach(page=>{
+      const{width,height}=page.getSize();
+      const tw=font.widthOfTextAtSize(text,fontSize);
+      page.drawText(text,{x:(width-tw)/2,y:height/2,size:fontSize,font,color,opacity,rotate:degrees(angleDeg)});
+    });
+    const bytes=await pdf.save();
+    const blob=new Blob([bytes],{type:'application/pdf'});
+    const url=URL.createObjectURL(blob);
+    const a=document.createElement('a');a.href=url;a.download='watermarked.pdf';a.click();
+    setTimeout(()=>URL.revokeObjectURL(url),2000);
+    bumpStat();toast('Watermark ditambahkan ke '+pages.length+' halaman!','💧','success');
+  }catch(err){toast('Gagal: '+err.message,'❌','error')}
+  finally{btn.disabled=false;loading.classList.remove('show')}
+}
+
+function switchB64Tab(tab){
+  ['encode','decode','file'].forEach(t=>{
+    const cap=t.charAt(0).toUpperCase()+t.slice(1);
+    document.getElementById('b64Tab'+cap).classList.remove('active');
+    document.getElementById('b64Panel'+cap).style.display='none';
+  });
+  const cap=tab.charAt(0).toUpperCase()+tab.slice(1);
+  document.getElementById('b64Tab'+cap).classList.add('active');
+  document.getElementById('b64Panel'+cap).style.display='block';
+}
+
+function doBase64Encode(){
+  try{document.getElementById('b64OutputEncode').value=btoa(unescape(encodeURIComponent(document.getElementById('b64InputEncode').value)))}
+  catch(e){document.getElementById('b64OutputEncode').value='Error: '+e.message}
+}
+
+function doBase64Decode(){
+  const input=document.getElementById('b64InputDecode').value.trim();
+  const errEl=document.getElementById('b64DecodeError');
+  try{document.getElementById('b64OutputDecode').value=decodeURIComponent(escape(atob(input)));errEl.style.display='none'}
+  catch(e){document.getElementById('b64OutputDecode').value='';errEl.style.display='block'}
+}
+
+let _b64FileData=null,_b64FileName=null;
+function fileToBase64Fn(){
+  const input=document.getElementById('b64FileInput');
+  if(!input.files.length)return;
+  const file=input.files[0];_b64FileName=file.name;
+  const reader=new FileReader();
+  reader.onload=e=>{
+    _b64FileData=e.target.result.split(',')[1];
+    document.getElementById('b64FileOutput').value=_b64FileData;
+    document.getElementById('b64FileResult').style.display='block';
+    toast('File dikonversi ke Base64!','🔤','success');
+    bumpStat();
+  };
+  reader.readAsDataURL(file);
+}
+
+function downloadBase64File(){
+  if(!_b64FileData)return;
+  dlBlob(_b64FileData,'text/plain',(_b64FileName||'file')+'.base64.txt');
+  toast('File Base64 diunduh!','⬇️','success');
 }
 </script>
-</body>
-</html>

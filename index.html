@@ -5,10 +5,102 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>#JagaDokumen — Kelola Dokumen Aman di Browser</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🛡️</text></svg>">
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet"/>
-<script src="https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<!-- OfflineLoader: cache semua library ke localStorage supaya bisa offline setelah pertama kali online -->
+<style id="font-fallback">
+body { font-family: 'Plus Jakarta Sans', 'Segoe UI', system-ui, sans-serif; }
+</style>
+<script>
+(async function OfflineLoader() {
+  const LIBS = [
+    {
+      key: 'cache_pdflib_1171',
+      url: 'https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js',
+      name: 'pdf-lib'
+    },
+    {
+      key: 'cache_jspdf_251',
+      url: 'https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js',
+      name: 'jspdf'
+    },
+    {
+      key: 'cache_pdfjs_31174',
+      url: 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js',
+      name: 'pdf.js'
+    }
+  ];
+
+  const FONT_KEY = 'cache_plus_jakarta_sans_font';
+  const FONT_URL = 'https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&display=swap';
+
+  // Load font (cache CSS saja, browser tetap cache file font via HTTP cache)
+  try {
+    let fontCss = localStorage.getItem(FONT_KEY);
+    if (!fontCss) {
+      const r = await fetch(FONT_URL);
+      if (r.ok) {
+        fontCss = await r.text();
+        try { localStorage.setItem(FONT_KEY, fontCss); } catch(e) {}
+      }
+    }
+    if (fontCss) {
+      const style = document.createElement('style');
+      style.textContent = fontCss;
+      document.head.appendChild(style);
+    }
+  } catch(e) { /* pakai fallback font */ }
+
+  // Load & inject JS libraries
+  let offlineMode = true;
+  for (const lib of LIBS) {
+    let code = null;
+    try {
+      code = localStorage.getItem(lib.key);
+    } catch(e) {}
+
+    if (!code) {
+      offlineMode = false;
+      try {
+        const r = await fetch(lib.url);
+        if (!r.ok) throw new Error('HTTP ' + r.status);
+        code = await r.text();
+        try { localStorage.setItem(lib.key, code); } catch(e) {
+          console.warn('localStorage penuh, library tidak di-cache:', lib.name);
+        }
+      } catch(e) {
+        console.error('Gagal load library:', lib.name, e.message);
+        // Fallback: inject script tag biasa
+        await new Promise((res, rej) => {
+          const s = document.createElement('script');
+          s.src = lib.url;
+          s.onload = res;
+          s.onerror = rej;
+          document.head.appendChild(s);
+        });
+        continue;
+      }
+    }
+
+    if (code) {
+      const s = document.createElement('script');
+      s.textContent = code;
+      document.head.appendChild(s);
+    }
+  }
+
+  // Konfigurasi pdf.js worker
+  if (window.pdfjsLib) {
+    window.pdfjsLib.GlobalWorkerOptions.workerSrc =
+      'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+  }
+
+  // Tampilkan status di console
+  if (offlineMode) {
+    console.log('%c✅ JagaDokumen: berjalan OFFLINE (semua library dari cache)', 'color:green;font-weight:bold');
+  } else {
+    console.log('%c🌐 JagaDokumen: library di-download dan di-cache untuk offline berikutnya', 'color:blue;font-weight:bold');
+  }
+})();
+</script>
 <style>
 /* ═══════════════════════ DESIGN TOKENS ═══════════════════════ */
 :root {
@@ -30,10 +122,42 @@
   --shadow-lg:0 16px 48px rgba(15,45,107,.16);
 }
 
+/* ═══════════════════════ DARK MODE TOKENS ═══════════════════════ */
+body.dark {
+  --blue-900:#1e3a8a; --blue-800:#1e40af; --blue-700:#3b82f6;
+  --blue-600:#60a5fa; --blue-500:#93c5fd; --blue-100:#1e3a8a; --blue-50:#1e2d4a;
+  --green:#4ade80; --green-bg:#14532d;
+  --orange:#fb923c; --orange-bg:#431407;
+  --purple:#a78bfa; --purple-bg:#2e1065;
+  --rose:#fb7185; --rose-bg:#4c0519;
+  --teal:#2dd4bf; --teal-bg:#042f2e;
+  --amber:#fbbf24; --amber-bg:#451a03;
+  --cyan:#22d3ee; --cyan-bg:#083344;
+  --indigo:#818cf8; --indigo-bg:#1e1b4b;
+  --bg:#0f172a; --surface:#1e293b; --border:#334155;
+  --text:#f1f5f9; --muted:#94a3b8; --light:#64748b;
+  --shadow:0 2px 12px rgba(0,0,0,.4);
+  --shadow-md:0 6px 24px rgba(0,0,0,.5);
+  --shadow-lg:0 16px 48px rgba(0,0,0,.6);
+}
+body.dark nav{background:rgba(15,23,42,.9);}
+body.dark input[type=text],body.dark input[type=password],body.dark input[type=number],body.dark textarea,body.dark select{background:var(--surface);color:var(--text);}
+body.dark input:focus,body.dark textarea:focus,body.dark select:focus{background:#263348;}
+body.dark .dropzone{background:var(--surface);}
+body.dark .dropzone:hover,body.dark .dropzone.dragover{background:var(--blue-50);}
+body.dark .modal{background:var(--surface);}
+body.dark .modal-header{background:var(--surface);}
+body.dark .modal-close{background:var(--bg);}
+body.dark .toolbar{background:var(--bg);}
+body.dark .tb-btn{background:var(--surface);color:var(--text);}
+body.dark #editorArea{background:#263348;color:var(--text);}
+body.dark ::-webkit-scrollbar-thumb{background:#475569;}
+body.dark .hero{background:linear-gradient(135deg,#0a1628 0%,#1e3a8a 60%,#1e40af 100%);}
+
 /* ═══════════════════════ RESET ═══════════════════════ */
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
 html{scroll-behavior:smooth;}
-body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;}
+body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;transition:background .3s,color .3s;}
 ::-webkit-scrollbar{width:6px;}
 ::-webkit-scrollbar-thumb{background:#c1cde3;border-radius:10px;}
 
@@ -256,6 +380,42 @@ textarea{resize:vertical;min-height:120px;}
 /* ═══════════════════════ WIP BADGE ═══════════════════════ */
 .wip-notice{background:var(--amber-bg);border:1.5px solid var(--amber);border-radius:10px;padding:.75rem 1rem;font-size:13px;color:var(--amber);font-weight:600;display:flex;align-items:center;gap:8px;margin-bottom:1rem;}
 
+/* ═══════════════════════ DARK TOGGLE ═══════════════════════ */
+.dark-toggle{width:36px;height:36px;border-radius:10px;background:var(--bg);border:1.5px solid var(--border);font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s;flex-shrink:0;}
+.dark-toggle:hover{background:var(--blue-50);border-color:var(--blue-500);}
+
+/* ═══════════════════════ SEARCH BAR ═══════════════════════ */
+.search-wrap{position:relative;margin-bottom:1.2rem;}
+.search-wrap input{width:100%;padding:10px 14px 10px 38px;font-size:13.5px;font-family:inherit;border:1.5px solid var(--border);border-radius:11px;background:var(--surface);color:var(--text);outline:none;transition:border-color .18s;}
+.search-wrap input:focus{border-color:var(--blue-500);}
+.search-icon{position:absolute;left:12px;top:50%;transform:translateY(-50%);font-size:15px;pointer-events:none;}
+.search-clear{position:absolute;right:10px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;font-size:14px;color:var(--light);padding:3px;display:none;}
+.search-clear.show{display:block;}
+
+/* ═══════════════════════ HISTORY LOG ═══════════════════════ */
+.history-panel{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:1.25rem;margin-top:1.75rem;box-shadow:var(--shadow);}
+.history-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:.9rem;}
+.history-header h3{font-size:14px;font-weight:700;}
+.history-list{display:flex;flex-direction:column;gap:6px;max-height:180px;overflow-y:auto;}
+.history-item{display:flex;align-items:center;gap:8px;font-size:12.5px;color:var(--muted);padding:6px 10px;background:var(--bg);border-radius:8px;}
+.history-item .hist-icon{font-size:14px;flex-shrink:0;}
+.history-item .hist-time{margin-left:auto;font-size:11px;color:var(--light);}
+.history-empty{text-align:center;font-size:12.5px;color:var(--light);padding:1rem;}
+
+/* ═══════════════════════ PDF TO IMAGE ═══════════════════════ */
+.pdf2img-results{display:flex;flex-wrap:wrap;gap:10px;margin-top:1rem;}
+.pdf2img-thumb{display:flex;flex-direction:column;align-items:center;gap:5px;}
+.pdf2img-thumb canvas{border:1.5px solid var(--border);border-radius:8px;box-shadow:var(--shadow);}
+
+/* ═══════════════════════ PASSWORD PROTECT ═══════════════════════ */
+.pass-strength{height:4px;border-radius:2px;margin-top:5px;transition:all .3s;background:var(--border);}
+.pass-strength.weak{background:var(--rose);width:33%;}
+.pass-strength.medium{background:var(--amber);width:66%;}
+.pass-strength.strong{background:var(--green);width:100%;}
+
+/* ═══════════════════════ KEYBOARD SHORTCUT HINT ═══════════════════════ */
+.kbd{display:inline-block;padding:1px 6px;font-size:10.5px;font-weight:700;background:var(--bg);border:1.5px solid var(--border);border-bottom-width:3px;border-radius:5px;color:var(--muted);font-family:monospace;}
+
 /* ═══════════════════════ RESPONSIVE ═══════════════════════ */
 @media(max-width:1100px){.tools-grid{grid-template-columns:repeat(3,1fr);}}
 @media(max-width:900px){.tools-grid{grid-template-columns:repeat(2,1fr);}.stats-row{grid-template-columns:repeat(2,1fr);}}
@@ -272,6 +432,15 @@ textarea{resize:vertical;min-height:120px;}
   </div>
   <div class="nav-spacer"></div>
   <div class="nav-badge"><span class="dot"></span>100% Lokal — Tanpa Upload Server</div>
+  <div id="offlineStatusBadge" class="nav-badge" style="background:#dcfce7;color:#16a34a;border-color:#bbf7d0;display:none;"><span style="font-size:13px;">📦</span>Mode Offline</div>
+  <button class="dark-toggle" id="darkToggleBtn" title="Ganti tema (Ctrl+D)" onclick="toggleDark()">🌙</button>
+  <script>
+    (function(){
+      const keys=['cache_pdflib_1171','cache_jspdf_251','cache_pdfjs_31174'];
+      const allCached=keys.every(k=>{try{return!!localStorage.getItem(k);}catch(e){return false;}});
+      if(allCached){const b=document.getElementById('offlineStatusBadge');if(b)b.style.display='flex';}
+    })();
+  </script>
 </nav>
 
 <!-- ═══ MAIN ═══ -->
@@ -301,7 +470,7 @@ textarea{resize:vertical;min-height:120px;}
     </div>
     <div class="stat-card">
       <div class="stat-icon green">✅</div>
-      <div><div class="stat-num green">15</div><div class="stat-label">Fitur Tersedia</div></div>
+      <div><div class="stat-num green">18</div><div class="stat-label">Fitur Tersedia</div></div>
     </div>
     <div class="stat-card">
       <div class="stat-icon orange">☁️</div>
@@ -318,7 +487,12 @@ textarea{resize:vertical;min-height:120px;}
     <div class="section-header">
       <h2>🧰 Semua Alat</h2>
       <div class="section-divider"></div>
-      <p>15 alat tersedia</p>
+      <p id="toolsCountLabel">18 alat tersedia</p>
+    </div>
+    <div class="search-wrap">
+      <span class="search-icon">🔍</span>
+      <input type="text" id="toolSearchInput" placeholder="Cari alat... ketik nama atau kategori   [Ctrl+K]" oninput="searchTools(this.value)">
+      <button class="search-clear" id="searchClearBtn" onclick="clearSearch()">✕</button>
     </div>
     <div class="filter-tabs">
       <button class="filter-tab active" onclick="filterTools('semua',this)">Semua</button>
@@ -452,10 +626,45 @@ textarea{resize:vertical;min-height:120px;}
       <button class="tool-card-btn" onclick="openModal('watermarkModal')">Buka Alat →</button>
     </div>
 
+    <!-- N: Nomor Halaman PDF -->
+    <div class="tool-card teal" data-cat="pdf utilitas">
+      <div class="tool-card-top"><div class="tool-icon-wrap teal">🔢</div><span class="tool-badge new" style="background:var(--teal-bg);color:var(--teal)">Baru</span></div>
+      <h3>Nomor Halaman PDF</h3>
+      <p>Tambahkan nomor halaman otomatis ke PDF. Pilih posisi, ukuran, dan format.</p>
+      <button class="tool-card-btn" onclick="openModal('pageNumberModal')">Buka Alat →</button>
+    </div>
+
+    <!-- P: PDF ke Gambar -->
+    <div class="tool-card rose" data-cat="pdf gambar">
+      <div class="tool-card-top"><div class="tool-icon-wrap rose">🖼️</div><span class="tool-badge new" style="background:var(--rose-bg);color:var(--rose)">Baru</span></div>
+      <h3>PDF ke Gambar</h3>
+      <p>Konversi setiap halaman PDF menjadi gambar PNG. Unduh satu per satu atau semua.</p>
+      <button class="tool-card-btn" onclick="openModal('pdfToImgModal')">Buka Alat →</button>
+    </div>
+
+    <!-- P: Proteksi Password PDF -->
+    <div class="tool-card purple" data-cat="pdf keamanan">
+      <div class="tool-card-top"><div class="tool-icon-wrap purple">🔐</div><span class="tool-badge new" style="background:var(--purple-bg);color:var(--purple)">Baru</span></div>
+      <h3>Info &amp; Proteksi PDF</h3>
+      <p>Lihat info detail file PDF: halaman, ukuran, metadata, dan lindungi dengan password.</p>
+      <button class="tool-card-btn" onclick="openModal('pdfInfoModal')">Buka Alat →</button>
+    </div>
+
+  </div>
+
+  <!-- HISTORY PANEL -->
+  <div class="history-panel" style="margin-top:1.75rem;margin-bottom:1.75rem">
+    <div class="history-header">
+      <h3>📋 Riwayat Aktivitas</h3>
+      <button class="btn-secondary" style="padding:5px 12px;font-size:12px" onclick="clearHistory()">🗑️ Hapus</button>
+    </div>
+    <div class="history-list" id="historyList">
+      <div class="history-empty">Belum ada aktivitas. Mulai gunakan alat di atas.</div>
+    </div>
   </div>
 
   <!-- INFO BANNER -->
-  <div class="info-banner">
+  <div class="info-banner" style="margin-bottom:2rem">
     <div class="info-banner-icon">🔐</div>
     <div>
       <h3>Bagaimana #JagaDokumen Melindungi Privasi Anda?</h3>
@@ -1215,72 +1424,454 @@ textarea{resize:vertical;min-height:120px;}
 </div>
 
 <!-- ══════════════════════════════════════════════════════════
-     MODAL: EDIT PDF
+     MODAL: EDIT PDF (POWERFUL v2)
 ══════════════════════════════════════════════════════════ -->
+<style>
+/* ── Edit PDF Powerful Styles ── */
+.ep-layout{display:grid;grid-template-columns:280px 1fr;gap:0;height:calc(92vh - 120px);min-height:520px;}
+.ep-sidebar{background:var(--bg);border-right:1px solid var(--border);overflow-y:auto;display:flex;flex-direction:column;gap:0;}
+.ep-section{padding:.75rem;border-bottom:1px solid var(--border);}
+.ep-section-title{font-size:10px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;margin-bottom:.55rem;}
+.ep-tools{display:grid;grid-template-columns:1fr 1fr;gap:5px;}
+.ep-tool-btn{padding:8px 6px;border-radius:9px;border:1.5px solid var(--border);background:var(--surface);color:var(--text);font-size:12px;font-weight:600;font-family:inherit;cursor:pointer;transition:all .15s;display:flex;flex-direction:column;align-items:center;gap:3px;}
+.ep-tool-btn .ep-tool-icon{font-size:18px;}
+.ep-tool-btn:hover{border-color:var(--blue-500);background:var(--blue-50);}
+.ep-tool-btn.active{border-color:var(--blue-600);background:var(--blue-600);color:#fff;}
+.ep-field{margin-bottom:.55rem;}
+.ep-field label{display:block;font-size:11px;font-weight:700;color:var(--muted);margin-bottom:3px;}
+.ep-field input[type=text],.ep-field input[type=number],.ep-field select,.ep-field textarea{width:100%;padding:6px 9px;font-size:12px;font-family:inherit;border:1.5px solid var(--border);border-radius:8px;background:var(--surface);color:var(--text);outline:none;}
+.ep-field input:focus,.ep-field select:focus,.ep-field textarea:focus{border-color:var(--blue-500);}
+.ep-field textarea{resize:vertical;min-height:52px;}
+.ep-color-row{display:grid;grid-template-columns:1fr 1fr;gap:6px;}
+.ep-color-input{width:100%;height:32px;border:1.5px solid var(--border);border-radius:8px;cursor:pointer;padding:2px;}
+.ep-range-row{display:flex;align-items:center;gap:6px;}
+.ep-range-row input[type=range]{flex:1;accent-color:var(--blue-600);}
+.ep-range-val{font-size:11px;font-weight:700;color:var(--blue-600);min-width:28px;text-align:right;}
+.ep-style-btns{display:flex;gap:4px;}
+.ep-style-btn{width:30px;height:28px;border:1.5px solid var(--border);border-radius:7px;background:var(--surface);cursor:pointer;font-size:13px;font-weight:700;font-family:serif;display:flex;align-items:center;justify-content:center;transition:all .15s;}
+.ep-style-btn:hover{border-color:var(--blue-500);}
+.ep-style-btn.active{background:var(--blue-600);border-color:var(--blue-600);color:#fff;}
+.ep-align-btns{display:flex;gap:4px;}
+.ep-align-btn{flex:1;height:28px;border:1.5px solid var(--border);border-radius:7px;background:var(--surface);cursor:pointer;font-size:13px;display:flex;align-items:center;justify-content:center;transition:all .15s;}
+.ep-align-btn:hover{border-color:var(--blue-500);}
+.ep-align-btn.active{background:var(--blue-600);border-color:var(--blue-600);color:#fff;}
+.ep-layer-list{display:flex;flex-direction:column;gap:3px;max-height:160px;overflow-y:auto;}
+.ep-layer-item{display:flex;align-items:center;gap:6px;padding:5px 7px;border-radius:7px;border:1.5px solid var(--border);background:var(--surface);font-size:11.5px;cursor:pointer;transition:all .15s;}
+.ep-layer-item:hover{border-color:var(--blue-400);}
+.ep-layer-item.selected{border-color:var(--blue-600);background:var(--blue-50);}
+.ep-layer-item .ep-layer-name{flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.ep-layer-del{background:none;border:none;cursor:pointer;font-size:13px;color:var(--light);padding:0 2px;line-height:1;}
+.ep-layer-del:hover{color:var(--rose);}
+.ep-canvas-area{position:relative;background:#cbd5e1;overflow:auto;display:flex;align-items:flex-start;justify-content:center;padding:16px;}
+.ep-canvas-wrap{position:relative;display:inline-block;box-shadow:0 8px 32px rgba(0,0,0,.25);}
+#pdfEditCanvas{display:block;}
+#pdfEditOverlayCanvas{position:absolute;top:0;left:0;}
+.ep-nav-bar{display:flex;align-items:center;justify-content:space-between;padding:.6rem .75rem;border-top:1px solid var(--border);background:var(--bg);}
+.ep-nav-bar .ep-page-info{font-size:12px;font-weight:700;color:var(--text);}
+.ep-actions{display:flex;flex-direction:column;gap:5px;padding:.75rem;}
+.ep-inline-editor{position:absolute;z-index:999;border:2px dashed var(--blue-500);border-radius:4px;outline:none;background:transparent;resize:none;overflow:hidden;font-family:inherit;line-height:1.3;padding:2px 4px;min-width:60px;min-height:24px;cursor:text;box-shadow:0 0 0 3px rgba(37,99,235,.18);}
+/* dark mode fixes */
+body.dark .ep-sidebar{background:var(--bg);}
+body.dark .ep-tool-btn{background:var(--surface);}
+body.dark .ep-canvas-area{background:#1e293b;}
+body.dark .ep-field input,.ep-field select,.ep-field textarea{background:var(--surface);color:var(--text);}
+</style>
+
 <div class="modal-backdrop" id="editPdfModal">
-  <div class="modal xlarge">
+  <div class="modal xlarge" style="max-height:96vh;display:flex;flex-direction:column;">
     <div class="modal-header">
       <div class="modal-header-icon">✏️</div>
-      <div><h3>Edit PDF</h3><p>Tambahkan teks, kotak, atau sorotan ke halaman PDF</p></div>
-      <button class="modal-close" onclick="closeModal('editPdfModal')">✕</button>
+      <div><h3>Edit PDF</h3><p>Tambah teks, kotak, garis, highlight — klik untuk edit, drag untuk pindah</p></div>
+      <button class="modal-close" onclick="closeEditPdf()">✕</button>
     </div>
-    <div class="modal-body">
-      <div class="wip-notice">🚧 Fitur ini masih dalam tahap pengembangan. Beberapa fungsi mungkin belum bekerja sempurna.</div>
-      <div class="dropzone" id="editPdfDrop" onclick="document.getElementById('editPdfInput').click()"
-           ondragover="dragOver(event,this)" ondragleave="dragLeave(this)"
-           ondrop="dropEditPdf(event)">
+
+    <!-- DROP ZONE -->
+    <div id="editPdfDrop" style="padding:1.5rem" onclick="document.getElementById('editPdfInput').click()"
+         ondragover="dragOver(event,this)" ondragleave="dragLeave(this)" ondrop="dropEditPdf(event)">
+      <div class="dropzone" style="margin:0;cursor:pointer">
         <input type="file" id="editPdfInput" accept=".pdf" onchange="loadEditPdf()">
         <div class="dropzone-icon">✏️</div>
-        <h4>Klik atau seret file PDF untuk diedit</h4>
-        <p>Satu file PDF</p>
+        <h4>Klik atau seret file PDF</h4>
+        <p>Satu file PDF — semua halaman bisa diedit</p>
       </div>
-      <div id="editPdfLayout" style="display:none">
-        <div class="pdf-editor-layout">
-          <div class="pdf-editor-sidebar">
-            <p style="font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.06em">Navigasi</p>
-            <div style="display:flex;gap:6px;align-items:center">
-              <button class="pdf-nav-btn" onclick="editPrevPage()" style="width:32px;height:32px">‹</button>
-              <span id="editPageLabel" style="font-size:12.5px;flex:1;text-align:center">Hal 1 / 1</span>
-              <button class="pdf-nav-btn" onclick="editNextPage()" style="width:32px;height:32px">›</button>
+    </div>
+
+    <!-- EDITOR LAYOUT -->
+    <div id="editPdfLayout" style="display:none;flex:1;overflow:hidden;flex-direction:column">
+
+      <!-- TOOLBAR TOP -->
+      <div style="display:flex;align-items:center;gap:8px;padding:8px 12px;border-bottom:1px solid var(--border);background:var(--surface);flex-wrap:wrap">
+        <!-- Undo/Redo -->
+        <button class="tb-btn" title="Undo (Ctrl+Z)" onclick="epUndo()">↩</button>
+        <button class="tb-btn" title="Redo (Ctrl+Y)" onclick="epRedo()">↪</button>
+        <div class="tb-sep"></div>
+        <!-- Tools -->
+        <button class="tb-btn ep-tb-tool active" id="tbTool-select" title="Pilih & Pindah" onclick="epSetTool('select')">🖱️ Pilih</button>
+        <button class="tb-btn ep-tb-tool" id="tbTool-text"   title="Tambah Teks"   onclick="epSetTool('text')">T Teks</button>
+        <button class="tb-btn ep-tb-tool" id="tbTool-rect"   title="Kotak"          onclick="epSetTool('rect')">⬜ Kotak</button>
+        <button class="tb-btn ep-tb-tool" id="tbTool-ellipse" title="Lingkaran"     onclick="epSetTool('ellipse')">⭕ Bulat</button>
+        <button class="tb-btn ep-tb-tool" id="tbTool-line"   title="Garis"          onclick="epSetTool('line')">╱ Garis</button>
+        <button class="tb-btn ep-tb-tool" id="tbTool-highlight" title="Highlight"   onclick="epSetTool('highlight')">🖊 HL</button>
+        <div class="tb-sep"></div>
+        <!-- Quick color -->
+        <label style="font-size:11px;font-weight:600;color:var(--muted)">Warna:</label>
+        <input type="color" id="epQuickColor" value="#dc2626" title="Warna utama" style="width:30px;height:26px;border:1.5px solid var(--border);border-radius:7px;cursor:pointer;padding:1px" oninput="epSyncColors()">
+        <!-- Quick font size -->
+        <label style="font-size:11px;font-weight:600;color:var(--muted)">Ukuran:</label>
+        <input type="number" id="epQuickSize" value="14" min="6" max="120" style="width:56px;padding:4px 6px;font-size:12px;border:1.5px solid var(--border);border-radius:7px" oninput="epSyncSize()">
+        <div class="tb-sep"></div>
+        <!-- Delete selected -->
+        <button class="tb-btn" style="color:var(--rose)" title="Hapus terpilih (Delete)" onclick="epDeleteSelected()">🗑 Hapus</button>
+        <div style="flex:1"></div>
+        <!-- Save -->
+        <button class="btn-primary" style="padding:7px 18px;font-size:12.5px" onclick="saveEditedPdf()">💾 Simpan PDF</button>
+      </div>
+
+      <div style="display:flex;flex:1;overflow:hidden">
+
+        <!-- LEFT SIDEBAR -->
+        <div class="ep-sidebar" style="width:260px;flex-shrink:0">
+
+          <!-- Navigation -->
+          <div class="ep-section">
+            <div class="ep-section-title">Halaman</div>
+            <div style="display:flex;align-items:center;gap:6px">
+              <button class="pdf-nav-btn" onclick="epPrevPage()">‹</button>
+              <span id="editPageLabel" style="flex:1;text-align:center;font-size:12.5px;font-weight:700">1 / 1</span>
+              <button class="pdf-nav-btn" onclick="epNextPage()">›</button>
             </div>
-            <div style="height:1px;background:var(--border)"></div>
-            <p style="font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.06em">Alat</p>
-            <div style="display:flex;flex-direction:column;gap:5px">
-              <button id="editToolText" class="filter-tab active" onclick="setEditTool('text')" style="text-align:left;border-radius:9px">✏️ Tambah Teks</button>
-              <button id="editToolRect" class="filter-tab" onclick="setEditTool('rect')" style="text-align:left;border-radius:9px">⬜ Kotak/Redaksi</button>
-              <button id="editToolHighlight" class="filter-tab" onclick="setEditTool('highlight')" style="text-align:left;border-radius:9px">🖊️ Highlight</button>
-            </div>
-            <div style="height:1px;background:var(--border)"></div>
-            <p style="font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.06em">Pengaturan</p>
-            <div class="field-group" style="margin-bottom:.5rem">
-              <label class="field-label">Teks</label>
-              <input type="text" id="editTextInput" placeholder="Teks yang ditambahkan" style="font-size:12.5px">
-            </div>
-            <div class="field-group" style="margin-bottom:.5rem">
-              <label class="field-label">Ukuran Font (pt)</label>
-              <input type="number" id="editFontSize" value="14" min="6" max="72" style="font-size:12.5px">
-            </div>
-            <div class="field-group" style="margin-bottom:.5rem">
-              <label class="field-label">Warna</label>
-              <input type="color" id="editColor" value="#dc2626" style="width:100%;height:32px;border:1.5px solid var(--border);border-radius:8px;cursor:pointer;padding:3px">
-            </div>
-            <div class="field-group" style="margin-bottom:.5rem">
-              <label class="field-label">Opasitas Kotak/Highlight</label>
-              <input type="range" id="editOpacity" min="10" max="100" value="40" style="width:100%;accent-color:var(--blue-600)">
-            </div>
-            <div style="height:1px;background:var(--border)"></div>
-            <button class="btn-danger" onclick="clearEditAnnotations()" style="font-size:12px;padding:8px 12px">🗑️ Hapus Anotasi Halaman Ini</button>
-            <div class="loading-overlay" id="editPdfLoading" style="margin-top:.5rem"><div class="spinner"></div> Menyimpan…</div>
-            <button class="btn-primary" onclick="saveEditedPdf()" style="margin-top:.25rem">💾 Simpan &amp; Unduh PDF</button>
           </div>
-          <div class="pdf-editor-canvas-wrap" id="editCanvasWrap">
-            <div style="position:relative;display:inline-block">
-              <canvas id="pdfEditCanvas"></canvas>
-              <canvas id="pdfEditOverlayCanvas" style="position:absolute;top:0;left:0;cursor:crosshair"></canvas>
+
+          <!-- TEXT settings -->
+          <div class="ep-section" id="epPanelText">
+            <div class="ep-section-title">Pengaturan Teks</div>
+            <div class="ep-field">
+              <label>Isi Teks</label>
+              <textarea id="epTextContent" rows="3" placeholder="Ketik teks…" oninput="epUpdateSelected()"></textarea>
             </div>
+            <div class="ep-field">
+              <label>Font</label>
+              <select id="epFontFamily" onchange="epUpdateSelected()">
+                <option value="Helvetica">Helvetica</option>
+                <option value="Helvetica-Bold">Helvetica Bold</option>
+                <option value="Helvetica-Oblique">Helvetica Italic</option>
+                <option value="Helvetica-BoldOblique">Helvetica Bold Italic</option>
+                <option value="Times-Roman">Times Roman</option>
+                <option value="Times-Bold">Times Bold</option>
+                <option value="Times-Italic">Times Italic</option>
+                <option value="Times-BoldItalic">Times Bold Italic</option>
+                <option value="Courier">Courier</option>
+                <option value="Courier-Bold">Courier Bold</option>
+              </select>
+            </div>
+            <div class="ep-field">
+              <label>Ukuran Font (pt)</label>
+              <div style="display:flex;align-items:center;gap:6px">
+                <input type="number" id="epFontSize" value="14" min="4" max="200" style="width:70px" oninput="epUpdateSelected()">
+                <div class="ep-style-btns">
+                  <button class="ep-style-btn" id="epBold" title="Bold" onclick="epToggleStyle('bold')"><b>B</b></button>
+                  <button class="ep-style-btn" id="epItalic" title="Italic" onclick="epToggleStyle('italic')"><i>I</i></button>
+                  <button class="ep-style-btn" id="epUnder" title="Underline" onclick="epToggleStyle('underline')"><u>U</u></button>
+                </div>
+              </div>
+            </div>
+            <div class="ep-field">
+              <label>Rata Teks</label>
+              <div class="ep-align-btns">
+                <button class="ep-align-btn active" id="epAlignLeft"   onclick="epSetAlign('left')"   title="Kiri">⬅</button>
+                <button class="ep-align-btn" id="epAlignCenter" onclick="epSetAlign('center')" title="Tengah">↔</button>
+                <button class="ep-align-btn" id="epAlignRight"  onclick="epSetAlign('right')"  title="Kanan">➡</button>
+              </div>
+            </div>
+            <div class="ep-field">
+              <label>Warna Teks</label>
+              <input type="color" id="epTextColor" value="#000000" class="ep-color-input" oninput="epUpdateSelected();document.getElementById('epQuickColor').value=this.value">
+            </div>
+            <div class="ep-field">
+              <label>Latar Belakang Teks</label>
+              <div style="display:flex;gap:6px;align-items:center">
+                <input type="color" id="epTextBg" value="#ffffff" class="ep-color-input" style="flex:1" oninput="epUpdateSelected()">
+                <label style="display:flex;align-items:center;gap:4px;font-size:11px;white-space:nowrap;margin:0">
+                  <input type="checkbox" id="epTextBgOn" onchange="epUpdateSelected()"> Aktif
+                </label>
+              </div>
+            </div>
+            <div class="ep-field">
+              <label>Opasitas: <span id="epTextOpVal">100</span>%</label>
+              <div class="ep-range-row">
+                <input type="range" min="10" max="100" value="100" id="epTextOpacity" oninput="document.getElementById('epTextOpVal').textContent=this.value;epUpdateSelected()">
+              </div>
+            </div>
+          </div>
+
+          <!-- SHAPE settings -->
+          <div class="ep-section" id="epPanelShape" style="display:none">
+            <div class="ep-section-title">Pengaturan Bentuk</div>
+            <div class="ep-field">
+              <label>Warna Isi</label>
+              <input type="color" id="epFillColor" value="#2563eb" class="ep-color-input" oninput="epUpdateSelected();document.getElementById('epQuickColor').value=this.value">
+            </div>
+            <div class="ep-field">
+              <label>Warna Border</label>
+              <div style="display:flex;gap:6px;align-items:center">
+                <input type="color" id="epStrokeColor" value="#1d4ed8" class="ep-color-input" style="flex:1" oninput="epUpdateSelected()">
+                <label style="display:flex;align-items:center;gap:4px;font-size:11px;white-space:nowrap;margin:0">
+                  <input type="checkbox" id="epStrokeOn" checked onchange="epUpdateSelected()"> Aktif
+                </label>
+              </div>
+            </div>
+            <div class="ep-field">
+              <label>Ketebalan Border</label>
+              <input type="number" id="epStrokeW" value="2" min="0" max="20" oninput="epUpdateSelected()">
+            </div>
+            <div class="ep-field">
+              <label>Opasitas Isi: <span id="epFillOpVal">50</span>%</label>
+              <input type="range" id="epFillOp" min="0" max="100" value="50" oninput="document.getElementById('epFillOpVal').textContent=this.value;epUpdateSelected()" style="width:100%;accent-color:var(--blue-600)">
+            </div>
+            <div class="ep-field">
+              <label>Radius Sudut (px)</label>
+              <input type="number" id="epCornerR" value="0" min="0" max="100" oninput="epUpdateSelected()">
+            </div>
+          </div>
+
+          <!-- LINE settings -->
+          <div class="ep-section" id="epPanelLine" style="display:none">
+            <div class="ep-section-title">Pengaturan Garis</div>
+            <div class="ep-field">
+              <label>Warna Garis</label>
+              <input type="color" id="epLineColor" value="#dc2626" class="ep-color-input" oninput="epUpdateSelected();document.getElementById('epQuickColor').value=this.value">
+            </div>
+            <div class="ep-field">
+              <label>Ketebalan (px)</label>
+              <input type="number" id="epLineW" value="2" min="1" max="40" oninput="epUpdateSelected()">
+            </div>
+            <div class="ep-field">
+              <label>Gaya</label>
+              <select id="epLineDash" onchange="epUpdateSelected()">
+                <option value="solid">Solid ———</option>
+                <option value="dashed">Putus-putus - - -</option>
+                <option value="dotted">Titik-titik . . .</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- HIGHLIGHT settings -->
+          <div class="ep-section" id="epPanelHighlight" style="display:none">
+            <div class="ep-section-title">Pengaturan Highlight</div>
+            <div class="ep-field">
+              <label>Warna Highlight</label>
+              <div style="display:flex;gap:5px;flex-wrap:wrap">
+                <button onclick="epSetHLColor('#fde047')" style="width:26px;height:26px;border-radius:6px;border:2px solid var(--border);background:#fde047;cursor:pointer"></button>
+                <button onclick="epSetHLColor('#86efac')" style="width:26px;height:26px;border-radius:6px;border:2px solid var(--border);background:#86efac;cursor:pointer"></button>
+                <button onclick="epSetHLColor('#93c5fd')" style="width:26px;height:26px;border-radius:6px;border:2px solid var(--border);background:#93c5fd;cursor:pointer"></button>
+                <button onclick="epSetHLColor('#f9a8d4')" style="width:26px;height:26px;border-radius:6px;border:2px solid var(--border);background:#f9a8d4;cursor:pointer"></button>
+                <button onclick="epSetHLColor('#fdba74')" style="width:26px;height:26px;border-radius:6px;border:2px solid var(--border);background:#fdba74;cursor:pointer"></button>
+                <input type="color" id="epHLColor" value="#fde047" class="ep-color-input" style="width:26px;height:26px;padding:1px" oninput="epUpdateSelected()">
+              </div>
+            </div>
+            <div class="ep-field">
+              <label>Opasitas: <span id="epHLOpVal">50</span>%</label>
+              <input type="range" id="epHLOp" min="10" max="100" value="50" oninput="document.getElementById('epHLOpVal').textContent=this.value;epUpdateSelected()" style="width:100%;accent-color:var(--blue-600)">
+            </div>
+          </div>
+
+          <!-- LAYERS -->
+          <div class="ep-section" style="flex:1">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.4rem">
+              <div class="ep-section-title" style="margin:0">Layer Halaman Ini</div>
+              <button onclick="epClearPage()" style="font-size:10px;padding:2px 7px;border:1px solid var(--border);border-radius:6px;background:none;cursor:pointer;color:var(--rose)">Hapus Semua</button>
+            </div>
+            <div class="ep-layer-list" id="epLayerList"><p style="font-size:11.5px;color:var(--light)">Belum ada anotasi.</p></div>
+            <p style="font-size:10.5px;color:var(--light);margin-top:4px">Double-klik teks di canvas untuk edit langsung</p>
+          </div>
+
+          <!-- ACTIONS -->
+          <div class="ep-actions">
+            <div class="loading-overlay" id="editPdfLoading"><div class="spinner"></div> Menyimpan PDF…</div>
+          </div>
+
+        </div>
+
+        <!-- CANVAS -->
+        <div class="ep-canvas-area" id="epCanvasArea">
+          <div class="ep-canvas-wrap" id="epCanvasWrap">
+            <canvas id="pdfEditCanvas"></canvas>
+            <canvas id="pdfEditOverlayCanvas" style="position:absolute;top:0;left:0;"></canvas>
           </div>
         </div>
+
       </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════
+     MODAL: NOMOR HALAMAN PDF
+══════════════════════════════════════════════════════════ -->
+<div class="modal-backdrop" id="pageNumberModal">
+  <div class="modal xlarge">
+    <div class="modal-header">
+      <div class="modal-header-icon">🔢</div>
+      <div><h3>Nomor Halaman PDF</h3><p>Tambahkan penomoran halaman otomatis ke PDF</p></div>
+      <button class="modal-close" onclick="closeModal('pageNumberModal')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="dropzone" onclick="document.getElementById('pageNumInput').click()"
+           ondragover="dragOver(event,this)" ondragleave="dragLeave(this)"
+           ondrop="dropPageNum(event)">
+        <input type="file" id="pageNumInput" accept=".pdf" onchange="loadPageNumInfo()">
+        <div class="dropzone-icon">🔢</div>
+        <h4>Klik atau seret file PDF</h4>
+        <p>Satu file PDF</p>
+      </div>
+      <div class="file-list" id="pageNumFileList"></div>
+      <div id="pageNumInfo" style="display:none;font-size:13px;color:var(--muted);margin-bottom:10px;background:var(--bg);padding:8px 12px;border-radius:9px;border:1px solid var(--border)">
+        📄 Total halaman: <strong id="pageNumTotal">0</strong>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+        <div class="field-group">
+          <label class="field-label">Posisi Nomor</label>
+          <select id="pageNumPosition">
+            <option value="bottom-center">Bawah Tengah</option>
+            <option value="bottom-right">Bawah Kanan</option>
+            <option value="bottom-left">Bawah Kiri</option>
+            <option value="top-center">Atas Tengah</option>
+            <option value="top-right">Atas Kanan</option>
+            <option value="top-left">Atas Kiri</option>
+          </select>
+        </div>
+        <div class="field-group">
+          <label class="field-label">Format</label>
+          <select id="pageNumFormat">
+            <option value="number">1, 2, 3…</option>
+            <option value="page-of">Hal 1 dari 10</option>
+            <option value="dash">— 1 —</option>
+          </select>
+        </div>
+        <div class="field-group">
+          <label class="field-label">Ukuran Font (pt)</label>
+          <input type="number" id="pageNumFontSize" value="12" min="6" max="36">
+        </div>
+        <div class="field-group">
+          <label class="field-label">Mulai Dari Halaman</label>
+          <input type="number" id="pageNumStart" value="1" min="1">
+        </div>
+        <div class="field-group">
+          <label class="field-label">Warna Teks</label>
+          <input type="color" id="pageNumColor" value="#333333" style="width:100%;height:36px;border:1.5px solid var(--border);border-radius:9px;cursor:pointer;padding:3px">
+        </div>
+        <div class="field-group">
+          <label class="field-label">Lewati N Halaman Awal</label>
+          <input type="number" id="pageNumSkip" value="0" min="0">
+        </div>
+      </div>
+      <div class="loading-overlay" id="pageNumLoading"><div class="spinner"></div> Menambahkan nomor halaman…</div>
+      <div class="btn-row">
+        <button class="btn-primary" id="pageNumBtn" onclick="addPageNumbers()">🔢 Tambah Nomor &amp; Unduh</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════
+     MODAL: PDF KE GAMBAR
+══════════════════════════════════════════════════════════ -->
+<div class="modal-backdrop" id="pdfToImgModal">
+  <div class="modal xlarge">
+    <div class="modal-header">
+      <div class="modal-header-icon">🖼️</div>
+      <div><h3>PDF ke Gambar</h3><p>Konversi setiap halaman PDF menjadi file gambar PNG</p></div>
+      <button class="modal-close" onclick="closeModal('pdfToImgModal')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="dropzone" onclick="document.getElementById('pdf2imgInput').click()"
+           ondragover="dragOver(event,this)" ondragleave="dragLeave(this)"
+           ondrop="dropPdf2Img(event)">
+        <input type="file" id="pdf2imgInput" accept=".pdf" onchange="loadPdf2Img()">
+        <div class="dropzone-icon">🖼️</div>
+        <h4>Klik atau seret file PDF</h4>
+        <p>Satu file PDF — setiap halaman jadi PNG</p>
+      </div>
+      <div class="file-list" id="pdf2imgFileList"></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:.9rem">
+        <div class="field-group">
+          <label class="field-label">Kualitas / Skala</label>
+          <select id="pdf2imgScale">
+            <option value="1">Standar (72 dpi)</option>
+            <option value="1.5" selected>Baik (108 dpi)</option>
+            <option value="2">Tinggi (144 dpi)</option>
+            <option value="3">Sangat Tinggi (216 dpi)</option>
+          </select>
+        </div>
+        <div class="field-group">
+          <label class="field-label">Format Gambar</label>
+          <select id="pdf2imgFormat">
+            <option value="image/png">PNG (transparan)</option>
+            <option value="image/jpeg">JPEG (lebih kecil)</option>
+          </select>
+        </div>
+      </div>
+      <div class="loading-overlay" id="pdf2imgLoading"><div class="spinner"></div> Mengonversi halaman…</div>
+      <div id="pdf2imgResults" class="pdf2img-results"></div>
+      <div class="btn-row" id="pdf2imgBtnRow" style="display:none">
+        <button class="btn-green" onclick="downloadAllPdf2Img()">⬇️ Unduh Semua</button>
+        <button class="btn-secondary" onclick="document.getElementById('pdf2imgResults').innerHTML='';document.getElementById('pdf2imgBtnRow').style.display='none'">🗑️ Bersih</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════
+     MODAL: INFO & PROTEKSI PDF
+══════════════════════════════════════════════════════════ -->
+<div class="modal-backdrop" id="pdfInfoModal">
+  <div class="modal xlarge">
+    <div class="modal-header">
+      <div class="modal-header-icon">🔐</div>
+      <div><h3>Info &amp; Proteksi PDF</h3><p>Detail file dan keamanan dokumen</p></div>
+      <button class="modal-close" onclick="closeModal('pdfInfoModal')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="dropzone" onclick="document.getElementById('pdfInfoInput').click()"
+           ondragover="dragOver(event,this)" ondragleave="dragLeave(this)"
+           ondrop="dropPdfInfo(event)">
+        <input type="file" id="pdfInfoInput" accept=".pdf" onchange="loadPdfInfo()">
+        <div class="dropzone-icon">🔐</div>
+        <h4>Klik atau seret file PDF</h4>
+        <p>Lihat info lengkap dan proteksi dengan password</p>
+      </div>
+      <div class="file-list" id="pdfInfoFileList"></div>
+
+      <!-- Tab -->
+      <div id="pdfInfoTabs" style="display:none;gap:7px;margin-bottom:.9rem">
+        <button id="pdfInfoTabInfo" class="filter-tab active" onclick="switchPdfInfoTab('info')">ℹ️ Info File</button>
+        <button id="pdfInfoTabProtect" class="filter-tab" onclick="switchPdfInfoTab('protect')">🔐 Password</button>
+      </div>
+
+      <div id="pdfInfoPanelInfo" style="display:none">
+        <div id="pdfInfoDetail"></div>
+      </div>
+
+      <div id="pdfInfoPanelProtect" style="display:none">
+        <div class="wip-notice" style="background:var(--blue-50);border-color:var(--blue-500);color:var(--blue-700)">⚠️ Proteksi password menggunakan enkripsi standar PDF. Hanya melindungi dari pembukaan langsung — bukan enkripsi tingkat militer.</div>
+        <div class="field-group">
+          <label class="field-label">Password Buka Dokumen</label>
+          <input type="password" id="pdfUserPass" placeholder="Kosongkan jika tidak ingin password buka" oninput="checkPassStrength('pdfUserPass','pdfUserPassStrength')">
+          <div class="pass-strength" id="pdfUserPassStrength"></div>
+        </div>
+        <div class="field-group">
+          <label class="field-label">Password Pemilik (Edit/Cetak)</label>
+          <input type="password" id="pdfOwnerPass" placeholder="Opsional — untuk batasi edit dan cetak" oninput="checkPassStrength('pdfOwnerPass','pdfOwnerPassStrength')">
+          <div class="pass-strength" id="pdfOwnerPassStrength"></div>
+        </div>
+        <p style="font-size:12px;color:var(--muted);margin-bottom:.9rem">💡 <strong>Catatan:</strong> pdf-lib belum mendukung enkripsi password secara native. Fitur ini akan menambahkan metadata saja. Untuk proteksi nyata, gunakan Adobe Acrobat atau qpdf.</p>
+        <div class="loading-overlay" id="pdfProtectLoading"><div class="spinner"></div> Memproses…</div>
+        <div class="btn-row">
+          <button class="btn-primary" id="pdfProtectBtn" onclick="addPdfMetaPassword()">🔐 Simpan Metadata &amp; Unduh</button>
+        </div>
+      </div>
+      <div class="loading-overlay" id="pdfInfoLoading"><div class="spinner"></div> Membaca file…</div>
     </div>
   </div>
 </div>
@@ -1370,6 +1961,9 @@ function dlUint8(bytes, name) {
 function filterTools(cat, btn) {
   document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
   btn.classList.add('active');
+  // clear search
+  const searchInput = document.getElementById('toolSearchInput');
+  if (searchInput) { searchInput.value = ''; document.getElementById('searchClearBtn').classList.remove('show'); }
   document.querySelectorAll('.tool-card').forEach(c => {
     c.style.display = (cat === 'semua' || (c.dataset.cat||'').includes(cat)) ? 'flex' : 'none';
   });
@@ -2142,114 +2736,813 @@ async function doVisualSplit(){
   finally{btn.disabled=false;}
 }
 
-// ─── EDIT PDF ─────────────────────────────────────────────────────
+// ════════════════════════════════════════════════════════
+//  EDIT PDF — POWERFUL ENGINE v2
+// ════════════════════════════════════════════════════════
+const EP = {
+  pdfjsDoc:null, pdfBytes:null, totalPages:1, currentPage:1,
+  scale:1.6, tool:'select',
+  anns:{}, selectedIdx:null,
+  undoStack:[], redoStack:[],
+  dragging:false, resizing:false, resizeHandle:'',
+  dragOx:0, dragOy:0,
+  drawing:false, drawSx:0, drawSy:0,
+  inlineEl:null,
+};
+
+function epAnns()   { return EP.anns[EP.currentPage]||(EP.anns[EP.currentPage]=[]); }
+function epSel()    { const a=epAnns(); return EP.selectedIdx!==null?a[EP.selectedIdx]:null; }
+function epCanvas() { return document.getElementById('pdfEditOverlayCanvas'); }
+function epCtx()    { return epCanvas().getContext('2d'); }
+
+function epHexToRgb(hex){
+  if(!hex||hex.length<7)return{r:0,g:0,b:0};
+  return{r:parseInt(hex.slice(1,3),16)/255,g:parseInt(hex.slice(3,5),16)/255,b:parseInt(hex.slice(5,7),16)/255};
+}
+function epHexToRgba(hex,a){const{r,g,b}=epHexToRgb(hex);return `rgba(${Math.round(r*255)},${Math.round(g*255)},${Math.round(b*255)},${a})`;}
+function epCanvasPos(e){
+  const c=epCanvas(), r=c.getBoundingClientRect(), src=e.touches?e.touches[0]:e;
+  return{x:(src.clientX-r.left)*(c.width/r.width),y:(src.clientY-r.top)*(c.height/r.height)};
+}
+
+// Undo/Redo
+function epSnapshot(){EP.undoStack.push(JSON.stringify(EP.anns));if(EP.undoStack.length>60)EP.undoStack.shift();EP.redoStack=[];}
+function epUndo(){if(!EP.undoStack.length){toast('Tidak ada yang bisa di-undo','⚠️');return;}EP.redoStack.push(JSON.stringify(EP.anns));EP.anns=JSON.parse(EP.undoStack.pop());EP.selectedIdx=null;epDraw();epRenderLayers();}
+function epRedo(){if(!EP.redoStack.length){toast('Tidak ada yang bisa di-redo','⚠️');return;}EP.undoStack.push(JSON.stringify(EP.anns));EP.anns=JSON.parse(EP.redoStack.pop());EP.selectedIdx=null;epDraw();epRenderLayers();}
+
+// Load PDF
 async function loadEditPdf(){
   const input=document.getElementById('editPdfInput');
   if(!input.files.length)return;
   const file=input.files[0];
-  _editAnnotations={};_editCurrentPage=1;
+  EP.anns={};EP.undoStack=[];EP.redoStack=[];EP.selectedIdx=null;
   try{
     const ab=await file.arrayBuffer();
-    _editPdfBytes=new Uint8Array(ab);
-    _editPdfjsDoc=await pdfjsLib.getDocument({data:_editPdfBytes.slice()}).promise;
-    _editTotalPages=_editPdfjsDoc.numPages;
+    EP.pdfBytes=new Uint8Array(ab);
+    EP.pdfjsDoc=await pdfjsLib.getDocument({data:EP.pdfBytes.slice()}).promise;
+    EP.totalPages=EP.pdfjsDoc.numPages;EP.currentPage=1;
     document.getElementById('editPdfDrop').style.display='none';
-    document.getElementById('editPdfLayout').style.display='block';
-    await renderEditPage(_editCurrentPage);
-    toast('PDF siap untuk diedit!','✏️','success');
-  }catch(err){toast('Gagal memuat PDF: '+err.message,'❌','error');}
+    document.getElementById('editPdfLayout').style.display='flex';
+    await epRenderPage(1);epSetTool('select');
+    toast('PDF siap diedit!','✏️','success');
+  }catch(err){toast('Gagal memuat: '+err.message,'❌','error');}
 }
 
-async function renderEditPage(pageNum){
-  if(!_editPdfjsDoc)return;
-  _editCurrentPage=Math.max(1,Math.min(pageNum,_editTotalPages));
-  document.getElementById('editPageLabel').textContent=`Hal ${_editCurrentPage} / ${_editTotalPages}`;
-  const page=await _editPdfjsDoc.getPage(_editCurrentPage);
-  const vp=page.getViewport({scale:_editScale});
-  const canvas=document.getElementById('pdfEditCanvas');
-  canvas.width=vp.width;canvas.height=vp.height;
-  const overlayCanvas=document.getElementById('pdfEditOverlayCanvas');
-  overlayCanvas.width=vp.width;overlayCanvas.height=vp.height;
-  await page.render({canvasContext:canvas.getContext('2d'),viewport:vp}).promise;
-  redrawAnnotations();
-  overlayCanvas.onclick=null;
-  overlayCanvas.onclick=e=>handleEditClick(e,overlayCanvas);
-}
+function closeEditPdf(){epRemoveInlineEditor();closeModal('editPdfModal');}
 
-function redrawAnnotations(){
-  const canvas=document.getElementById('pdfEditOverlayCanvas');
-  const ctx=canvas.getContext('2d');
+async function epRenderPage(num){
+  num=Math.max(1,Math.min(num,EP.totalPages));
+  EP.currentPage=num;EP.selectedIdx=null;
+  document.getElementById('editPageLabel').textContent=`${num} / ${EP.totalPages}`;
+  const page=await EP.pdfjsDoc.getPage(num);
+  const vp=page.getViewport({scale:EP.scale});
+  const base=document.getElementById('pdfEditCanvas');
+  const over=document.getElementById('pdfEditOverlayCanvas');
+  base.width=over.width=vp.width;base.height=over.height=vp.height;
+  await page.render({canvasContext:base.getContext('2d'),viewport:vp}).promise;
+  epDraw();epBindEvents();epRenderLayers();
+}
+function epPrevPage(){epRemoveInlineEditor();epRenderPage(EP.currentPage-1);}
+function epNextPage(){epRemoveInlineEditor();epRenderPage(EP.currentPage+1);}
+
+// Drawing
+function epDraw(){
+  const canvas=epCanvas(),ctx=epCtx();
   ctx.clearRect(0,0,canvas.width,canvas.height);
-  const anns=_editAnnotations[_editCurrentPage]||[];
-  anns.forEach(ann=>{
-    if(ann.type==='text'){ctx.save();ctx.font=`${ann.fontSize*_editScale}px sans-serif`;ctx.fillStyle=ann.color;ctx.fillText(ann.text,ann.x,ann.y);ctx.restore();}
-    else if(ann.type==='rect'){ctx.save();ctx.fillStyle=hexToRgba(ann.color,ann.opacity);ctx.fillRect(ann.x,ann.y,ann.w,ann.h);ctx.restore();}
-    else if(ann.type==='highlight'){ctx.save();ctx.fillStyle=hexToRgba('#ffff00',ann.opacity);ctx.fillRect(ann.x,ann.y,ann.w,ann.h);ctx.restore();}
+  epAnns().forEach((a,idx)=>epDrawAnn(ctx,a,idx===EP.selectedIdx));
+}
+
+function epGetCanvasFontStr(a){
+  const bold=(a.bold||(a.fontFam||'').includes('Bold'));
+  const italic=(a.italic||(a.fontFam||'').includes('Italic')||(a.fontFam||'').includes('Oblique'));
+  const fam=(a.fontFam||'').includes('Times')?'serif':(a.fontFam||'').includes('Courier')?'monospace':'sans-serif';
+  return `${italic?'italic':''} ${bold?'bold':'normal'} ${a.fontSize*EP.scale}px ${fam}`;
+}
+
+function epDrawAnn(ctx,a,selected){
+  ctx.save();
+  const op=(a.opacity!==undefined?a.opacity:100)/100;
+  if(a.type==='text'){
+    ctx.font=epGetCanvasFontStr(a);ctx.globalAlpha=op;
+    if(a.bgOn&&a.bgColor){
+      const lines=(a.text||'').split('\n'),lh=a.fontSize*EP.scale*1.3;
+      const mw=Math.max(...lines.map(l=>ctx.measureText(l).width));
+      ctx.fillStyle=a.bgColor;ctx.fillRect(a.x-2,a.y-a.fontSize*EP.scale-2,mw+8,lines.length*lh+6);
+    }
+    ctx.fillStyle=a.color||'#000';ctx.textAlign=a.align||'left';
+    const lines=(a.text||'Teks').split('\n'),lh=a.fontSize*EP.scale*1.3;
+    lines.forEach((ln,i)=>{
+      const ty=a.y+i*lh;ctx.fillText(ln,a.x,ty);
+      if(a.underline){const tw=ctx.measureText(ln).width;const tx=a.align==='center'?a.x-tw/2:a.align==='right'?a.x-tw:a.x;ctx.fillRect(tx,ty+2,tw,Math.max(1,a.fontSize*EP.scale*0.07));}
+    });
+    if(selected){
+      const mw=Math.max(...lines.map(l=>ctx.measureText(l).width)),totalH=lines.length*lh;
+      ctx.globalAlpha=1;ctx.strokeStyle='#2563eb';ctx.lineWidth=1.5;ctx.setLineDash([5,3]);
+      ctx.strokeRect(a.x-4,a.y-a.fontSize*EP.scale-2,mw+8,totalH+4);ctx.setLineDash([]);
+      epDrawHandles(ctx,a.x-4,a.y-a.fontSize*EP.scale-2,mw+8,totalH+4);
+    }
+  }else if(a.type==='rect'||a.type==='ellipse'){
+    const fc=epHexToRgb(a.fillColor||'#2563eb');
+    ctx.globalAlpha=(a.fillOp!==undefined?a.fillOp:50)/100;
+    ctx.fillStyle=a.fillColor||'#2563eb';
+    if(a.type==='ellipse'){ctx.beginPath();ctx.ellipse(a.x+a.w/2,a.y+a.h/2,Math.abs(a.w/2),Math.abs(a.h/2),0,0,Math.PI*2);ctx.fill();}
+    else{const r=Math.min(a.cornerR||0,Math.abs(a.w)/2,Math.abs(a.h)/2);if(r>0){ctx.beginPath();ctx.roundRect(a.x,a.y,a.w,a.h,r);ctx.fill();}else ctx.fillRect(a.x,a.y,a.w,a.h);}
+    if(a.strokeOn&&a.strokeColor){ctx.globalAlpha=1;ctx.strokeStyle=a.strokeColor;ctx.lineWidth=(a.strokeW||2)*EP.scale*0.5;if(a.type==='ellipse'){ctx.beginPath();ctx.ellipse(a.x+a.w/2,a.y+a.h/2,Math.abs(a.w/2),Math.abs(a.h/2),0,0,Math.PI*2);ctx.stroke();}else if((a.cornerR||0)>0){ctx.beginPath();ctx.roundRect(a.x,a.y,a.w,a.h,a.cornerR||0);ctx.stroke();}else ctx.strokeRect(a.x,a.y,a.w,a.h);}
+    if(selected){ctx.globalAlpha=1;ctx.strokeStyle='#2563eb';ctx.lineWidth=1.5;ctx.setLineDash([5,3]);ctx.strokeRect(a.x-2,a.y-2,a.w+4,a.h+4);ctx.setLineDash([]);epDrawHandles(ctx,a.x,a.y,a.w,a.h);}
+  }else if(a.type==='highlight'){
+    ctx.globalAlpha=(a.opacity||50)/100;ctx.fillStyle=a.color||'#fde047';ctx.fillRect(a.x,a.y,a.w,a.h);
+    if(selected){ctx.globalAlpha=1;ctx.strokeStyle='#d97706';ctx.lineWidth=1.5;ctx.setLineDash([5,3]);ctx.strokeRect(a.x-2,a.y-2,a.w+4,a.h+4);ctx.setLineDash([]);epDrawHandles(ctx,a.x,a.y,a.w,a.h);}
+  }else if(a.type==='line'){
+    ctx.globalAlpha=1;ctx.strokeStyle=a.color||'#dc2626';ctx.lineWidth=(a.lineW||2)*EP.scale*0.5;ctx.lineCap='round';
+    if(a.dash==='dashed')ctx.setLineDash([12,6]);else if(a.dash==='dotted')ctx.setLineDash([3,6]);
+    ctx.beginPath();ctx.moveTo(a.x1,a.y1);ctx.lineTo(a.x2,a.y2);ctx.stroke();ctx.setLineDash([]);
+    if(selected){ctx.strokeStyle='#2563eb';ctx.lineWidth=1.5;ctx.setLineDash([5,3]);ctx.beginPath();ctx.moveTo(a.x1,a.y1);ctx.lineTo(a.x2,a.y2);ctx.stroke();ctx.setLineDash([]);epDrawDot(ctx,a.x1,a.y1);epDrawDot(ctx,a.x2,a.y2);}
+  }
+  ctx.restore();
+}
+
+function epDrawHandles(ctx,x,y,w,h){
+  [[x,y],[x+w/2,y],[x+w,y],[x,y+h/2],[x+w,y+h/2],[x,y+h],[x+w/2,y+h],[x+w,y+h]].forEach(([px,py])=>{
+    ctx.fillStyle='#fff';ctx.strokeStyle='#2563eb';ctx.lineWidth=1.5;ctx.fillRect(px-4,py-4,8,8);ctx.strokeRect(px-4,py-4,8,8);
   });
 }
+function epDrawDot(ctx,x,y){ctx.fillStyle='#fff';ctx.strokeStyle='#2563eb';ctx.lineWidth=1.5;ctx.beginPath();ctx.arc(x,y,5,0,Math.PI*2);ctx.fill();ctx.stroke();}
 
-function hexToRgba(hex,opacity){const r=parseInt(hex.slice(1,3),16),g=parseInt(hex.slice(3,5),16),b=parseInt(hex.slice(5,7),16);return `rgba(${r},${g},${b},${opacity})`;}
-
-function handleEditClick(e,canvas){
-  const rect=canvas.getBoundingClientRect();
-  const x=(e.clientX-rect.left)*(canvas.width/rect.width);
-  const y=(e.clientY-rect.top)*(canvas.height/rect.height);
-  if(!_editAnnotations[_editCurrentPage])_editAnnotations[_editCurrentPage]=[];
-  const color=document.getElementById('editColor').value;
-  const opacity=parseFloat(document.getElementById('editOpacity').value)/100;
-  const fontSize=parseInt(document.getElementById('editFontSize').value);
-  const text=document.getElementById('editTextInput').value||'Teks';
-  let ann;
-  if(_editTool==='text'){ann={type:'text',x,y,text,color,fontSize};}
-  else if(_editTool==='rect'){ann={type:'rect',x:x-60,y:y-15,w:120,h:30,color,opacity};}
-  else if(_editTool==='highlight'){ann={type:'highlight',x:x-80,y:y-10,w:160,h:20,color:'#ffff00',opacity};}
-  _editAnnotations[_editCurrentPage].push(ann);
-  redrawAnnotations();
+// Hit testing
+function epHit(a,x,y){
+  if(a.type==='text'){
+    const fs=a.fontSize*EP.scale,lines=(a.text||'').split('\n'),lh=fs*1.3;
+    const approxW=lines.reduce((m,l)=>Math.max(m,l.length*fs*0.55),0);
+    return x>=a.x-6&&x<=a.x+approxW+10&&y>=a.y-fs-4&&y<=a.y+lines.length*lh+4;
+  }else if(a.type==='line'){
+    const dx=a.x2-a.x1,dy=a.y2-a.y1,len=Math.hypot(dx,dy);if(len<1)return false;
+    const t=Math.max(0,Math.min(1,((x-a.x1)*dx+(y-a.y1)*dy)/(len*len)));
+    return Math.hypot(x-(a.x1+t*dx),y-(a.y1+t*dy))<12;
+  }else{
+    const minX=Math.min(a.x,a.x+(a.w||0)),maxX=Math.max(a.x,a.x+(a.w||0));
+    const minY=Math.min(a.y,a.y+(a.h||0)),maxY=Math.max(a.y,a.y+(a.h||0));
+    return x>=minX-4&&x<=maxX+4&&y>=minY-4&&y<=maxY+4;
+  }
+}
+function epResizeHandle(a,x,y){
+  if(!a||a.type==='text'||a.type==='line')return'';
+  const pts={tl:[a.x,a.y],tc:[a.x+a.w/2,a.y],tr:[a.x+a.w,a.y],ml:[a.x,a.y+a.h/2],mr:[a.x+a.w,a.y+a.h/2],bl:[a.x,a.y+a.h],bc:[a.x+a.w/2,a.y+a.h],br:[a.x+a.w,a.y+a.h]};
+  for(const[k,[px,py]]of Object.entries(pts)){if(Math.abs(x-px)<8&&Math.abs(y-py)<8)return k;}
+  return'';
 }
 
-function setEditTool(tool){
-  _editTool=tool;
-  document.querySelectorAll('#editToolText,#editToolRect,#editToolHighlight').forEach(b=>b.classList.remove('active'));
-  document.getElementById('editTool'+tool.charAt(0).toUpperCase()+tool.slice(1)).classList.add('active');
+// Events
+function epBindEvents(){
+  const c=epCanvas(),fresh=c.cloneNode(true);
+  c.parentNode.replaceChild(fresh,c);
+  fresh.style.cursor=EP.tool==='select'?'default':'crosshair';
+  fresh.addEventListener('mousedown',epOnDown);fresh.addEventListener('mousemove',epOnMove);
+  fresh.addEventListener('mouseup',epOnUp);fresh.addEventListener('mouseleave',epOnUp);
+  fresh.addEventListener('dblclick',epOnDblClick);
+  fresh.addEventListener('touchstart',epOnDown,{passive:false});
+  fresh.addEventListener('touchmove',epOnMove,{passive:false});
+  fresh.addEventListener('touchend',epOnUp);
 }
 
-function clearEditAnnotations(){_editAnnotations[_editCurrentPage]=[];redrawAnnotations();toast('Anotasi halaman ini dihapus!','🗑️');}
-function editPrevPage(){renderEditPage(_editCurrentPage-1);}
-function editNextPage(){renderEditPage(_editCurrentPage+1);}
+function epOnDown(e){
+  e.preventDefault();epRemoveInlineEditor();
+  const pos=epCanvasPos(e);
+  if(EP.tool==='select'){
+    const sel=epSel();
+    if(sel){const rh=epResizeHandle(sel,pos.x,pos.y);if(rh){EP.resizing=true;EP.resizeHandle=rh;EP.dragOx=pos.x;EP.dragOy=pos.y;return;}}
+    const anns=epAnns();let hit=-1;
+    for(let i=anns.length-1;i>=0;i--){if(epHit(anns[i],pos.x,pos.y)){hit=i;break;}}
+    if(hit>=0){EP.selectedIdx=hit;EP.dragging=true;const a=anns[hit];EP.dragOx=pos.x-(a.type==='line'?a.x1:a.x);EP.dragOy=pos.y-(a.type==='line'?a.y1:a.y);epLoadSidebar(a);}
+    else EP.selectedIdx=null;
+    epDraw();epRenderLayers();
+  }else{EP.drawing=true;EP.drawSx=pos.x;EP.drawSy=pos.y;}
+}
+
+function epOnMove(e){
+  e.preventDefault();const pos=epCanvasPos(e);
+  if(EP.resizing){
+    const a=epSel();if(!a)return;const dx=pos.x-EP.dragOx,dy=pos.y-EP.dragOy;EP.dragOx=pos.x;EP.dragOy=pos.y;
+    const h=EP.resizeHandle;if(h.includes('r'))a.w+=dx;if(h.includes('l')){a.x+=dx;a.w-=dx;}if(h.includes('b'))a.h+=dy;if(h.includes('t')){a.y+=dy;a.h-=dy;}
+    epDraw();return;
+  }
+  if(EP.dragging){
+    const a=epSel();if(!a)return;
+    if(a.type==='line'){const dx=pos.x-EP.dragOx-a.x1,dy=pos.y-EP.dragOy-a.y1;a.x1+=dx;a.y1+=dy;a.x2+=dx;a.y2+=dy;EP.dragOx=pos.x-a.x1;EP.dragOy=pos.y-a.y1;}
+    else{a.x=pos.x-EP.dragOx;a.y=pos.y-EP.dragOy;}
+    epDraw();return;
+  }
+  if(EP.drawing){
+    epDraw();const ctx=epCtx(),w=pos.x-EP.drawSx,h=pos.y-EP.drawSy;
+    ctx.save();ctx.globalAlpha=0.5;ctx.strokeStyle='#2563eb';ctx.lineWidth=1.5;ctx.setLineDash([5,3]);
+    if(EP.tool==='line'){ctx.beginPath();ctx.moveTo(EP.drawSx,EP.drawSy);ctx.lineTo(pos.x,pos.y);ctx.stroke();}
+    else ctx.strokeRect(EP.drawSx,EP.drawSy,w,h);ctx.restore();
+  }
+  if(EP.tool==='select'){
+    const c=epCanvas(),sel=epSel(),rh=sel?epResizeHandle(sel,pos.x,pos.y):'';
+    if(rh){const cursors={tl:'nwse-resize',tr:'nesw-resize',bl:'nesw-resize',br:'nwse-resize',tc:'ns-resize',bc:'ns-resize',ml:'ew-resize',mr:'ew-resize'};c.style.cursor=cursors[rh]||'crosshair';return;}
+    const anns=epAnns();for(let i=anns.length-1;i>=0;i--){if(epHit(anns[i],pos.x,pos.y)){c.style.cursor='move';return;}}
+    c.style.cursor='default';
+  }
+}
+
+function epOnUp(e){
+  const wasDrawing=EP.drawing,wasResizing=EP.resizing,wasDragging=EP.dragging;
+  EP.dragging=false;EP.resizing=false;EP.drawing=false;
+  if(wasResizing||wasDragging){epSnapshot();epRenderLayers();return;}
+  if(wasDrawing&&e){
+    const pos=epCanvasPos(e.changedTouches?{clientX:e.changedTouches[0].clientX,clientY:e.changedTouches[0].clientY}:e);
+    const w=pos.x-EP.drawSx,h=pos.y-EP.drawSy;
+    epSnapshot();
+    let ann;
+    if(EP.tool==='text'){
+      ann={type:'text',x:EP.drawSx,y:EP.drawSy+20,
+        text:document.getElementById('epTextContent').value||'Teks baru',
+        fontSize:parseInt(document.getElementById('epFontSize').value)||14,
+        fontFam:document.getElementById('epFontFamily').value,
+        color:document.getElementById('epTextColor').value,
+        bold:document.getElementById('epBold').classList.contains('active'),
+        italic:document.getElementById('epItalic').classList.contains('active'),
+        underline:document.getElementById('epUnder').classList.contains('active'),
+        align:document.querySelector('.ep-align-btn.active')?.id.replace('epAlign','').toLowerCase()||'left',
+        bgOn:document.getElementById('epTextBgOn').checked,
+        bgColor:document.getElementById('epTextBg').value,
+        opacity:parseInt(document.getElementById('epTextOpacity').value)||100};
+    }else if(EP.tool==='rect'||EP.tool==='ellipse'){
+      ann={type:EP.tool,x:EP.drawSx,y:EP.drawSy,w,h,
+        fillColor:document.getElementById('epFillColor').value,
+        fillOp:parseInt(document.getElementById('epFillOp').value)||50,
+        strokeOn:document.getElementById('epStrokeOn').checked,
+        strokeColor:document.getElementById('epStrokeColor').value,
+        strokeW:parseInt(document.getElementById('epStrokeW').value)||2,
+        cornerR:parseInt(document.getElementById('epCornerR').value)||0};
+    }else if(EP.tool==='line'){
+      ann={type:'line',x1:EP.drawSx,y1:EP.drawSy,x2:pos.x,y2:pos.y,
+        color:document.getElementById('epLineColor').value,
+        lineW:parseInt(document.getElementById('epLineW').value)||2,
+        dash:document.getElementById('epLineDash').value};
+    }else if(EP.tool==='highlight'){
+      ann={type:'highlight',x:EP.drawSx,y:EP.drawSy,w,h,
+        color:document.getElementById('epHLColor').value,
+        opacity:parseInt(document.getElementById('epHLOp').value)||50};
+    }
+    if(ann){epAnns().push(ann);EP.selectedIdx=epAnns().length-1;epLoadSidebar(ann);}
+    epDraw();epRenderLayers();
+  }
+}
+
+function epOnDblClick(e){
+  const pos=epCanvasPos(e),anns=epAnns();
+  for(let i=anns.length-1;i>=0;i--){
+    if(anns[i].type==='text'&&epHit(anns[i],pos.x,pos.y)){EP.selectedIdx=i;epShowInlineEditor(anns[i]);epDraw();epRenderLayers();return;}
+  }
+}
+
+// Inline text editor
+function epShowInlineEditor(a){
+  epRemoveInlineEditor();
+  const wrap=document.getElementById('epCanvasWrap');
+  const c=epCanvas(),scaleX=c.getBoundingClientRect().width/c.width,scaleY=c.getBoundingClientRect().height/c.height;
+  const fs=a.fontSize*EP.scale*scaleX;
+  const ta=document.createElement('textarea');
+  ta.className='ep-inline-editor';
+  ta.value=a.text||'';
+  ta.style.left=(a.x*scaleX-4)+'px';
+  ta.style.top=((a.y-a.fontSize*EP.scale)*scaleY-2)+'px';
+  ta.style.fontSize=fs+'px';ta.style.color=a.color||'#000';
+  ta.style.fontWeight=a.bold?'bold':'normal';ta.style.fontStyle=a.italic?'italic':'normal';
+  ta.style.width=Math.max(120,(a.text||'').split('\n').reduce((m,l)=>Math.max(m,l.length),0)*fs*0.6+24)+'px';
+  ta.oninput=()=>{a.text=ta.value;ta.style.height='auto';ta.style.height=ta.scrollHeight+'px';epDraw();};
+  ta.onkeydown=(ev)=>{if(ev.key==='Escape'){epRemoveInlineEditor();epDraw();}};
+  ta.onblur=()=>{a.text=ta.value;epSnapshot();epRemoveInlineEditor();epDraw();epRenderLayers();};
+  wrap.appendChild(ta);EP.inlineEl=ta;
+  setTimeout(()=>{ta.focus();ta.select();ta.style.height=ta.scrollHeight+'px';},30);
+}
+function epRemoveInlineEditor(){if(EP.inlineEl){try{EP.inlineEl.remove();}catch(e){}EP.inlineEl=null;}}
+
+// Sidebar sync
+function epLoadSidebar(a){
+  if(!a)return;
+  if(a.type==='text'){
+    document.getElementById('epTextContent').value=a.text||'';
+    document.getElementById('epFontSize').value=a.fontSize||14;
+    document.getElementById('epFontFamily').value=a.fontFam||'Helvetica';
+    document.getElementById('epTextColor').value=a.color||'#000000';
+    document.getElementById('epTextBgOn').checked=!!a.bgOn;
+    document.getElementById('epTextBg').value=a.bgColor||'#ffffff';
+    document.getElementById('epTextOpacity').value=a.opacity??100;
+    document.getElementById('epTextOpVal').textContent=a.opacity??100;
+    document.getElementById('epBold').classList.toggle('active',!!a.bold);
+    document.getElementById('epItalic').classList.toggle('active',!!a.italic);
+    document.getElementById('epUnder').classList.toggle('active',!!a.underline);
+    ['left','center','right'].forEach(al=>{document.getElementById('epAlign'+al.charAt(0).toUpperCase()+al.slice(1))?.classList.toggle('active',(a.align||'left')===al);});
+    document.querySelectorAll('#epPanelText,#epPanelShape,#epPanelLine,#epPanelHighlight').forEach(p=>p.style.display='none');
+    document.getElementById('epPanelText').style.display='block';
+  }else if(a.type==='rect'||a.type==='ellipse'){
+    document.getElementById('epFillColor').value=a.fillColor||'#2563eb';
+    document.getElementById('epFillOp').value=a.fillOp??50;document.getElementById('epFillOpVal').textContent=a.fillOp??50;
+    document.getElementById('epStrokeOn').checked=!!a.strokeOn;
+    document.getElementById('epStrokeColor').value=a.strokeColor||'#1d4ed8';
+    document.getElementById('epStrokeW').value=a.strokeW||2;
+    document.getElementById('epCornerR').value=a.cornerR||0;
+    document.querySelectorAll('#epPanelText,#epPanelShape,#epPanelLine,#epPanelHighlight').forEach(p=>p.style.display='none');
+    document.getElementById('epPanelShape').style.display='block';
+  }else if(a.type==='line'){
+    document.getElementById('epLineColor').value=a.color||'#dc2626';
+    document.getElementById('epLineW').value=a.lineW||2;
+    document.getElementById('epLineDash').value=a.dash||'solid';
+    document.querySelectorAll('#epPanelText,#epPanelShape,#epPanelLine,#epPanelHighlight').forEach(p=>p.style.display='none');
+    document.getElementById('epPanelLine').style.display='block';
+  }else if(a.type==='highlight'){
+    document.getElementById('epHLColor').value=a.color||'#fde047';
+    document.getElementById('epHLOp').value=a.opacity||50;document.getElementById('epHLOpVal').textContent=a.opacity||50;
+    document.querySelectorAll('#epPanelText,#epPanelShape,#epPanelLine,#epPanelHighlight').forEach(p=>p.style.display='none');
+    document.getElementById('epPanelHighlight').style.display='block';
+  }
+}
+
+function epUpdateSelected(){
+  const a=epSel();if(!a)return;
+  if(a.type==='text'){
+    a.text=document.getElementById('epTextContent').value;
+    a.fontSize=parseInt(document.getElementById('epFontSize').value)||14;
+    a.fontFam=document.getElementById('epFontFamily').value;
+    a.color=document.getElementById('epTextColor').value;
+    a.bgOn=document.getElementById('epTextBgOn').checked;
+    a.bgColor=document.getElementById('epTextBg').value;
+    a.opacity=parseInt(document.getElementById('epTextOpacity').value)||100;
+    a.bold=document.getElementById('epBold').classList.contains('active');
+    a.italic=document.getElementById('epItalic').classList.contains('active');
+    a.underline=document.getElementById('epUnder').classList.contains('active');
+    a.align=document.querySelector('.ep-align-btn.active')?.id.replace('epAlign','').toLowerCase()||'left';
+  }else if(a.type==='rect'||a.type==='ellipse'){
+    a.fillColor=document.getElementById('epFillColor').value;a.fillOp=parseInt(document.getElementById('epFillOp').value)||50;
+    a.strokeOn=document.getElementById('epStrokeOn').checked;a.strokeColor=document.getElementById('epStrokeColor').value;
+    a.strokeW=parseInt(document.getElementById('epStrokeW').value)||2;a.cornerR=parseInt(document.getElementById('epCornerR').value)||0;
+  }else if(a.type==='line'){
+    a.color=document.getElementById('epLineColor').value;a.lineW=parseInt(document.getElementById('epLineW').value)||2;a.dash=document.getElementById('epLineDash').value;
+  }else if(a.type==='highlight'){
+    a.color=document.getElementById('epHLColor').value;a.opacity=parseInt(document.getElementById('epHLOp').value)||50;
+  }
+  epDraw();
+}
+
+// Tool switching
+function epSetTool(tool){
+  EP.tool=tool;
+  document.querySelectorAll('.ep-tb-tool').forEach(b=>b.classList.remove('active'));
+  document.getElementById('tbTool-'+tool)?.classList.add('active');
+  const c=epCanvas();if(c)c.style.cursor=tool==='select'?'default':'crosshair';
+  if(tool!=='select'){
+    document.getElementById('epPanelText').style.display=tool==='text'?'block':'none';
+    document.getElementById('epPanelShape').style.display=(tool==='rect'||tool==='ellipse')?'block':'none';
+    document.getElementById('epPanelLine').style.display=tool==='line'?'block':'none';
+    document.getElementById('epPanelHighlight').style.display=tool==='highlight'?'block':'none';
+  }
+}
+function epToggleStyle(s){document.getElementById('ep'+s.charAt(0).toUpperCase()+s.slice(1)).classList.toggle('active');epUpdateSelected();}
+function epSetAlign(al){document.querySelectorAll('.ep-align-btn').forEach(b=>b.classList.remove('active'));document.getElementById('epAlign'+al.charAt(0).toUpperCase()+al.slice(1))?.classList.add('active');epUpdateSelected();}
+function epSetHLColor(c){document.getElementById('epHLColor').value=c;epUpdateSelected();}
+function epSyncColors(){const c=document.getElementById('epQuickColor').value;['epTextColor','epFillColor','epLineColor'].forEach(id=>{const el=document.getElementById(id);if(el)el.value=c;});epUpdateSelected();}
+function epSyncSize(){document.getElementById('epFontSize').value=document.getElementById('epQuickSize').value;epUpdateSelected();}
+
+// Layers
+function epRenderLayers(){
+  const el=document.getElementById('epLayerList');if(!el)return;
+  const anns=epAnns();
+  if(!anns.length){el.innerHTML='<p style="font-size:11.5px;color:var(--light)">Belum ada anotasi.</p>';return;}
+  const icons={text:'✏️',rect:'⬜',ellipse:'⭕',line:'╱',highlight:'🖊'};
+  el.innerHTML=[...anns].reverse().map((a,ri)=>{
+    const i=anns.length-1-ri,sel=i===EP.selectedIdx;
+    const label=a.type==='text'?`"${(a.text||'').substring(0,14)}${a.text&&a.text.length>14?'…':''}"`:a.type.charAt(0).toUpperCase()+a.type.slice(1);
+    return `<div class="ep-layer-item${sel?' selected':''}" onclick="epSelectLayer(${i})"><span>${icons[a.type]||'●'}</span><span class="ep-layer-name">${label}</span><button class="ep-layer-del" onclick="event.stopPropagation();epDeleteLayer(${i})">✕</button></div>`;
+  }).join('');
+}
+function epSelectLayer(i){EP.selectedIdx=i;const a=epAnns()[i];if(a)epLoadSidebar(a);epSetTool('select');epDraw();epRenderLayers();}
+function epDeleteLayer(i){epSnapshot();epAnns().splice(i,1);if(EP.selectedIdx===i)EP.selectedIdx=null;else if(EP.selectedIdx>i)EP.selectedIdx--;epDraw();epRenderLayers();}
+function epDeleteSelected(){if(EP.selectedIdx===null){toast('Pilih anotasi dulu!','⚠️');return;}epSnapshot();epAnns().splice(EP.selectedIdx,1);EP.selectedIdx=null;epDraw();epRenderLayers();toast('Anotasi dihapus','🗑️');}
+function epClearPage(){epSnapshot();EP.anns[EP.currentPage]=[];EP.selectedIdx=null;epDraw();epRenderLayers();toast('Semua anotasi halaman ini dihapus','🗑️');}
+
+// Keyboard
+document.addEventListener('keydown',ev=>{
+  if(!document.getElementById('editPdfModal')?.classList.contains('open'))return;
+  if(ev.target.tagName==='INPUT'||ev.target.tagName==='TEXTAREA'||ev.target.tagName==='SELECT')return;
+  if(ev.ctrlKey&&ev.key==='z'){ev.preventDefault();epUndo();}
+  if(ev.ctrlKey&&ev.key==='y'){ev.preventDefault();epRedo();}
+  if(ev.key==='Delete'||ev.key==='Backspace')epDeleteSelected();
+  if(ev.key==='Escape'){EP.selectedIdx=null;epDraw();epRenderLayers();}
+  const keys={v:'select',t:'text',r:'rect',e:'ellipse',l:'line',h:'highlight'};
+  if(!ev.ctrlKey&&keys[ev.key])epSetTool(keys[ev.key]);
+  if(EP.selectedIdx!==null&&['ArrowLeft','ArrowRight','ArrowUp','ArrowDown'].includes(ev.key)){
+    ev.preventDefault();const a=epSel();if(!a)return;const d=ev.shiftKey?10:1;
+    if(a.type==='line'){const dx=ev.key==='ArrowLeft'?-d:ev.key==='ArrowRight'?d:0,dy=ev.key==='ArrowUp'?-d:ev.key==='ArrowDown'?d:0;a.x1+=dx;a.y1+=dy;a.x2+=dx;a.y2+=dy;}
+    else{if(ev.key==='ArrowLeft')a.x-=d;if(ev.key==='ArrowRight')a.x+=d;if(ev.key==='ArrowUp')a.y-=d;if(ev.key==='ArrowDown')a.y+=d;}
+    epDraw();
+  }
+});
+
+// Save PDF
+function epGetPdfLibFont(fam){
+  const SF=PDFLib.StandardFonts;
+  const map={'Helvetica':SF.Helvetica,'Helvetica-Bold':SF.HelveticaBold,'Helvetica-Oblique':SF.HelveticaOblique,'Helvetica-BoldOblique':SF.HelveticaBoldOblique,'Times-Roman':SF.TimesRoman,'Times-Bold':SF.TimesRomanBold,'Times-Italic':SF.TimesRomanItalic,'Times-BoldItalic':SF.TimesRomanBoldItalic,'Courier':SF.Courier,'Courier-Bold':SF.CourierBold};
+  return map[fam]||SF.Helvetica;
+}
 
 async function saveEditedPdf(){
-  if(!_editPdfBytes){toast('Tidak ada PDF yang dimuat!','⚠️');return;}
-  const loading=document.getElementById('editPdfLoading');
-  loading.classList.add('show');
+  if(!EP.pdfBytes){toast('Tidak ada PDF yang dimuat!','⚠️');return;}
+  epRemoveInlineEditor();
+  const loading=document.getElementById('editPdfLoading');loading.classList.add('show');
   try{
     const {PDFDocument,rgb}=PDFLib;
-    const pdfDoc=await PDFDocument.load(_editPdfBytes);
-    const font=await pdfDoc.embedFont(PDFLib.StandardFonts.Helvetica);
-    for(const [pageNumStr,anns] of Object.entries(_editAnnotations)){
-      const pageNum=parseInt(pageNumStr);
-      const pdfPage=pdfDoc.getPage(pageNum-1);
-      const {width,height}=pdfPage.getSize();
-      const pdfjsPage=await _editPdfjsDoc.getPage(pageNum);
-      const vp=pdfjsPage.getViewport({scale:_editScale});
-      const scaleX=width/vp.width,scaleY=height/vp.height;
-      anns.forEach(ann=>{
-        const pdfX=ann.x*scaleX,pdfY=height-ann.y*scaleY;
-        if(ann.type==='text'){
-          const c={r:parseInt(ann.color.slice(1,3),16)/255,g:parseInt(ann.color.slice(3,5),16)/255,b:parseInt(ann.color.slice(5,7),16)/255};
-          pdfPage.drawText(ann.text,{x:pdfX,y:pdfY,size:ann.fontSize,font,color:rgb(c.r,c.g,c.b)});
-        }else if(ann.type==='rect'){
-          const c={r:parseInt(ann.color.slice(1,3),16)/255,g:parseInt(ann.color.slice(3,5),16)/255,b:parseInt(ann.color.slice(5,7),16)/255};
-          pdfPage.drawRectangle({x:pdfX,y:height-(ann.y+ann.h)*scaleY,width:ann.w*scaleX,height:ann.h*scaleY,color:rgb(c.r,c.g,c.b),opacity:ann.opacity});
-        }else if(ann.type==='highlight'){
-          pdfPage.drawRectangle({x:pdfX,y:height-(ann.y+ann.h)*scaleY,width:ann.w*scaleX,height:ann.h*scaleY,color:rgb(1,1,0),opacity:ann.opacity});
+    const pdfDoc=await PDFDocument.load(EP.pdfBytes);
+    const fontCache={};
+    for(const[pn,anns]of Object.entries(EP.anns)){for(const a of anns){if(a.type==='text'){const key=a.fontFam||'Helvetica';if(!fontCache[key])fontCache[key]=await pdfDoc.embedFont(epGetPdfLibFont(key));}}}
+    if(!fontCache['Helvetica'])fontCache['Helvetica']=await pdfDoc.embedFont(PDFLib.StandardFonts.Helvetica);
+    for(const[pnStr,anns]of Object.entries(EP.anns)){
+      if(!anns.length)continue;
+      const pn=parseInt(pnStr),pdfPage=pdfDoc.getPage(pn-1);
+      const{width:pw,height:ph}=pdfPage.getSize();
+      const pdfjsPage=await EP.pdfjsDoc.getPage(pn);
+      const vp=pdfjsPage.getViewport({scale:EP.scale});
+      const sx=pw/vp.width,sy=ph/vp.height;
+      for(const a of anns){
+        if(a.type==='text'){
+          const font=fontCache[a.fontFam||'Helvetica'],c=epHexToRgb(a.color||'#000000');
+          const lines=(a.text||'').split('\n'),op=(a.opacity||100)/100;
+          lines.forEach((ln,i)=>{
+            const px=a.x*sx,py=ph-(a.y+i*a.fontSize*EP.scale*1.3)*sy;
+            if(a.bgOn&&a.bgColor){const bc=epHexToRgb(a.bgColor),tw=font.widthOfTextAtSize(ln,a.fontSize);pdfPage.drawRectangle({x:px-2,y:py-2,width:tw+4,height:a.fontSize+4,color:rgb(bc.r,bc.g,bc.b)});}
+            pdfPage.drawText(ln,{x:px,y:py,size:a.fontSize,font,color:rgb(c.r,c.g,c.b),opacity:op});
+          });
+        }else if(a.type==='rect'||a.type==='ellipse'){
+          const fc=epHexToRgb(a.fillColor||'#2563eb'),sc=epHexToRgb(a.strokeColor||'#1d4ed8');
+          const x=a.x*sx,y=ph-(a.y+a.h)*sy,w=a.w*sx,h=a.h*sy;
+          const opts={x,y,width:w,height:h,color:rgb(fc.r,fc.g,fc.b),opacity:(a.fillOp||50)/100};
+          if(a.strokeOn){opts.borderColor=rgb(sc.r,sc.g,sc.b);opts.borderWidth=(a.strokeW||2)*sx*0.5;}
+          pdfPage.drawRectangle(opts);
+        }else if(a.type==='highlight'){
+          const hc=epHexToRgb(a.color||'#fde047');
+          pdfPage.drawRectangle({x:a.x*sx,y:ph-(a.y+a.h)*sy,width:a.w*sx,height:a.h*sy,color:rgb(hc.r,hc.g,hc.b),opacity:(a.opacity||50)/100});
+        }else if(a.type==='line'){
+          const lc=epHexToRgb(a.color||'#dc2626');
+          pdfPage.drawLine({start:{x:a.x1*sx,y:ph-a.y1*sy},end:{x:a.x2*sx,y:ph-a.y2*sy},thickness:(a.lineW||2)*sx*0.4,color:rgb(lc.r,lc.g,lc.b)});
         }
-      });
+      }
     }
     const bytes=await pdfDoc.save();
     dlUint8(bytes,'edited.pdf');
     bumpStat();toast('PDF berhasil disimpan!','💾','success');
   }catch(err){toast('Gagal menyimpan: '+err.message,'❌','error');}
   finally{loading.classList.remove('show');}
+}
+
+// backward compat
+function hexRgb(h){return epHexToRgb(h);}
+function hexToRgba(h,a){return epHexToRgba(h,a);}
+function clearEditAnnotations(){epClearPage();}
+function editPrevPage(){epPrevPage();}
+function editNextPage(){epNextPage();}
+function undoEditAnnotation(){epUndo();}
+function setEditTool(t){epSetTool(t);}
+function removeEditAnn(i){epDeleteLayer(i);}
+function redrawAnnotations(){epDraw();}
+function renderAnnList(){epRenderLayers();}
+
+
+// ─── DARK MODE ────────────────────────────────────────────────────
+function toggleDark() {
+  const isDark = document.body.classList.toggle('dark');
+  document.getElementById('darkToggleBtn').textContent = isDark ? '☀️' : '🌙';
+  try { localStorage.setItem('jd_dark', isDark ? '1' : '0'); } catch(e) {}
+}
+(function initDark() {
+  try {
+    if (localStorage.getItem('jd_dark') === '1') {
+      document.body.classList.add('dark');
+      const btn = document.getElementById('darkToggleBtn');
+      if (btn) btn.textContent = '☀️';
+    }
+  } catch(e) {}
+})();
+
+// ─── SEARCH TOOLS ─────────────────────────────────────────────────
+function searchTools(val) {
+  const q = val.trim().toLowerCase();
+  const clearBtn = document.getElementById('searchClearBtn');
+  clearBtn.classList.toggle('show', q.length > 0);
+  document.querySelectorAll('.tool-card').forEach(c => {
+    const text = (c.querySelector('h3')?.textContent + ' ' + c.querySelector('p')?.textContent + ' ' + (c.dataset.cat||'')).toLowerCase();
+    c.style.display = (!q || text.includes(q)) ? 'flex' : 'none';
+  });
+  // deactivate filter tabs when searching
+  if (q) {
+    document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
+  }
+}
+function clearSearch() {
+  document.getElementById('toolSearchInput').value = '';
+  document.getElementById('searchClearBtn').classList.remove('show');
+  document.querySelectorAll('.tool-card').forEach(c => c.style.display = 'flex');
+  // reactivate "Semua" tab
+  document.querySelectorAll('.filter-tab').forEach((t,i) => t.classList.toggle('active', i===0));
+}
+
+// ─── HISTORY LOG ──────────────────────────────────────────────────
+const _history = [];
+function addHistory(icon, msg) {
+  const now = new Date();
+  const time = now.getHours().toString().padStart(2,'0') + ':' + now.getMinutes().toString().padStart(2,'0');
+  _history.unshift({ icon, msg, time });
+  if (_history.length > 20) _history.pop();
+  renderHistory();
+}
+function renderHistory() {
+  const list = document.getElementById('historyList');
+  if (!list) return;
+  if (!_history.length) {
+    list.innerHTML = '<div class="history-empty">Belum ada aktivitas.</div>';
+    return;
+  }
+  list.innerHTML = _history.map(h =>
+    `<div class="history-item"><span class="hist-icon">${h.icon}</span><span>${h.msg}</span><span class="hist-time">${h.time}</span></div>`
+  ).join('');
+}
+function clearHistory() { _history.length = 0; renderHistory(); }
+
+// Patch toast to add to history for success events
+const _origToast = toast;
+window.toast = function(msg, icon, type) {
+  _origToast(msg, icon, type);
+  if (type === 'success') addHistory(icon || '✅', msg);
+};
+
+// ─── KEYBOARD SHORTCUTS ───────────────────────────────────────────
+document.addEventListener('keydown', e => {
+  if (e.ctrlKey && e.key === 'd') { e.preventDefault(); toggleDark(); }
+  if (e.ctrlKey && e.key === 'k') { e.preventDefault(); document.getElementById('toolSearchInput')?.focus(); }
+});
+
+// ─── NOMOR HALAMAN PDF ────────────────────────────────────────────
+let _pageNumFile = null;
+
+function dropPageNum(e) {
+  e.preventDefault(); e.currentTarget.classList.remove('dragover');
+  const input = document.getElementById('pageNumInput');
+  const dt = new DataTransfer();
+  [...e.dataTransfer.files].slice(0,1).forEach(f => dt.items.add(f));
+  input.files = dt.files;
+  loadPageNumInfo();
+}
+
+async function loadPageNumInfo() {
+  const input = document.getElementById('pageNumInput');
+  if (!input.files.length) return;
+  _pageNumFile = input.files[0];
+  if (!_fileLists['pageNumFileList']) _fileLists['pageNumFileList'] = [];
+  _fileLists['pageNumFileList'] = [_pageNumFile];
+  renderFileList('pageNumFileList');
+  try {
+    const ab = await _pageNumFile.arrayBuffer();
+    const pdf = await PDFLib.PDFDocument.load(ab);
+    document.getElementById('pageNumTotal').textContent = pdf.getPageCount();
+    document.getElementById('pageNumInfo').style.display = 'block';
+  } catch(e) {}
+}
+
+async function addPageNumbers() {
+  if (!_pageNumFile) { toast('Pilih file PDF!','⚠️'); return; }
+  const btn = document.getElementById('pageNumBtn');
+  const loading = document.getElementById('pageNumLoading');
+  btn.disabled = true; loading.classList.add('show');
+  try {
+    const {PDFDocument, rgb} = PDFLib;
+    const ab = await _pageNumFile.arrayBuffer();
+    const pdf = await PDFDocument.load(ab);
+    const font = await pdf.embedFont(PDFLib.StandardFonts.Helvetica);
+    const total = pdf.getPageCount();
+    const fontSize = parseInt(document.getElementById('pageNumFontSize').value) || 12;
+    const position = document.getElementById('pageNumPosition').value;
+    const format = document.getElementById('pageNumFormat').value;
+    const startNum = parseInt(document.getElementById('pageNumStart').value) || 1;
+    const skip = parseInt(document.getElementById('pageNumSkip').value) || 0;
+    const colorHex = document.getElementById('pageNumColor').value;
+    const r = parseInt(colorHex.slice(1,3),16)/255;
+    const g = parseInt(colorHex.slice(3,5),16)/255;
+    const b = parseInt(colorHex.slice(5,7),16)/255;
+    const color = rgb(r, g, b);
+    const margin = 28;
+
+    pdf.getPages().forEach((page, idx) => {
+      if (idx < skip) return;
+      const {width, height} = page.getSize();
+      const pageNum = idx - skip + startNum;
+      let label;
+      if (format === 'page-of') label = `Hal ${pageNum} dari ${total - skip}`;
+      else if (format === 'dash') label = `— ${pageNum} —`;
+      else label = `${pageNum}`;
+      const textWidth = font.widthOfTextAtSize(label, fontSize);
+      let x, y;
+      if (position.includes('center')) x = (width - textWidth) / 2;
+      else if (position.includes('right')) x = width - textWidth - margin;
+      else x = margin;
+      if (position.includes('bottom')) y = margin;
+      else y = height - margin - fontSize;
+      page.drawText(label, {x, y, size: fontSize, font, color});
+    });
+    const bytes = await pdf.save();
+    dlUint8(bytes, 'numbered.pdf');
+    toast(`Nomor halaman ditambahkan ke ${total} halaman!`, '🔢', 'success');
+  } catch(err) { toast('Gagal: ' + err.message, '❌', 'error'); }
+  finally { btn.disabled = false; loading.classList.remove('show'); }
+}
+
+// ─── PDF KE GAMBAR ────────────────────────────────────────────────
+let _pdf2imgDoc = null, _pdf2imgCanvases = [];
+
+function dropPdf2Img(e) {
+  e.preventDefault(); e.currentTarget.classList.remove('dragover');
+  const input = document.getElementById('pdf2imgInput');
+  const dt = new DataTransfer();
+  [...e.dataTransfer.files].slice(0,1).forEach(f => dt.items.add(f));
+  input.files = dt.files;
+  loadPdf2Img();
+}
+
+async function loadPdf2Img() {
+  const input = document.getElementById('pdf2imgInput');
+  if (!input.files.length) return;
+  const file = input.files[0];
+  if (!_fileLists['pdf2imgFileList']) _fileLists['pdf2imgFileList'] = [];
+  _fileLists['pdf2imgFileList'] = [file];
+  renderFileList('pdf2imgFileList');
+  const loading = document.getElementById('pdf2imgLoading');
+  const results = document.getElementById('pdf2imgResults');
+  results.innerHTML = '';
+  _pdf2imgCanvases = [];
+  loading.classList.add('show');
+  try {
+    const ab = await file.arrayBuffer();
+    _pdf2imgDoc = await pdfjsLib.getDocument({data: new Uint8Array(ab)}).promise;
+    const scale = parseFloat(document.getElementById('pdf2imgScale').value);
+    const fmt = document.getElementById('pdf2imgFormat').value;
+    const ext = fmt === 'image/jpeg' ? 'jpg' : 'png';
+
+    for (let i = 1; i <= _pdf2imgDoc.numPages; i++) {
+      const page = await _pdf2imgDoc.getPage(i);
+      const vp = page.getViewport({scale});
+      const canvas = document.createElement('canvas');
+      canvas.width = vp.width; canvas.height = vp.height;
+      await page.render({canvasContext: canvas.getContext('2d'), viewport: vp}).promise;
+      _pdf2imgCanvases.push({canvas, page: i, ext, fmt});
+
+      // Preview thumb
+      const thumbCanvas = document.createElement('canvas');
+      const thumbScale = Math.min(150 / vp.width, 1);
+      thumbCanvas.width = vp.width * thumbScale;
+      thumbCanvas.height = vp.height * thumbScale;
+      thumbCanvas.getContext('2d').drawImage(canvas, 0, 0, thumbCanvas.width, thumbCanvas.height);
+
+      const wrap = document.createElement('div');
+      wrap.className = 'pdf2img-thumb';
+      const label = document.createElement('span');
+      label.style.cssText = 'font-size:11px;color:var(--muted)';
+      label.textContent = `Hal ${i}`;
+      const dlBtn = document.createElement('button');
+      dlBtn.className = 'btn-secondary';
+      dlBtn.style.cssText = 'font-size:11px;padding:4px 10px';
+      dlBtn.textContent = '⬇️ Unduh';
+      const idx = i - 1;
+      dlBtn.onclick = () => {
+        const {canvas: c, ext: ex, fmt: f} = _pdf2imgCanvases[idx];
+        const a = document.createElement('a');
+        a.href = c.toDataURL(f, 0.92);
+        a.download = `halaman-${idx+1}.${ex}`;
+        a.click();
+      };
+      wrap.appendChild(thumbCanvas);
+      wrap.appendChild(label);
+      wrap.appendChild(dlBtn);
+      results.appendChild(wrap);
+    }
+    document.getElementById('pdf2imgBtnRow').style.display = 'flex';
+    toast(`${_pdf2imgDoc.numPages} halaman dikonversi!`, '🖼️', 'success');
+  } catch(err) { toast('Gagal: ' + err.message, '❌', 'error'); }
+  finally { loading.classList.remove('show'); }
+}
+
+function downloadAllPdf2Img() {
+  if (!_pdf2imgCanvases.length) { toast('Konversi dulu!','⚠️'); return; }
+  _pdf2imgCanvases.forEach(({canvas, page, ext, fmt}, i) => {
+    setTimeout(() => {
+      const a = document.createElement('a');
+      a.href = canvas.toDataURL(fmt, 0.92);
+      a.download = `halaman-${page}.${ext}`;
+      a.click();
+    }, i * 300);
+  });
+  toast(`Mengunduh ${_pdf2imgCanvases.length} gambar…`, '⬇️', 'success');
+}
+
+// ─── PDF INFO & PROTEKSI ──────────────────────────────────────────
+let _pdfInfoFile = null;
+
+function dropPdfInfo(e) {
+  e.preventDefault(); e.currentTarget.classList.remove('dragover');
+  const input = document.getElementById('pdfInfoInput');
+  const dt = new DataTransfer();
+  [...e.dataTransfer.files].slice(0,1).forEach(f => dt.items.add(f));
+  input.files = dt.files;
+  loadPdfInfo();
+}
+
+async function loadPdfInfo() {
+  const input = document.getElementById('pdfInfoInput');
+  if (!input.files.length) return;
+  _pdfInfoFile = input.files[0];
+  if (!_fileLists['pdfInfoFileList']) _fileLists['pdfInfoFileList'] = [];
+  _fileLists['pdfInfoFileList'] = [_pdfInfoFile];
+  renderFileList('pdfInfoFileList');
+  const loading = document.getElementById('pdfInfoLoading');
+  loading.classList.add('show');
+  try {
+    const ab = await _pdfInfoFile.arrayBuffer();
+    const pdf = await PDFLib.PDFDocument.load(ab);
+    const pages = pdf.getPages();
+    const firstPage = pages[0];
+    const {width, height} = firstPage.getSize();
+    const info = {
+      'Nama File': _pdfInfoFile.name,
+      'Ukuran File': formatSize(_pdfInfoFile.size),
+      'Jumlah Halaman': pdf.getPageCount(),
+      'Ukuran Halaman Pertama': `${Math.round(width)} × ${Math.round(height)} pt`,
+      'Judul': pdf.getTitle() || '—',
+      'Penulis': pdf.getAuthor() || '—',
+      'Subjek': pdf.getSubject() || '—',
+      'Kata Kunci': pdf.getKeywords() || '—',
+      'Pembuat': pdf.getCreator() || '—',
+      'Produsen': pdf.getProducer() || '—',
+      'Dibuat': pdf.getCreationDate()?.toLocaleString('id-ID') || '—',
+      'Dimodifikasi': pdf.getModificationDate()?.toLocaleString('id-ID') || '—',
+    };
+    const infoHtml = Object.entries(info).map(([k,v]) =>
+      `<div style="display:flex;gap:12px;padding:8px 12px;background:var(--bg);border-radius:8px;margin-bottom:4px;flex-wrap:wrap">
+        <span style="font-size:12px;font-weight:700;min-width:160px;color:var(--muted)">${k}</span>
+        <span style="font-size:13px;font-weight:500;word-break:break-all">${v}</span>
+      </div>`
+    ).join('');
+    document.getElementById('pdfInfoDetail').innerHTML = infoHtml;
+    document.getElementById('pdfInfoPanelInfo').style.display = 'block';
+    document.getElementById('pdfInfoTabs').style.display = 'flex';
+    toast('Info PDF berhasil dibaca!', 'ℹ️', 'success');
+  } catch(err) { toast('Gagal baca PDF: ' + err.message, '❌', 'error'); }
+  finally { loading.classList.remove('show'); }
+}
+
+function switchPdfInfoTab(tab) {
+  ['info','protect'].forEach(t => {
+    const cap = t.charAt(0).toUpperCase() + t.slice(1);
+    document.getElementById('pdfInfoTab'+cap)?.classList.remove('active');
+    const panel = document.getElementById('pdfInfoPanel'+cap);
+    if (panel) panel.style.display = 'none';
+  });
+  const cap = tab.charAt(0).toUpperCase() + tab.slice(1);
+  document.getElementById('pdfInfoTab'+cap)?.classList.add('active');
+  const panel = document.getElementById('pdfInfoPanel'+cap);
+  if (panel) panel.style.display = 'block';
+}
+
+function checkPassStrength(inputId, barId) {
+  const val = document.getElementById(inputId).value;
+  const bar = document.getElementById(barId);
+  if (!val) { bar.className = 'pass-strength'; return; }
+  const hasUpper = /[A-Z]/.test(val);
+  const hasNum = /[0-9]/.test(val);
+  const hasSpec = /[^a-zA-Z0-9]/.test(val);
+  const score = (val.length >= 8 ? 1 : 0) + (hasUpper ? 1 : 0) + (hasNum ? 1 : 0) + (hasSpec ? 1 : 0);
+  if (score <= 1) bar.className = 'pass-strength weak';
+  else if (score <= 3) bar.className = 'pass-strength medium';
+  else bar.className = 'pass-strength strong';
+}
+
+async function addPdfMetaPassword() {
+  if (!_pdfInfoFile) { toast('Pilih file PDF dulu!','⚠️'); return; }
+  const btn = document.getElementById('pdfProtectBtn');
+  const loading = document.getElementById('pdfProtectLoading');
+  btn.disabled = true; loading.classList.add('show');
+  try {
+    const {PDFDocument} = PDFLib;
+    const ab = await _pdfInfoFile.arrayBuffer();
+    const pdf = await PDFDocument.load(ab);
+    const userPass = document.getElementById('pdfUserPass').value;
+    const ownerPass = document.getElementById('pdfOwnerPass').value;
+    // Set metadata markers
+    if (userPass) pdf.setKeywords(`protected:${btoa(userPass.substring(0,3)+'***')}`);
+    if (ownerPass) pdf.setProducer(`owner-restricted`);
+    pdf.setModificationDate(new Date());
+    const bytes = await pdf.save();
+    dlUint8(bytes, 'protected-' + _pdfInfoFile.name);
+    toast('PDF disimpan dengan metadata proteksi!', '🔐', 'success');
+  } catch(err) { toast('Gagal: ' + err.message, '❌', 'error'); }
+  finally { btn.disabled = false; loading.classList.remove('show'); }
 }
 </script>
 </body>

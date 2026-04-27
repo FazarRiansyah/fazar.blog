@@ -1,0 +1,1393 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>#JagaDokumen - Privacy-First Document Tools</title>
+    
+    <!-- Favicon -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🛡️</text></svg>">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;700&family=Dancing+Script:wght@400;700&family=Inter:wght@400;700&family=Lato:ital,wght@0,400;0,700;1,400&family=Lobster&family=Lora:ital,wght@0,400;0,700;1,400&family=Merriweather:ital,wght@0,400;0,700;1,400&family=Montserrat:ital,wght@0,400;0,700;1,400&family=Nunito:ital,wght@0,400;0,700;1,400&family=Open+Sans:ital,wght@0,400;0,700;1,400&family=Pacifico&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Poppins:ital,wght@0,400;0,700;1,400&family=Raleway:ital,wght@0,400;0,700;1,400&family=Righteous&family=Roboto+Mono:ital,wght@0,400;0,700;1,400&family=Roboto:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    
+    <!-- Phosphor Icons -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="site-header">
+        <div class="header-container">
+            <div class="logo">
+                <div class="logo-icon"><i class="ph-fill ph-shield-check"></i></div>
+                <span class="logo-text">#JagaDokumen</span>
+            </div>
+            <div class="nav-actions">
+                <div class="badge-status">
+                    <span class="dot green"></span> 100% Lokal — Tanpa Upload Server
+                </div>
+                <div class="badge-status">
+                    <span class="dot green"></span> Mode Offline
+                </div>
+                <button class="icon-btn theme-toggle" title="Toggle Dark Mode">
+                    <i class="ph-fill ph-moon"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="app-container">
+        <!-- Dashboard View -->
+        <div id="dashboard-view">
+            <!-- Hero Section -->
+        <section class="hero">
+            <div class="hero-content">
+                <div class="hero-badge"><i class="ph-fill ph-lock-key"></i> PRIVACY-FIRST DOCUMENT TOOLS</div>
+                <h1 class="hero-title">Kelola Dokumen Anda Tanpa Risiko Kebocoran Data</h1>
+                <p class="hero-desc">Semua alat berjalan 100% di browser Anda. File tidak pernah dikirim ke server manapun.<br>Privasi dan keamanan data terjaga sepenuhnya.</p>
+                <div class="hero-buttons">
+                    <button class="btn btn-primary" id="btn-start-now"><i class="ph-fill ph-lightning"></i> Mulai Pakai</button>
+                    <button class="btn btn-white-outline" id="btn-how-it-works"><i class="ph ph-magnifying-glass"></i> Cara Kerjanya</button>
+                </div>
+            </div>
+            <div class="hero-illustration">
+                <!-- Abstract Shield Illustration -->
+                <div class="shield-container">
+                    <i class="ph-fill ph-shield-check shield-icon"></i>
+                </div>
+            </div>
+        </section>
+
+        <!-- Stats Section -->
+        <section class="stats-grid">
+
+            <div class="stat-card">
+                <div class="stat-icon"><i class="ph-fill ph-check-square text-green"></i></div>
+                <div class="stat-info">
+                    <h3 class="text-green" id="stat-tool-count">0</h3>
+                    <p>Fitur Tersedia</p>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon"><i class="ph-fill ph-cloud-slash text-orange"></i></div>
+                <div class="stat-info">
+                    <h3 class="text-orange">0 Byte</h3>
+                    <p>Data ke Server</p>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon"><i class="ph-fill ph-lightning text-purple"></i></div>
+                <div class="stat-info">
+                    <h3 class="text-purple">100%</h3>
+                    <p>Proses di Browser</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Tools Section -->
+        <section class="tools-section">
+            <div class="tools-header">
+                <h2><i class="ph-fill ph-toolbox"></i> Semua Alat</h2>
+                <span class="tool-count">17 alat tersedia</span>
+            </div>
+
+            <div class="search-container">
+                <i class="ph ph-magnifying-glass search-icon"></i>
+                <input type="text" id="searchInput" placeholder="Cari alat... ketik nama atau kategori [Ctrl+K]">
+            </div>
+
+            <section class="tools-category-section">
+                <h2 style="font-size: 1.2rem; color: var(--text-main); margin-bottom: 16px; display: flex; align-items: center; gap: 8px;">
+                    <i class="ph-fill ph-file-pdf" style="color: var(--primary-red);"></i> Alat Dokumen PDF
+                </h2>
+                <div class="tools-grid" id="tools-grid-pdf">
+                    <div class="tool-card maintenance" data-category="pdf">
+                        <div class="tool-card-header">
+                            <div class="tool-icon" style="background: #eff6ff; color: #2563eb;"><i class="ph-fill ph-note-pencil"></i></div>
+                            <div class="tool-meta">
+                                <span class="tool-type" style="background: #fff1f2; color: #e11d48; border-color: #fecdd3;">Maintenance</span>
+                                <span class="tool-type">PDF</span>
+                            </div>
+                        </div>
+                        <div class="tool-card-body">
+                            <h3>Edit PDF</h3>
+                            <p>Fitur ini sedang dalam pemeliharaan untuk peningkatan performa. Silakan kembali lagi nanti.</p>
+                        </div>
+                        <div class="tool-card-footer"><button class="btn-tool" disabled style="opacity: 0.6; cursor: not-allowed; background: #f1f5f9; color: #94a3b8; border-color: #e2e8f0;">Sedang Perbaikan <i class="ph ph-hammer"></i></button></div>
+                    </div>
+                    <div class="tool-card" data-category="pdf">
+                        <div class="tool-card-header">
+                            <div class="tool-icon"><i class="ph-fill ph-file-pdf"></i></div>
+                            <div class="tool-meta"><span class="tool-type">PDF</span></div>
+                        </div>
+                        <div class="tool-card-body">
+                            <h3>Gabungkan PDF</h3>
+                            <p>Gabungkan beberapa file PDF menjadi satu dokumen tunggal.</p>
+                        </div>
+                        <div class="tool-card-footer"><button class="btn-tool">Buka Alat <i class="ph ph-arrow-right"></i></button></div>
+                    </div>
+
+                    <div class="tool-card" data-category="pdf">
+                        <div class="tool-card-header">
+                            <div class="tool-icon"><i class="ph-fill ph-scissors"></i></div>
+                            <div class="tool-meta"><span class="tool-type">PDF</span></div>
+                        </div>
+                        <div class="tool-card-body">
+                            <h3>Pisahkan PDF</h3>
+                            <p>Pisahkan PDF menjadi beberapa file dengan rentang halaman.</p>
+                        </div>
+                        <div class="tool-card-footer"><button class="btn-tool">Buka Alat <i class="ph ph-arrow-right"></i></button></div>
+                    </div>
+
+                    <div class="tool-card" data-category="pdf">
+                        <div class="tool-card-header">
+                            <div class="tool-icon"><i class="ph-fill ph-arrows-clockwise"></i></div>
+                            <div class="tool-meta"><span class="tool-type">PDF</span></div>
+                        </div>
+                        <div class="tool-card-body">
+                            <h3>Putar Halaman PDF</h3>
+                            <p>Putar halaman PDF ke kiri, kanan, atau 180&deg;.</p>
+                        </div>
+                        <div class="tool-card-footer"><button class="btn-tool">Buka Alat <i class="ph ph-arrow-right"></i></button></div>
+                    </div>
+
+                    <div class="tool-card" data-category="pdf">
+                        <div class="tool-card-header">
+                            <div class="tool-icon"><i class="ph-fill ph-file-x"></i></div>
+                            <div class="tool-meta"><span class="tool-type">PDF</span></div>
+                        </div>
+                        <div class="tool-card-body">
+                            <h3>Hapus Halaman PDF</h3>
+                            <p>Pilih dan hapus halaman yang tidak diperlukan secara visual.</p>
+                        </div>
+                        <div class="tool-card-footer"><button class="btn-tool">Buka Alat <i class="ph ph-arrow-right"></i></button></div>
+                    </div>
+
+                    <div class="tool-card" data-category="pdf">
+                        <div class="tool-card-header">
+                            <div class="tool-icon"><i class="ph-fill ph-arrows-left-right"></i></div>
+                            <div class="tool-meta"><span class="tool-type">PDF</span></div>
+                        </div>
+                        <div class="tool-card-body">
+                            <h3>Ganti Halaman PDF</h3>
+                            <p>Tukar halaman tertentu dengan halaman dari file PDF lain secara presisi.</p>
+                        </div>
+                        <div class="tool-card-footer"><button class="btn-tool">Buka Alat <i class="ph ph-arrow-right"></i></button></div>
+                    </div>
+
+                    <div class="tool-card" data-category="pdf">
+                        <div class="tool-card-header">
+                            <div class="tool-icon"><i class="ph-fill ph-list-numbers"></i></div>
+                            <div class="tool-meta"><span class="tool-type">PDF</span></div>
+                        </div>
+                        <div class="tool-card-body">
+                            <h3>Nomor Halaman PDF</h3>
+                            <p>Tambahkan nomor halaman otomatis ke PDF.</p>
+                        </div>
+                        <div class="tool-card-footer"><button class="btn-tool">Buka Alat <i class="ph ph-arrow-right"></i></button></div>
+                    </div>
+
+                    <div class="tool-card" data-category="pdf">
+                        <div class="tool-card-header">
+                            <div class="tool-icon"><i class="ph-fill ph-arrows-in"></i></div>
+                            <div class="tool-meta"><span class="tool-type">PDF</span></div>
+                        </div>
+                        <div class="tool-card-body">
+                            <h3>Kompres PDF</h3>
+                            <p>Kecilkan ukuran file PDF dengan pintar tanpa merusak teks.</p>
+                        </div>
+                        <div class="tool-card-footer"><button class="btn-tool">Buka Alat <i class="ph ph-arrow-right"></i></button></div>
+                    </div>
+
+                    <div class="tool-card" data-category="pdf">
+                        <div class="tool-card-header">
+                            <div class="tool-icon"><i class="ph-fill ph-file-pdf"></i></div>
+                            <div class="tool-meta"><span class="tool-type">PDF</span></div>
+                        </div>
+                        <div class="tool-card-body">
+                            <h3>PDF to Text</h3>
+                            <p>Ekstrak teks murni dari dalam file PDF.</p>
+                        </div>
+                        <div class="tool-card-footer"><button class="btn-tool">Buka Alat <i class="ph ph-arrow-right"></i></button></div>
+                    </div>
+                    <div class="tool-card" data-category="pdf">
+                        <div class="tool-card-header">
+                            <div class="tool-icon"><i class="ph-fill ph-lock-key"></i></div>
+                            <div class="tool-meta"><span class="tool-type">PDF</span></div>
+                        </div>
+                        <div class="tool-card-body">
+                            <h3>Info & Proteksi PDF</h3>
+                            <p>Lihat info detail dan lindungi PDF dengan password.</p>
+                        </div>
+                        <div class="tool-card-footer"><button class="btn-tool">Buka Alat <i class="ph ph-arrow-right"></i></button></div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="tools-category-section">
+                <h2 style="font-size: 1.2rem; color: var(--text-main); margin-top: 32px; margin-bottom: 16px; display: flex; align-items: center; gap: 8px;">
+                    <i class="ph-fill ph-image" style="color: var(--primary-blue);"></i> Alat Visual & Gambar
+                </h2>
+                <div class="tools-grid" id="tools-grid-image">
+                    <div class="tool-card" data-category="gambar">
+                        <div class="tool-card-header">
+                            <div class="tool-icon"><i class="ph-fill ph-image"></i></div>
+                            <div class="tool-meta"><span class="tool-type">Gambar</span></div>
+                        </div>
+                        <div class="tool-card-body">
+                            <h3>Gambar ke PDF</h3>
+                            <p>Konversi JPG, PNG, WebP menjadi file PDF.</p>
+                        </div>
+                        <div class="tool-card-footer"><button class="btn-tool">Buka Alat <i class="ph ph-arrow-right"></i></button></div>
+                    </div>
+
+                    <div class="tool-card" data-category="gambar">
+                        <div class="tool-card-header">
+                            <div class="tool-icon"><i class="ph-fill ph-image"></i></div>
+                            <div class="tool-meta"><span class="tool-type">Gambar</span></div>
+                        </div>
+                        <div class="tool-card-body">
+                            <h3>PDF ke Gambar</h3>
+                            <p>Konversi setiap halaman PDF menjadi gambar PNG.</p>
+                        </div>
+                        <div class="tool-card-footer"><button class="btn-tool">Buka Alat <i class="ph ph-arrow-right"></i></button></div>
+                    </div>
+
+                    
+
+                    <div class="tool-card" data-category="gambar">
+                        <div class="tool-card-header">
+                            <div class="tool-icon"><i class="ph-fill ph-arrows-in"></i></div>
+                            <div class="tool-meta"><span class="tool-type">Gambar</span></div>
+                        </div>
+                        <div class="tool-card-body">
+                            <h3>Kompres Gambar</h3>
+                            <p>Kurangi ukuran file gambar tanpa kehilangan kualitas.</p>
+                        </div>
+                        <div class="tool-card-footer"><button class="btn-tool">Buka Alat <i class="ph ph-arrow-right"></i></button></div>
+                    </div>
+
+                    <div class="tool-card" data-category="gambar">
+                        <div class="tool-card-header">
+                            <div class="tool-icon"><i class="ph-fill ph-frame-corners"></i></div>
+                            <div class="tool-meta"><span class="tool-type">Gambar</span></div>
+                        </div>
+                        <div class="tool-card-body">
+                            <h3>Resize Gambar</h3>
+                            <p>Ubah resolusi atau dimensi gambar dengan mudah.</p>
+                        </div>
+                        <div class="tool-card-footer"><button class="btn-tool">Buka Alat <i class="ph ph-arrow-right"></i></button></div>
+                    </div>
+
+                    <div class="tool-card" data-category="gambar">
+                        <div class="tool-card-header">
+                            <div class="tool-icon"><i class="ph-fill ph-arrows-counter-clockwise"></i></div>
+                            <div class="tool-meta"><span class="tool-type">Gambar</span></div>
+                        </div>
+                        <div class="tool-card-body">
+                            <h3>Konversi Gambar</h3>
+                            <p>Ubah format gambar (PNG, JPG, WebP, BMP).</p>
+                        </div>
+                        <div class="tool-card-footer"><button class="btn-tool">Buka Alat <i class="ph ph-arrow-right"></i></button></div>
+                    </div>
+                </div>
+            </section>
+        </section>
+
+
+
+
+        <!-- Privacy Section -->
+        <section class="privacy-section">
+            <div class="privacy-header">
+                <h2><i class="ph-fill ph-shield-check" style="color: var(--color-green);"></i> Privasi Anda Adalah Prioritas Kami</h2>
+                <p>#JagaDokumen dirancang dengan arsitektur "Privacy-First" untuk memastikan data Anda tetap menjadi milik Anda sepenuhnya.</p>
+            </div>
+            
+            <div class="privacy-grid">
+                <div class="privacy-item">
+                    <div class="privacy-item-icon">
+                        <i class="ph-fill ph-user-focus"></i>
+                    </div>
+                    <h4>100% Pemrosesan Lokal</h4>
+                    <p>Semua manipulasi PDF dan gambar dilakukan langsung di browser Anda. File tidak pernah diunggah ke server mana pun.</p>
+                </div>
+                
+                <div class="privacy-item">
+                    <div class="privacy-item-icon" style="background: var(--color-orange-light); color: var(--color-orange);">
+                        <i class="ph-fill ph-database"></i>
+                    </div>
+                    <h4>Tanpa Penyimpanan Data</h4>
+                    <p>Kami tidak memiliki database. File Anda akan hilang dari memori browser segera setelah Anda menutup tab atau refresh halaman.</p>
+                </div>
+                
+                <div class="privacy-item">
+                    <div class="privacy-item-icon" style="background: var(--color-purple-light); color: var(--color-purple);">
+                        <i class="ph-fill ph-wifi-slash"></i>
+                    </div>
+                    <h4>Bekerja Tanpa Internet</h4>
+                    <p>Setelah halaman dimuat, Anda bisa mematikan koneksi internet dan alat-alat kami akan tetap berfungsi dengan normal.</p>
+                </div>
+            </div>
+        </section>
+        </div>
+
+    </main>
+    
+    <!-- Tool View (SPA Mode) - Moved outside app-container for true full screen -->
+    <div id="tool-view" style="display: none;">
+        <div class="tool-view-container">
+            <div class="tool-view-header">
+                <button class="btn-back" id="btn-back-dashboard">
+                    <i class="ph ph-arrow-left"></i> Kembali ke Beranda
+                </button>
+                <div class="tool-view-title-wrapper">
+                    <div class="tool-view-icon" id="toolViewIcon"></div>
+                    <div class="tool-view-title-text">
+                        <h2 id="toolViewTitle">Nama Alat</h2>
+                        <p id="toolViewCategory" class="tool-type">KATEGORI</p>
+                    </div>
+                </div>
+                <div class="tool-view-actions">
+                    <div class="footer-status">
+                        <i class="ph-fill ph-shield-check"></i> Aman & Lokal
+                    </div>
+                </div>
+            </div>
+            <div class="tool-view-body" id="toolViewBody">
+                <!-- Tool content injected here -->
+            </div>
+        </div>
+    </div>
+
+    <footer class="site-footer">
+        <div class="footer-container">
+            <div class="footer-top">
+                <div class="footer-brand">
+                    <div class="logo-icon small"><i class="ph-fill ph-shield-check"></i></div>
+                    <strong>#JagaDokumen</strong>
+                </div>
+                <div class="footer-social">
+                    <a href="#" title="Instagram" class="social-link">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 256 256"><path d="M128,80a48,48,0,1,0,48,48A48.05,48.05,0,0,0,128,80Zm0,80a32,32,0,1,1,32-32A32,32,0,0,1,128,160ZM176,24H80A56.06,56.06,0,0,0,24,80v96a56.06,56.06,0,0,0,56,56h96a56.06,56.06,0,0,0,56-56V80A56.06,56.06,0,0,0,176,24Zm40,152a40,40,0,0,1-40,40H80a40,40,0,0,1-40-40V80A40,40,0,0,1,80,40h96a40,40,0,0,1,40,40ZM192,76a12,12,0,1,1-12-12A12,12,0,0,1,192,76Z"></path></svg>
+                    </a>
+                    <a href="#" title="YouTube" class="social-link">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 256 256"><path d="M234.44,69.53a24,24,0,0,0-14.49-14.49C199.39,48,128,48,128,48s-71.39,0-91.95,7.04A24,24,0,0,0,21.56,69.53C14.52,90.09,14.52,128,14.52,128s0,37.91,7.04,58.47a24,24,0,0,0,14.49,14.49c20.56,7.04,91.95,7.04,91.95,7.04s71.39,0,91.95-7.04a24,24,0,0,0,14.49-14.49C241.48,165.91,241.48,128,241.48,128S241.48,90.09,234.44,69.53ZM160,128l-48,32V96Z"></path></svg>
+                    </a>
+                    <a href="#" title="Website" class="social-link">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 256 256"><path d="M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0,0,128,24Zm0,192a88,88,0,1,1,88-88A88.1,88.1,0,0,1,128,216ZM128,40a88,88,0,0,0-8,175.64V40.36A88,88,0,0,0,128,40ZM112,40.63V215.37a88.1,88.1,0,0,1,0-174.74ZM144,40.63a88.1,88.1,0,0,1,0,174.74V40.63Z"></path></svg>
+                    </a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <div class="footer-copy">
+                    <p>&copy; 2026 #JagaDokumen. Seluruh pemrosesan bersifat lokal.</p>
+                </div>
+                <div class="footer-attribution">
+                    <p>Inovasi Digital oleh <strong>Pusat Pelatihan dan Pengembangan Pendidikan Kota Adm Jakarta Pusat</strong></p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Tool Modal Container -->
+    <div id="toolModal" class="modal-overlay">
+        <div class="modal-box fade-in-up">
+            <div class="modal-header">
+                <div class="modal-title-wrapper">
+                    <div class="modal-icon" id="modalIcon"><i class="ph-fill ph-toolbox"></i></div>
+                    <div>
+                        <h2 id="modalTitle">Nama Alat</h2>
+                        <p id="modalCategory" class="tool-type">KATEGORI</p>
+                    </div>
+                </div>
+                <button class="modal-close" id="closeModal">&times;</button>
+            </div>
+            <div class="modal-body" id="modalBody">
+                <!-- Tool specific content will be injected here -->
+            </div>
+            <div class="modal-footer">
+                <div class="footer-status">
+                    <i class="ph-fill ph-shield-check"></i> Aman & Lokal
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit PDF Template -->
+    <template id="tpl-edit-pdf">
+        <div class="tool-workspace">
+            <!-- Initial Upload View -->
+            <div id="pdf-upload-view" class="pdf-tool-container">
+                <div class="upload-area" id="edit-upload-area">
+                    <i class="ph-fill ph-pencil-simple"></i>
+                    <h3>Pilih file PDF untuk di-edit</h3>
+                    <p>Tambahkan teks, gambar, atau tanda tangan secara lokal di browser Anda</p>
+                    <div class="btn btn-primary">
+                        Pilih File PDF
+                    </div>
+                </div>
+                <input type="file" id="edit-pdf-input" class="pdf-file-input" accept="application/pdf" style="display: none;">
+            </div>
+
+            <!-- Editor View (Hidden by default) -->
+            <div id="pdf-editor-view" class="editor-layout" style="display: none;">
+                <!-- Ribbon Interface -->
+                <div class="editor-ribbon">
+                    <div class="ribbon-tabs">
+                        <div class="ribbon-tab active" data-tab="home">Beranda</div>
+                        <div class="ribbon-tab" data-tab="annotate">Anotasi</div>
+                        <div class="ribbon-tab" data-tab="forms">Formulir & Keamanan</div>
+                    </div>
+                    
+                    <div class="ribbon-content">
+                        <!-- Tab: Beranda -->
+                        <div class="ribbon-panel active" id="panel-home">
+                            <div class="ribbon-group">
+                                <div class="ribbon-tools">
+                                    <button class="ribbon-btn active" data-tool="select">
+                                        <i class="ph-bold ph-cursor"></i>
+                                        <span>Pilih</span>
+                                    </button>
+                                </div>
+                                <div class="ribbon-group-label">Kursor</div>
+                            </div>
+                            
+                            <div class="ribbon-group">
+                                <div class="ribbon-tools">
+                                    <button class="ribbon-btn" data-tool="text">
+                                        <i class="ph-bold ph-text-t"></i>
+                                        <span>Teks</span>
+                                    </button>
+                                    <button class="ribbon-btn" data-tool="draw">
+                                        <i class="ph-bold ph-pencil-simple"></i>
+                                        <span>Tulis</span>
+                                    </button>
+                                    <button class="ribbon-btn" data-tool="image">
+                                        <i class="ph-bold ph-image"></i>
+                                        <span>Gambar</span>
+                                    </button>
+                                </div>
+                                <div class="ribbon-group-label">Sisipkan</div>
+                            </div>
+
+                            <div class="ribbon-group">
+                                <div class="ribbon-tools">
+                                    <button class="ribbon-btn" id="btn-undo">
+                                        <i class="ph-bold ph-arrow-u-up-left"></i>
+                                        <span>Undo</span>
+                                    </button>
+                                    <button class="ribbon-btn" id="btn-copy">
+                                        <i class="ph-bold ph-copy"></i>
+                                        <span>Salin</span>
+                                    </button>
+                                </div>
+                                <div class="ribbon-group-label">Edit</div>
+                            </div>
+                        </div>
+
+                        <!-- Tab: Anotasi -->
+                        <div class="ribbon-panel" id="panel-annotate">
+                            <div class="ribbon-group">
+                                <div class="ribbon-tools">
+                                    <button class="ribbon-btn" data-tool="highlight">
+                                        <i class="ph-bold ph-highlighter-circle"></i>
+                                        <span>Sorot</span>
+                                    </button>
+                                </div>
+                                <div class="ribbon-group-label">Penekanan</div>
+                            </div>
+
+                            <div class="ribbon-group">
+                                <div class="ribbon-tools">
+                                    <button class="ribbon-btn" data-tool="rect">
+                                        <i class="ph-bold ph-square"></i>
+                                        <span>Kotak</span>
+                                    </button>
+                                    <button class="ribbon-btn" data-tool="circle">
+                                        <i class="ph-bold ph-circle"></i>
+                                        <span>Lingkaran</span>
+                                    </button>
+                                    <button class="ribbon-btn" data-tool="arrow">
+                                        <i class="ph-bold ph-arrow-up-right"></i>
+                                        <span>Panah</span>
+                                    </button>
+                                </div>
+                                <div class="ribbon-group-label">Bentuk</div>
+                            </div>
+                        </div>
+
+                        <!-- Tab: Formulir & Keamanan -->
+                        <div class="ribbon-panel" id="panel-forms">
+                            <div class="ribbon-group">
+                                <div class="ribbon-tools">
+                                    <button class="ribbon-btn" data-tool="signature">
+                                        <i class="ph-bold ph-pen-nib"></i>
+                                        <span>TTD</span>
+                                    </button>
+                                    <button class="ribbon-btn" data-tool="stamp">
+                                        <i class="ph-bold ph-stamp"></i>
+                                        <span>Stempel</span>
+                                    </button>
+                                </div>
+                                <div class="ribbon-group-label">Legalitas</div>
+                            </div>
+
+                            <div class="ribbon-group">
+                                <div class="ribbon-tools">
+                                    <button class="ribbon-btn" data-tool="whiteout">
+                                        <i class="ph-bold ph-eraser"></i>
+                                        <span>Hapus</span>
+                                    </button>
+                                    <button class="ribbon-btn" data-tool="watermark">
+                                        <i class="ph-bold ph-drop"></i>
+                                        <span>Watermark</span>
+                                    </button>
+                                </div>
+                                <div class="ribbon-group-label">Privasi</div>
+                            </div>
+                        </div>
+
+                        <!-- Ribbon Actions (Zoom, Nav, Save) -->
+                        <div class="ribbon-actions">
+                            <div class="zoom-controls">
+                                <button class="zoom-btn" id="btn-zoom-out"><i class="ph ph-minus"></i></button>
+                                <span id="zoom-indicator" style="font-size: 0.8rem; font-weight: 800; min-width: 45px; text-align: center;">100%</span>
+                                <button class="zoom-btn" id="btn-zoom-in"><i class="ph ph-plus"></i></button>
+                            </div>
+                            
+                            <div class="toolbar-divider" style="height: 30px; width: 1px; background: var(--border-color);"></div>
+                            
+                            <div style="display: flex; align-items: center; gap: 8px;">
+                                <button class="btn btn-outline small" id="btn-prev-page"><i class="ph ph-caret-left"></i></button>
+                                <span id="page-indicator" style="font-size: 0.8rem; font-weight: 800;">1 / 1</span>
+                                <button class="btn btn-outline small" id="btn-next-page"><i class="ph ph-caret-right"></i></button>
+                            </div>
+
+                            <button class="btn btn-primary" id="btn-export-pdf" style="padding: 10px 20px; font-size: 0.85rem;">
+                                <i class="ph-fill ph-download-simple"></i> Simpan PDF
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Document Tabs Bar (Now below Ribbon) -->
+                <div class="doc-tabs-bar">
+                    <div class="doc-tab tool-name-tab active">
+                        <i class="ph-bold ph-pencil-simple"></i> Edit
+                    </div>
+                    <!-- Dynamic Tabs Container -->
+                    <div id="tabs-container" style="display: flex; gap: 4px;">
+                        <!-- Tabs injected here -->
+                    </div>
+                    <button class="btn-add-tab" id="btn-add-new-tab" title="Buka File PDF Baru">
+                        <i class="ph ph-plus"></i>
+                    </button>
+                    <!-- Hidden input for additional files -->
+                    <input type="file" id="extra-pdf-input" accept="application/pdf" style="display: none;">
+                </div>
+
+                <!-- Sub Toolbar (Properties Panel) -->
+                <div class="editor-sub-toolbar" id="properties-panel" style="display: none;">
+                    <!-- Text Props -->
+                    <div class="prop-group" id="prop-text" style="display: none;">
+                        <select id="font-family" class="prop-select">
+                            <option value="Helvetica">Helvetica (Standar)</option>
+                            <option value="Times New Roman">Times Roman (Standar)</option>
+                            <option value="Courier">Courier (Standar)</option>
+                            <optgroup label="Sans-Serif">
+                                <option value="Roboto">Roboto</option>
+                                <option value="Open Sans">Open Sans</option>
+                                <option value="Montserrat">Montserrat</option>
+                                <option value="Lato">Lato</option>
+                                <option value="Poppins">Poppins</option>
+                                <option value="Nunito">Nunito</option>
+                                <option value="Raleway">Raleway</option>
+                                <option value="Inter">Inter</option>
+                            </optgroup>
+                            <optgroup label="Serif">
+                                <option value="Merriweather">Merriweather</option>
+                                <option value="Playfair Display">Playfair Display</option>
+                                <option value="Lora">Lora</option>
+                            </optgroup>
+                            <optgroup label="Monospace">
+                                <option value="Roboto Mono">Roboto Mono</option>
+                            </optgroup>
+                            <optgroup label="Handwriting / Display">
+                                <option value="Dancing Script">Dancing Script</option>
+                                <option value="Pacifico">Pacifico</option>
+                                <option value="Caveat">Caveat</option>
+                                <option value="Righteous">Righteous</option>
+                                <option value="Lobster">Lobster</option>
+                            </optgroup>
+                        </select>
+                        <button class="prop-btn font-style-btn" data-style="bold"><b>B</b></button>
+                        <button class="prop-btn font-style-btn" data-style="italic"><i>I</i></button>
+                    </div>
+                    
+                    <!-- Color Props -->
+                    <div class="prop-group">
+                        <label for="color-picker" title="Warna Garis/Teks" style="font-size: 0.75rem; color: var(--text-muted);">Garis/Teks:</label>
+                        <input type="color" id="color-picker" value="#000000">
+                        <label for="fill-picker" title="Warna Isi (Fill)" style="font-size: 0.75rem; color: var(--text-muted); margin-left: 8px;">Isi:</label>
+                        <input type="color" id="fill-picker" value="#ffffff">
+                        <label style="font-size: 0.75rem; color: var(--text-muted); margin-left: 4px;">
+                            <input type="checkbox" id="transparent-fill" checked> Transparan
+                        </label>
+                    </div>
+
+                    <!-- Size Prop -->
+                    <div class="prop-group">
+                        <label for="size-slider" style="font-size: 0.75rem; color: var(--text-muted);">Ukuran:</label>
+                        <input type="range" id="size-slider" min="1" max="100" value="16">
+                    </div>
+
+                    <!-- Object Layering -->
+                    <div class="prop-group" id="prop-layering" style="display: none;">
+                        <button class="prop-btn" id="btn-bring-front" title="Bawa ke Depan"><i class="ph-bold ph-intersect"></i></button>
+                        <button class="prop-btn" id="btn-send-back" title="Kirim ke Belakang"><i class="ph-bold ph-exclude"></i></button>
+                    </div>
+
+                    <div class="prop-group">
+                        <button class="prop-btn text-red" id="delete-btn" title="Hapus Objek"><i class="ph-bold ph-trash"></i></button>
+                    </div>
+                </div>
+
+                <!-- Main Workspace (Sidebar + Canvas) -->
+                <div class="editor-main-workspace">
+                    <div class="editor-sidebar" id="pdf-thumbnails">
+                        <!-- Thumbnails injected via JS -->
+                    </div>
+                    <div class="canvas-container-wrapper" id="canvas-wrapper"><canvas id="pdf-bg-canvas"></canvas><canvas id="pdf-interact-canvas"></canvas></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Hidden inputs for file selection -->
+        <input type="file" id="image-upload-input" accept="image/png, image/jpeg, image/webp" hidden>
+
+        <!-- Signature Modal (nested within template or appended to body via JS) -->
+        <div id="signature-modal" class="modal-overlay" style="z-index: 2000; align-items: center; justify-content: center;">
+            <div class="modal-box" style="max-width: 500px; height: auto;">
+                <div class="modal-header">
+                    <h2 style="font-size: 1.1rem;"><i class="ph-fill ph-pen-nib"></i> Buat Tanda Tangan</h2>
+                    <button class="modal-close" id="close-sig-modal">&times;</button>
+                </div>
+                <div class="modal-body" style="background: #f1f5f9; padding: 20px; display: flex; justify-content: center;">
+                    <canvas id="signature-pad" width="400" height="200" style="border: 1px dashed var(--border-color); background: white; border-radius: 8px; cursor: crosshair; touch-action: none;"></canvas>
+                </div>
+                <div class="modal-footer" style="padding: 16px;">
+                    <button class="btn btn-outline small" id="clear-sig">Bersihkan Kanvas</button>
+                    <button class="btn btn-primary small" id="save-sig">Gunakan Tanda Tangan</button>
+                </div>
+            </div>
+        </div>
+    </template>
+
+    <!-- Template: Preview Modal (General) -->
+    <template id="tpl-preview-modal">
+        <div class="modal" id="previewModal" style="display: flex;">
+            <div class="modal-box" style="max-width: 800px; width: 95%; border-radius: 20px;">
+                <div class="modal-header" style="border-bottom: 1px solid #f1f5f9; padding: 20px;">
+                    <div style="display: flex; align-items: center; gap: 12px;">
+                        <div style="background: var(--color-blue-light); color: var(--primary-blue); width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.2rem;">
+                            <i class="ph-fill ph-eye"></i>
+                        </div>
+                        <div>
+                            <h2 id="previewModalTitle" style="font-size: 1.1rem; margin: 0;">Pratinjau Dokumen</h2>
+                            <p id="previewModalSubtitle" style="font-size: 0.75rem; color: var(--text-muted); margin: 4px 0 0;">Daftar seluruh halaman dalam file</p>
+                        </div>
+                    </div>
+                    <button class="modal-close" onclick="this.closest('.modal').remove()">&times;</button>
+                </div>
+                <div class="modal-body" id="previewModalBody" style="max-height: 65vh; overflow-y: auto; background: #f8fafc; padding: 25px;">
+                    <div class="preview-modal-grid" id="previewGridContainer">
+                        <!-- Pages will be injected here -->
+                    </div>
+                </div>
+                <div class="modal-footer" style="padding: 15px 20px; border-top: 1px solid #f1f5f9;">
+                    <button class="btn btn-primary" style="width: 100%;" onclick="this.closest('.modal').remove()">Tutup Pratinjau</button>
+                </div>
+            </div>
+        </div>
+    </template>
+
+
+    <!-- Template: Merge PDF -->
+    <template id="tpl-merge-pdf">
+        <div class="pdf-tool-container" style="width: 100%; max-width: 900px; margin: 0 auto; padding: 40px 20px;">
+            <div id="merge-upload-area" class="upload-area" style="cursor: pointer;">
+                <i class="ph-fill ph-files" style="font-size: 80px; color: #2563eb; margin-bottom: 20px; filter: drop-shadow(0 4px 8px rgba(37, 99, 235, 0.15));"></i>
+                <div class="upload-text">
+                    <h3>Gabungkan Dokumen PDF</h3>
+                    <p>Satukan beberapa file PDF menjadi satu dokumen berkualitas tinggi</p>
+                </div>
+                <div class="btn btn-primary">Pilih File PDF</div>
+            </div>
+            <input type="file" id="merge-file-input" multiple accept="application/pdf" style="display: none;">
+
+            <!-- Workspace -->
+            <div id="merge-workspace" style="display: none; width: 100%;">
+                <div id="merge-file-list" style="margin-bottom: 30px;">
+                    <!-- File cards will be here (Top Section) -->
+                </div>
+                
+                <div style="text-align: center; margin-bottom: 30px;">
+                    <button class="btn btn-outline" id="btn-add-more-merge">
+                        <i class="ph ph-plus"></i> Tambah File Lagi
+                    </button>
+                </div>
+
+                <!-- Central Save Panel (Middle Section) -->
+                <div id="merge-save-panel"></div>
+                
+                <!-- Page Previews (Bottom Section) -->
+                <div id="merge-page-preview"></div>
+            </div>
+        </div>
+    </template>
+
+    <!-- Template: Image to PDF -->
+                                <template id="tpl-image-to-pdf">
+        <div class="pdf-tool-container">
+            <div class="upload-area" id="img-to-pdf-upload-area" style="cursor:pointer;">
+                <i class="ph-fill ph-image"></i>
+                <h3>Konversi Gambar ke PDF</h3>
+                <p>Ubah foto atau scan menjadi dokumen PDF yang rapi</p>
+                <div class="btn btn-primary">Pilih Gambar</div>
+                <input type="file" id="img-to-pdf-file-input" multiple accept="image/*" style="display: none;">
+            </div>
+            
+            <div id="img-to-pdf-workspace" style="display: none;">
+                <div style="position:sticky; top:0; z-index:900; background:white; border-radius:20px; padding:16px 24px; border:1px solid #e2e8f0; box-shadow:0 10px 30px rgba(0,0,0,0.08); margin-bottom:28px; display:flex; align-items:center; justify-content:space-between; gap:12px;">
+                    <div style="display:flex; align-items:center; gap:14px;">
+                        <div style="width:42px; height:42px; border-radius:14px; background:#eff6ff; display:flex; align-items:center; justify-content:center;">
+                            <i class="ph-fill ph-images" style="color:#2563eb; font-size:1.3rem;"></i>
+                        </div>
+                        <div>
+                            <div style="font-weight:800; font-size:0.95rem; color:#0f172a;" id="img-to-pdf-counter">0 Gambar</div>
+                            <div style="font-size:0.8rem; color:#64748b;">Atur urutan dan arah gambar</div>
+                        </div>
+                    </div>
+
+                    <div style="display:flex; align-items:center; gap:10px;">
+                        <div style="display:flex; align-items:center; gap:6px; background:#f8fafc; padding:6px 12px; border-radius:12px; border:1px solid #e2e8f0;">
+                            <div style="display:flex; align-items:center; gap:4px; border-right:1px solid #e2e8f0; padding-right:8px; margin-right:4px;">
+                                <span style="font-size:0.7rem; font-weight:700; color:#64748b;">KERTAS:</span>
+                                <select id="i2p-page-size" style="background:none; border:none; font-size:0.8rem; font-weight:800; color:#0f172a; cursor:pointer;">
+                                    <option value="fit">Auto</option>
+                                    <option value="a4">A4</option>
+                                    <option value="letter">Letter</option>
+                                    <option value="legal">Legal</option>
+                                </select>
+                            </div>
+                            <div style="display:flex; align-items:center; gap:4px;">
+                                <span style="font-size:0.7rem; font-weight:700; color:#64748b;">MARGIN:</span>
+                                <select id="i2p-margin" style="background:none; border:none; font-size:0.8rem; font-weight:800; color:#0f172a; cursor:pointer;">
+                                    <option value="0">None</option>
+                                    <option value="20">Kecil</option>
+                                    <option value="40">Sedang</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <button id="btn-i2p-rotate-all" style="padding:10px 18px; border-radius:12px; font-weight:700; font-size:0.85rem; background:#f8fafc; color:#475569; border:1px solid #e2e8f0; cursor:pointer; display:flex; align-items:center; gap:6px;">
+                            <i class="ph-bold ph-arrows-clockwise"></i> Putar Semua
+                        </button>
+                    </div>
+                </div>
+
+                <div id="img-to-pdf-grid" style="display:grid; grid-template-columns:repeat(5, 1fr); gap:20px; margin-bottom:40px;"></div>
+
+                <div style="text-align:center; padding:20px 0 60px 0;">
+                    <button id="btn-img-to-pdf-execute" style="padding:16px 40px; border-radius:18px; font-weight:800; font-size:1.1rem; background:#2563eb; color:white; border:none; cursor:pointer; display:inline-flex; align-items:center; gap:12px; box-shadow: 0 10px 25px rgba(37,99,235,0.3); transition:all 0.3s ease;">
+                        <i class="ph-bold ph-file-pdf" style="font-size:1.4rem;"></i> Buat PDF Sekarang
+                    </button>
+                </div>
+            </div>
+        </div>
+    </template>
+
+
+    <!-- Template: Compress Image -->
+                                                            <template id="tpl-compress-image">
+        <div class="pdf-tool-container" id="compress-tool-root">
+            <input type="file" class="compress-hidden-input" multiple accept="image/*" style="display: none;">
+
+            <div class="upload-area compress-upload-box" style="cursor:pointer;">
+                <i class="ph-fill ph-arrows-in"></i>
+                <h3>Kompres Ukuran Gambar</h3>
+                <p>Kecilkan ukuran file JPG/PNG tanpa kirim data ke server</p>
+                <div class="btn btn-primary compress-main-btn">Pilih Gambar</div>
+            </div>
+
+            <div class="compress-workspace-area" style="display: none;">
+                <!-- Integrated Mode & Slider -->
+                <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:24px; padding:24px; margin-bottom:30px;">
+                    <div style="display:grid; grid-template-columns:repeat(3, 1fr); gap:16px; margin-bottom:24px;">
+                        <div class="compress-mode-card" data-val="10" style="background:white; border:2px solid #e2e8f0; border-radius:18px; padding:12px; text-align:center; transition:all 0.3s;">
+                            <div style="font-weight:900; font-size:0.85rem; color:#ef4444;">HEMET DATA</div>
+                            <div style="font-size:0.65rem; color:#64748b;">Ukuran Super Kecil</div>
+                        </div>
+                        <div class="compress-mode-card active" data-val="50" style="background:#eff6ff; border:2px solid #2563eb; border-radius:18px; padding:12px; text-align:center; transition:all 0.3s;">
+                            <div style="font-weight:900; font-size:0.85rem; color:#2563eb;">REKOMENDASI</div>
+                            <div style="font-size:0.65rem; color:#64748b;">Hasil Seimbang</div>
+                        </div>
+                        <div class="compress-mode-card" data-val="90" style="background:white; border:2px solid #e2e8f0; border-radius:18px; padding:12px; text-align:center; transition:all 0.3s;">
+                            <div style="font-weight:900; font-size:0.85rem; color:#22c55e;">KUALITAS TINGGI</div>
+                            <div style="font-size:0.65rem; color:#64748b;">Tetap Tajam</div>
+                        </div>
+                    </div>
+
+                    <div style="display:flex; align-items:center; gap:20px; padding:0 10px;">
+                        <span style="font-size:0.7rem; font-weight:900; color:#ef4444; width:60px;">HEMAT</span>
+                        <input type="range" class="compress-slider-input" min="5" max="95" value="50" style="flex:1; accent-color:#2563eb; cursor:pointer; height:8px;">
+                        <span style="font-size:0.7rem; font-weight:900; color:#22c55e; width:60px; text-align:right;">TAJAM</span>
+                    </div>
+                </div>
+
+                <div class="compress-grid-list" style="display:grid; grid-template-columns:repeat(5, 1fr); gap:20px; margin-bottom:40px;"></div>
+
+                <div style="text-align:center; padding:20px 0 60px 0;">
+                    <button class="compress-execute-btn" style="padding:16px 45px; border-radius:18px; font-weight:900; font-size:1.1rem; background:#2563eb; color:white; border:none; cursor:pointer; display:inline-flex; align-items:center; gap:12px; box-shadow: 0 10px 25px rgba(37,99,235,0.25); transition:all 0.3s ease;">
+                        <i class="ph-bold ph-download-simple" style="font-size:1.4rem;"></i> Unduh Sekarang
+                    </button>
+                </div>
+            </div>
+        </div>
+    </template>
+
+    <!-- Template: Split PDF -->
+    <template id="tpl-split-pdf">
+        <div class="pdf-tool-container" style="width: 100%; max-width: 900px; margin: 0 auto; padding: 40px 20px;">
+            <!-- Upload Area -->
+            <div id="split-upload-area" class="upload-area">
+                <i class="ph-fill ph-scissors"></i>
+                <div class="upload-text">
+                    <h3>Pisahkan Halaman PDF</h3>
+                    <p>Ekstrak halaman tertentu atau pecah dokumen menjadi beberapa bagian secara instan</p>
+                </div>
+                <div class="btn btn-primary">Pilih File PDF</div>
+                <input type="file" id="split-file-input" accept="application/pdf" style="display: none;">
+            </div>
+            <!-- Workspace -->
+            <div id="split-workspace" style="display: none; width: 100%;">
+                <!-- File Info -->
+                <div class="file-list-card" style="margin-bottom: 24px; padding: 18px; display: flex; align-items: center; gap: 20px; background: white; border-radius: 16px; border: 1px solid var(--border-color); box-shadow: var(--shadow-sm);">
+                    <div id="split-file-thumb" style="width: 50px; height: 65px; background: #f1f5f9; border-radius: 6px; border: 1px solid #e2e8f0; display: flex; align-items: center; justify-content: center; overflow: hidden;">
+                        <i class="ph ph-file-pdf" style="font-size: 1.5rem; color: #ef4444;"></i>
+                    </div>
+                    <div style="flex-grow: 1;">
+                        <h4 id="split-display-name" style="margin: 0 0 2px 0; font-size: 1rem;">filename.pdf</h4>
+                        <p id="split-display-meta" style="margin: 0; font-size: 0.8rem; color: var(--text-muted);">0 MB • 0 Halaman</p>
+                    </div>
+                    <button class="btn btn-outline small" id="btn-reset-split">Ganti File</button>
+                </div>
+
+                <!-- Mode Tabs -->
+                <div class="split-mode-tabs" style="display: flex; gap: 10px; margin-bottom: 30px; background: #f1f5f9; padding: 6px; border-radius: 14px; width: fit-content; margin-left: auto; margin-right: auto;">
+                    <button class="mode-tab-btn active" data-mode="extract" style="padding: 10px 20px; border: none; background: white; border-radius: 10px; font-weight: 700; color: var(--primary-blue); cursor: pointer; box-shadow: var(--shadow-sm);">Ekstrak Halaman</button>
+                    <button class="mode-tab-btn" data-mode="range" style="padding: 10px 20px; border: none; background: transparent; border-radius: 10px; font-weight: 700; color: var(--text-muted); cursor: pointer;">Per Rentang</button>
+                    <button class="mode-tab-btn" data-mode="burst" style="padding: 10px 20px; border: none; background: transparent; border-radius: 10px; font-weight: 700; color: var(--text-muted); cursor: pointer;">Pisahkan Semua</button>
+                </div>
+
+                <!-- Mode Contents -->
+                <div id="mode-extract-content" class="split-mode-content">
+                    <div style="text-align: center; margin-bottom: 20px; color: var(--text-muted); font-size: 0.85rem; font-weight: 600;">
+                        <i class="ph ph-cursor-click"></i> Klik pada halaman di bawah untuk memilih yang ingin diambil
+                    </div>
+                </div>
+
+                <div id="mode-range-content" class="split-mode-content" style="display: none;">
+                    <div style="background: white; border-radius: 16px; border: 1px solid var(--border-color); padding: 25px; margin-bottom: 30px;">
+                        <div id="split-range-list">
+                            <div class="split-range-row" style="display: flex; align-items: center; gap: 12px; margin-bottom: 12px;">
+                                <span style="font-weight: 700; color: var(--text-muted); width: 60px;">File 1:</span>
+                                <input type="text" class="split-range-input" placeholder="Misal: 1-5" style="flex-grow: 1; padding: 12px 16px; border-radius: 10px; border: 1px solid #e2e8f0; outline: none;">
+                                <button class="btn-icon small text-red" disabled style="opacity: 0.3;"><i class="ph ph-trash"></i></button>
+                            </div>
+                        </div>
+                        <button class="btn btn-outline small" id="btn-add-split-range" style="margin-top: 10px;">
+                            <i class="ph ph-plus"></i> Tambah File Hasil Lagi
+                        </button>
+                    </div>
+                </div>
+
+                <div id="mode-burst-content" class="split-mode-content" style="display: none;">
+                    <div style="background: #fff1f2; color: #be123c; padding: 15px 20px; border-radius: 12px; margin-bottom: 30px; font-size: 0.85rem; font-weight: 600; display: flex; align-items: center; gap: 10px; border: 1px solid #fecdd3;">
+                        <i class="ph-fill ph-lightning"></i>
+                        <span>Setiap halaman akan dipisahkan menjadi file PDF mandiri (ZIP).</span>
+                    </div>
+                </div>
+
+                <!-- Visual Page Grid -->
+                <div id="split-page-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 20px; margin-bottom: 40px;">
+                    <!-- Pages will be rendered here -->
+                </div>
+
+                <!-- Footer Action -->
+                <div style="position: sticky; bottom: 20px; background: white; padding: 20px 30px; border-radius: 16px; box-shadow: var(--shadow-lg); border: 1px solid var(--border-color); display: flex; align-items: center; justify-content: space-between; z-index: 100;">
+                    <div id="split-status-text" style="font-weight: 700; color: var(--text-muted);">0 Halaman Terpilih</div>
+                    <button id="btn-run-split" class="btn btn-primary" style="padding: 12px 40px; font-size: 1rem;">
+                        <i class="ph-fill ph-scissors"></i> Pisahkan PDF Sekarang
+                    </button>
+                </div>
+            </div>
+        </div>
+    </template>
+
+
+    <!-- Essential Libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.min.js"></script>
+    <script src="https://unpkg.com/pdf-lib/dist/pdf-lib.min.js"></script>
+    <script src="https://unpkg.com/@pdf-lib/fontkit/dist/fontkit.umd.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/5.3.1/fabric.min.js"></script>
+    <script>
+        // Set worker source safely
+        if (typeof pdfjsLib !== 'undefined') {
+            pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.worker.min.js';
+        }
+    </script>
+
+
+
+    <!-- PDF to Image Template -->
+                        <template id="tpl-pdf-to-img">
+        <div class="pdf-tool-container">
+            <div id="pdf-to-img-upload-area" class="upload-area" style="cursor:pointer;">
+                <i class="ph-fill ph-images"></i>
+                <div class="upload-text">
+                    <h3>Konversi PDF ke Gambar</h3>
+                    <p>Ubah setiap halaman PDF menjadi file gambar berkualitas tinggi secara instan</p>
+                </div>
+                <div class="btn btn-primary">Pilih File PDF</div>
+                <input type="file" id="pdf-to-img-file-input" accept="application/pdf" style="display: none;">
+            </div>
+
+            <div id="pdf-to-img-workspace" style="display: none;">
+                <div style="position:sticky; top:0; z-index:900; background:white; border-radius:20px; padding:16px 24px; border:1px solid #e2e8f0; box-shadow:0 10px 30px rgba(0,0,0,0.08); margin-bottom:28px; display:flex; align-items:center; justify-content:space-between; gap:12px;">
+                    <div style="display:flex; align-items:center; gap:14px;">
+                        <div style="width:42px; height:42px; border-radius:14px; background:#eff6ff; display:flex; align-items:center; justify-content:center;">
+                            <i class="ph-fill ph-images" style="color:#2563eb; font-size:1.3rem;"></i>
+                        </div>
+                        <div>
+                            <div style="font-weight:800; font-size:0.95rem; color:#0f172a;" id="pdf-to-img-name">document.pdf</div>
+                            <div style="font-size:0.8rem; color:#64748b;" id="pdf-to-img-status">Pilih halaman untuk dikonversi</div>
+                        </div>
+                    </div>
+
+                    <div style="display:flex; align-items:center; gap:10px;">
+                        <button id="btn-p2i-toggle-all" style="padding:10px 18px; border-radius:12px; font-weight:700; font-size:0.85rem; background:#eff6ff; color:#2563eb; border:1px solid #dbeafe; cursor:pointer; display:flex; align-items:center; gap:6px;">
+                            <i class="ph-bold ph-check-square"></i> <span id="p2i-toggle-text">Pilih Semua</span>
+                        </button>
+                        
+                        <button id="btn-p2i-rotate-all" style="padding:10px 18px; border-radius:12px; font-weight:700; font-size:0.85rem; background:#f8fafc; color:#475569; border:1px solid #e2e8f0; cursor:pointer; display:flex; align-items:center; gap:6px;">
+                            <i class="ph-bold ph-arrows-clockwise"></i> Putar Semua
+                        </button>
+
+                        <div style="display:flex; align-items:center; gap:6px; background:#f8fafc; padding:6px 12px; border-radius:12px; border:1px solid #e2e8f0;">
+                            <div style="display:flex; align-items:center; gap:4px; border-right:1px solid #e2e8f0; padding-right:8px; margin-right:4px;">
+                                <span style="font-size:0.7rem; font-weight:700; color:#64748b;">FORMAT:</span>
+                                <select id="p2i-format" style="background:none; border:none; font-size:0.8rem; font-weight:800; color:#0f172a; cursor:pointer;">
+                                    <option value="jpeg">JPG</option>
+                                    <option value="png">PNG</option>
+                                </select>
+                            </div>
+                            <div style="display:flex; align-items:center; gap:4px;">
+                                <span style="font-size:0.7rem; font-weight:700; color:#64748b;">KUALITAS:</span>
+                                <select id="p2i-quality" style="background:none; border:none; font-size:0.8rem; font-weight:800; color:#0f172a; cursor:pointer;">
+                                    <option value="2">HD (2x)</option>
+                                    <option value="1">Normal</option>
+                                    <option value="3">Ultra (3x)</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <button id="btn-p2i-change-file" style="padding:10px 18px; border-radius:12px; font-weight:700; font-size:0.85rem; background:#f8fafc; color:#475569; border:1px solid #e2e8f0; cursor:pointer; display:flex; align-items:center; gap:6px;">
+                            <i class="ph-bold ph-arrows-clockwise"></i> Ganti File
+                        </button>
+                    </div>
+                </div>
+
+                <div id="pdf-to-img-grid" style="display:grid; grid-template-columns:repeat(5, 1fr); gap:20px; margin-bottom:40px;"></div>
+
+                <div style="text-align:center; padding:20px 0 60px 0;">
+                    <button id="btn-pdf-to-img-execute" style="padding:16px 40px; border-radius:18px; font-weight:800; font-size:1.1rem; background:#2563eb; color:white; border:none; cursor:pointer; display:inline-flex; align-items:center; gap:12px; box-shadow: 0 10px 25px rgba(37,99,235,0.3); transition:all 0.3s ease;">
+                        <i class="ph-bold ph-download-simple" style="font-size:1.4rem;"></i> Konversi & Unduh ZIP
+                    </button>
+                </div>
+            </div>
+        </div>
+    </template>
+
+    <!-- Template: Putar PDF (Rebuild) -->
+    <template id="tpl-rotate-pdf">
+        <div class="pdf-tool-container" style="width: 100%; max-width: 1000px; margin: 0 auto; padding: 40px 20px;">
+            <div id="rotate-upload-area" class="upload-area">
+                <i class="ph-fill ph-arrows-clockwise"></i>
+                <div class="upload-text" style="text-align: center;">
+                    <h3>Putar Halaman PDF</h3>
+                    <p>Ubah orientasi halaman PDF Anda dengan mudah dan cepat</p>
+                </div>
+                <div class="btn btn-primary">Pilih File PDF</div>
+                <input type="file" id="rotate-file-input" accept="application/pdf" style="display: none;">
+            </div>
+
+                <div id="rotate-workspace" style="display: none;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; padding: 15px; background: white; border-radius: 12px; border: 1px solid #e2e8f0;">
+                        <div>
+                            <h4 id="rotate-filename" style="margin: 0; font-size: 1.1rem;">filename.pdf</h4>
+                            <p id="rotate-meta" style="margin: 5px 0 0; color: #64748b; font-size: 0.85rem;">0 Halaman</p>
+                        </div>
+                        <button class="btn btn-outline small" id="btn-rotate-change">Ganti File</button>
+                    </div>
+                    
+                    <!-- Toolbar Nitro akan disuntikkan di sini via JS -->
+                    
+                    <div id="rotate-grid" style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 20px; margin-bottom: 40px;">
+                    </div>
+
+                <div style="text-align: center; padding: 30px; border-top: 1px solid #eee;">
+                    <button class="btn btn-primary" id="btn-rotate-submit" style="min-width: 250px; height: 50px; font-size: 1rem;">
+                        <i class="ph ph-download-simple"></i> Terapkan & Unduh PDF
+                    </button>
+                </div>
+            </div>
+        </div>
+    </template>
+
+    <!-- Template: Hapus Halaman PDF -->
+    <template id="tpl-delete-pages">
+        <div class="pdf-tool-container">
+            <div id="delete-upload-area" class="upload-area">
+                <i class="ph-fill ph-file-x"></i>
+                <h3>Pilih file PDF untuk dihapus</h3>
+                <p>Klik atau seret file PDF Anda untuk memilih halaman yang ingin dihapus</p>
+                <div class="btn btn-primary">Pilih File PDF</div>
+                <input type="file" id="delete-file-input" accept="application/pdf" style="display: none;">
+            </div>
+
+            <div id="delete-workspace" style="display: none;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; padding: 15px; background: white; border-radius: 12px; border: 1px solid #e2e8f0;">
+                    <div>
+                        <h4 id="delete-filename" style="margin: 0; font-size: 1.1rem;">filename.pdf</h4>
+                        <p id="delete-meta" style="margin: 5px 0 0; color: #64748b; font-size: 0.85rem;">0 Halaman</p>
+                    </div>
+                    <button class="btn btn-outline small" id="btn-delete-change">Ganti File</button>
+                </div>
+
+                <div id="delete-grid" style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 20px; margin-bottom: 40px;">
+                </div>
+            </div>
+        </div>
+    </template>
+
+    <template id="tpl-how-it-works">
+        <div class="how-it-works-container" style="padding: 10px 0; display: flex; flex-direction: column; gap: 20px;">
+            <div style="background: linear-gradient(to right, #eff6ff, #ffffff); border-radius: 24px; padding: 24px; border: 1px solid #dbeafe; display: flex; gap: 20px; align-items: flex-start; transition: all 0.3s ease;">
+                <div style="width: 54px; height: 54px; background: #3b82f6; color: white; border-radius: 16px; display: flex; align-items: center; justify-content: center; font-size: 28px; flex-shrink: 0; box-shadow: 0 8px 16px rgba(59, 130, 246, 0.2);">
+                    <i class="ph-fill ph-cpu"></i>
+                </div>
+                <div style="flex: 1;">
+                    <h4 style="margin: 0 0 6px 0; font-size: 1.1rem; font-weight: 800; color: #1e3a8a;">Pemrosesan Lokal 100%</h4>
+                    <p style="margin: 0; font-size: 0.9rem; line-height: 1.6; color: #475569; font-weight: 500;">Dokumen Anda diproses langsung di RAM komputer Anda menggunakan <b>File API</b> dan <b>pdf-lib</b>. Tidak ada data yang singgah di server.</p>
+                </div>
+            </div>
+
+            <div style="background: linear-gradient(to right, #f0fdf4, #ffffff); border-radius: 24px; padding: 24px; border: 1px solid #dcfce7; display: flex; gap: 20px; align-items: flex-start; transition: all 0.3s ease;">
+                <div style="width: 54px; height: 54px; background: #22c55e; color: white; border-radius: 16px; display: flex; align-items: center; justify-content: center; font-size: 28px; flex-shrink: 0; box-shadow: 0 8px 16px rgba(34, 197, 94, 0.2);">
+                    <i class="ph-fill ph-shield-checkered"></i>
+                </div>
+                <div style="flex: 1;">
+                    <h4 style="margin: 0 0 6px 0; font-size: 1.1rem; font-weight: 800; color: #14532d;">Transparansi Tanpa Batas</h4>
+                    <p style="margin: 0; font-size: 0.9rem; line-height: 1.6; color: #475569; font-weight: 500;">Buktikan sendiri dengan membuka <b>DevTools &rarr; Network</b>. Anda akan melihat tidak ada satu pun paket data yang dikirim keluar.</p>
+                </div>
+            </div>
+
+            <div style="background: linear-gradient(to right, #fffbeb, #ffffff); border-radius: 24px; padding: 24px; border: 1px solid #fef3c7; display: flex; gap: 20px; align-items: flex-start; transition: all 0.3s ease;">
+                <div style="width: 54px; height: 54px; background: #f59e0b; color: white; border-radius: 16px; display: flex; align-items: center; justify-content: center; font-size: 28px; flex-shrink: 0; box-shadow: 0 8px 16px rgba(245, 158, 11, 0.2);">
+                    <i class="ph-fill ph-wifi-high"></i>
+                </div>
+                <div style="flex: 1;">
+                    <h4 style="margin: 0 0 6px 0; font-size: 1.1rem; font-weight: 800; color: #78350f;">Kebebasan Mode Offline</h4>
+                    <p style="margin: 0; font-size: 0.9rem; line-height: 1.6; color: #475569; font-weight: 500;">Anda bahkan dapat mematikan internet setelah halaman terbuka. Semua fitur tetap berjalan normal tanpa gangguan.</p>
+                </div>
+            </div>
+
+            <div style="background: linear-gradient(to right, #faf5ff, #ffffff); border-radius: 24px; padding: 24px; border: 1px solid #f3e8ff; display: flex; gap: 20px; align-items: flex-start; transition: all 0.3s ease;">
+                <div style="width: 54px; height: 54px; background: #a855f7; color: white; border-radius: 16px; display: flex; align-items: center; justify-content: center; font-size: 28px; flex-shrink: 0; box-shadow: 0 8px 16px rgba(168, 85, 247, 0.2);">
+                    <i class="ph-fill ph-ghost"></i>
+                </div>
+                <div style="flex: 1;">
+                    <h4 style="margin: 0 0 6px 0; font-size: 1.1rem; font-weight: 800; color: #581c87;">Privasi Sekali Pakai</h4>
+                    <p style="margin: 0; font-size: 0.9rem; line-height: 1.6; color: #475569; font-weight: 500;">Begitu tab browser ditutup, semua data akan hilang selamanya dari memori RAM. Tidak ada jejak digital yang tersisa.</p>
+                </div>
+            </div>
+
+            <div style="margin-top: 10px; padding: 20px; background: #f8fafc; border-radius: 20px; display: flex; align-items: center; justify-content: center; gap: 12px; border: 1px dashed #e2e8f0;">
+                <div style="color: #22c55e; font-size: 24px;"><i class="ph-fill ph-shield-check"></i></div>
+                <div style="font-size: 0.85rem; font-weight: 700; color: #64748b; letter-spacing: 0.5px; text-transform: uppercase;">Keamanan Diverifikasi Secara Lokal</div>
+            </div>
+        </div>
+    </template>
+
+    <!-- Template: Ganti Halaman PDF -->
+    <template id="tpl-replace-pages">
+        <div class="pdf-tool-container" style="width:100%;max-width:1300px;margin:0 auto;padding:40px 20px;">
+            <div id="replace-upload-area" class="upload-area">
+                <i class="ph-fill ph-arrows-left-right"></i>
+                <div class="upload-text" style="text-align:center;">
+                    <h3>Ganti Halaman PDF</h3>
+                    <p>Pilih file PDF utama, lalu tentukan halaman yang ingin ditukar</p>
+                </div>
+                <div class="btn btn-primary">Pilih File Utama</div>
+                <input type="file" id="replace-file-input" accept="application/pdf" style="display:none;">
+            </div>
+            <div id="replace-workspace" style="display:none;">
+                <div style="position:sticky;top:0;z-index:900;background:white;border-radius:20px;padding:16px 24px;border:1px solid #e2e8f0;box-shadow:0 10px 30px rgba(0,0,0,0.08);margin-bottom:28px;display:flex;align-items:center;justify-content:space-between;gap:12px;">
+                    <div style="display:flex;align-items:center;gap:14px;">
+                        <div style="width:42px;height:42px;border-radius:14px;background:#eff6ff;display:flex;align-items:center;justify-content:center;">
+                            <i class="ph-fill ph-arrows-left-right" style="color:#2563eb;font-size:1.3rem;"></i>
+                        </div>
+                        <div>
+                            <div id="replace-main-name" style="font-weight:800;font-size:0.95rem;color:#0f172a;"></div>
+                            <div id="replace-main-pages" style="font-size:0.8rem;color:#64748b;"></div>
+                        </div>
+                    </div>
+                    <button id="btn-replace-change-main" style="padding:10px 18px;border-radius:12px;font-weight:700;font-size:0.85rem;background:#f8fafc;color:#475569;border:1px solid #e2e8f0;cursor:pointer;display:flex;align-items:center;gap:6px;">
+                        <i class="ph-bold ph-arrows-clockwise"></i> Ganti File Utama
+                    </button>
+                </div>
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:32px;">
+                    <div style="background:white;border-radius:20px;border:1px solid #e2e8f0;overflow:hidden;">
+                        <div style="padding:18px 22px;border-bottom:1px solid #f1f5f9;background:#f8fafc;display:flex;align-items:center;justify-content:space-between;">
+                            <div>
+                                <div style="font-weight:800;font-size:0.9rem;color:#0f172a;">Halaman yang Akan Diganti</div>
+                                <div style="font-size:0.75rem;color:#64748b;margin-top:2px;">Klik kartu atau atur rentang</div>
+                            </div>
+                            <div style="display:flex;align-items:center;gap:8px;background:#eff6ff;padding:8px 14px;border-radius:12px;">
+                                <span style="font-size:0.78rem;font-weight:700;color:#1e40af;">Hal.</span>
+                                <input type="number" id="replace-start" value="1" min="1" style="width:50px;padding:5px;border:1px solid #93c5fd;border-radius:8px;text-align:center;font-weight:800;color:#1e40af;">
+                                <span style="font-size:0.78rem;color:#64748b;">s/d</span>
+                                <input type="number" id="replace-end" value="1" min="1" style="width:50px;padding:5px;border:1px solid #93c5fd;border-radius:8px;text-align:center;font-weight:800;color:#1e40af;">
+                            </div>
+                        </div>
+                        <div style="padding:18px;max-height:420px;overflow-y:auto;">
+                            <div id="replace-main-grid"></div>
+                        </div>
+                    </div>
+                    <div style="background:white;border-radius:20px;border:1px solid #e2e8f0;overflow:hidden;">
+                        <div style="padding:18px 22px;border-bottom:1px solid #f1f5f9;background:#f0fdf4;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;">
+                            <div>
+                                <div style="font-weight:800;font-size:0.9rem;color:#0f172a;">File Pengganti</div>
+                                <div id="replace-sub-name" style="font-size:0.75rem;color:#64748b;margin-top:2px;">Belum dipilih</div>
+                            </div>
+                            <div style="display:flex;align-items:center;gap:8px;">
+                                <span id="replace-sub-badge" style="background:#e2e8f0;color:#64748b;padding:3px 10px;border-radius:8px;font-size:0.78rem;font-weight:700;">Belum ada</span>
+                                <button id="btn-browse-sub" style="padding:8px 14px;border-radius:10px;font-weight:800;font-size:0.8rem;background:#059669;color:white;border:none;cursor:pointer;display:flex;align-items:center;gap:5px;">
+                                    <i class="ph-bold ph-file-arrow-up"></i> Pilih File
+                                </button>
+                                <input type="file" id="replace-sub-input" accept="application/pdf" style="display:none;">
+                            </div>
+                        </div>
+                        <div style="padding:10px 22px;background:#f0fdf4;border-bottom:1px solid #d1fae5;display:flex;align-items:center;gap:10px;">
+                            <span style="font-size:0.78rem;font-weight:700;color:#065f46;">Ambil dari hal.</span>
+                            <input type="number" id="replace-sub-start" value="1" min="1" disabled style="width:50px;padding:5px;border:1px solid #6ee7b7;border-radius:8px;text-align:center;font-weight:800;color:#065f46;background:white;">
+                            <span style="font-size:0.78rem;color:#64748b;">s/d</span>
+                            <span id="replace-sub-end-label" style="font-weight:900;color:#059669;font-size:0.95rem;background:#d1fae5;padding:4px 10px;border-radius:8px;">1</span>
+                        </div>
+                        <div style="padding:18px;max-height:380px;overflow-y:auto;">
+                            <div id="replace-sub-grid">
+                                <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:200px;color:#94a3b8;text-align:center;">
+                                    <i class="ph ph-file-search" style="font-size:3rem;margin-bottom:12px;opacity:0.3;"></i>
+                                    <p style="font-size:0.85rem;font-weight:600;">Pilih file pengganti untuk melihat pratinjau</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div style="text-align:center;">
+                    <button id="btn-run-replace" disabled style="padding:16px 48px;border-radius:16px;font-weight:900;font-size:1rem;background:#2563eb;color:white;border:none;cursor:pointer;display:inline-flex;align-items:center;gap:12px;box-shadow:0 8px 20px rgba(37,99,235,0.3);opacity:0.4;pointer-events:none;transition:all 0.2s;">
+                        <i class="ph-bold ph-check-circle" style="font-size:1.3rem;"></i> Mulai Ganti Halaman
+                    </button>
+                </div>
+            </div>
+        </div>
+    </template>
+
+    <div id="replace-lightbox" style="position: fixed; inset: 0; background: rgba(2, 6, 23, 0.85); backdrop-filter: blur(20px); z-index: 99999; display: none; align-items: center; justify-content: center; padding: 40px; cursor: zoom-out;">
+        
+        <button id="btn-close-lightbox" style="position: absolute; top: 30px; right: 30px; background: white; border: none; width: 50px; height: 50px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; color: #0f172a; box-shadow: 0 10px 25px rgba(0,0,0,0.3); transition: all 0.2s; z-index: 1;">
+            <i class="ph-bold ph-x"></i>
+        </button>
+        
+        <div class="lightbox-box" style="max-width: 95%; max-height: 92vh; background: white; border-radius: 24px; box-shadow: 0 40px 100px -20px rgba(0,0,0,0.7); overflow: hidden; position: relative; display: flex; flex-direction: column; cursor: default;">
+            <div id="lightbox-content" style="overflow: auto; flex: 1; display: flex; justify-content: center; background: #f1f5f9; min-height: 300px; min-width: 300px;">
+                <div style="padding: 100px; color: #64748b; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+                    <i class="ph ph-circle-notch animate-spin" style="font-size: 4rem; color: #3b82f6; margin-bottom: 25px;"></i>
+                    <p style="font-weight: 700; font-size: 1.1rem; color: #1e293b;">Sedang Memperbesar...</p>
+                </div>
+            </div>
+            
+            <div style="padding: 15px 25px; background: white; border-top: 1px solid #f1f5f9; display: flex; align-items: center; justify-content: space-between;">
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <div style="background: #eff6ff; color: #2563eb; padding: 6px 14px; border-radius: 12px; font-weight: 800; font-size: 0.9rem;" id="lightbox-label">Halaman 1</div>
+                    <span style="color: #94a3b8; font-size: 0.85rem;">Pratinjau Kualitas Tinggi</span>
+                </div>
+                <div style="font-size: 0.8rem; color: #cbd5e1; font-weight: 600;">#JagaDokumen PRO</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Final Review Result Modal -->
+    <div id="replace-final-modal" style="position: fixed; inset: 0; background: rgba(15, 23, 42, 0.7); backdrop-filter: blur(15px); z-index: 99999; display: none; align-items: center; justify-content: center; padding: 20px; animation: fadeIn 0.3s ease;">
+        <div style="background: white; width: 100%; max-width: 1000px; border-radius: 32px; box-shadow: 0 50px 100px rgba(0,0,0,0.4); overflow: hidden; display: flex; flex-direction: column; max-height: 90vh; animation: zoomIn 0.4s cubic-bezier(0.16, 1, 0.3, 1);">
+            <div style="padding: 25px 35px; background: #f8fafc; border-bottom: 1px solid #e2e8f0; display: flex; align-items: center; justify-content: space-between;">
+                <div>
+                    <h3 style="margin: 0; font-size: 1.4rem; font-weight: 900; color: #0f172a;">Pratinjau Hasil Akhir</h3>
+                    <p style="margin: 5px 0 0 0; color: #64748b; font-size: 0.9rem; font-weight: 500;">Silakan periksa kembali sebelum menyimpan dokumen.</p>
+                </div>
+                <div style="display: flex; gap: 12px;">
+                    <button id="btn-final-download" class="btn btn-primary" style="padding: 12px 25px; border-radius: 14px; font-weight: 800; display: flex; align-items: center; gap: 10px; background: #2563eb; color: white; border: none; cursor: pointer; box-shadow: 0 10px 20px rgba(37, 99, 235, 0.2);">
+                        <i class="ph-fill ph-download-simple" style="font-size: 1.2rem;"></i> Download Sekarang
+                    </button>
+                    <button id="btn-final-back" class="btn" style="padding: 12px 20px; border-radius: 14px; font-weight: 700; background: #f1f5f9; color: #475569; border: none; cursor: pointer;">Ganti Lagi</button>
+                </div>
+            </div>
+            
+            <div id="final-review-grid" style="flex: 1; overflow-y: auto; padding: 30px; background: #f1f5f9; display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px;">
+                <!-- Result pages will be rendered here -->
+            </div>
+            
+            <div style="padding: 15px; background: #0f172a; color: rgba(255,255,255,0.6); font-size: 0.75rem; text-align: center; font-weight: 600;">
+                <i class="ph-fill ph-shield-check" style="margin-right: 5px; color: #22c55e;"></i> Dokumen diproses dengan aman di browser Anda.
+            </div>
+        </div>
+    </div>
+
+    <!-- Custom Modal System -->
+    <div id="app-modal" class="modal-overlay" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modal-title">Konfirmasi</h3>
+                <button class="modal-close" id="modal-close-btn">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p id="modal-message">Apakah Anda yakin?</p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" id="modal-cancel-btn">Batal</button>
+                <button class="btn btn-primary" id="modal-confirm-btn">Ya, Lanjutkan</button>
+            </div>
+        </div>
+    </div>
+
+                <template id="tpl-compress-pdf">
+        <div class="pdf-tool-container" id="compress-pdf-root">
+            <input type="file" class="compress-pdf-hidden-input" multiple accept=".pdf" style="display: none;">
+
+            <div class="upload-area compress-pdf-upload-box" style="cursor:pointer;">
+                <i class="ph-fill ph-arrows-in"></i>
+                <h3>Kompres Ukuran PDF</h3>
+                <p>Kecilkan ukuran banyak file PDF sekaligus tanpa ribet</p>
+                <div class="btn btn-primary">Pilih File PDF</div>
+            </div>
+
+            <div class="compress-pdf-workspace" style="display: none;">
+                <!-- Integrated Lever UI -->
+                <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:24px; padding:24px; margin-bottom:30px;">
+                    <div style="display:grid; grid-template-columns:repeat(3, 1fr); gap:16px; margin-bottom:24px;">
+                        <div class="compress-pdf-mode-card" data-val="20" style="background:white; border:2px solid #e2e8f0; border-radius:18px; padding:12px; text-align:center; cursor:pointer; transition:all 0.3s;">
+                            <div style="font-weight:900; font-size:0.85rem; color:#ef4444;">EKSTRIM</div>
+                            <div style="font-size:0.65rem; color:#64748b;">Ukuran Paling Kecil</div>
+                        </div>
+                        <div class="compress-pdf-mode-card active" data-val="50" style="background:#eff6ff; border:2px solid #2563eb; border-radius:18px; padding:12px; text-align:center; cursor:pointer; transition:all 0.3s;">
+                            <div style="font-weight:900; font-size:0.85rem; color:#2563eb;">REKOMENDASI</div>
+                            <div style="font-size:0.65rem; color:#64748b;">Seimbang & Aman</div>
+                        </div>
+                        <div class="compress-pdf-mode-card" data-val="85" style="background:white; border:2px solid #e2e8f0; border-radius:18px; padding:12px; text-align:center; cursor:pointer; transition:all 0.3s;">
+                            <div style="font-weight:900; font-size:0.85rem; color:#22c55e;">RINGAN</div>
+                            <div style="font-size:0.65rem; color:#64748b;">Kualitas Maksimal</div>
+                        </div>
+                    </div>
+
+                    <div style="display:flex; align-items:center; gap:20px; padding:0 10px;">
+                        <span style="font-size:0.7rem; font-weight:900; color:#ef4444; width:80px;">HEMAT</span>
+                        <input type="range" class="compress-pdf-slider" min="10" max="95" value="50" style="flex:1; accent-color:#2563eb; cursor:pointer; height:8px;">
+                        <span style="font-size:0.7rem; font-weight:900; color:#22c55e; width:80px; text-align:right;">BAGUS</span>
+                    </div>
+                </div>
+
+                <!-- PDF Grid Results (Like Image Compress) -->
+                <div class="compress-pdf-grid" style="display:grid; grid-template-columns:repeat(5, 1fr); gap:20px; margin-bottom:40px;"></div>
+
+                <div style="text-align:center; padding-bottom:60px;">
+                    <button class="compress-pdf-btn" style="padding:18px 60px; border-radius:22px; font-weight:900; font-size:1.2rem; background:#2563eb; color:white; border:none; cursor:pointer; display:inline-flex; align-items:center; gap:12px; box-shadow: 0 15px 30px rgba(37,99,235,0.3); transition:all 0.3s ease;">
+                        <i class="ph-bold ph-arrows-in" style="font-size:1.6rem;"></i> Unduh Sekarang
+                    </button>
+                </div>
+            </div>
+        </div>
+    </template>
+
+    <!-- Core Libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.min.js"></script>
+    <script src="https://unpkg.com/pdf-lib/dist/pdf-lib.min.js"></script>
+
+    <!-- Custom Scripts -->
+    <script src="js/pdf-utils.js?v=4"></script>
+    <script src="js/tools/merge-pdf.js?v=4"></script>
+    <script src="js/tools/image-to-pdf.js?v=4"></script>
+    <script src="js/tools/split-pdf.js?v=4"></script>
+    <script src="js/tools/delete-pdf.js?v=4"></script>
+    <script src="js/tools/replace-pdf.js?v=4"></script>
+    <script src="js/tools/rotate-pdf.js?v=4"></script>
+    <script src="js/tools/pdf-to-img.js?v=4"></script>
+    <script src="js/tools/compress-pdf.js?v=4"></script>
+    <script src="js/tools/compress-image.js?v=4"></script>
+    <script src="js/tools/pdf-editor.js?v=4"></script>
+    <script src="js/main.js?v=4"></script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

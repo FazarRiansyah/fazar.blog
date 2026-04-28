@@ -209,6 +209,7 @@ function initViewSwitching() {
                 else if (title === 'Putar Halaman PDF') inject('tpl-rotate-pdf', typeof initRotatePdf !== 'undefined' ? initRotatePdf : null);
                 else if (title === 'Gambar ke PDF') inject('tpl-image-to-pdf', typeof initImageToPdf !== 'undefined' ? initImageToPdf : null);
                 else if (title === 'PDF ke Gambar') inject('tpl-pdf-to-img', typeof initPdfToImg !== 'undefined' ? initPdfToImg : null);
+                else if (title === 'PDF to Text') inject('tpl-pdf-to-text', typeof initPdfToText !== 'undefined' ? initPdfToText : null);
                 else if (title === 'Kompres Gambar') inject('tpl-compress-image', typeof initCompressImg !== 'undefined' ? initCompressImg : null);
                 else if (title === 'Kompres PDF') inject('tpl-compress-pdf', typeof initCompressPdf !== 'undefined' ? initCompressPdf : null);
 

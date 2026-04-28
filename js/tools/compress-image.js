@@ -88,6 +88,9 @@ function initCompressImg(container = document) {
                 card.style.boxShadow = 'none';
             }
         });
+
+        // Instant Preview: update sizes in the grid without waiting for actual compression
+        renderGrid(); 
     }
 
     if (qualitySlider) {
@@ -127,6 +130,7 @@ function initCompressImg(container = document) {
             }
             if (item.compressedUrl) URL.revokeObjectURL(item.compressedUrl);
             item.compressedUrl = URL.createObjectURL(item.compressedBlob);
+            item.lastVal = val;
         }));
         renderGrid();
     }
@@ -163,13 +167,27 @@ function initCompressImg(container = document) {
     function renderGrid() {
         if (!grid) return;
         grid.innerHTML = '';
+        
+        const val = parseInt(qualitySlider.value);
+        // Estimate saving percentage based on slider (0-100)
+        // 100 (Tajam) -> ~10% saving
+        // 50 (Standar) -> ~50% saving
+        // 0 (Hemat) -> ~85% saving
+        const estimatedSaving = Math.max(5, (100 - val) * 0.85);
+
         imageFiles.forEach((item) => {
-            const saved = item.originalSize - item.compressedSize;
-            const ratio = Math.max(0, ((saved / item.originalSize) * 100)).toFixed(0);
+            const displaySize = (item.compressedSize > 0 && val === (item.lastVal || val)) 
+                ? item.compressedSize 
+                : (item.originalSize * (1 - (estimatedSaving / 100)));
+            
+            const ratio = (item.compressedSize > 0 && val === (item.lastVal || val))
+                ? Math.max(0, (((item.originalSize - item.compressedSize) / item.originalSize) * 100)).toFixed(0)
+                : estimatedSaving.toFixed(0);
+
             const el = document.createElement('div');
             el.style.cssText = `background:white; border:1px solid #e2e8f0; border-radius:18px; padding:12px; text-align:center; position:relative; transition:all 0.2s; min-width:0;`;
             el.innerHTML = `
-                <div style="height:110px; display:flex; align-items:center; justify-content:center; background:#f8fafc; border-radius:12px; overflow:hidden; margin-bottom:10px; position:relative;">
+                <div style="height:110px; display:flex; align-items:center; justify-content:center; background:#f8fafc; border-radius:12px; overflow:hidden; margin-bottom:10px; position:relative; border:1px solid #f1f5f9;">
                     <img src="${item.src}" style="width:100%; height:100%; object-fit:cover;">
                     <div style="position:absolute; top:6px; right:6px; background:#dcfce7; color:#166534; font-size:0.6rem; font-weight:900; padding:2px 6px; border-radius:5px; border:1px solid #bbf7d0;">-${ratio}%</div>
                     <div style="position:absolute; bottom:6px; right:6px; display:flex; gap:4px;">
@@ -181,7 +199,7 @@ function initCompressImg(container = document) {
                 <div style="font-size:0.65rem; color:#64748b; font-weight:600;">
                     <span style="text-decoration:line-through; opacity:0.6;">${formatSize(item.originalSize)}</span>
                     <i class="ph ph-arrow-right" style="margin:0 2px;"></i>
-                    <span style="color:#2563eb; font-weight:800;">${formatSize(item.compressedSize)}</span>
+                    <span style="color:#2563eb; font-weight:800;">${formatSize(displaySize)}</span>
                 </div>
             `;
             el.querySelector('.btn-preview-item').onclick = () => showFullPreview(item.compressedUrl, item.file.name);

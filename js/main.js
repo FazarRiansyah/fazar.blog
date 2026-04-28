@@ -211,6 +211,8 @@ function initViewSwitching() {
                 else if (title === 'PDF ke Gambar') inject('tpl-pdf-to-img', typeof initPdfToImg !== 'undefined' ? initPdfToImg : null);
                 else if (title === 'PDF to Text') inject('tpl-pdf-to-text', typeof initPdfToText !== 'undefined' ? initPdfToText : null);
                 else if (title === 'Kompres Gambar') inject('tpl-compress-image', typeof initCompressImg !== 'undefined' ? initCompressImg : null);
+                else if (title === 'Resize Gambar') inject('tpl-resize-image', typeof initResizeImg !== 'undefined' ? initResizeImg : null);
+                else if (title === 'Konversi Gambar') inject('tpl-convert-image', typeof initConvertImg !== 'undefined' ? initConvertImg : null);
                 else if (title === 'Kompres PDF') inject('tpl-compress-pdf', typeof initCompressPdf !== 'undefined' ? initCompressPdf : null);
 
                 if (!found) {
@@ -263,7 +265,19 @@ function initViewSwitching() {
                 appContainer.style.padding = '';
             }
             
-            window.scrollTo(0, 0);
+            // Ultimate auto-scroll fix: Wait for viewFadeIn animation (500ms) to complete
+            setTimeout(() => {
+                const target = document.getElementById('tools-section-anchor');
+                if (target) {
+                    const headerOffset = 100;
+                    const elementPosition = target.getBoundingClientRect().top + window.pageYOffset;
+                    
+                    window.scrollTo({
+                        top: elementPosition - headerOffset,
+                        behavior: 'smooth'
+                    });
+                }
+            }, 600);
         });
     }
 }

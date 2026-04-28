@@ -51,20 +51,20 @@
 
 /* Dark Mode Variables */
 [data-theme="dark"] {
-    --bg-main: #0f172a;
-    --bg-header: #1e293b;
-    --bg-footer: #162032;
-    --bg-card: #1e293b;
-    --bg-secondary: #334155;
+    --bg-main: #000000;      /* Hitam Murni */
+    --bg-header: #0a0a0a;
+    --bg-footer: #0a0a0a;
+    --bg-card: #141414;      /* Abu-abu Gelap untuk Kartu */
+    --bg-secondary: #1f1f1f; /* Abu-abu Sedikit Terang */
     
-    --text-main: #f8fafc;
-    --text-muted: #94a3b8;
+    --text-main: #f5f5f5;
+    --text-muted: #a3a3a3;
     
-    --border-color: #334155;
+    --border-color: #262626;
     
-    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.4);
-    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.5);
-    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.5);
+    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.8);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.9);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.9);
 }
 
 /* ==========================================================================
@@ -171,6 +171,8 @@ body {
     max-width: none;
     margin: 0;
     padding: 40px 40px 30px 40px;
+    background-color: var(--bg-main);
+    min-height: calc(100vh - 70px);
 }
 
 /* Utilities */
@@ -188,9 +190,9 @@ body {
    Header / Navbar
    ========================================================================== */
 .site-header {
-    background-color: var(--bg-header);
+    background-color: var(--bg-header) !important;
     border-bottom: 1px solid var(--border-color);
-    box-shadow: 0 2px 10px rgba(0,0,0,0.02);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.4);
     width: 100%;
     position: sticky;
     top: 0;
@@ -356,9 +358,9 @@ body {
 }
 
 .btn-primary {
-    background: white;
-    color: var(--primary-blue);
-    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    background: var(--primary-blue);
+    color: white;
+    box-shadow: 0 4px 15px rgba(37, 99, 235, 0.3);
 }
 
 .btn-primary:hover {
@@ -666,7 +668,7 @@ body {
 
 .btn-tool {
     width: 100%;
-    background: #f8fafc;
+    background: var(--bg-main);
     border: 1px solid var(--border-color);
     color: var(--text-main);
     font-weight: 700;
@@ -1239,7 +1241,7 @@ canvas, .canvas-container {
     overflow: hidden;
     box-shadow: var(--shadow-sm);
     margin-bottom: 8px;
-    background: white;
+    background: var(--bg-card);
 }
 .thumb-canvas-wrapper canvas {
     display: block;
@@ -1332,7 +1334,7 @@ canvas, .canvas-container {
 
 #pdf-bg-canvas {
     box-shadow: var(--shadow-lg);
-    background: white;
+    background: var(--bg-card);
 }
 
 /* Fabric canvas wrapper styling */
@@ -1426,7 +1428,7 @@ canvas, .canvas-container {
 }
 
 .doc-tab.active {
-    background: white;
+    background: var(--bg-card);
     color: var(--text-main);
     border-color: var(--border-color);
 }
@@ -1674,7 +1676,7 @@ canvas, .canvas-container {
 }
 
 .zoom-btn:hover {
-    background: white;
+    background: var(--bg-card);
 }
 
 [data-theme="dark"] .zoom-btn:hover {
@@ -1725,7 +1727,7 @@ canvas, .canvas-container {
 }
 
 .upload-area {
-    background: white;
+    background: var(--bg-card);
     border: 2px dashed #e2e8f0;
     border-radius: 20px;
     padding: 60px 40px;
@@ -1922,7 +1924,7 @@ canvas, .canvas-container {
 }
 
 .img-thumb-container {
-    background: white;
+    background: var(--bg-card);
     border: 1px solid var(--border-color);
     border-radius: 8px;
     padding: 10px;
@@ -2026,7 +2028,7 @@ canvas, .canvas-container {
 
 .how-card:hover {
     transform: translateX(8px);
-    background: white;
+    background: var(--bg-card);
     box-shadow: 0 10px 30px rgba(0,0,0,0.05);
 }
 
@@ -2118,7 +2120,7 @@ canvas, .canvas-container {
 }
 
 .tool-view-container {
-    background: white;
+    background: var(--bg-card);
     display: flex;
     flex-direction: column;
     width: 100%;
@@ -2333,7 +2335,7 @@ canvas, .canvas-container {
 }
 
 .file-list-item {
-    background: white;
+    background: var(--bg-card);
     border: 1px solid var(--border-color);
     border-radius: 12px;
     padding: 16px;
@@ -2479,7 +2481,7 @@ canvas, .canvas-container {
 }
 
 .modal-content {
-    background: white;
+    background: var(--bg-card);
     width: 95%;
     max-width: 600px;
     border-radius: 32px;
@@ -2567,6 +2569,20 @@ canvas, .canvas-container {
 }
 .animate-spin {
     animation: spin 1s linear infinite;
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(37, 99, 235, 0.4); }
+    70% { transform: scale(1.05); box-shadow: 0 0 0 10px rgba(37, 99, 235, 0); }
+    100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(37, 99, 235, 0); }
+}
+.pulse-animation {
+    animation: pulse 2s infinite;
+}
+
+.export-opt:hover {
+    background: #f1f5f9;
+    color: #2563eb !important;
 }
 
 /* End of file - Cleaned redundant animations */

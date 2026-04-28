@@ -34,9 +34,10 @@
                 <div class="badge-status">
                     <span class="dot green"></span> Mode Offline
                 </div>
-                <button class="icon-btn theme-toggle" title="Toggle Dark Mode">
-                    <i class="ph-fill ph-moon"></i>
-                </button>
+                <div class="theme-status-maintenance" style="display: flex; align-items: center; gap: 8px; background: rgba(245, 158, 11, 0.05); padding: 8px 14px; border-radius: 12px; border: 1px solid rgba(245, 158, 11, 0.2); margin-left: 10px;">
+                    <i class="ph-fill ph-moon" style="color: #f59e0b; font-size: 1.1rem;"></i>
+                    <span style="color: #f59e0b; font-size: 0.7rem; font-weight: 800; letter-spacing: 0.05em; white-space: nowrap;">DARK MODE (MAINTENANCE)</span>
+                </div>
             </div>
         </div>
     </header>
@@ -89,8 +90,7 @@
             </div>
         </section>
 
-        <!-- Tools Section -->
-        <section class="tools-section">
+            <section class="tools-section" id="tools-section-anchor">
             <div class="tools-header">
                 <h2><i class="ph-fill ph-toolbox"></i> Semua Alat</h2>
                 <span class="tool-count">17 alat tersedia</span>
@@ -118,7 +118,7 @@
                             <h3>Edit PDF</h3>
                             <p>Fitur ini sedang dalam pemeliharaan untuk peningkatan performa. Silakan kembali lagi nanti.</p>
                         </div>
-                        <div class="tool-card-footer"><button class="btn-tool" disabled style="opacity: 0.6; cursor: not-allowed; background: #f1f5f9; color: #94a3b8; border-color: #e2e8f0;">Sedang Perbaikan <i class="ph ph-hammer"></i></button></div>
+                        <div class="tool-card-footer"><button class="btn-tool" disabled style="opacity: 0.5; cursor: not-allowed; background: var(--bg-main); color: var(--text-muted); border-color: var(--border-color);">Sedang Perbaikan <i class="ph ph-hammer"></i></button></div>
                     </div>
                     <div class="tool-card" data-category="pdf">
                         <div class="tool-card-header">
@@ -212,17 +212,6 @@
                         <div class="tool-card-body">
                             <h3>PDF to Text</h3>
                             <p>Ekstrak teks murni dari dalam file PDF.</p>
-                        </div>
-                        <div class="tool-card-footer"><button class="btn-tool">Buka Alat <i class="ph ph-arrow-right"></i></button></div>
-                    </div>
-                    <div class="tool-card" data-category="pdf">
-                        <div class="tool-card-header">
-                            <div class="tool-icon"><i class="ph-fill ph-lock-key"></i></div>
-                            <div class="tool-meta"><span class="tool-type">PDF</span></div>
-                        </div>
-                        <div class="tool-card-body">
-                            <h3>Info & Proteksi PDF</h3>
-                            <p>Lihat info detail dan lindungi PDF dengan password.</p>
                         </div>
                         <div class="tool-card-footer"><button class="btn-tool">Buka Alat <i class="ph ph-arrow-right"></i></button></div>
                     </div>
@@ -718,7 +707,199 @@
     </template>
 
 
-    <!-- Template: PDF to Text -->
+
+    <!-- Template: Resize Gambar -->
+    <template id="tpl-resize-image">
+        <div class="pdf-tool-container" style="width: 100%; max-width: 1440px; margin: 0 auto; padding: 20px;">
+            <div id="resize-img-upload-area" class="upload-area" style="cursor: pointer;">
+                <i class="ph-fill ph-frame-corners" style="font-size: 80px; color: #2563eb; margin-bottom: 20px;"></i>
+                <div class="upload-text">
+                    <h3>Resize Gambar</h3>
+                    <p>Ubah lebar dan tinggi gambar Anda dengan presisi</p>
+                </div>
+                <div class="btn btn-primary">Pilih File Gambar</div>
+            </div>
+            <input type="file" id="resize-img-file-input" accept="image/*" multiple style="display: none;">
+
+            <!-- Modern Editor Layout -->
+            <div id="resize-img-workspace" style="display: none; width: 100%; grid-template-columns: 350px 1fr; gap: 40px; align-items: start;">
+                
+                <!-- Left: Control Panel & List -->
+                <div style="display: flex; flex-direction: column; gap: 24px;">
+                    <!-- Settings Card -->
+                    <div style="background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 24px; padding: 28px; box-shadow: 0 10px 30px rgba(0,0,0,0.04);">
+                        <h4 style="margin: 0 0 20px 0; font-size: 1.1rem; font-weight: 800; color: var(--text-main); display: flex; align-items: center; gap: 10px;">
+                            <i class="ph-fill ph-sliders-horizontal" style="color: #2563eb;"></i> Resize Settings
+                        </h4>
+
+                        <div style="display: grid; gap: 24px;">
+                            <div>
+                                <label style="display: block; font-size: 0.7rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase; margin-bottom: 12px; letter-spacing: 0.05em;">Manual Dimensions (PX)</label>
+                                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+                                    <div style="position: relative;">
+                                        <span style="position: absolute; left: 14px; top: 50%; transform: translateY(-50%); font-size: 0.7rem; font-weight: 800; color: var(--text-muted);">W</span>
+                                        <input type="number" id="resize-width" style="width: 100%; padding: 14px 14px 14px 34px; border: 1.5px solid var(--border-color); border-radius: 14px; outline: none; font-weight: 700; font-size: 1rem; color: var(--text-main); background: var(--bg-main); transition: border-color 0.2s;">
+                                    </div>
+                                    <div style="position: relative;">
+                                        <span style="position: absolute; left: 14px; top: 50%; transform: translateY(-50%); font-size: 0.7rem; font-weight: 800; color: var(--text-muted);">H</span>
+                                        <input type="number" id="resize-height" style="width: 100%; padding: 14px 14px 14px 34px; border: 1.5px solid var(--border-color); border-radius: 14px; outline: none; font-weight: 700; font-size: 1rem; color: var(--text-main); background: var(--bg-main); transition: border-color 0.2s;">
+                                    </div>
+                                </div>
+                                <label style="display: flex; align-items: center; gap: 10px; margin-top: 16px; cursor: pointer; padding: 12px; background: var(--bg-main); border-radius: 12px; border: 1px solid var(--border-color);">
+                                    <input type="checkbox" id="resize-lock-ratio" checked style="width: 18px; height: 18px; accent-color: #2563eb;">
+                                    <span style="font-size: 0.85rem; font-weight: 700; color: var(--text-main);">Lock Aspect Ratio</span>
+                                </label>
+                            </div>
+
+                            <div>
+                                <label style="display: block; font-size: 0.7rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase; margin-bottom: 12px; letter-spacing: 0.05em;">Quick Presets</label>
+                                <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px;">
+                                    <button class="btn-resize-pct" data-pct="25" style="padding: 12px; border-radius: 12px; border: 1px solid var(--border-color); background: var(--bg-card); font-weight: 800; font-size: 0.85rem; color: var(--text-main); cursor: pointer; transition: all 0.2s;">25%</button>
+                                    <button class="btn-resize-pct" data-pct="50" style="padding: 12px; border-radius: 12px; border: 1px solid var(--border-color); background: var(--bg-card); font-weight: 800; font-size: 0.85rem; color: var(--text-main); cursor: pointer; transition: all 0.2s;">50%</button>
+                                    <button class="btn-resize-pct" data-pct="75" style="padding: 12px; border-radius: 12px; border: 1px solid var(--border-color); background: var(--bg-card); font-weight: 800; font-size: 0.85rem; color: var(--text-main); cursor: pointer; transition: all 0.2s;">75%</button>
+                                </div>
+                            </div>
+
+                            <button id="btn-resize-img-save" class="btn btn-primary" style="width: 100%; padding: 18px; border-radius: 16px; font-weight: 900; background: var(--primary-gradient); border: none; color: white; box-shadow: 0 10px 25px rgba(37, 99, 235, 0.25);"><i class="ph-bold ph-download-simple"></i> Download Results</button>
+                        </div>
+                    </div>
+
+                    <!-- Bulk Operations Card -->
+                    <div style="background: #1e293b; border-radius: 24px; padding: 24px; color: white; box-shadow: 0 10px 30px rgba(0,0,0,0.1);">
+                        <h4 style="margin: 0 0 15px 0; font-size: 0.9rem; font-weight: 800; display: flex; align-items: center; gap: 8px;">
+                            <i class="ph-fill ph-package" style="color: #60a5fa;"></i> Bulk Operations
+                        </h4>
+                        <div style="display: grid; gap: 15px;">
+                            <div>
+                                <label style="display: block; font-size: 0.65rem; font-weight: 700; color: #94a3b8; text-transform: uppercase; margin-bottom: 8px;">Output Format</label>
+                                <select id="resize-bulk-format" style="width: 100%; padding: 12px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.2); border-radius: 12px; color: white; outline: none; font-size: 0.85rem; font-weight: 600; cursor: pointer;">
+                                    <option value="original" style="color: #1e293b;">Same as Original</option>
+                                    <option value="image/jpeg" style="color: #1e293b;">Convert to JPG</option>
+                                    <option value="image/png" style="color: #1e293b;">Convert to PNG</option>
+                                    <option value="image/webp" style="color: #1e293b;">Convert to WebP</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label style="display: block; font-size: 0.65rem; font-weight: 700; color: #94a3b8; text-transform: uppercase; margin-bottom: 8px;">Filename Suffix</label>
+                                <input type="text" id="resize-bulk-suffix" placeholder="e.g. -resized" style="width: 100%; padding: 10px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 10px; color: white; outline: none; font-size: 0.85rem;">
+                            </div>
+                            <button id="btn-resize-bulk-clear" style="width: 100%; padding: 10px; background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.2); border-radius: 10px; color: #f87171; font-weight: 800; font-size: 0.75rem; cursor: pointer; transition: all 0.2s;"><i class="ph ph-trash"></i> Clear All Files</button>
+                        </div>
+                    </div>
+
+                    <!-- List Card -->
+                    <div style="background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 24px; padding: 20px; flex: 1; display: flex; flex-direction: column;">
+                        <div style="font-size: 0.7rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase; margin-bottom: 15px; letter-spacing: 0.05em;">Selected Files</div>
+                        <div id="resize-img-grid" style="display: flex; flex-direction: column; gap: 10px; max-height: 350px; overflow-y: auto; padding-right: 5px;"></div>
+                    </div>
+                </div>
+
+                <!-- Right: Massive Comparison Preview -->
+                <div style="background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 32px; padding: 32px; display: flex; flex-direction: column; gap: 24px; box-shadow: 0 20px 50px rgba(0,0,0,0.03); position: sticky; top: 20px; height: 680px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <h4 style="margin: 0; font-size: 1.1rem; font-weight: 800; color: var(--text-main);">Comparison Workspace</h4>
+                        <div style="display: flex; gap: 8px;">
+                            <div id="resize-pct-badge" style="background: #eff6ff; color: #2563eb; font-size: 0.75rem; font-weight: 900; padding: 6px 12px; border-radius: 10px; border: 1px solid #dbeafe;">100%</div>
+                        </div>
+                    </div>
+
+                    <div style="flex: 1; display: grid; grid-template-columns: 1fr 1fr; gap: 32px; min-height: 500px;">
+                        <!-- Original Panel -->
+                        <div style="display: flex; flex-direction: column; gap: 14px;">
+                            <div style="text-align: center; font-size: 0.75rem; font-weight: 900; color: var(--text-muted); letter-spacing: 0.1em;">ORIGINAL</div>
+                            <div style="flex: 1; background: var(--bg-main); border: 1px dashed var(--border-color); border-radius: 24px; display: flex; align-items: center; justify-content: center; overflow: hidden; padding: 20px; position: relative;">
+                                <img id="resize-preview-orig" style="max-width: 95%; max-height: 95%; object-fit: contain; filter: drop-shadow(0 15px 30px rgba(0,0,0,0.08));">
+                                <div id="resize-label-orig" style="position: absolute; bottom: 20px; font-size: 0.8rem; font-weight: 800; color: var(--text-muted); background: var(--bg-card); padding: 6px 16px; border-radius: 12px; backdrop-filter: blur(10px); box-shadow: 0 4px 15px rgba(0,0,0,0.05); border: 1px solid var(--border-color);">0 x 0</div>
+                            </div>
+                        </div>
+
+                        <!-- Result Panel -->
+                        <div style="display: flex; flex-direction: column; gap: 14px;">
+                            <div style="text-align: center; font-size: 0.75rem; font-weight: 900; color: #2563eb; letter-spacing: 0.1em;">PREVIEW RESIZE</div>
+                            <div style="flex: 1; background: #eff6ff; border: 2.5px solid #2563eb; border-radius: 24px; display: flex; align-items: center; justify-content: center; overflow: hidden; padding: 20px; position: relative;">
+                                <div id="resize-scale-box" style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center;">
+                                    <img id="resize-preview-new" style="max-width: 95%; max-height: 95%; object-fit: contain; filter: drop-shadow(0 25px 50px rgba(37, 99, 235, 0.2)); transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);">
+                                </div>
+                                <div id="resize-label-new" style="position: absolute; bottom: 20px; font-size: 0.8rem; font-weight: 900; color: white; background: #2563eb; padding: 8px 18px; border-radius: 12px; box-shadow: 0 8px 20px rgba(37, 99, 235, 0.4);">0 x 0</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </template>
+    <!-- Template: Konversi Gambar -->
+    <template id="tpl-convert-image">
+        <div class="pdf-tool-container" style="width: 100%; max-width: 1440px; margin: 0 auto; padding: 20px;">
+            <div id="conv-img-upload-area" class="upload-area" style="cursor: pointer;">
+                <i class="ph-fill ph-arrows-counter-clockwise" style="font-size: 80px; color: #2563eb; margin-bottom: 20px;"></i>
+                <div class="upload-text">
+                    <h3>Konversi Format Gambar</h3>
+                    <p>Ubah file JPG, PNG, atau WebP Anda secara massal</p>
+                </div>
+                <div class="btn btn-primary">Pilih Gambar</div>
+            </div>
+            <input type="file" id="conv-img-file-input" accept="image/*" multiple style="display: none;">
+
+            <!-- Editor Layout -->
+            <div id="conv-img-workspace" style="display: none; width: 100%; grid-template-columns: 350px 1fr; gap: 40px; align-items: start;">
+                
+                <!-- Left: Control Panel -->
+                <div style="display: flex; flex-direction: column; gap: 24px;">
+                    <div style="background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 24px; padding: 28px; box-shadow: 0 10px 30px rgba(0,0,0,0.04);">
+                        <h4 style="margin: 0 0 20px 0; font-size: 1.1rem; font-weight: 800; color: var(--text-main); display: flex; align-items: center; gap: 10px;">
+                            <i class="ph-fill ph-gear" style="color: #2563eb;"></i> Conversion Settings
+                        </h4>
+
+                        <div style="display: grid; gap: 24px;">
+                            <div>
+                                <label style="display: block; font-size: 0.7rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase; margin-bottom: 12px; letter-spacing: 0.05em;">Target Format</label>
+                                <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px;">
+                                    <button class="btn-conv-format active" data-format="image/jpeg" style="padding: 12px; border-radius: 12px; border: 2.5px solid #2563eb; background: #eff6ff; font-weight: 800; font-size: 0.85rem; color: #2563eb; cursor: pointer;">JPG</button>
+                                    <button class="btn-conv-format" data-format="image/png" style="padding: 12px; border-radius: 12px; border: 1px solid var(--border-color); background: var(--bg-card); font-weight: 800; font-size: 0.85rem; color: var(--text-muted); cursor: pointer;">PNG</button>
+                                    <button class="btn-conv-format" data-format="image/webp" style="padding: 12px; border-radius: 12px; border: 1px solid var(--border-color); background: var(--bg-card); font-weight: 800; font-size: 0.85rem; color: var(--text-muted); cursor: pointer;">WEBP</button>
+                                </div>
+                            </div>
+
+                            <div style="margin-bottom: 20px;">
+                                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                                    <label style="display: block; font-size: 0.7rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em;">Quality Level</label>
+                                    <span id="conv-quality-val" style="font-size: 0.85rem; font-weight: 900; color: #2563eb;">90%</span>
+                                </div>
+                                <input type="range" id="conv-quality" min="10" max="100" value="90" style="width: 100%; accent-color: #2563eb; background: var(--bg-main); border-radius: 5px;">
+                                <p style="font-size: 0.65rem; color: var(--text-muted); margin-top: 8px; font-weight: 600;">Geser untuk mengatur tingkat kompresi hasil konversi.</p>
+                            </div>
+
+                            <button id="btn-conv-img-save" class="btn btn-primary" style="width: 100%; padding: 18px; border-radius: 16px; font-weight: 900; background: var(--primary-gradient); border: none; color: white; box-shadow: 0 10px 25px rgba(37, 99, 235, 0.25);"><i class="ph-bold ph-check-circle"></i> Convert & Download</button>
+                        </div>
+                    </div>
+
+                    <div style="background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 24px; padding: 20px; flex: 1; display: flex; flex-direction: column;">
+                        <div style="font-size: 0.7rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase; margin-bottom: 15px; letter-spacing: 0.05em;">Queued Files</div>
+                        <div id="conv-img-grid" style="display: flex; flex-direction: column; gap: 10px; max-height: 400px; overflow-y: auto;"></div>
+                    </div>
+                </div>
+
+                <!-- Right: Preview Area -->
+                <div style="background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 32px; padding: 32px; display: flex; flex-direction: column; gap: 24px; box-shadow: 0 20px 50px rgba(0,0,0,0.03); position: sticky; top: 20px; height: 680px;">
+                    <h4 style="margin: 0; font-size: 1.1rem; font-weight: 800; color: var(--text-main);">Image Preview</h4>
+                    <div style="flex: 1; background: var(--bg-main); border: 1px dashed var(--border-color); border-radius: 24px; display: flex; flex-direction: column; align-items: center; justify-content: center; overflow: hidden; padding: 20px; position: relative;">
+                        <img id="conv-preview-img" style="max-width: 95%; max-height: 90%; object-fit: contain; filter: drop-shadow(0 20px 40px rgba(0,0,0,0.08));">
+                        <div id="conv-img-info" style="margin-top: 15px; font-size: 0.8rem; font-weight: 700; color: var(--text-main); background: var(--bg-card); padding: 10px 20px; border-radius: 14px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); display: flex; flex-direction: column; align-items: center; gap: 4px; border: 1px solid var(--border-color);">
+                            <div style="display: flex; gap: 8px; color: var(--text-muted);">
+                                <span>Original: <b id="conv-info-orig-type" style="color: var(--text-main);">JPG</b> (<span id="conv-info-orig-size">0 KB</span>)</span>
+                            </div>
+                            <div style="width: 100%; height: 1px; background: var(--border-color); margin: 4px 0;"></div>
+                            <div style="display: flex; gap: 8px;">
+                                <span style="color: #2563eb; font-weight: 800;">Estimated Result: <b id="conv-info-new-type">JPG</b> (~<span id="conv-info-new-size">0 KB</span>)</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </template>
+
     <template id="tpl-pdf-to-text">
         <div class="pdf-tool-container" style="width: 100%; max-width: 1400px; margin: 0 auto; padding: 20px;">
             <div id="pdf-to-text-upload-area" class="upload-area" style="cursor: pointer;">
@@ -763,6 +944,9 @@
                     <div style="display: flex; gap: 8px;">
                         <button class="btn btn-outline" id="btn-p2t-change" style="height: 100%; border-radius: 16px;"><i class="ph ph-arrows-clockwise"></i> Ganti</button>
                         <button class="btn btn-outline" id="btn-p2t-clean" style="height: 100%; border-radius: 16px;" title="Bersihkan spasi & baris kosong"><i class="ph ph-magic-wand"></i> Rapikan</button>
+                        <button class="btn btn-primary" id="btn-p2t-ocr" style="height: 100%; border-radius: 16px; background: var(--primary-gradient); color: white; box-shadow: 0 8px 20px rgba(37, 99, 235, 0.2); border: none; font-weight: 700;" title="Gunakan AI untuk scan teks dari gambar/foto">
+                            <i class="ph-fill ph-eye"></i> Scan OCR (AI)
+                        </button>
                     </div>
                 </div>
 
@@ -782,10 +966,24 @@
                     <!-- Right: Extracted Text -->
                     <div style="display: flex; flex-direction: column; background: white; border: 1px solid #e2e8f0; border-radius: 20px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.03);">
                         <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px 20px; background: #f8fafc; border-bottom: 1px solid #e2e8f0;">
-                            <span style="font-size: 0.7rem; font-weight: 800; color: #64748b;">HASIL EKSTRAKSI</span>
+                            <div style="display: flex; align-items: center; gap: 12px; flex: 1;">
+                                <span style="font-size: 0.7rem; font-weight: 800; color: #64748b; white-space: nowrap;">HASIL EKSTRAKSI</span>
+                                <div style="position: relative; flex: 1; max-width: 300px;">
+                                    <i class="ph ph-magnifying-glass" style="position: absolute; left: 10px; top: 50%; transform: translateY(-50%); font-size: 0.8rem; color: #94a3b8;"></i>
+                                    <input type="text" id="p2t-search-input" placeholder="Cari di hasil..." style="width: 100%; padding: 6px 12px 6px 32px; border-radius: 8px; border: 1px solid #e2e8f0; font-size: 0.75rem; outline: none; transition: all 0.2s;">
+                                </div>
+                            </div>
                             <div style="display: flex; gap: 8px;">
                                 <button id="btn-p2t-copy" style="background: white; border: 1px solid #e2e8f0; padding: 6px 12px; border-radius: 8px; font-size: 0.75rem; font-weight: 700; color: #1e293b; cursor: pointer; display: flex; align-items: center; gap: 6px;"><i class="ph-bold ph-copy"></i> Salin</button>
-                                <button id="btn-p2t-download" style="background: #2563eb; border: none; padding: 6px 14px; border-radius: 8px; font-size: 0.75rem; font-weight: 700; color: white; cursor: pointer; display: flex; align-items: center; gap: 6px;"><i class="ph-bold ph-download-simple"></i> Unduh .txt</button>
+                                <div style="position: relative;">
+                                    <button id="btn-p2t-download-main" style="background: #2563eb; border: none; padding: 6px 14px; border-radius: 8px; font-size: 0.75rem; font-weight: 700; color: white; cursor: pointer; display: flex; align-items: center; gap: 6px;"><i class="ph-bold ph-download-simple"></i> Unduh <i class="ph ph-caret-down"></i></button>
+                                    <div id="p2t-export-menu" style="display: none; position: absolute; top: calc(100% + 5px); right: 0; background: white; border: 1px solid #e2e8f0; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); width: 150px; z-index: 100; overflow: hidden;">
+                                        <div class="export-opt" data-ext="txt" style="padding: 10px 16px; font-size: 0.8rem; font-weight: 600; color: #475569; cursor: pointer; transition: all 0.2s; border-bottom: 1px solid #f1f5f9;">Teks Biasa (.txt)</div>
+                                        <div class="export-opt" data-ext="doc" style="padding: 10px 16px; font-size: 0.8rem; font-weight: 600; color: #475569; cursor: pointer; transition: all 0.2s; border-bottom: 1px solid #f1f5f9;">Microsoft Word (.doc)</div>
+                                        <div class="export-opt" data-ext="md" style="padding: 10px 16px; font-size: 0.8rem; font-weight: 600; color: #475569; cursor: pointer; transition: all 0.2s; border-bottom: 1px solid #f1f5f9;">Markdown (.md)</div>
+                                        <div class="export-opt" data-ext="json" style="padding: 10px 16px; font-size: 0.8rem; font-weight: 600; color: #475569; cursor: pointer; transition: all 0.2s;">Data JSON (.json)</div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         <textarea id="pdf-to-text-result" style="flex: 1; padding: 24px; border: none; font-family: 'Roboto Mono', monospace; font-size: 0.95rem; line-height: 1.6; color: #334155; resize: none; outline: none; background: white;" placeholder="Teks hasil ekstraksi akan muncul di sini..."></textarea>
@@ -810,12 +1008,12 @@
 
             <!-- Workspace -->
             <div id="merge-workspace" style="display: none; width: 100%;">
-                <div id="merge-file-list" style="margin-bottom: 30px;">
+                <div id="merge-file-list" style="margin-bottom: 30px; background: var(--bg-card); border-radius: 16px; border: 1px solid var(--border-color); padding: 10px;">
                     <!-- File cards will be here (Top Section) -->
                 </div>
                 
                 <div style="text-align: center; margin-bottom: 30px;">
-                    <button class="btn btn-outline" id="btn-add-more-merge">
+                    <button class="btn btn-outline" id="btn-add-more-merge" style="background: var(--bg-card); color: var(--text-main); border-color: var(--border-color);">
                         <i class="ph ph-plus"></i> Tambah File Lagi
                     </button>
                 </div>
@@ -841,22 +1039,22 @@
             </div>
             
             <div id="img-to-pdf-workspace" style="display: none;">
-                <div style="position:sticky; top:0; z-index:900; background:white; border-radius:20px; padding:16px 24px; border:1px solid #e2e8f0; box-shadow:0 10px 30px rgba(0,0,0,0.08); margin-bottom:28px; display:flex; align-items:center; justify-content:space-between; gap:12px;">
+                <div style="position:sticky; top:0; z-index:900; background:var(--bg-card); border-radius:20px; padding:16px 24px; border:1px solid var(--border-color); box-shadow:0 10px 30px rgba(0,0,0,0.08); margin-bottom:28px; display:flex; align-items:center; justify-content:space-between; gap:12px;">
                     <div style="display:flex; align-items:center; gap:14px;">
-                        <div style="width:42px; height:42px; border-radius:14px; background:#eff6ff; display:flex; align-items:center; justify-content:center;">
-                            <i class="ph-fill ph-images" style="color:#2563eb; font-size:1.3rem;"></i>
+                        <div style="width:42px; height:42px; border-radius:14px; background:var(--bg-main); display:flex; align-items:center; justify-content:center;">
+                            <i class="ph-fill ph-images" style="color:var(--primary-blue); font-size:1.3rem;"></i>
                         </div>
                         <div>
-                            <div style="font-weight:800; font-size:0.95rem; color:#0f172a;" id="img-to-pdf-counter">0 Gambar</div>
-                            <div style="font-size:0.8rem; color:#64748b;">Atur urutan dan arah gambar</div>
+                            <div style="font-weight:800; font-size:0.95rem; color:var(--text-main);" id="img-to-pdf-counter">0 Gambar</div>
+                            <div style="font-size:0.8rem; color:var(--text-muted);">Atur urutan dan arah gambar</div>
                         </div>
                     </div>
 
                     <div style="display:flex; align-items:center; gap:10px;">
-                        <div style="display:flex; align-items:center; gap:6px; background:#f8fafc; padding:6px 12px; border-radius:12px; border:1px solid #e2e8f0;">
-                            <div style="display:flex; align-items:center; gap:4px; border-right:1px solid #e2e8f0; padding-right:8px; margin-right:4px;">
-                                <span style="font-size:0.7rem; font-weight:700; color:#64748b;">KERTAS:</span>
-                                <select id="i2p-page-size" style="background:none; border:none; font-size:0.8rem; font-weight:800; color:#0f172a; cursor:pointer;">
+                        <div style="display:flex; align-items:center; gap:6px; background:var(--bg-main); padding:6px 12px; border-radius:12px; border:1px solid var(--border-color);">
+                            <div style="display:flex; align-items:center; gap:4px; border-right:1px solid var(--border-color); padding-right:8px; margin-right:4px;">
+                                <span style="font-size:0.7rem; font-weight:700; color:var(--text-muted);">KERTAS:</span>
+                                <select id="i2p-page-size" style="background:none; border:none; font-size:0.8rem; font-weight:800; color:var(--text-main); cursor:pointer;">
                                     <option value="fit">Auto</option>
                                     <option value="a4">A4</option>
                                     <option value="letter">Letter</option>
@@ -864,8 +1062,8 @@
                                 </select>
                             </div>
                             <div style="display:flex; align-items:center; gap:4px;">
-                                <span style="font-size:0.7rem; font-weight:700; color:#64748b;">MARGIN:</span>
-                                <select id="i2p-margin" style="background:none; border:none; font-size:0.8rem; font-weight:800; color:#0f172a; cursor:pointer;">
+                                <span style="font-size:0.7rem; font-weight:700; color:var(--text-muted);">MARGIN:</span>
+                                <select id="i2p-margin" style="background:none; border:none; font-size:0.8rem; font-weight:800; color:var(--text-main); cursor:pointer;">
                                     <option value="0">None</option>
                                     <option value="20">Kecil</option>
                                     <option value="40">Sedang</option>
@@ -873,7 +1071,7 @@
                             </div>
                         </div>
 
-                        <button id="btn-i2p-rotate-all" style="padding:10px 18px; border-radius:12px; font-weight:700; font-size:0.85rem; background:#f8fafc; color:#475569; border:1px solid #e2e8f0; cursor:pointer; display:flex; align-items:center; gap:6px;">
+                        <button id="btn-i2p-rotate-all" style="padding:10px 18px; border-radius:12px; font-weight:700; font-size:0.85rem; background:var(--bg-main); color:var(--text-main); border:1px solid var(--border-color); cursor:pointer; display:flex; align-items:center; gap:6px;">
                             <i class="ph-bold ph-arrows-clockwise"></i> Putar Semua
                         </button>
                     </div>
@@ -905,19 +1103,19 @@
 
             <div class="compress-workspace-area" style="display: none;">
                 <!-- Integrated Mode & Slider -->
-                <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:24px; padding:24px; margin-bottom:30px;">
+                <div style="background:var(--bg-card); border:1px solid var(--border-color); border-radius:24px; padding:24px; margin-bottom:30px;">
                     <div style="display:grid; grid-template-columns:repeat(3, 1fr); gap:16px; margin-bottom:24px;">
-                        <div class="compress-mode-card" data-val="10" style="background:white; border:2px solid #e2e8f0; border-radius:18px; padding:12px; text-align:center; transition:all 0.3s;">
-                            <div style="font-weight:900; font-size:0.85rem; color:#ef4444;">HEMET DATA</div>
-                            <div style="font-size:0.65rem; color:#64748b;">Ukuran Super Kecil</div>
+                        <div class="compress-mode-card" data-val="10" style="background:var(--bg-main); border:2px solid var(--border-color); border-radius:18px; padding:12px; text-align:center; transition:all 0.3s;">
+                            <div style="font-weight:900; font-size:0.85rem; color:#ef4444;">HEMAT DATA</div>
+                            <div style="font-size:0.65rem; color:var(--text-muted);">Ukuran Super Kecil</div>
                         </div>
-                        <div class="compress-mode-card active" data-val="50" style="background:#eff6ff; border:2px solid #2563eb; border-radius:18px; padding:12px; text-align:center; transition:all 0.3s;">
+                        <div class="compress-mode-card active" data-val="50" style="background:rgba(37,99,235,0.1); border:2px solid #2563eb; border-radius:18px; padding:12px; text-align:center; transition:all 0.3s;">
                             <div style="font-weight:900; font-size:0.85rem; color:#2563eb;">REKOMENDASI</div>
-                            <div style="font-size:0.65rem; color:#64748b;">Hasil Seimbang</div>
+                            <div style="font-size:0.65rem; color:var(--text-muted);">Hasil Seimbang</div>
                         </div>
-                        <div class="compress-mode-card" data-val="90" style="background:white; border:2px solid #e2e8f0; border-radius:18px; padding:12px; text-align:center; transition:all 0.3s;">
+                        <div class="compress-mode-card" data-val="90" style="background:var(--bg-main); border:2px solid var(--border-color); border-radius:18px; padding:12px; text-align:center; transition:all 0.3s;">
                             <div style="font-weight:900; font-size:0.85rem; color:#22c55e;">KUALITAS TINGGI</div>
-                            <div style="font-size:0.65rem; color:#64748b;">Tetap Tajam</div>
+                            <div style="font-size:0.65rem; color:var(--text-muted);">Tetap Tajam</div>
                         </div>
                     </div>
 
@@ -955,8 +1153,8 @@
             <!-- Workspace -->
             <div id="split-workspace" style="display: none; width: 100%;">
                 <!-- File Info -->
-                <div class="file-list-card" style="margin-bottom: 24px; padding: 18px; display: flex; align-items: center; gap: 20px; background: white; border-radius: 16px; border: 1px solid var(--border-color); box-shadow: var(--shadow-sm);">
-                    <div id="split-file-thumb" style="width: 50px; height: 65px; background: #f1f5f9; border-radius: 6px; border: 1px solid #e2e8f0; display: flex; align-items: center; justify-content: center; overflow: hidden;">
+                <div class="file-list-card" style="margin-bottom: 24px; padding: 18px; display: flex; align-items: center; gap: 20px; background: var(--bg-card); border-radius: 16px; border: 1px solid var(--border-color); box-shadow: var(--shadow-sm);">
+                    <div id="split-file-thumb" style="width: 50px; height: 65px; background: var(--bg-main); border-radius: 6px; border: 1px solid var(--border-color); display: flex; align-items: center; justify-content: center; overflow: hidden;">
                         <i class="ph ph-file-pdf" style="font-size: 1.5rem; color: #ef4444;"></i>
                     </div>
                     <div style="flex-grow: 1;">
@@ -1008,7 +1206,7 @@
                 </div>
 
                 <!-- Footer Action -->
-                <div style="position: sticky; bottom: 20px; background: white; padding: 20px 30px; border-radius: 16px; box-shadow: var(--shadow-lg); border: 1px solid var(--border-color); display: flex; align-items: center; justify-content: space-between; z-index: 100;">
+                <div style="position: sticky; bottom: 20px; background: var(--bg-card); padding: 20px 30px; border-radius: 16px; box-shadow: var(--shadow-lg); border: 1px solid var(--border-color); display: flex; align-items: center; justify-content: space-between; z-index: 100;">
                     <div id="split-status-text" style="font-weight: 700; color: var(--text-muted);">0 Halaman Terpilih</div>
                     <button id="btn-run-split" class="btn btn-primary" style="padding: 12px 40px; font-size: 1rem;">
                         <i class="ph-fill ph-scissors"></i> Pisahkan PDF Sekarang
@@ -1026,6 +1224,22 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/5.3.1/fabric.min.js"></script>
     <script>
+        function initThemeToggle() {
+    // Dark Mode is currently under maintenance
+    console.log("Dark Mode feature is in maintenance mode.");
+    
+    // Force light mode
+    document.body.removeAttribute('data-theme');
+    localStorage.setItem('theme', 'light');
+    
+    const toggleBtn = document.querySelector('.theme-toggle');
+    if (toggleBtn) {
+        toggleBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            alert("Fitur Dark Mode sedang dalam optimalisasi (Maintenance) untuk memberikan kenyamanan visual terbaik. Mohon tunggu update selanjutnya! 🙏");
+        });
+    }
+}
         // Set worker source safely
         if (typeof pdfjsLib !== 'undefined') {
             pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.worker.min.js';
@@ -1048,37 +1262,37 @@
             </div>
 
             <div id="pdf-to-img-workspace" style="display: none;">
-                <div style="position:sticky; top:0; z-index:900; background:white; border-radius:20px; padding:16px 24px; border:1px solid #e2e8f0; box-shadow:0 10px 30px rgba(0,0,0,0.08); margin-bottom:28px; display:flex; align-items:center; justify-content:space-between; gap:12px;">
+                <div style="position:sticky; top:0; z-index:900; background:var(--bg-card); border-radius:20px; padding:16px 24px; border:1px solid var(--border-color); box-shadow:0 10px 30px rgba(0,0,0,0.08); margin-bottom:28px; display:flex; align-items:center; justify-content:space-between; gap:12px;">
                     <div style="display:flex; align-items:center; gap:14px;">
-                        <div style="width:42px; height:42px; border-radius:14px; background:#eff6ff; display:flex; align-items:center; justify-content:center;">
-                            <i class="ph-fill ph-images" style="color:#2563eb; font-size:1.3rem;"></i>
+                        <div style="width:42px; height:42px; border-radius:14px; background:var(--bg-main); display:flex; align-items:center; justify-content:center;">
+                            <i class="ph-fill ph-images" style="color:var(--primary-blue); font-size:1.3rem;"></i>
                         </div>
                         <div>
-                            <div style="font-weight:800; font-size:0.95rem; color:#0f172a;" id="pdf-to-img-name">document.pdf</div>
-                            <div style="font-size:0.8rem; color:#64748b;" id="pdf-to-img-status">Pilih halaman untuk dikonversi</div>
+                            <div style="font-weight:800; font-size:0.95rem; color:var(--text-main);" id="pdf-to-img-name">document.pdf</div>
+                            <div style="font-size:0.8rem; color:var(--text-muted);" id="pdf-to-img-status">Pilih halaman untuk dikonversi</div>
                         </div>
                     </div>
 
                     <div style="display:flex; align-items:center; gap:10px;">
-                        <button id="btn-p2i-toggle-all" style="padding:10px 18px; border-radius:12px; font-weight:700; font-size:0.85rem; background:#eff6ff; color:#2563eb; border:1px solid #dbeafe; cursor:pointer; display:flex; align-items:center; gap:6px;">
+                        <button id="btn-p2i-toggle-all" style="padding:10px 18px; border-radius:12px; font-weight:700; font-size:0.85rem; background:var(--bg-main); color:var(--primary-blue); border:1px solid var(--border-color); cursor:pointer; display:flex; align-items:center; gap:6px;">
                             <i class="ph-bold ph-check-square"></i> <span id="p2i-toggle-text">Pilih Semua</span>
                         </button>
                         
-                        <button id="btn-p2i-rotate-all" style="padding:10px 18px; border-radius:12px; font-weight:700; font-size:0.85rem; background:#f8fafc; color:#475569; border:1px solid #e2e8f0; cursor:pointer; display:flex; align-items:center; gap:6px;">
+                        <button id="btn-p2i-rotate-all" style="padding:10px 18px; border-radius:12px; font-weight:700; font-size:0.85rem; background:var(--bg-main); color:var(--text-main); border:1px solid var(--border-color); cursor:pointer; display:flex; align-items:center; gap:6px;">
                             <i class="ph-bold ph-arrows-clockwise"></i> Putar Semua
                         </button>
 
-                        <div style="display:flex; align-items:center; gap:6px; background:#f8fafc; padding:6px 12px; border-radius:12px; border:1px solid #e2e8f0;">
-                            <div style="display:flex; align-items:center; gap:4px; border-right:1px solid #e2e8f0; padding-right:8px; margin-right:4px;">
-                                <span style="font-size:0.7rem; font-weight:700; color:#64748b;">FORMAT:</span>
-                                <select id="p2i-format" style="background:none; border:none; font-size:0.8rem; font-weight:800; color:#0f172a; cursor:pointer;">
+                        <div style="display:flex; align-items:center; gap:6px; background:var(--bg-main); padding:6px 12px; border-radius:12px; border:1px solid var(--border-color);">
+                            <div style="display:flex; align-items:center; gap:4px; border-right:1px solid var(--border-color); padding-right:8px; margin-right:4px;">
+                                <span style="font-size:0.7rem; font-weight:700; color:var(--text-muted);">FORMAT:</span>
+                                <select id="p2i-format" style="background:none; border:none; font-size:0.8rem; font-weight:800; color:var(--text-main); cursor:pointer;">
                                     <option value="jpeg">JPG</option>
                                     <option value="png">PNG</option>
                                 </select>
                             </div>
                             <div style="display:flex; align-items:center; gap:4px;">
-                                <span style="font-size:0.7rem; font-weight:700; color:#64748b;">KUALITAS:</span>
-                                <select id="p2i-quality" style="background:none; border:none; font-size:0.8rem; font-weight:800; color:#0f172a; cursor:pointer;">
+                                <span style="font-size:0.7rem; font-weight:700; color:var(--text-muted);">KUALITAS:</span>
+                                <select id="p2i-quality" style="background:none; border:none; font-size:0.8rem; font-weight:800; color:var(--text-main); cursor:pointer;">
                                     <option value="2">HD (2x)</option>
                                     <option value="1">Normal</option>
                                     <option value="3">Ultra (3x)</option>
@@ -1086,7 +1300,7 @@
                             </div>
                         </div>
 
-                        <button id="btn-p2i-change-file" style="padding:10px 18px; border-radius:12px; font-weight:700; font-size:0.85rem; background:#f8fafc; color:#475569; border:1px solid #e2e8f0; cursor:pointer; display:flex; align-items:center; gap:6px;">
+                        <button id="btn-p2i-change-file" style="padding:10px 18px; border-radius:12px; font-weight:700; font-size:0.85rem; background:var(--bg-main); color:var(--text-main); border:1px solid var(--border-color); cursor:pointer; display:flex; align-items:center; gap:6px;">
                             <i class="ph-bold ph-arrows-clockwise"></i> Ganti File
                         </button>
                     </div>
@@ -1117,10 +1331,10 @@
             </div>
 
                 <div id="rotate-workspace" style="display: none;">
-                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; padding: 15px; background: white; border-radius: 12px; border: 1px solid #e2e8f0;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; padding: 15px; background: var(--bg-card); border-radius: 12px; border: 1px solid var(--border-color);">
                         <div>
-                            <h4 id="rotate-filename" style="margin: 0; font-size: 1.1rem;">filename.pdf</h4>
-                            <p id="rotate-meta" style="margin: 5px 0 0; color: #64748b; font-size: 0.85rem;">0 Halaman</p>
+                            <h4 id="rotate-filename" style="margin: 0; font-size: 1.1rem; color: var(--text-main);">filename.pdf</h4>
+                            <p id="rotate-meta" style="margin: 5px 0 0; color: var(--text-muted); font-size: 0.85rem;">0 Halaman</p>
                         </div>
                         <button class="btn btn-outline small" id="btn-rotate-change">Ganti File</button>
                     </div>
@@ -1151,10 +1365,10 @@
             </div>
 
             <div id="delete-workspace" style="display: none;">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; padding: 15px; background: white; border-radius: 12px; border: 1px solid #e2e8f0;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; padding: 15px; background: var(--bg-card); border-radius: 12px; border: 1px solid var(--border-color);">
                     <div>
-                        <h4 id="delete-filename" style="margin: 0; font-size: 1.1rem;">filename.pdf</h4>
-                        <p id="delete-meta" style="margin: 5px 0 0; color: #64748b; font-size: 0.85rem;">0 Halaman</p>
+                        <h4 id="delete-filename" style="margin: 0; font-size: 1.1rem; color: var(--text-main);">filename.pdf</h4>
+                        <p id="delete-meta" style="margin: 5px 0 0; color: var(--text-muted); font-size: 0.85rem;">0 Halaman</p>
                     </div>
                     <button class="btn btn-outline small" id="btn-delete-change">Ganti File</button>
                 </div>
@@ -1166,50 +1380,54 @@
     </template>
 
     <template id="tpl-how-it-works">
-        <div class="how-it-works-container" style="padding: 10px 0; display: flex; flex-direction: column; gap: 20px;">
-            <div style="background: linear-gradient(to right, #eff6ff, #ffffff); border-radius: 24px; padding: 24px; border: 1px solid #dbeafe; display: flex; gap: 20px; align-items: flex-start; transition: all 0.3s ease;">
-                <div style="width: 54px; height: 54px; background: #3b82f6; color: white; border-radius: 16px; display: flex; align-items: center; justify-content: center; font-size: 28px; flex-shrink: 0; box-shadow: 0 8px 16px rgba(59, 130, 246, 0.2);">
+        <div class="how-it-works-container" style="padding: 10px 0; display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+            <!-- Card 1 -->
+            <div style="background: linear-gradient(to bottom right, #eff6ff, #ffffff); border-radius: 20px; padding: 16px; border: 1px solid #dbeafe; display: flex; flex-direction: column; gap: 12px; transition: all 0.3s ease;">
+                <div style="width: 42px; height: 42px; background: #3b82f6; color: white; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0; box-shadow: 0 4px 10px rgba(59, 130, 246, 0.15);">
                     <i class="ph-fill ph-cpu"></i>
                 </div>
-                <div style="flex: 1;">
-                    <h4 style="margin: 0 0 6px 0; font-size: 1.1rem; font-weight: 800; color: #1e3a8a;">Pemrosesan Lokal 100%</h4>
-                    <p style="margin: 0; font-size: 0.9rem; line-height: 1.6; color: #475569; font-weight: 500;">Dokumen Anda diproses langsung di RAM komputer Anda menggunakan <b>File API</b> dan <b>pdf-lib</b>. Tidak ada data yang singgah di server.</p>
+                <div>
+                    <h4 style="margin: 0 0 4px 0; font-size: 0.95rem; font-weight: 800; color: #1e3a8a;">Pemrosesan Lokal 100%</h4>
+                    <p style="margin: 0; font-size: 0.8rem; line-height: 1.5; color: #64748b; font-weight: 500;">Dokumen diproses di RAM menggunakan <b>File API</b>. Tidak ada data ke server.</p>
                 </div>
             </div>
 
-            <div style="background: linear-gradient(to right, #f0fdf4, #ffffff); border-radius: 24px; padding: 24px; border: 1px solid #dcfce7; display: flex; gap: 20px; align-items: flex-start; transition: all 0.3s ease;">
-                <div style="width: 54px; height: 54px; background: #22c55e; color: white; border-radius: 16px; display: flex; align-items: center; justify-content: center; font-size: 28px; flex-shrink: 0; box-shadow: 0 8px 16px rgba(34, 197, 94, 0.2);">
+            <!-- Card 2 -->
+            <div style="background: linear-gradient(to bottom right, #f0fdf4, #ffffff); border-radius: 20px; padding: 16px; border: 1px solid #dcfce7; display: flex; flex-direction: column; gap: 12px; transition: all 0.3s ease;">
+                <div style="width: 42px; height: 42px; background: #22c55e; color: white; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0; box-shadow: 0 4px 10px rgba(34, 197, 94, 0.15);">
                     <i class="ph-fill ph-shield-checkered"></i>
                 </div>
-                <div style="flex: 1;">
-                    <h4 style="margin: 0 0 6px 0; font-size: 1.1rem; font-weight: 800; color: #14532d;">Transparansi Tanpa Batas</h4>
-                    <p style="margin: 0; font-size: 0.9rem; line-height: 1.6; color: #475569; font-weight: 500;">Buktikan sendiri dengan membuka <b>DevTools &rarr; Network</b>. Anda akan melihat tidak ada satu pun paket data yang dikirim keluar.</p>
+                <div>
+                    <h4 style="margin: 0 0 4px 0; font-size: 0.95rem; font-weight: 800; color: #14532d;">Transparansi Tanpa Batas</h4>
+                    <p style="margin: 0; font-size: 0.8rem; line-height: 1.5; color: #64748b; font-weight: 500;">Buktikan via <b>DevTools Network</b>. Tidak ada paket data keluar.</p>
                 </div>
             </div>
 
-            <div style="background: linear-gradient(to right, #fffbeb, #ffffff); border-radius: 24px; padding: 24px; border: 1px solid #fef3c7; display: flex; gap: 20px; align-items: flex-start; transition: all 0.3s ease;">
-                <div style="width: 54px; height: 54px; background: #f59e0b; color: white; border-radius: 16px; display: flex; align-items: center; justify-content: center; font-size: 28px; flex-shrink: 0; box-shadow: 0 8px 16px rgba(245, 158, 11, 0.2);">
+            <!-- Card 3 -->
+            <div style="background: linear-gradient(to bottom right, #fffbeb, #ffffff); border-radius: 20px; padding: 16px; border: 1px solid #fef3c7; display: flex; flex-direction: column; gap: 12px; transition: all 0.3s ease;">
+                <div style="width: 42px; height: 42px; background: #f59e0b; color: white; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0; box-shadow: 0 4px 10px rgba(245, 158, 11, 0.15);">
                     <i class="ph-fill ph-wifi-high"></i>
                 </div>
-                <div style="flex: 1;">
-                    <h4 style="margin: 0 0 6px 0; font-size: 1.1rem; font-weight: 800; color: #78350f;">Kebebasan Mode Offline</h4>
-                    <p style="margin: 0; font-size: 0.9rem; line-height: 1.6; color: #475569; font-weight: 500;">Anda bahkan dapat mematikan internet setelah halaman terbuka. Semua fitur tetap berjalan normal tanpa gangguan.</p>
+                <div>
+                    <h4 style="margin: 0 0 4px 0; font-size: 0.95rem; font-weight: 800; color: #78350f;">Mode Offline</h4>
+                    <p style="margin: 0; font-size: 0.8rem; line-height: 1.5; color: #64748b; font-weight: 500;">Bisa matikan internet setelah halaman terbuka. Semua fitur tetap normal.</p>
                 </div>
             </div>
 
-            <div style="background: linear-gradient(to right, #faf5ff, #ffffff); border-radius: 24px; padding: 24px; border: 1px solid #f3e8ff; display: flex; gap: 20px; align-items: flex-start; transition: all 0.3s ease;">
-                <div style="width: 54px; height: 54px; background: #a855f7; color: white; border-radius: 16px; display: flex; align-items: center; justify-content: center; font-size: 28px; flex-shrink: 0; box-shadow: 0 8px 16px rgba(168, 85, 247, 0.2);">
+            <!-- Card 4 -->
+            <div style="background: linear-gradient(to bottom right, #faf5ff, #ffffff); border-radius: 20px; padding: 16px; border: 1px solid #f3e8ff; display: flex; flex-direction: column; gap: 12px; transition: all 0.3s ease;">
+                <div style="width: 42px; height: 42px; background: #a855f7; color: white; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0; box-shadow: 0 4px 10px rgba(168, 85, 247, 0.15);">
                     <i class="ph-fill ph-ghost"></i>
                 </div>
-                <div style="flex: 1;">
-                    <h4 style="margin: 0 0 6px 0; font-size: 1.1rem; font-weight: 800; color: #581c87;">Privasi Sekali Pakai</h4>
-                    <p style="margin: 0; font-size: 0.9rem; line-height: 1.6; color: #475569; font-weight: 500;">Begitu tab browser ditutup, semua data akan hilang selamanya dari memori RAM. Tidak ada jejak digital yang tersisa.</p>
+                <div>
+                    <h4 style="margin: 0 0 4px 0; font-size: 0.95rem; font-weight: 800; color: #581c87;">Privasi Sekali Pakai</h4>
+                    <p style="margin: 0; font-size: 0.8rem; line-height: 1.5; color: #64748b; font-weight: 500;">Data hilang dari RAM saat tab ditutup. Tidak ada jejak digital.</p>
                 </div>
             </div>
 
-            <div style="margin-top: 10px; padding: 20px; background: #f8fafc; border-radius: 20px; display: flex; align-items: center; justify-content: center; gap: 12px; border: 1px dashed #e2e8f0;">
-                <div style="color: #22c55e; font-size: 24px;"><i class="ph-fill ph-shield-check"></i></div>
-                <div style="font-size: 0.85rem; font-weight: 700; color: #64748b; letter-spacing: 0.5px; text-transform: uppercase;">Keamanan Diverifikasi Secara Lokal</div>
+            <div style="grid-column: span 2; padding: 14px; background: #f8fafc; border-radius: 16px; display: flex; align-items: center; justify-content: center; gap: 10px; border: 1px dashed #e2e8f0;">
+                <div style="color: #22c55e; font-size: 20px;"><i class="ph-fill ph-shield-check"></i></div>
+                <div style="font-size: 0.75rem; font-weight: 700; color: #64748b; letter-spacing: 0.5px; text-transform: uppercase;">Keamanan Diverifikasi Secara Lokal</div>
             </div>
         </div>
     </template>
@@ -1227,26 +1445,26 @@
                 <input type="file" id="replace-file-input" accept="application/pdf" style="display:none;">
             </div>
             <div id="replace-workspace" style="display:none;">
-                <div style="position:sticky;top:0;z-index:900;background:white;border-radius:20px;padding:16px 24px;border:1px solid #e2e8f0;box-shadow:0 10px 30px rgba(0,0,0,0.08);margin-bottom:28px;display:flex;align-items:center;justify-content:space-between;gap:12px;">
+                <div style="position:sticky;top:0;z-index:900;background:var(--bg-card);border-radius:20px;padding:16px 24px;border:1px solid var(--border-color);box-shadow:0 10px 30px rgba(0,0,0,0.08);margin-bottom:28px;display:flex;align-items:center;justify-content:space-between;gap:12px;">
                     <div style="display:flex;align-items:center;gap:14px;">
-                        <div style="width:42px;height:42px;border-radius:14px;background:#eff6ff;display:flex;align-items:center;justify-content:center;">
-                            <i class="ph-fill ph-arrows-left-right" style="color:#2563eb;font-size:1.3rem;"></i>
+                        <div style="width:42px;height:42px;border-radius:14px;background:var(--bg-main);display:flex;align-items:center;justify-content:center;">
+                            <i class="ph-fill ph-arrows-left-right" style="color:var(--primary-blue);font-size:1.3rem;"></i>
                         </div>
                         <div>
-                            <div id="replace-main-name" style="font-weight:800;font-size:0.95rem;color:#0f172a;"></div>
-                            <div id="replace-main-pages" style="font-size:0.8rem;color:#64748b;"></div>
+                            <div id="replace-main-name" style="font-weight:800;font-size:0.95rem;color:var(--text-main);"></div>
+                            <div id="replace-main-pages" style="font-size:0.8rem;color:var(--text-muted);"></div>
                         </div>
                     </div>
-                    <button id="btn-replace-change-main" style="padding:10px 18px;border-radius:12px;font-weight:700;font-size:0.85rem;background:#f8fafc;color:#475569;border:1px solid #e2e8f0;cursor:pointer;display:flex;align-items:center;gap:6px;">
+                    <button id="btn-replace-change-main" style="padding:10px 18px;border-radius:12px;font-weight:700;font-size:0.85rem;background:var(--bg-main);color:var(--text-main);border:1px solid var(--border-color);cursor:pointer;display:flex;align-items:center;gap:6px;">
                         <i class="ph-bold ph-arrows-clockwise"></i> Ganti File Utama
                     </button>
                 </div>
                 <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:32px;">
-                    <div style="background:white;border-radius:20px;border:1px solid #e2e8f0;overflow:hidden;">
-                        <div style="padding:18px 22px;border-bottom:1px solid #f1f5f9;background:#f8fafc;display:flex;align-items:center;justify-content:space-between;">
+                    <div style="background:var(--bg-card);border-radius:20px;border:1px solid var(--border-color);overflow:hidden;">
+                        <div style="padding:18px 22px;border-bottom:1px solid var(--border-color);background:var(--bg-main);display:flex;align-items:center;justify-content:space-between;">
                             <div>
-                                <div style="font-weight:800;font-size:0.9rem;color:#0f172a;">Halaman yang Akan Diganti</div>
-                                <div style="font-size:0.75rem;color:#64748b;margin-top:2px;">Klik kartu atau atur rentang</div>
+                                <div style="font-weight:800;font-size:0.9rem;color:var(--text-main);">Halaman yang Akan Diganti</div>
+                                <div style="font-size:0.75rem;color:var(--text-muted);margin-top:2px;">Klik kartu atau atur rentang</div>
                             </div>
                             <div style="display:flex;align-items:center;gap:8px;background:#eff6ff;padding:8px 14px;border-radius:12px;">
                                 <span style="font-size:0.78rem;font-weight:700;color:#1e40af;">Hal.</span>
@@ -1259,11 +1477,11 @@
                             <div id="replace-main-grid"></div>
                         </div>
                     </div>
-                    <div style="background:white;border-radius:20px;border:1px solid #e2e8f0;overflow:hidden;">
-                        <div style="padding:18px 22px;border-bottom:1px solid #f1f5f9;background:#f0fdf4;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;">
+                    <div style="background:var(--bg-card);border-radius:20px;border:1px solid var(--border-color);overflow:hidden;">
+                        <div style="padding:18px 22px;border-bottom:1px solid var(--border-color);background:rgba(34,197,94,0.1);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;">
                             <div>
-                                <div style="font-weight:800;font-size:0.9rem;color:#0f172a;">File Pengganti</div>
-                                <div id="replace-sub-name" style="font-size:0.75rem;color:#64748b;margin-top:2px;">Belum dipilih</div>
+                                <div style="font-weight:800;font-size:0.9rem;color:var(--text-main);">File Pengganti</div>
+                                <div id="replace-sub-name" style="font-size:0.75rem;color:var(--text-muted);margin-top:2px;">Belum dipilih</div>
                             </div>
                             <div style="display:flex;align-items:center;gap:8px;">
                                 <span id="replace-sub-badge" style="background:#e2e8f0;color:#64748b;padding:3px 10px;border-radius:8px;font-size:0.78rem;font-weight:700;">Belum ada</span>
@@ -1304,18 +1522,18 @@
             <i class="ph-bold ph-x"></i>
         </button>
         
-        <div class="lightbox-box" style="max-width: 95%; max-height: 92vh; background: white; border-radius: 24px; box-shadow: 0 40px 100px -20px rgba(0,0,0,0.7); overflow: hidden; position: relative; display: flex; flex-direction: column; cursor: default;">
-            <div id="lightbox-content" style="overflow: auto; flex: 1; display: flex; justify-content: center; background: #f1f5f9; min-height: 300px; min-width: 300px;">
-                <div style="padding: 100px; color: #64748b; display: flex; flex-direction: column; align-items: center; justify-content: center;">
-                    <i class="ph ph-circle-notch animate-spin" style="font-size: 4rem; color: #3b82f6; margin-bottom: 25px;"></i>
-                    <p style="font-weight: 700; font-size: 1.1rem; color: #1e293b;">Sedang Memperbesar...</p>
+        <div class="lightbox-box" style="max-width: 95%; max-height: 92vh; background: var(--bg-card); box-shadow: 0 40px 100px -20px rgba(0,0,0,0.7); overflow: hidden; position: relative; display: flex; flex-direction: column; cursor: default; border: 1px solid var(--border-color); border-radius: 24px;">
+            <div id="lightbox-content" style="overflow: auto; flex: 1; display: flex; justify-content: center; background: var(--bg-main); min-height: 300px; min-width: 300px;">
+                <div style="padding: 100px; color: var(--text-muted); display: flex; flex-direction: column; align-items: center; justify-content: center;">
+                    <i class="ph ph-circle-notch animate-spin" style="font-size: 4rem; color: var(--primary-blue); margin-bottom: 25px;"></i>
+                    <p style="font-weight: 700; font-size: 1.1rem; color: var(--text-main);">Sedang Memperbesar...</p>
                 </div>
             </div>
             
-            <div style="padding: 15px 25px; background: white; border-top: 1px solid #f1f5f9; display: flex; align-items: center; justify-content: space-between;">
+            <div style="padding: 15px 25px; background: var(--bg-card); border-top: 1px solid var(--border-color); display: flex; align-items: center; justify-content: space-between;">
                 <div style="display: flex; align-items: center; gap: 10px;">
-                    <div style="background: #eff6ff; color: #2563eb; padding: 6px 14px; border-radius: 12px; font-weight: 800; font-size: 0.9rem;" id="lightbox-label">Halaman 1</div>
-                    <span style="color: #94a3b8; font-size: 0.85rem;">Pratinjau Kualitas Tinggi</span>
+                    <div style="background: rgba(37, 99, 235, 0.1); color: var(--primary-blue); padding: 6px 14px; border-radius: 12px; font-weight: 800; font-size: 0.9rem;" id="lightbox-label">Halaman 1</div>
+                    <span style="color: var(--text-muted); font-size: 0.85rem;">Pratinjau Kualitas Tinggi</span>
                 </div>
                 <div style="font-size: 0.8rem; color: #cbd5e1; font-weight: 600;">#JagaDokumen PRO</div>
             </div>
@@ -1323,26 +1541,26 @@
     </div>
 
     <!-- Final Review Result Modal -->
-    <div id="replace-final-modal" style="position: fixed; inset: 0; background: rgba(15, 23, 42, 0.7); backdrop-filter: blur(15px); z-index: 99999; display: none; align-items: center; justify-content: center; padding: 20px; animation: fadeIn 0.3s ease;">
-        <div style="background: white; width: 100%; max-width: 1000px; border-radius: 32px; box-shadow: 0 50px 100px rgba(0,0,0,0.4); overflow: hidden; display: flex; flex-direction: column; max-height: 90vh; animation: zoomIn 0.4s cubic-bezier(0.16, 1, 0.3, 1);">
-            <div style="padding: 25px 35px; background: #f8fafc; border-bottom: 1px solid #e2e8f0; display: flex; align-items: center; justify-content: space-between;">
+    <div id="replace-final-modal" style="position: fixed; inset: 0; background: rgba(0, 0, 0, 0.8); backdrop-filter: blur(15px); z-index: 99999; display: none; align-items: center; justify-content: center; padding: 20px; animation: fadeIn 0.3s ease;">
+        <div style="background: var(--bg-card); width: 100%; max-width: 1000px; border-radius: 32px; box-shadow: 0 50px 100px rgba(0,0,0,0.6); overflow: hidden; display: flex; flex-direction: column; max-height: 90vh; border: 1px solid var(--border-color); animation: zoomIn 0.4s cubic-bezier(0.16, 1, 0.3, 1);">
+            <div style="padding: 25px 35px; background: var(--bg-main); border-bottom: 1px solid var(--border-color); display: flex; align-items: center; justify-content: space-between;">
                 <div>
-                    <h3 style="margin: 0; font-size: 1.4rem; font-weight: 900; color: #0f172a;">Pratinjau Hasil Akhir</h3>
-                    <p style="margin: 5px 0 0 0; color: #64748b; font-size: 0.9rem; font-weight: 500;">Silakan periksa kembali sebelum menyimpan dokumen.</p>
+                    <h3 style="margin: 0; font-size: 1.4rem; font-weight: 900; color: var(--text-main);">Pratinjau Hasil Akhir</h3>
+                    <p style="margin: 5px 0 0 0; color: var(--text-muted); font-size: 0.9rem; font-weight: 500;">Silakan periksa kembali sebelum menyimpan dokumen.</p>
                 </div>
                 <div style="display: flex; gap: 12px;">
-                    <button id="btn-final-download" class="btn btn-primary" style="padding: 12px 25px; border-radius: 14px; font-weight: 800; display: flex; align-items: center; gap: 10px; background: #2563eb; color: white; border: none; cursor: pointer; box-shadow: 0 10px 20px rgba(37, 99, 235, 0.2);">
+                    <button id="btn-final-download" class="btn btn-primary" style="padding: 12px 25px; border-radius: 14px; font-weight: 800; display: flex; align-items: center; gap: 10px; background: var(--primary-blue); color: white; border: none; cursor: pointer; box-shadow: 0 10px 20px rgba(37, 99, 235, 0.2);">
                         <i class="ph-fill ph-download-simple" style="font-size: 1.2rem;"></i> Download Sekarang
                     </button>
-                    <button id="btn-final-back" class="btn" style="padding: 12px 20px; border-radius: 14px; font-weight: 700; background: #f1f5f9; color: #475569; border: none; cursor: pointer;">Ganti Lagi</button>
+                    <button id="btn-final-back" class="btn" style="padding: 12px 20px; border-radius: 14px; font-weight: 700; background: var(--bg-secondary); color: var(--text-muted); border: none; cursor: pointer;">Ganti Lagi</button>
                 </div>
             </div>
             
-            <div id="final-review-grid" style="flex: 1; overflow-y: auto; padding: 30px; background: #f1f5f9; display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px;">
+            <div id="final-review-grid" style="flex: 1; overflow-y: auto; padding: 30px; background: var(--bg-main); display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px;">
                 <!-- Result pages will be rendered here -->
             </div>
             
-            <div style="padding: 15px; background: #0f172a; color: rgba(255,255,255,0.6); font-size: 0.75rem; text-align: center; font-weight: 600;">
+            <div style="padding: 15px; background: #000; color: rgba(255,255,255,0.4); font-size: 0.75rem; text-align: center; font-weight: 600;">
                 <i class="ph-fill ph-shield-check" style="margin-right: 5px; color: #22c55e;"></i> Dokumen diproses dengan aman di browser Anda.
             </div>
         </div>
@@ -1378,19 +1596,19 @@
 
             <div class="compress-pdf-workspace" style="display: none;">
                 <!-- Integrated Lever UI -->
-                <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:24px; padding:24px; margin-bottom:30px;">
+                <div style="background:var(--bg-card); border:1px solid var(--border-color); border-radius:24px; padding:24px; margin-bottom:30px;">
                     <div style="display:grid; grid-template-columns:repeat(3, 1fr); gap:16px; margin-bottom:24px;">
-                        <div class="compress-pdf-mode-card" data-val="20" style="background:white; border:2px solid #e2e8f0; border-radius:18px; padding:12px; text-align:center; cursor:pointer; transition:all 0.3s;">
+                        <div class="compress-pdf-mode-card" data-val="20" style="background:var(--bg-main); border:2px solid var(--border-color); border-radius:18px; padding:12px; text-align:center; cursor:pointer; transition:all 0.3s;">
                             <div style="font-weight:900; font-size:0.85rem; color:#ef4444;">EKSTRIM</div>
-                            <div style="font-size:0.65rem; color:#64748b;">Ukuran Paling Kecil</div>
+                            <div style="font-size:0.65rem; color:var(--text-muted);">Ukuran Paling Kecil</div>
                         </div>
-                        <div class="compress-pdf-mode-card active" data-val="50" style="background:#eff6ff; border:2px solid #2563eb; border-radius:18px; padding:12px; text-align:center; cursor:pointer; transition:all 0.3s;">
+                        <div class="compress-pdf-mode-card active" data-val="50" style="background:rgba(37,99,235,0.1); border:2px solid #2563eb; border-radius:18px; padding:12px; text-align:center; cursor:pointer; transition:all 0.3s;">
                             <div style="font-weight:900; font-size:0.85rem; color:#2563eb;">REKOMENDASI</div>
-                            <div style="font-size:0.65rem; color:#64748b;">Seimbang & Aman</div>
+                            <div style="font-size:0.65rem; color:var(--text-muted);">Seimbang & Aman</div>
                         </div>
-                        <div class="compress-pdf-mode-card" data-val="85" style="background:white; border:2px solid #e2e8f0; border-radius:18px; padding:12px; text-align:center; cursor:pointer; transition:all 0.3s;">
+                        <div class="compress-pdf-mode-card" data-val="85" style="background:var(--bg-main); border:2px solid var(--border-color); border-radius:18px; padding:12px; text-align:center; cursor:pointer; transition:all 0.3s;">
                             <div style="font-weight:900; font-size:0.85rem; color:#22c55e;">RINGAN</div>
-                            <div style="font-size:0.65rem; color:#64748b;">Kualitas Maksimal</div>
+                            <div style="font-size:0.65rem; color:var(--text-muted);">Kualitas Maksimal</div>
                         </div>
                     </div>
 
@@ -1416,6 +1634,7 @@
     <!-- Core Libraries -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.min.js"></script>
     <script src="https://unpkg.com/pdf-lib/dist/pdf-lib.min.js"></script>
+    <script src="https://unpkg.com/tesseract.js@4.0.1/dist/tesseract.min.js"></script>
 
     <!-- Custom Scripts -->
     <script src="js/pdf-utils.js?v=4"></script>
@@ -1427,13 +1646,13 @@
     <script src="js/tools/rotate-pdf.js?v=4"></script>
     <script src="js/tools/pdf-to-img.js?v=4"></script>
     <script src="js/tools/pdf-to-text.js?v=4"></script>
-    <script src="js/tools/compress-pdf.js?v=4"></script>
+    <script src="js/tools/resize-image.js"></script>
+    <script src="js/tools/convert-image.js"></script>
+    <script src="js/tools/compress-pdf.js"></script>
     <script src="js/tools/compress-image.js?v=4"></script>
     <script src="js/tools/pdf-editor.js?v=4"></script>
     <script src="js/main.js?v=4"></script>
 </body>
-</html>
-
 
 
 

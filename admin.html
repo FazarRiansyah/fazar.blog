@@ -30,6 +30,21 @@
                 grid-template-columns: 1fr;
             }
         }
+        .admin-action-btn-edit {
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            background: none;
+            border: 1px solid var(--accent-color);
+            color: var(--accent-color);
+            padding: 6px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: var(--transition-smooth);
+        }
+        .admin-action-btn-edit:hover {
+            background-color: var(--accent-color);
+            color: white;
+        }
     </style>
 </head>
 <body>
@@ -66,7 +81,10 @@
                 <h1 class="admin-title-main">Dashboard Editor</h1>
                 <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 4px;">Kelola semua konten fazar.site Anda</p>
             </div>
-            <button class="admin-logout-btn" id="logout-btn">Log Out</button>
+            <div style="display: flex; gap: 8px; align-items: center;">
+                <button class="admin-logout-btn" id="import-btn" style="background-color: var(--accent-color); color: var(--bg-main); border-color: transparent;">Impor Data Awal</button>
+                <button class="admin-logout-btn" id="logout-btn">Log Out</button>
+            </div>
         </div>
 
         <!-- Alert Toast -->
@@ -152,7 +170,7 @@
 
                 <!-- Right Column: Home Pillars CRUD -->
                 <div class="admin-card-box">
-                    <h3 style="font-family: var(--font-heading); font-size: 1.15rem; font-weight: 700;">Tambah Pilar Keahlian Beranda</h3>
+                    <h3 id="pillar-form-title" style="font-family: var(--font-heading); font-size: 1.15rem; font-weight: 700;">Tambah Pilar Keahlian Beranda</h3>
                     <form id="pillar-add-form" style="display: flex; flex-direction: column; gap: 16px;">
                         <div class="admin-form-ctrl">
                             <label>Ikon / Emoji (Contoh: 🎓, ✨, ⚡)</label>
@@ -170,7 +188,10 @@
                             <label>No Urut</label>
                             <input type="number" id="add-pillar-order" class="admin-input-txt" required value="1">
                         </div>
-                        <button type="submit" class="admin-submit-btn">Tambah Pilar</button>
+                        <div style="display: flex; gap: 8px;">
+                            <button type="submit" id="pillar-submit-btn" class="admin-submit-btn">Tambah Pilar</button>
+                            <button type="button" id="pillar-cancel-btn" class="admin-logout-btn" style="display: none;">Batal</button>
+                        </div>
                     </form>
 
                     <h4 style="font-family: var(--font-heading); font-size: 1rem; font-weight: 700; margin-top: 16px;">Daftar Pilar Beranda</h4>
@@ -184,7 +205,7 @@
             <div class="admin-flex-row">
                 <!-- Left: Education CRUD -->
                 <div class="admin-card-box">
-                    <h3 style="font-family: var(--font-heading); font-size: 1.15rem; font-weight: 700;">Kelola Riwayat Pendidikan</h3>
+                    <h3 id="edu-form-title" style="font-family: var(--font-heading); font-size: 1.15rem; font-weight: 700;">Kelola Riwayat Pendidikan</h3>
                     <form id="edu-add-form" style="display: flex; flex-direction: column; gap: 16px; margin-bottom: 24px;">
                         <div class="admin-form-ctrl">
                             <label>Tahun (Contoh: 2019 - 2023)</label>
@@ -206,14 +227,17 @@
                             <label>Urutan</label>
                             <input type="number" id="add-edu-order" class="admin-input-txt" required value="1">
                         </div>
-                        <button type="submit" class="admin-submit-btn">Tambah Pendidikan</button>
+                        <div style="display: flex; gap: 8px;">
+                            <button type="submit" id="edu-submit-btn" class="admin-submit-btn">Tambah Pendidikan</button>
+                            <button type="button" id="edu-cancel-btn" class="admin-logout-btn" style="display: none;">Batal</button>
+                        </div>
                     </form>
                     <div id="edu-list-admin" style="display: flex; flex-direction: column;"></div>
                 </div>
 
                 <!-- Right: Certifications CRUD -->
                 <div class="admin-card-box">
-                    <h3 style="font-family: var(--font-heading); font-size: 1.15rem; font-weight: 700;">Kelola Sertifikat</h3>
+                    <h3 id="cert-form-title" style="font-family: var(--font-heading); font-size: 1.15rem; font-weight: 700;">Kelola Sertifikat</h3>
                     <form id="cert-add-form" style="display: flex; flex-direction: column; gap: 16px; margin-bottom: 24px;">
                         <div class="admin-form-ctrl">
                             <label>Waktu Perolehan (Contoh: Maret 2024)</label>
@@ -231,7 +255,10 @@
                             <label>Urutan</label>
                             <input type="number" id="add-cert-order" class="admin-input-txt" required value="1">
                         </div>
-                        <button type="submit" class="admin-submit-btn">Tambah Sertifikat</button>
+                        <div style="display: flex; gap: 8px;">
+                            <button type="submit" id="cert-submit-btn" class="admin-submit-btn">Tambah Sertifikat</button>
+                            <button type="button" id="cert-cancel-btn" class="admin-logout-btn" style="display: none;">Batal</button>
+                        </div>
                     </form>
                     <div id="cert-list-admin" style="display: flex; flex-direction: column;"></div>
                 </div>
@@ -241,7 +268,7 @@
         <!-- Tab 4: Career Manager -->
         <div id="tab-experience" class="admin-tab-content">
             <div class="admin-card-box" style="margin-bottom: 32px;">
-                <h3 style="font-family: var(--font-heading); font-size: 1.15rem; font-weight: 700; margin-bottom: 12px;">Tambah Pengalaman Baru</h3>
+                <h3 id="exp-form-title" style="font-family: var(--font-heading); font-size: 1.15rem; font-weight: 700; margin-bottom: 12px;">Tambah Pengalaman Baru</h3>
                 <form id="exp-add-form" style="display: flex; flex-direction: column; gap: 16px;">
                     <div class="admin-form-ctrl">
                         <label>Rentang Waktu (Contoh: Juni 2025 - Sekarang)</label>
@@ -259,7 +286,10 @@
                         <label>No Urut Tampil (Angka Kecil Di Atas)</label>
                         <input type="number" id="add-exp-order" class="admin-input-txt" required value="1">
                     </div>
-                    <button type="submit" class="admin-submit-btn">Tambah Pengalaman</button>
+                    <div style="display: flex; gap: 8px;">
+                        <button type="submit" id="exp-submit-btn" class="admin-submit-btn">Tambah Pengalaman</button>
+                        <button type="button" id="exp-cancel-btn" class="admin-logout-btn" style="display: none;">Batal</button>
+                    </div>
                 </form>
             </div>
 
@@ -272,7 +302,7 @@
         <!-- Tab 5: Projects Manager -->
         <div id="tab-projects" class="admin-tab-content">
             <div class="admin-card-box" style="margin-bottom: 32px;">
-                <h3 style="font-family: var(--font-heading); font-size: 1.15rem; font-weight: 700; margin-bottom: 12px;">Tambah Proyek Baru</h3>
+                <h3 id="proj-form-title" style="font-family: var(--font-heading); font-size: 1.15rem; font-weight: 700; margin-bottom: 12px;">Tambah Proyek Baru</h3>
                 <form id="proj-add-form" style="display: flex; flex-direction: column; gap: 16px;">
                     <div class="admin-form-ctrl">
                         <label>Judul Proyek</label>
@@ -290,7 +320,10 @@
                         <label>No Urut Tampil (Urutan)</label>
                         <input type="number" id="add-proj-order" class="admin-input-txt" required value="1">
                     </div>
-                    <button type="submit" class="admin-submit-btn">Tambah Proyek</button>
+                    <div style="display: flex; gap: 8px;">
+                        <button type="submit" id="proj-submit-btn" class="admin-submit-btn">Tambah Proyek</button>
+                        <button type="button" id="proj-cancel-btn" class="admin-logout-btn" style="display: none;">Batal</button>
+                    </div>
                 </form>
             </div>
 
@@ -325,6 +358,13 @@
         const dashboardSection = document.getElementById('dashboard-section');
         const loginError = document.getElementById('login-error');
         const alertToast = document.getElementById('alert-toast');
+
+        // Edit IDs tracking state
+        let editPillarId = null;
+        let editEduId = null;
+        let editCertId = null;
+        let editExpId = null;
+        let editProjId = null;
 
         // Authentication State Listener
         onAuthStateChanged(auth, (user) => {
@@ -379,7 +419,87 @@
             }, 4000);
         }
 
-        // Load all data
+        // --- Inisialisasi Data Awal (Impor Otomatis) ---
+        document.getElementById('import-btn').addEventListener('click', async () => {
+            if (confirm("Ingin memigrasikan seluruh profil, karir, dan portofolio default saat ini ke Firebase?")) {
+                try {
+                    showToast("Sedang mengimpor data awal...", "success");
+
+                    // 1. Profile
+                    await setDoc(doc(db, "settings", "profile"), {
+                        name: "Fazar Riansyah",
+                        bio: "Saya adalah seorang <strong>Pengembang Teknologi Pembelajaran</strong> yang berdedikasi merancang sistem pembelajaran digital yang efektif, mengoptimasi platform LMS, serta menciptakan pengalaman desain UI/UX yang fungsional dan intuitif.",
+                        bioTentang: "Halo! Saya Fazar Riansyah. Saya berfokus pada ranah <strong>Teknologi Pendidikan & Desain Pengalaman Pengguna (UI/UX)</strong>. Melalui kombinasi keahlian di bidang riset pembelajaran, perancangan kurikulum digital, dan desain antarmuka, saya berupaya menghadirkan solusi media pembelajaran yang bermakna, efisien, dan menyenangkan.<br><br>Saat ini, saya mengabdi sebagai <strong>Pengembang Teknologi Pembelajaran Ahli Pertama</strong> di Dinas Pendidikan Provinsi DKI Jakarta, mengelola dan mengembangkan strategi pembelajaran digital berskala kota.",
+                        peran: "Pengembang Teknologi Pembelajaran",
+                        instansi: "Dinas Pendidikan Provinsi DKI Jakarta",
+                        lokasi: "Jakarta, Indonesia"
+                    });
+
+                    // 2. Contacts
+                    await setDoc(doc(db, "settings", "contacts"), {
+                        email: "fazarriansyah@gmail.com",
+                        linkedin: "https://linkedin.com/in/fazarriansyah/",
+                        whatsapp: "628123456789",
+                        telegram: "fazarriansyah"
+                    });
+
+                    // 3. Skills Tags
+                    await setDoc(doc(db, "settings", "skills"), {
+                        tags: ["LMS Management", "Learning Design", "UI Design", "Usability Testing", "Wireframing", "Project Management", "Critical Thinking", "OBS & Zoom Broadcasting"]
+                    });
+
+                    // 4. Pillars (Expertise)
+                    const expCol = collection(db, "expertise");
+                    const currentPillars = await getDocs(expCol);
+                    if (currentPillars.empty) {
+                        await addDoc(expCol, { icon: "🎓", title: "Teknologi Pembelajaran", desc: "Perancangan kurikulum digital, pengembangan modul e-learning, serta pengelolaan dan optimasi Learning Management System (LMS) berskala besar.", sortOrder: 1 });
+                        await addDoc(expCol, { icon: "✨", title: "Desain UI/UX", desc: "Penerjemahan ide produk ke dalam wireframe, pembuatan prototipe interaktif, serta pengujian kegunaan (usability testing) yang berpusat pada pengguna.", sortOrder: 2 });
+                        await addDoc(expCol, { icon: "📊", title: "Operasional Program", desc: "Manajemen operasional pembelajaran ujung-ke-ujung (end-to-end), analisis kebutuhan pelatihan (TNA), serta fasilitasi program pengembangan kompetensi.", sortOrder: 3 });
+                    }
+
+                    // 5. Education
+                    const eduCol = collection(db, "education");
+                    const currentEdu = await getDocs(eduCol);
+                    if (currentEdu.empty) {
+                        await addDoc(eduCol, { time: "2019 - 2023", title: "Sarjana Pendidikan (S.Pd) - Teknologi Pendidikan", school: "Universitas Negeri Malang (IPK: 3.70)", desc: "Fokus studi: Learning Management Systems, Desain Pembelajaran, Seamless Learning, Manajemen Sistem Informasi.", sortOrder: 1 });
+                    }
+
+                    // 6. Certifications
+                    const certCol = collection(db, "certifications");
+                    const currentCert = await getDocs(certCol);
+                    if (currentCert.empty) {
+                        await addDoc(certCol, { time: "Maret 2024", title: "Critical Thinking: Analyze Problem and Make Decision", publisher: "Dale Carnegie® Indonesia", sortOrder: 1 });
+                        await addDoc(certCol, { time: "September 2023", title: "Mengelola Karyawan sebagai Staf Sumber Daya Manusia (HR)", publisher: "Karier.mu", sortOrder: 2 });
+                        await addDoc(certCol, { time: "Juli 2022", title: "Fundamental UI/UX Designer", publisher: "Hacktiv8 Indonesia", sortOrder: 3 });
+                    }
+
+                    // 7. Experiences
+                    const careerCol = collection(db, "experience");
+                    const currentCareer = await getDocs(careerCol);
+                    if (currentCareer.empty) {
+                        await addDoc(careerCol, { time: "Juni 2025 - Sekarang", title: "Pengembang Teknologi Pembelajaran Ahli Pertama", company: "Dinas Pendidikan Provinsi DKI Jakarta (Puslatbangdik Jakpus)", sortOrder: 1 });
+                        await addDoc(careerCol, { time: "Okt 2024 - Mei 2025", title: "Learning Operations", company: "Karier.mu", sortOrder: 2 });
+                        await addDoc(careerCol, { time: "Jan 2024 - Okt 2024", title: "Learning Operations", company: "Rumah Siap Kerja", sortOrder: 3 });
+                        await addDoc(careerCol, { time: "Nov 2023 - Jan 2024", title: "Learning Operations (Intern)", company: "Talenesia", sortOrder: 4 });
+                    }
+
+                    // 8. Projects
+                    const projCol = collection(db, "projects");
+                    const currentProj = await getDocs(projCol);
+                    if (currentProj.empty) {
+                        await addDoc(projCol, { title: "FTI Website", tag: "Web Development", desc: "Pembaruan total situs web fakultas dengan arsitektur modern untuk waktu pemuatan yang sangat cepat.", sortOrder: 1 });
+                        await addDoc(projCol, { title: "Jakarta Berdampak", tag: "UI/UX Design", desc: "Desain antarmuka visualisasi data yang ramah pengguna untuk menyampaikan info publik secara efektif.", sortOrder: 2 });
+                    }
+
+                    showToast("Seluruh data default berhasil diimpor!");
+                    loadDashboardData();
+                } catch (err) {
+                    showToast("Gagal mengimpor data: " + err.message, "error");
+                }
+            }
+        });
+
+        // Load all data from Firestore
         async function loadDashboardData() {
             try {
                 // 1. Profile Data
@@ -454,7 +574,6 @@
             e.preventDefault();
             try {
                 const textVal = document.getElementById('edit-skills-tags').value;
-                // split by comma, trim spaces, filter empty elements
                 const tagsArray = textVal.split(',').map(s => s.trim()).filter(s => s.length > 0);
                 
                 await setDoc(doc(db, "settings", "skills"), {
@@ -483,26 +602,61 @@
                         <span style="font-weight:600;">${data.icon} ${data.title}</span>
                         <span style="font-size:0.8rem; color:var(--text-secondary);">${data.desc}</span>
                     </div>
-                    <button class="admin-action-btn-danger" onclick="deletePillar('${docSnap.id}')">Hapus</button>
+                    <div class="admin-item-action-btns">
+                        <button class="admin-action-btn-edit" onclick="startEditPillar('${docSnap.id}', '${data.icon}', '${data.title.replace(/'/g, "\\'")}', '${data.desc.replace(/'/g, "\\'")}', ${data.sortOrder})">Ubah</button>
+                        <button class="admin-action-btn-danger" onclick="deletePillar('${docSnap.id}')">Hapus</button>
+                    </div>
                 `;
                 list.appendChild(row);
             });
         }
 
+        window.startEditPillar = function(id, icon, title, desc, sortOrder) {
+            editPillarId = id;
+            document.getElementById('add-pillar-icon').value = icon;
+            document.getElementById('add-pillar-title').value = title;
+            document.getElementById('add-pillar-desc').value = desc;
+            document.getElementById('add-pillar-order').value = sortOrder;
+            
+            document.getElementById('pillar-form-title').innerText = "Ubah Pilar Keahlian";
+            document.getElementById('pillar-submit-btn').innerText = "Simpan Perubahan";
+            document.getElementById('pillar-cancel-btn').style.display = 'inline-block';
+            
+            // Scroll to form
+            document.getElementById('pillar-form-title').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        document.getElementById('pillar-cancel-btn').addEventListener('click', () => {
+            editPillarId = null;
+            document.getElementById('pillar-add-form').reset();
+            document.getElementById('pillar-form-title').innerText = "Tambah Pilar Keahlian Beranda";
+            document.getElementById('pillar-submit-btn').innerText = "Tambah Pilar";
+            document.getElementById('pillar-cancel-btn').style.display = 'none';
+        });
+
         document.getElementById('pillar-add-form').addEventListener('submit', async (e) => {
             e.preventDefault();
             try {
-                await addDoc(collection(db, "expertise"), {
+                const data = {
                     icon: document.getElementById('add-pillar-icon').value,
                     title: document.getElementById('add-pillar-title').value,
                     desc: document.getElementById('add-pillar-desc').value,
                     sortOrder: parseInt(document.getElementById('add-pillar-order').value)
-                });
-                document.getElementById('pillar-add-form').reset();
-                showToast("Pilar keahlian berhasil ditambahkan!");
+                };
+
+                if (editPillarId) {
+                    await setDoc(doc(db, "expertise", editPillarId), data);
+                    editPillarId = null;
+                    document.getElementById('pillar-cancel-btn').click();
+                    showToast("Pilar keahlian berhasil diperbarui!");
+                } else {
+                    await addDoc(collection(db, "expertise"), data);
+                    document.getElementById('pillar-add-form').reset();
+                    showToast("Pilar keahlian berhasil ditambahkan!");
+                }
                 loadAdminPillars();
             } catch (err) {
-                showToast("Gagal menambahkan pilar.", "error");
+                showToast("Gagal memproses pilar.", "error");
             }
         });
 
@@ -531,27 +685,62 @@
                         <span style="font-weight:600;">${data.title}</span>
                         <span style="font-size:0.8rem; color:var(--text-secondary);">${data.school} (${data.time})</span>
                     </div>
-                    <button class="admin-action-btn-danger" onclick="deleteEdu('${docSnap.id}')">Hapus</button>
+                    <div class="admin-item-action-btns">
+                        <button class="admin-action-btn-edit" onclick="startEditEdu('${docSnap.id}', '${data.time}', '${data.title.replace(/'/g, "\\'")}', '${data.school.replace(/'/g, "\\'")}', '${(data.desc || '').replace(/'/g, "\\'")}', ${data.sortOrder})">Ubah</button>
+                        <button class="admin-action-btn-danger" onclick="deleteEdu('${docSnap.id}')">Hapus</button>
+                    </div>
                 `;
                 list.appendChild(row);
             });
         }
 
+        window.startEditEdu = function(id, time, title, school, desc, sortOrder) {
+            editEduId = id;
+            document.getElementById('add-edu-time').value = time;
+            document.getElementById('add-edu-title').value = title;
+            document.getElementById('add-edu-school').value = school;
+            document.getElementById('add-edu-desc').value = desc;
+            document.getElementById('add-edu-order').value = sortOrder;
+
+            document.getElementById('edu-form-title').innerText = "Ubah Riwayat Pendidikan";
+            document.getElementById('edu-submit-btn').innerText = "Simpan Perubahan";
+            document.getElementById('edu-cancel-btn').style.display = 'inline-block';
+
+            document.getElementById('edu-form-title').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        document.getElementById('edu-cancel-btn').addEventListener('click', () => {
+            editEduId = null;
+            document.getElementById('edu-add-form').reset();
+            document.getElementById('edu-form-title').innerText = "Kelola Riwayat Pendidikan";
+            document.getElementById('edu-submit-btn').innerText = "Tambah Pendidikan";
+            document.getElementById('edu-cancel-btn').style.display = 'none';
+        });
+
         document.getElementById('edu-add-form').addEventListener('submit', async (e) => {
             e.preventDefault();
             try {
-                await addDoc(collection(db, "education"), {
+                const data = {
                     time: document.getElementById('add-edu-time').value,
                     title: document.getElementById('add-edu-title').value,
                     school: document.getElementById('add-edu-school').value,
                     desc: document.getElementById('add-edu-desc').value,
                     sortOrder: parseInt(document.getElementById('add-edu-order').value)
-                });
-                document.getElementById('edu-add-form').reset();
-                showToast("Riwayat pendidikan ditambahkan!");
+                };
+
+                if (editEduId) {
+                    await setDoc(doc(db, "education", editEduId), data);
+                    editEduId = null;
+                    document.getElementById('edu-cancel-btn').click();
+                    showToast("Pendidikan berhasil diperbarui!");
+                } else {
+                    await addDoc(collection(db, "education"), data);
+                    document.getElementById('edu-add-form').reset();
+                    showToast("Riwayat pendidikan ditambahkan!");
+                }
                 loadAdminEducation();
             } catch (err) {
-                showToast("Gagal menambahkan.", "error");
+                showToast("Gagal memproses riwayat pendidikan.", "error");
             }
         });
 
@@ -580,26 +769,60 @@
                         <span style="font-weight:600;">${data.title}</span>
                         <span style="font-size:0.8rem; color:var(--text-secondary);">${data.publisher} (${data.time})</span>
                     </div>
-                    <button class="admin-action-btn-danger" onclick="deleteCert('${docSnap.id}')">Hapus</button>
+                    <div class="admin-item-action-btns">
+                        <button class="admin-action-btn-edit" onclick="startEditCert('${docSnap.id}', '${data.time}', '${data.title.replace(/'/g, "\\'")}', '${data.publisher.replace(/'/g, "\\'")}', ${data.sortOrder})">Ubah</button>
+                        <button class="admin-action-btn-danger" onclick="deleteCert('${docSnap.id}')">Hapus</button>
+                    </div>
                 `;
                 list.appendChild(row);
             });
         }
 
+        window.startEditCert = function(id, time, title, publisher, sortOrder) {
+            editCertId = id;
+            document.getElementById('add-cert-time').value = time;
+            document.getElementById('add-cert-title').value = title;
+            document.getElementById('add-cert-publisher').value = publisher;
+            document.getElementById('add-cert-order').value = sortOrder;
+
+            document.getElementById('cert-form-title').innerText = "Ubah Sertifikat";
+            document.getElementById('cert-submit-btn').innerText = "Simpan Perubahan";
+            document.getElementById('cert-cancel-btn').style.display = 'inline-block';
+
+            document.getElementById('cert-form-title').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        document.getElementById('cert-cancel-btn').addEventListener('click', () => {
+            editCertId = null;
+            document.getElementById('cert-add-form').reset();
+            document.getElementById('cert-form-title').innerText = "Kelola Sertifikat";
+            document.getElementById('cert-submit-btn').innerText = "Tambah Sertifikat";
+            document.getElementById('cert-cancel-btn').style.display = 'none';
+        });
+
         document.getElementById('cert-add-form').addEventListener('submit', async (e) => {
             e.preventDefault();
             try {
-                await addDoc(collection(db, "certifications"), {
+                const data = {
                     time: document.getElementById('add-cert-time').value,
                     title: document.getElementById('add-cert-title').value,
                     publisher: document.getElementById('add-cert-publisher').value,
                     sortOrder: parseInt(document.getElementById('add-cert-order').value)
-                });
-                document.getElementById('cert-add-form').reset();
-                showToast("Sertifikasi ditambahkan!");
+                };
+
+                if (editCertId) {
+                    await setDoc(doc(db, "certifications", editCertId), data);
+                    editCertId = null;
+                    document.getElementById('cert-cancel-btn').click();
+                    showToast("Sertifikat berhasil diperbarui!");
+                } else {
+                    await addDoc(collection(db, "certifications"), data);
+                    document.getElementById('cert-add-form').reset();
+                    showToast("Sertifikasi ditambahkan!");
+                }
                 loadAdminCertifications();
             } catch (err) {
-                showToast("Gagal menambahkan.", "error");
+                showToast("Gagal memproses sertifikasi.", "error");
             }
         });
 
@@ -628,26 +851,60 @@
                         <span style="font-weight:600; font-size:0.95rem;">${data.title}</span>
                         <span style="font-size:0.85rem; color:var(--text-secondary);">${data.company} (${data.time})</span>
                     </div>
-                    <button class="admin-action-btn-danger" onclick="deleteExp('${docSnap.id}')">Hapus</button>
+                    <div class="admin-item-action-btns">
+                        <button class="admin-action-btn-edit" onclick="startEditExp('${docSnap.id}', '${data.time}', '${data.title.replace(/'/g, "\\'")}', '${data.company.replace(/'/g, "\\'")}', ${data.sortOrder})">Ubah</button>
+                        <button class="admin-action-btn-danger" onclick="deleteExp('${docSnap.id}')">Hapus</button>
+                    </div>
                 `;
                 expList.appendChild(row);
             });
         }
 
+        window.startEditExp = function(id, time, title, company, sortOrder) {
+            editExpId = id;
+            document.getElementById('add-exp-time').value = time;
+            document.getElementById('add-exp-title').value = title;
+            document.getElementById('add-exp-company').value = company;
+            document.getElementById('add-exp-order').value = sortOrder;
+
+            document.getElementById('exp-form-title').innerText = "Ubah Riwayat Kerja";
+            document.getElementById('exp-submit-btn').innerText = "Simpan Perubahan";
+            document.getElementById('exp-cancel-btn').style.display = 'inline-block';
+
+            document.getElementById('exp-form-title').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        document.getElementById('exp-cancel-btn').addEventListener('click', () => {
+            editExpId = null;
+            document.getElementById('exp-add-form').reset();
+            document.getElementById('exp-form-title').innerText = "Tambah Pengalaman Baru";
+            document.getElementById('exp-submit-btn').innerText = "Tambah Pengalaman";
+            document.getElementById('exp-cancel-btn').style.display = 'none';
+        });
+
         document.getElementById('exp-add-form').addEventListener('submit', async (e) => {
             e.preventDefault();
             try {
-                await addDoc(collection(db, "experience"), {
+                const data = {
                     time: document.getElementById('add-exp-time').value,
                     title: document.getElementById('add-exp-title').value,
                     company: document.getElementById('add-exp-company').value,
                     sortOrder: parseInt(document.getElementById('add-exp-order').value)
-                });
-                document.getElementById('exp-add-form').reset();
-                showToast("Pengalaman kerja berhasil ditambahkan!");
+                };
+
+                if (editExpId) {
+                    await setDoc(doc(db, "experience", editExpId), data);
+                    editExpId = null;
+                    document.getElementById('exp-cancel-btn').click();
+                    showToast("Riwayat kerja berhasil diperbarui!");
+                } else {
+                    await addDoc(collection(db, "experience"), data);
+                    document.getElementById('exp-add-form').reset();
+                    showToast("Pengalaman kerja berhasil ditambahkan!");
+                }
                 loadAdminExperience();
             } catch (err) {
-                showToast("Gagal menambah pengalaman.", "error");
+                showToast("Gagal memproses riwayat kerja.", "error");
             }
         });
 
@@ -676,26 +933,60 @@
                         <span style="font-weight:600; font-size:0.95rem;">${data.title}</span>
                         <span style="font-size:0.85rem; color:var(--text-secondary);">${data.tag}</span>
                     </div>
-                    <button class="admin-action-btn-danger" onclick="deleteProj('${docSnap.id}')">Hapus</button>
+                    <div class="admin-item-action-btns">
+                        <button class="admin-action-btn-edit" onclick="startEditProj('${docSnap.id}', '${data.title.replace(/'/g, "\\'")}', '${data.tag.replace(/'/g, "\\'")}', '${data.desc.replace(/'/g, "\\'")}', ${data.sortOrder})">Ubah</button>
+                        <button class="admin-action-btn-danger" onclick="deleteProj('${docSnap.id}')">Hapus</button>
+                    </div>
                 `;
                 projList.appendChild(row);
             });
         }
 
+        window.startEditProj = function(id, title, tag, desc, sortOrder) {
+            editProjId = id;
+            document.getElementById('add-proj-title').value = title;
+            document.getElementById('add-proj-tag').value = tag;
+            document.getElementById('add-proj-desc').value = desc;
+            document.getElementById('add-proj-order').value = sortOrder;
+
+            document.getElementById('proj-form-title').innerText = "Ubah Proyek";
+            document.getElementById('proj-submit-btn').innerText = "Simpan Perubahan";
+            document.getElementById('proj-cancel-btn').style.display = 'inline-block';
+
+            document.getElementById('proj-form-title').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        document.getElementById('proj-cancel-btn').addEventListener('click', () => {
+            editProjId = null;
+            document.getElementById('proj-add-form').reset();
+            document.getElementById('proj-form-title').innerText = "Tambah Proyek Baru";
+            document.getElementById('proj-submit-btn').innerText = "Tambah Proyek";
+            document.getElementById('proj-cancel-btn').style.display = 'none';
+        });
+
         document.getElementById('proj-add-form').addEventListener('submit', async (e) => {
             e.preventDefault();
             try {
-                await addDoc(collection(db, "projects"), {
+                const data = {
                     title: document.getElementById('add-proj-title').value,
                     tag: document.getElementById('add-proj-tag').value,
                     desc: document.getElementById('add-proj-desc').value,
                     sortOrder: parseInt(document.getElementById('add-proj-order').value)
-                });
-                document.getElementById('proj-add-form').reset();
-                showToast("Proyek berhasil ditambahkan!");
+                };
+
+                if (editProjId) {
+                    await setDoc(doc(db, "projects", editProjId), data);
+                    editProjId = null;
+                    document.getElementById('proj-cancel-btn').click();
+                    showToast("Proyek berhasil diperbarui!");
+                } else {
+                    await addDoc(collection(db, "projects"), data);
+                    document.getElementById('proj-add-form').reset();
+                    showToast("Proyek berhasil ditambahkan!");
+                }
                 loadAdminProjects();
             } catch (err) {
-                showToast("Gagal menambah proyek.", "error");
+                showToast("Gagal memproses proyek.", "error");
             }
         });
 

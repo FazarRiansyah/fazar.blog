@@ -213,7 +213,7 @@
                         </div>
                         <div class="admin-form-ctrl">
                             <label>Short Description</label>
-                            <textarea id="add-pillar-desc" class="admin-textarea" required></textarea>
+                            <div id="add-pillar-desc" style="height: 100px; background-color: #ffffff; border-radius: 8px;"></div>
                         </div>
                         <div style="display: flex; gap: 8px;">
                             <button type="submit" id="pillar-submit-btn" class="admin-submit-btn">Add Pillar</button>
@@ -249,7 +249,7 @@
                         </div>
                         <div class="admin-form-ctrl">
                             <label>Additional Details</label>
-                            <textarea id="add-edu-desc" class="admin-textarea"></textarea>
+                            <div id="add-edu-desc" style="height: 100px; background-color: #ffffff; border-radius: 8px;"></div>
                         </div>
                         <div style="display: flex; gap: 8px;">
                             <button type="submit" id="edu-submit-btn" class="admin-submit-btn">Add Education</button>
@@ -308,7 +308,7 @@
                     </div>
                     <div class="admin-form-ctrl">
                         <label>Job Description / Responsibilities</label>
-                        <textarea id="add-exp-desc" class="admin-textarea" placeholder="List your key contributions..."></textarea>
+                        <div id="add-exp-desc" style="height: 120px; background-color: #ffffff; border-radius: 8px;"></div>
                     </div>
                     <div style="display: flex; gap: 8px;">
                         <button type="submit" id="exp-submit-btn" class="admin-submit-btn">Add Experience</button>
@@ -339,7 +339,7 @@
                     </div>
                     <div class="admin-form-ctrl">
                         <label>Short Description</label>
-                        <textarea id="add-proj-desc" class="admin-textarea" required></textarea>
+                        <div id="add-proj-desc" style="height: 100px; background-color: #ffffff; border-radius: 8px;"></div>
                     </div>
                     <div style="display: flex; gap: 8px;">
                         <button type="submit" id="proj-submit-btn" class="admin-submit-btn">Add Project</button>
@@ -397,6 +397,34 @@
             placeholder: 'Write your about page biography...',
             modules: {
                 toolbar: [['bold', 'italic', 'underline'], ['link'], [{ 'list': 'ordered'}, { 'list': 'bullet' }]]
+            }
+        });
+        const quillPillarDesc = new Quill('#add-pillar-desc', {
+            theme: 'snow',
+            placeholder: 'Enter short description...',
+            modules: {
+                toolbar: [['bold', 'italic', 'underline'], ['link']]
+            }
+        });
+        const quillEduDesc = new Quill('#add-edu-desc', {
+            theme: 'snow',
+            placeholder: 'Enter study details...',
+            modules: {
+                toolbar: [['bold', 'italic', 'underline'], ['link'], [{ 'list': 'bullet' }]]
+            }
+        });
+        const quillExpDesc = new Quill('#add-exp-desc', {
+            theme: 'snow',
+            placeholder: 'List your key contributions and responsibilities...',
+            modules: {
+                toolbar: [['bold', 'italic', 'underline'], ['link'], [{ 'list': 'bullet' }]]
+            }
+        });
+        const quillProjDesc = new Quill('#add-proj-desc', {
+            theme: 'snow',
+            placeholder: 'Write project summary...',
+            modules: {
+                toolbar: [['bold', 'italic', 'underline'], ['link']]
             }
         });
 
@@ -721,7 +749,7 @@
             editPillarId = id;
             document.getElementById('add-pillar-icon').value = data.icon || '';
             document.getElementById('add-pillar-title').value = data.title || '';
-            document.getElementById('add-pillar-desc').value = data.desc || '';
+            quillPillarDesc.root.innerHTML = data.desc || '';
             
             document.getElementById('pillar-form-title').innerText = "Edit Pillar";
             document.getElementById('pillar-submit-btn').innerText = "Save Changes";
@@ -733,6 +761,7 @@
         document.getElementById('pillar-cancel-btn').addEventListener('click', () => {
             editPillarId = null;
             document.getElementById('pillar-add-form').reset();
+            quillPillarDesc.root.innerHTML = '';
             document.getElementById('pillar-form-title').innerText = "Add Homepage Pillar";
             document.getElementById('pillar-submit-btn').innerText = "Add Pillar";
             document.getElementById('pillar-cancel-btn').style.display = 'none';
@@ -750,7 +779,7 @@
                 const data = {
                     icon: document.getElementById('add-pillar-icon').value,
                     title: document.getElementById('add-pillar-title').value,
-                    desc: document.getElementById('add-pillar-desc').value
+                    desc: quillPillarDesc.root.innerHTML
                 };
 
                 if (editPillarId) {
@@ -762,6 +791,7 @@
                     data.sortOrder = nextOrder;
                     await addDoc(collection(db, "expertise"), data);
                     document.getElementById('pillar-add-form').reset();
+                    quillPillarDesc.root.innerHTML = '';
                     showToast("Pillar added successfully!");
                 }
                 loadAdminPillars();
@@ -823,7 +853,7 @@
             document.getElementById('add-edu-time').value = data.time || '';
             document.getElementById('add-edu-title').value = data.title || '';
             document.getElementById('add-edu-school').value = data.school || '';
-            document.getElementById('add-edu-desc').value = data.desc || '';
+            quillEduDesc.root.innerHTML = data.desc || '';
 
             document.getElementById('edu-form-title').innerText = "Edit Education";
             document.getElementById('edu-submit-btn').innerText = "Save Changes";
@@ -835,6 +865,7 @@
         document.getElementById('edu-cancel-btn').addEventListener('click', () => {
             editEduId = null;
             document.getElementById('edu-add-form').reset();
+            quillEduDesc.root.innerHTML = '';
             document.getElementById('edu-form-title').innerText = "Manage Education";
             document.getElementById('edu-submit-btn').innerText = "Add Education";
             document.getElementById('edu-cancel-btn').style.display = 'none';
@@ -853,7 +884,7 @@
                     time: document.getElementById('add-edu-time').value,
                     title: document.getElementById('add-edu-title').value,
                     school: document.getElementById('add-edu-school').value,
-                    desc: document.getElementById('add-edu-desc').value
+                    desc: quillEduDesc.root.innerHTML
                 };
 
                 if (editEduId) {
@@ -865,6 +896,7 @@
                     data.sortOrder = nextOrder;
                     await addDoc(collection(db, "education"), data);
                     document.getElementById('edu-add-form').reset();
+                    quillEduDesc.root.innerHTML = '';
                     showToast("Education added successfully!");
                 }
                 loadAdminEducation();
@@ -1028,7 +1060,7 @@
             document.getElementById('add-exp-time').value = data.time || '';
             document.getElementById('add-exp-title').value = data.title || '';
             document.getElementById('add-exp-company').value = data.company || '';
-            document.getElementById('add-exp-desc').value = data.desc || '';
+            quillExpDesc.root.innerHTML = data.desc || '';
 
             document.getElementById('exp-form-title').innerText = "Edit Career Record";
             document.getElementById('exp-submit-btn').innerText = "Save Changes";
@@ -1040,6 +1072,7 @@
         document.getElementById('exp-cancel-btn').addEventListener('click', () => {
             editExpId = null;
             document.getElementById('exp-add-form').reset();
+            quillExpDesc.root.innerHTML = '';
             document.getElementById('exp-form-title').innerText = "Add Professional Experience";
             document.getElementById('exp-submit-btn').innerText = "Add Experience";
             document.getElementById('exp-cancel-btn').style.display = 'none';
@@ -1058,7 +1091,7 @@
                     time: document.getElementById('add-exp-time').value,
                     title: document.getElementById('add-exp-title').value,
                     company: document.getElementById('add-exp-company').value,
-                    desc: document.getElementById('add-exp-desc').value
+                    desc: quillExpDesc.root.innerHTML
                 };
 
                 if (editExpId) {
@@ -1070,6 +1103,7 @@
                     data.sortOrder = nextOrder;
                     await addDoc(collection(db, "experience"), data);
                     document.getElementById('exp-add-form').reset();
+                    quillExpDesc.root.innerHTML = '';
                     showToast("Career record added successfully!");
                 }
                 loadAdminExperience();
@@ -1130,7 +1164,7 @@
             editProjId = id;
             document.getElementById('add-proj-title').value = data.title || '';
             document.getElementById('add-proj-tag').value = data.tag || '';
-            document.getElementById('add-proj-desc').value = data.desc || '';
+            quillProjDesc.root.innerHTML = data.desc || '';
 
             document.getElementById('proj-form-title').innerText = "Edit Project";
             document.getElementById('proj-submit-btn').innerText = "Save Changes";
@@ -1142,6 +1176,7 @@
         document.getElementById('proj-cancel-btn').addEventListener('click', () => {
             editProjId = null;
             document.getElementById('proj-add-form').reset();
+            quillProjDesc.root.innerHTML = '';
             document.getElementById('proj-form-title').innerText = "Add Project";
             document.getElementById('proj-submit-btn').innerText = "Add Project";
             document.getElementById('proj-cancel-btn').style.display = 'none';
@@ -1159,7 +1194,7 @@
                 const data = {
                     title: document.getElementById('add-proj-title').value,
                     tag: document.getElementById('add-proj-tag').value,
-                    desc: document.getElementById('add-proj-desc').value
+                    desc: quillProjDesc.root.innerHTML
                 };
 
                 if (editProjId) {
@@ -1171,6 +1206,7 @@
                     data.sortOrder = nextOrder;
                     await addDoc(collection(db, "projects"), data);
                     document.getElementById('proj-add-form').reset();
+                    quillProjDesc.root.innerHTML = '';
                     showToast("Project added successfully!");
                 }
                 loadAdminProjects();

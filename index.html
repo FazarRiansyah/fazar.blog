@@ -3,79 +3,123 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>fazar.site</title>
-    <meta name="description" content="Website pribadi fazar.site sedang dalam pengembangan.">
-    <!-- Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
-    <link rel="icon" href="data:,">
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            background-color: #ffffff;
-            color: #111111;
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-            -webkit-font-smoothing: antialiased;
-        }
-
-        .container {
-            text-align: center;
-            max-width: 400px;
-            width: 100%;
-        }
-
-        .logo {
-            font-size: 1.8rem;
-            font-weight: 600;
-            letter-spacing: -0.03em;
-            margin-bottom: 8px;
-            color: #000000;
-        }
-
-        .status {
-            font-size: 0.95rem;
-            font-weight: 400;
-            color: #666666;
-            margin-bottom: 24px;
-        }
-
-        .divider {
-            width: 40px;
-            height: 1px;
-            background-color: #e5e5e5;
-            margin: 0 auto 24px auto;
-        }
-
-        .contact {
-            font-size: 0.85rem;
-            color: #888888;
-            text-decoration: none;
-            font-weight: 500;
-            transition: color 0.2s ease;
-        }
-
-        .contact:hover {
-            color: #111111;
-        }
-    </style>
+    <title>Fazar Riansyah | Beranda</title>
+    <meta name="description" content="Portfolio minimalis Fazar Riansyah - Pengembang Web & Designer">
+    <link rel="icon" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=">
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <main class="container">
-        <h1 class="logo">fazar.site</h1>
-        <p class="status">Website ini sedang dalam pengembangan</p>
-        <div class="divider"></div>
-        <a href="mailto:contact@fazar.site" class="contact">contact@fazar.site</a>
-    </main>
+
+    <!-- Header Navigation -->
+    <nav class="navbar">
+        <div class="container nav-container">
+            <a href="index.html" class="nav-brand">fazar<span>.site</span></a>
+            <ul class="nav-links">
+                <li><a href="index.html" class="nav-link active">/beranda</a></li>
+                <li><a href="tentang.html" class="nav-link">/tentang-saya</a></li>
+                <li><a href="portofolio.html" class="nav-link">/portofolio</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container hero-grid">
+            <div class="hero-info">
+                <div class="hero-badge">Status: Available for project</div>
+                <h1 class="hero-title">Membangun website minimalis & performa tinggi.</h1>
+                <p class="hero-desc">Halo, saya Fazar Riansyah. Pengembang web yang berfokus pada fungsionalitas, kecepatan, dan estetika yang bersih.</p>
+                <div class="hero-actions">
+                    <a href="portofolio.html" class="btn btn-primary">Lihat Karya</a>
+                    <a href="mailto:contact@fazar.site" class="btn btn-secondary">Kontak</a>
+                </div>
+            </div>
+            <div class="hero-visual">
+                <div class="terminal-card">
+                    <div class="terminal-header">
+                        <div class="dot dot-red"></div>
+                        <div class="dot dot-yellow"></div>
+                        <div class="dot dot-green"></div>
+                    </div>
+                    <div class="terminal-body">
+                        <div class="terminal-line"><span>$</span> cat info.json</div>
+                        <div class="terminal-line">{</div>
+                        <div class="terminal-line">&nbsp;&nbsp;<span class="accent">"name"</span>: "Fazar Riansyah",</div>
+                        <div class="terminal-line">&nbsp;&nbsp;<span class="accent">"role"</span>: "Web Developer",</div>
+                        <div class="terminal-line">&nbsp;&nbsp;<span class="accent">"location"</span>: "Jakarta, ID",</div>
+                        <div class="terminal-line">&nbsp;&nbsp;<span class="accent">"stack"</span>: ["HTML/CSS", "JavaScript", "React"],</div>
+                        <div class="terminal-line">&nbsp;&nbsp;<span class="accent">"focus"</span>: "Clean UI & Fast Loadtime"</div>
+                        <div class="terminal-line">}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Core Pillars / Keahlian Utama -->
+    <section class="pillars">
+        <div class="container">
+            <span class="section-label">Pilar Kerja / Keahlian</span>
+            <div class="pillars-grid">
+                <div class="pillar-card">
+                    <div class="pillar-icon">✦</div>
+                    <h3 class="pillar-title">Desain Bersih</h3>
+                    <p class="pillar-desc">Tata letak minimalis dan fungsional. Menghindari elemen yang tidak perlu untuk kenyamanan pembaca.</p>
+                </div>
+                <div class="pillar-card">
+                    <div class="pillar-icon">⚡</div>
+                    <h3 class="pillar-title">Optimasi Kecepatan</h3>
+                    <p class="pillar-desc">Struktur kode efisien yang menjamin waktu pemuatan super cepat dan performa maksimal.</p>
+                </div>
+                <div class="pillar-card">
+                    <div class="pillar-icon">🛠️</div>
+                    <h3 class="pillar-title">Fungsional</h3>
+                    <p class="pillar-desc">Pengembangan web modern yang memprioritaskan kegunaan dan interaksi pengguna yang intuitif.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Featured Works / Portofolio Pilihan -->
+    <section class="projects">
+        <div class="container">
+            <span class="section-label">Portofolio Pilihan</span>
+            <div class="projects-grid">
+                <a href="portofolio.html" class="project-card">
+                    <div class="project-img">
+                        <span class="project-img-placeholder">[ Desain Website Sekolah ]</span>
+                    </div>
+                    <div class="project-info">
+                        <span class="project-tag">Web Development</span>
+                        <h3 class="project-title">FTI Website</h3>
+                        <p class="project-desc">Platform edukasi minimalis dengan performa tinggi.</p>
+                    </div>
+                </a>
+                <a href="portofolio.html" class="project-card">
+                    <div class="project-img">
+                        <span class="project-img-placeholder">[ Landing Page Dashboard ]</span>
+                    </div>
+                    <div class="project-info">
+                        <span class="project-tag">UI/UX Design</span>
+                        <h3 class="project-title">Jakarta Berdampak</h3>
+                        <p class="project-desc">Visualisasi data dan dashboard informasi publik yang interaktif.</p>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container footer-content">
+            <p>&copy; 2026 Fazar Riansyah. All rights reserved.</p>
+            <div class="footer-links">
+                <a href="https://github.com" target="_blank" class="footer-link">GitHub</a>
+                <a href="https://linkedin.com" target="_blank" class="footer-link">LinkedIn</a>
+                <a href="mailto:contact@fazar.site" class="footer-link">Email</a>
+            </div>
+        </div>
+    </footer>
+
 </body>
 </html>

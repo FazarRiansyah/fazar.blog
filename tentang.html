@@ -33,16 +33,16 @@
     <!-- Page Content -->
     <main class="page-content">
         <div class="container about-grid">
-            <!-- Left Column: Biography & Education -->
+             <!-- Left Column: Biography & Education -->
             <div class="about-text">
-                <section style="margin-bottom: 40px;">
+                <section style="margin-bottom: 40px;" id="bio-tentang-container">
                     <p style="margin-bottom: 20px;">Halo! Saya Fazar Riansyah. Saya berfokus pada ranah <strong>Teknologi Pendidikan & Desain Pengalaman Pengguna (UI/UX)</strong>. Melalui kombinasi keahlian di bidang riset pembelajaran, perancangan kurikulum digital, dan desain antarmuka, saya berupaya menghadirkan solusi media pembelajaran yang bermakna, efisien, dan menyenangkan.</p>
                     <p>Saat ini, saya mengabdi sebagai <strong>Pengembang Teknologi Pembelajaran Ahli Pertama</strong> di Dinas Pendidikan Provinsi DKI Jakarta, mengelola dan mengembangkan strategi pembelajaran digital berskala kota.</p>
                 </section>
 
                 <section style="margin-bottom: 40px;">
                     <h3 class="detail-section-title">Pendidikan</h3>
-                    <div class="timeline">
+                    <div class="timeline" id="education-list">
                         <div class="timeline-item">
                             <p class="timeline-time">2019 - 2023</p>
                             <h4 class="timeline-title">Sarjana Pendidikan (S.Pd) - Teknologi Pendidikan</h4>
@@ -56,7 +56,7 @@
 
                 <section style="margin-bottom: 40px;">
                     <h3 class="detail-section-title">Sertifikasi</h3>
-                    <ul style="list-style: none; display: flex; flex-direction: column; gap: 16px;">
+                    <ul id="certifications-list" style="list-style: none; display: flex; flex-direction: column; gap: 16px;">
                         <li style="border-bottom: 1px solid var(--border-color); padding-bottom: 12px;">
                             <span style="font-family: var(--font-mono); font-size: 0.75rem; color: var(--text-muted);">Maret 2024</span>
                             <h4 style="font-size: 0.95rem; font-weight: 600;">Critical Thinking: Analyze Problem and Make Decision</h4>
@@ -109,7 +109,7 @@
                 <!-- Skills & Tags -->
                 <div>
                     <h3 class="detail-section-title">Keahlian Utama</h3>
-                    <div class="skills-tags">
+                    <div class="skills-tags" id="skills-tags-container">
                         <span class="tag">LMS Management</span>
                         <span class="tag">Learning Design</span>
                         <span class="tag">UI Design</span>
@@ -166,6 +166,68 @@
                     if (data.linkedin) {
                         document.querySelectorAll('.ln-url').forEach(el => el.href = data.linkedin);
                     }
+                }
+
+                // Load Biography Halaman Tentang Saya
+                const profileDoc = await getDoc(doc(db, "settings", "profile"));
+                if (profileDoc.exists()) {
+                    const data = profileDoc.data();
+                    if (data.bioTentang) {
+                        document.getElementById('bio-tentang-container').innerHTML = data.bioTentang;
+                    }
+                }
+
+                // Load Education Timeline
+                const eduQuery = query(collection(db, "education"), orderBy("sortOrder", "asc"));
+                const eduSnap = await getDocs(eduQuery);
+                if (!eduSnap.empty) {
+                    const eduContainer = document.getElementById('education-list');
+                    eduContainer.innerHTML = '';
+                    eduSnap.forEach(docSnap => {
+                        const data = docSnap.data();
+                        const item = document.createElement('div');
+                        item.className = 'timeline-item';
+                        item.innerHTML = `
+                            <p class="timeline-time">${data.time || ''}</p>
+                            <h4 class="timeline-title">${data.title || ''}</h4>
+                            <p class="timeline-company">${data.school || ''}</p>
+                            ${data.desc ? `<p style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 4px;">${data.desc}</p>` : ''}
+                        `;
+                        eduContainer.appendChild(item);
+                    });
+                }
+
+                // Load Certifications List
+                const certQuery = query(collection(db, "certifications"), orderBy("sortOrder", "asc"));
+                const certSnap = await getDocs(certQuery);
+                if (!certSnap.empty) {
+                    const certContainer = document.getElementById('certifications-list');
+                    certContainer.innerHTML = '';
+                    certSnap.forEach(docSnap => {
+                        const data = docSnap.data();
+                        const item = document.createElement('li');
+                        item.style = 'border-bottom: 1px solid var(--border-color); padding-bottom: 12px;';
+                        item.innerHTML = `
+                            <span style="font-family: var(--font-mono); font-size: 0.75rem; color: var(--text-muted);">${data.time || ''}</span>
+                            <h4 style="font-size: 0.95rem; font-weight: 600;">${data.title || ''}</h4>
+                            <p style="font-size: 0.85rem; color: var(--text-secondary);">${data.publisher || ''}</p>
+                        `;
+                        certContainer.appendChild(item);
+                    });
+                }
+
+                // Load Skills Tags
+                const skillsSnap = await getDoc(doc(db, "settings", "skills"));
+                if (skillsSnap.exists()) {
+                    const tags = skillsSnap.data().tags || [];
+                    const tagsContainer = document.getElementById('skills-tags-container');
+                    tagsContainer.innerHTML = '';
+                    tags.forEach(tag => {
+                        const span = document.createElement('span');
+                        span.className = 'tag';
+                        span.innerText = tag;
+                        tagsContainer.appendChild(span);
+                    });
                 }
 
                 // Load Full Career Timeline

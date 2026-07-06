@@ -61,7 +61,7 @@
     <section class="pillars" style="background-color: var(--bg-alt);">
         <div class="container">
             <span class="section-label" style="text-align: center; display: block; margin-bottom: 48px;">Fokus & Keahlian</span>
-            <div class="pillars-grid">
+            <div class="pillars-grid" id="pillars-container">
                 <div class="pillar-card" style="background: #ffffff;">
                     <div class="pillar-icon">🎓</div>
                     <h3 class="pillar-title">Teknologi Pembelajaran</h3>
@@ -235,6 +235,26 @@
                             <p class="timeline-company">${data.company || ''}</p>
                         `;
                         container.appendChild(item);
+                    });
+                }
+
+                // Expertise Pillars
+                const expertQuery = query(collection(db, "expertise"), orderBy("sortOrder", "asc"));
+                const expertSnap = await getDocs(expertQuery);
+                if (!expertSnap.empty) {
+                    const expertContainer = document.getElementById('pillars-container');
+                    expertContainer.innerHTML = '';
+                    expertSnap.forEach(doc => {
+                        const data = doc.data();
+                        const item = document.createElement('div');
+                        item.className = 'pillar-card';
+                        item.style.background = '#ffffff';
+                        item.innerHTML = `
+                            <div class="pillar-icon">${data.icon || '✦'}</div>
+                            <h3 class="pillar-title">${data.title || ''}</h3>
+                            <p class="pillar-desc">${data.desc || ''}</p>
+                        `;
+                        expertContainer.appendChild(item);
                     });
                 }
             } catch (err) {

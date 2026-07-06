@@ -20,6 +20,16 @@
             flex-direction: column;
             gap: 20px;
         }
+        .admin-flex-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 32px;
+        }
+        @media (max-width: 768px) {
+            .admin-flex-row {
+                grid-template-columns: 1fr;
+            }
+        }
     </style>
 </head>
 <body>
@@ -50,7 +60,7 @@
     </div>
 
     <!-- Admin Dashboard Container -->
-    <div id="dashboard-section" class="admin-container" style="display: none;">
+    <div id="dashboard-section" class="admin-container" style="display: none; max-width: 960px;">
         <div class="admin-header-row">
             <div>
                 <h1 class="admin-title-main">Dashboard Editor</h1>
@@ -63,35 +73,41 @@
         <div class="admin-alert-toast" id="alert-toast" style="margin-bottom: 24px;"></div>
 
         <!-- Tabs Navigation -->
-        <div class="admin-tabs-nav">
-            <button class="admin-tab-trigger active" onclick="switchTab('tab-profile')">1. Profil & Kontak</button>
-            <button class="admin-tab-trigger" onclick="switchTab('tab-experience')">2. Pengalaman Kerja</button>
-            <button class="admin-tab-trigger" onclick="switchTab('tab-projects')">3. Portofolio</button>
+        <div class="admin-tabs-nav" style="flex-wrap: wrap;">
+            <button class="admin-tab-trigger active" onclick="switchTab('tab-profile')">1. Profil & Bio</button>
+            <button class="admin-tab-trigger" onclick="switchTab('tab-expertise')">2. Keahlian & Tag</button>
+            <button class="admin-tab-trigger" onclick="switchTab('tab-edu-cert')">3. Edukasi & Sertifikat</button>
+            <button class="admin-tab-trigger" onclick="switchTab('tab-experience')">4. Karir</button>
+            <button class="admin-tab-trigger" onclick="switchTab('tab-projects')">5. Portofolio</button>
         </div>
 
         <!-- Tab 1: Profile & Contacts -->
         <div id="tab-profile" class="admin-tab-content active">
             <div class="admin-card-box">
-                <h3 style="font-family: var(--font-heading); font-size: 1.15rem; font-weight: 700; margin-bottom: 8px;">Ubah Informasi Diri</h3>
+                <h3 style="font-family: var(--font-heading); font-size: 1.15rem; font-weight: 700; margin-bottom: 8px;">Ubah Informasi Diri & Kontak</h3>
                 <form id="profile-form" style="display: flex; flex-direction: column; gap: 20px;">
                     <div class="admin-form-ctrl">
                         <label>Nama Lengkap</label>
                         <input type="text" id="edit-name" class="admin-input-txt" required>
                     </div>
                     <div class="admin-form-ctrl">
-                        <label>Biografi (HTML didukung)</label>
+                        <label>Biografi Halaman Utama (HTML didukung)</label>
                         <textarea id="edit-bio" class="admin-textarea" required></textarea>
                     </div>
                     <div class="admin-form-ctrl">
-                        <label>Posisi / Pekerjaan</label>
+                        <label>Biografi Halaman Tentang Saya (HTML didukung)</label>
+                        <textarea id="edit-bio-tentang" class="admin-textarea" required></textarea>
+                    </div>
+                    <div class="admin-form-ctrl">
+                        <label>Posisi / Pekerjaan Utama</label>
                         <input type="text" id="edit-peran" class="admin-input-txt" required>
                     </div>
                     <div class="admin-form-ctrl">
-                        <label>Instansi</label>
+                        <label>Instansi Kerja</label>
                         <input type="text" id="edit-instansi" class="admin-input-txt" required>
                     </div>
                     <div class="admin-form-ctrl">
-                        <label>Lokasi</label>
+                        <label>Lokasi Saat Ini</label>
                         <input type="text" id="edit-lokasi" class="admin-input-txt" required>
                     </div>
 
@@ -118,7 +134,111 @@
             </div>
         </div>
 
-        <!-- Tab 2: Experience Manager -->
+        <!-- Tab 2: Expertise & Skills Tags -->
+        <div id="tab-expertise" class="admin-tab-content">
+            <div class="admin-flex-row">
+                <!-- Left Column: Skills Tags -->
+                <div class="admin-card-box">
+                    <h3 style="font-family: var(--font-heading); font-size: 1.15rem; font-weight: 700;">Tag Keahlian</h3>
+                    <p style="font-size: 0.8rem; color: var(--text-muted);">Masukkan keahlian dipisahkan dengan koma (contoh: HTML, CSS, React, UI/UX)</p>
+                    <form id="skills-tags-form" style="display: flex; flex-direction: column; gap: 16px;">
+                        <div class="admin-form-ctrl">
+                            <label>Daftar Keahlian (Koma terpisah)</label>
+                            <input type="text" id="edit-skills-tags" class="admin-input-txt" placeholder="HTML, CSS, JavaScript, dll.">
+                        </div>
+                        <button type="submit" class="admin-submit-btn">Simpan Tag</button>
+                    </form>
+                </div>
+
+                <!-- Right Column: Home Pillars CRUD -->
+                <div class="admin-card-box">
+                    <h3 style="font-family: var(--font-heading); font-size: 1.15rem; font-weight: 700;">Tambah Pilar Keahlian Beranda</h3>
+                    <form id="pillar-add-form" style="display: flex; flex-direction: column; gap: 16px;">
+                        <div class="admin-form-ctrl">
+                            <label>Ikon / Emoji (Contoh: 🎓, ✨, ⚡)</label>
+                            <input type="text" id="add-pillar-icon" class="admin-input-txt" required>
+                        </div>
+                        <div class="admin-form-ctrl">
+                            <label>Nama Keahlian</label>
+                            <input type="text" id="add-pillar-title" class="admin-input-txt" required>
+                        </div>
+                        <div class="admin-form-ctrl">
+                            <label>Deskripsi Pendek</label>
+                            <textarea id="add-pillar-desc" class="admin-textarea" required></textarea>
+                        </div>
+                        <div class="admin-form-ctrl">
+                            <label>No Urut</label>
+                            <input type="number" id="add-pillar-order" class="admin-input-txt" required value="1">
+                        </div>
+                        <button type="submit" class="admin-submit-btn">Tambah Pilar</button>
+                    </form>
+
+                    <h4 style="font-family: var(--font-heading); font-size: 1rem; font-weight: 700; margin-top: 16px;">Daftar Pilar Beranda</h4>
+                    <div id="pillar-list-admin" style="display: flex; flex-direction: column;"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tab 3: Education & Certifications -->
+        <div id="tab-edu-cert" class="admin-tab-content">
+            <div class="admin-flex-row">
+                <!-- Left: Education CRUD -->
+                <div class="admin-card-box">
+                    <h3 style="font-family: var(--font-heading); font-size: 1.15rem; font-weight: 700;">Kelola Riwayat Pendidikan</h3>
+                    <form id="edu-add-form" style="display: flex; flex-direction: column; gap: 16px; margin-bottom: 24px;">
+                        <div class="admin-form-ctrl">
+                            <label>Tahun (Contoh: 2019 - 2023)</label>
+                            <input type="text" id="add-edu-time" class="admin-input-txt" required>
+                        </div>
+                        <div class="admin-form-ctrl">
+                            <label>Gelar / Jurusan</label>
+                            <input type="text" id="add-edu-title" class="admin-input-txt" required>
+                        </div>
+                        <div class="admin-form-ctrl">
+                            <label>Institusi</label>
+                            <input type="text" id="add-edu-school" class="admin-input-txt" required>
+                        </div>
+                        <div class="admin-form-ctrl">
+                            <label>Keterangan Tambahan</label>
+                            <textarea id="add-edu-desc" class="admin-textarea"></textarea>
+                        </div>
+                        <div class="admin-form-ctrl">
+                            <label>Urutan</label>
+                            <input type="number" id="add-edu-order" class="admin-input-txt" required value="1">
+                        </div>
+                        <button type="submit" class="admin-submit-btn">Tambah Pendidikan</button>
+                    </form>
+                    <div id="edu-list-admin" style="display: flex; flex-direction: column;"></div>
+                </div>
+
+                <!-- Right: Certifications CRUD -->
+                <div class="admin-card-box">
+                    <h3 style="font-family: var(--font-heading); font-size: 1.15rem; font-weight: 700;">Kelola Sertifikat</h3>
+                    <form id="cert-add-form" style="display: flex; flex-direction: column; gap: 16px; margin-bottom: 24px;">
+                        <div class="admin-form-ctrl">
+                            <label>Waktu Perolehan (Contoh: Maret 2024)</label>
+                            <input type="text" id="add-cert-time" class="admin-input-txt" required>
+                        </div>
+                        <div class="admin-form-ctrl">
+                            <label>Nama Sertifikasi</label>
+                            <input type="text" id="add-cert-title" class="admin-input-txt" required>
+                        </div>
+                        <div class="admin-form-ctrl">
+                            <label>Penerbit / Lembaga</label>
+                            <input type="text" id="add-cert-publisher" class="admin-input-txt" required>
+                        </div>
+                        <div class="admin-form-ctrl">
+                            <label>Urutan</label>
+                            <input type="number" id="add-cert-order" class="admin-input-txt" required value="1">
+                        </div>
+                        <button type="submit" class="admin-submit-btn">Tambah Sertifikat</button>
+                    </form>
+                    <div id="cert-list-admin" style="display: flex; flex-direction: column;"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tab 4: Career Manager -->
         <div id="tab-experience" class="admin-tab-content">
             <div class="admin-card-box" style="margin-bottom: 32px;">
                 <h3 style="font-family: var(--font-heading); font-size: 1.15rem; font-weight: 700; margin-bottom: 12px;">Tambah Pengalaman Baru</h3>
@@ -136,7 +256,7 @@
                         <input type="text" id="add-exp-company" class="admin-input-txt" required>
                     </div>
                     <div class="admin-form-ctrl">
-                        <label>No Urut Tampil (Angka Kecil Di Atas, misal: 1 untuk teratas)</label>
+                        <label>No Urut Tampil (Angka Kecil Di Atas)</label>
                         <input type="number" id="add-exp-order" class="admin-input-txt" required value="1">
                     </div>
                     <button type="submit" class="admin-submit-btn">Tambah Pengalaman</button>
@@ -145,13 +265,11 @@
 
             <div class="admin-card-box">
                 <h3 style="font-family: var(--font-heading); font-size: 1.15rem; font-weight: 700;">Daftar Pengalaman Karir</h3>
-                <div id="exp-list-admin" style="display: flex; flex-direction: column;">
-                    <!-- Will load dynamically -->
-                </div>
+                <div id="exp-list-admin" style="display: flex; flex-direction: column;"></div>
             </div>
         </div>
 
-        <!-- Tab 3: Projects Manager -->
+        <!-- Tab 5: Projects Manager -->
         <div id="tab-projects" class="admin-tab-content">
             <div class="admin-card-box" style="margin-bottom: 32px;">
                 <h3 style="font-family: var(--font-heading); font-size: 1.15rem; font-weight: 700; margin-bottom: 12px;">Tambah Proyek Baru</h3>
@@ -178,9 +296,7 @@
 
             <div class="admin-card-box">
                 <h3 style="font-family: var(--font-heading); font-size: 1.15rem; font-weight: 700;">Daftar Proyek</h3>
-                <div id="proj-list-admin" style="display: flex; flex-direction: column;">
-                    <!-- Will load dynamically -->
-                </div>
+                <div id="proj-list-admin" style="display: flex; flex-direction: column;"></div>
             </div>
         </div>
     </div>
@@ -272,6 +388,7 @@
                     const data = profileSnap.data();
                     document.getElementById('edit-name').value = data.name || '';
                     document.getElementById('edit-bio').value = data.bio || '';
+                    document.getElementById('edit-bio-tentang').value = data.bioTentang || '';
                     document.getElementById('edit-peran').value = data.peran || '';
                     document.getElementById('edit-instansi').value = data.instansi || '';
                     document.getElementById('edit-lokasi').value = data.lokasi || '';
@@ -287,10 +404,18 @@
                     document.getElementById('edit-telegram').value = data.telegram || '';
                 }
 
-                // 3. Load Experience
-                loadAdminExperience();
+                // 3. Load Skills Tags
+                const skillsSnap = await getDoc(doc(db, "settings", "skills"));
+                if (skillsSnap.exists()) {
+                    const tagsArray = skillsSnap.data().tags || [];
+                    document.getElementById('edit-skills-tags').value = tagsArray.join(', ');
+                }
 
-                // 4. Load Projects
+                // Load lists
+                loadAdminPillars();
+                loadAdminEducation();
+                loadAdminCertifications();
+                loadAdminExperience();
                 loadAdminProjects();
 
             } catch (err) {
@@ -305,6 +430,7 @@
                 await setDoc(doc(db, "settings", "profile"), {
                     name: document.getElementById('edit-name').value,
                     bio: document.getElementById('edit-bio').value,
+                    bioTentang: document.getElementById('edit-bio-tentang').value,
                     peran: document.getElementById('edit-peran').value,
                     instansi: document.getElementById('edit-instansi').value,
                     lokasi: document.getElementById('edit-lokasi').value
@@ -323,20 +449,176 @@
             }
         });
 
-        // --- Experience CRUD Section ---
+        // Save Skills Tags
+        document.getElementById('skills-tags-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            try {
+                const textVal = document.getElementById('edit-skills-tags').value;
+                // split by comma, trim spaces, filter empty elements
+                const tagsArray = textVal.split(',').map(s => s.trim()).filter(s => s.length > 0);
+                
+                await setDoc(doc(db, "settings", "skills"), {
+                    tags: tagsArray
+                });
+                showToast("Daftar tag keahlian berhasil disimpan!");
+            } catch (err) {
+                showToast("Gagal menyimpan tag.", "error");
+            }
+        });
+
+        // --- Pillars (Expertise) CRUD ---
+        async function loadAdminPillars() {
+            const list = document.getElementById('pillar-list-admin');
+            list.innerHTML = 'Memuat...';
+            const q = query(collection(db, "expertise"), orderBy("sortOrder", "asc"));
+            const snap = await getDocs(q);
+            list.innerHTML = '';
+            
+            snap.forEach(docSnap => {
+                const data = docSnap.data();
+                const row = document.createElement('div');
+                row.className = 'admin-item-row';
+                row.innerHTML = `
+                    <div class="admin-item-details">
+                        <span style="font-weight:600;">${data.icon} ${data.title}</span>
+                        <span style="font-size:0.8rem; color:var(--text-secondary);">${data.desc}</span>
+                    </div>
+                    <button class="admin-action-btn-danger" onclick="deletePillar('${docSnap.id}')">Hapus</button>
+                `;
+                list.appendChild(row);
+            });
+        }
+
+        document.getElementById('pillar-add-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            try {
+                await addDoc(collection(db, "expertise"), {
+                    icon: document.getElementById('add-pillar-icon').value,
+                    title: document.getElementById('add-pillar-title').value,
+                    desc: document.getElementById('add-pillar-desc').value,
+                    sortOrder: parseInt(document.getElementById('add-pillar-order').value)
+                });
+                document.getElementById('pillar-add-form').reset();
+                showToast("Pilar keahlian berhasil ditambahkan!");
+                loadAdminPillars();
+            } catch (err) {
+                showToast("Gagal menambahkan pilar.", "error");
+            }
+        });
+
+        window.deletePillar = async function(id) {
+            if (confirm("Hapus pilar keahlian ini?")) {
+                await deleteDoc(doc(db, "expertise", id));
+                showToast("Pilar keahlian dihapus.");
+                loadAdminPillars();
+            }
+        };
+
+        // --- Education CRUD ---
+        async function loadAdminEducation() {
+            const list = document.getElementById('edu-list-admin');
+            list.innerHTML = 'Memuat...';
+            const q = query(collection(db, "education"), orderBy("sortOrder", "asc"));
+            const snap = await getDocs(q);
+            list.innerHTML = '';
+            
+            snap.forEach(docSnap => {
+                const data = docSnap.data();
+                const row = document.createElement('div');
+                row.className = 'admin-item-row';
+                row.innerHTML = `
+                    <div class="admin-item-details">
+                        <span style="font-weight:600;">${data.title}</span>
+                        <span style="font-size:0.8rem; color:var(--text-secondary);">${data.school} (${data.time})</span>
+                    </div>
+                    <button class="admin-action-btn-danger" onclick="deleteEdu('${docSnap.id}')">Hapus</button>
+                `;
+                list.appendChild(row);
+            });
+        }
+
+        document.getElementById('edu-add-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            try {
+                await addDoc(collection(db, "education"), {
+                    time: document.getElementById('add-edu-time').value,
+                    title: document.getElementById('add-edu-title').value,
+                    school: document.getElementById('add-edu-school').value,
+                    desc: document.getElementById('add-edu-desc').value,
+                    sortOrder: parseInt(document.getElementById('add-edu-order').value)
+                });
+                document.getElementById('edu-add-form').reset();
+                showToast("Riwayat pendidikan ditambahkan!");
+                loadAdminEducation();
+            } catch (err) {
+                showToast("Gagal menambahkan.", "error");
+            }
+        });
+
+        window.deleteEdu = async function(id) {
+            if (confirm("Hapus riwayat pendidikan ini?")) {
+                await deleteDoc(doc(db, "education", id));
+                showToast("Riwayat pendidikan dihapus.");
+                loadAdminEducation();
+            }
+        };
+
+        // --- Certifications CRUD ---
+        async function loadAdminCertifications() {
+            const list = document.getElementById('cert-list-admin');
+            list.innerHTML = 'Memuat...';
+            const q = query(collection(db, "certifications"), orderBy("sortOrder", "asc"));
+            const snap = await getDocs(q);
+            list.innerHTML = '';
+            
+            snap.forEach(docSnap => {
+                const data = docSnap.data();
+                const row = document.createElement('div');
+                row.className = 'admin-item-row';
+                row.innerHTML = `
+                    <div class="admin-item-details">
+                        <span style="font-weight:600;">${data.title}</span>
+                        <span style="font-size:0.8rem; color:var(--text-secondary);">${data.publisher} (${data.time})</span>
+                    </div>
+                    <button class="admin-action-btn-danger" onclick="deleteCert('${docSnap.id}')">Hapus</button>
+                `;
+                list.appendChild(row);
+            });
+        }
+
+        document.getElementById('cert-add-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            try {
+                await addDoc(collection(db, "certifications"), {
+                    time: document.getElementById('add-cert-time').value,
+                    title: document.getElementById('add-cert-title').value,
+                    publisher: document.getElementById('add-cert-publisher').value,
+                    sortOrder: parseInt(document.getElementById('add-cert-order').value)
+                });
+                document.getElementById('cert-add-form').reset();
+                showToast("Sertifikasi ditambahkan!");
+                loadAdminCertifications();
+            } catch (err) {
+                showToast("Gagal menambahkan.", "error");
+            }
+        });
+
+        window.deleteCert = async function(id) {
+            if (confirm("Hapus sertifikasi ini?")) {
+                await deleteDoc(doc(db, "certifications", id));
+                showToast("Sertifikasi dihapus.");
+                loadAdminCertifications();
+            }
+        };
+
+        // --- Experience CRUD ---
         async function loadAdminExperience() {
             const expList = document.getElementById('exp-list-admin');
-            expList.innerHTML = '<p style="font-size:0.9rem; color:var(--text-muted);">Memuat...</p>';
-
+            expList.innerHTML = 'Memuat...';
             const expQuery = query(collection(db, "experience"), orderBy("sortOrder", "asc"));
             const snap = await getDocs(expQuery);
             expList.innerHTML = '';
             
-            if (snap.empty) {
-                expList.innerHTML = '<p style="font-size:0.9rem; color:var(--text-muted);">Belum ada riwayat ditambahkan.</p>';
-                return;
-            }
-
             snap.forEach(docSnap => {
                 const data = docSnap.data();
                 const row = document.createElement('div');
@@ -346,9 +628,7 @@
                         <span style="font-weight:600; font-size:0.95rem;">${data.title}</span>
                         <span style="font-size:0.85rem; color:var(--text-secondary);">${data.company} (${data.time})</span>
                     </div>
-                    <div class="admin-item-action-btns">
-                        <button class="admin-action-btn-danger" onclick="deleteExp('${docSnap.id}')">Hapus</button>
-                    </div>
+                    <button class="admin-action-btn-danger" onclick="deleteExp('${docSnap.id}')">Hapus</button>
                 `;
                 expList.appendChild(row);
             });
@@ -372,31 +652,21 @@
         });
 
         window.deleteExp = async function(id) {
-            if (confirm("Apakah Anda yakin ingin menghapus riwayat ini?")) {
-                try {
-                    await deleteDoc(doc(db, "experience", id));
-                    showToast("Pengalaman kerja berhasil dihapus.");
-                    loadAdminExperience();
-                } catch (err) {
-                    showToast("Gagal menghapus.", "error");
-                }
+            if (confirm("Hapus riwayat ini?")) {
+                await deleteDoc(doc(db, "experience", id));
+                showToast("Pengalaman kerja dihapus.");
+                loadAdminExperience();
             }
         };
 
-        // --- Projects CRUD Section ---
+        // --- Projects CRUD ---
         async function loadAdminProjects() {
             const projList = document.getElementById('proj-list-admin');
-            projList.innerHTML = '<p style="font-size:0.9rem; color:var(--text-muted);">Memuat...</p>';
-
+            projList.innerHTML = 'Memuat...';
             const projQuery = query(collection(db, "projects"), orderBy("sortOrder", "asc"));
             const snap = await getDocs(projQuery);
             projList.innerHTML = '';
             
-            if (snap.empty) {
-                projList.innerHTML = '<p style="font-size:0.9rem; color:var(--text-muted);">Belum ada proyek ditambahkan.</p>';
-                return;
-            }
-
             snap.forEach(docSnap => {
                 const data = docSnap.data();
                 const row = document.createElement('div');
@@ -406,9 +676,7 @@
                         <span style="font-weight:600; font-size:0.95rem;">${data.title}</span>
                         <span style="font-size:0.85rem; color:var(--text-secondary);">${data.tag}</span>
                     </div>
-                    <div class="admin-item-action-btns">
-                        <button class="admin-action-btn-danger" onclick="deleteProj('${docSnap.id}')">Hapus</button>
-                    </div>
+                    <button class="admin-action-btn-danger" onclick="deleteProj('${docSnap.id}')">Hapus</button>
                 `;
                 projList.appendChild(row);
             });
@@ -432,14 +700,10 @@
         });
 
         window.deleteProj = async function(id) {
-            if (confirm("Apakah Anda yakin ingin menghapus proyek ini?")) {
-                try {
-                    await deleteDoc(doc(db, "projects", id));
-                    showToast("Proyek berhasil dihapus.");
-                    loadAdminProjects();
-                } catch (err) {
-                    showToast("Gagal menghapus.", "error");
-                }
+            if (confirm("Hapus proyek ini?")) {
+                await deleteDoc(doc(db, "projects", id));
+                showToast("Proyek dihapus.");
+                loadAdminProjects();
             }
         };
 

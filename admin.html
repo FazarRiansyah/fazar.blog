@@ -35,7 +35,7 @@
     <!-- Login Area -->
     <div id="login-section" class="login-card">
         <h2 style="font-family: var(--font-heading); font-size: 1.5rem; font-weight: 700; text-align: center;">Login Admin</h2>
-        <div class="admin-alert-toast error" id="login-error"></div>
+        <div class="admin-alert-toast" id="login-error" style="display: none; margin-top: 10px; margin-bottom: 10px;"></div>
         <form id="login-form" style="display: flex; flex-direction: column; gap: 16px;">
             <div class="admin-form-ctrl">
                 <label for="login-email">Email</label>
@@ -212,13 +212,16 @@
         document.getElementById('login-form').addEventListener('submit', async (e) => {
             e.preventDefault();
             loginError.style.display = 'none';
+            loginError.classList.remove('error');
             const email = document.getElementById('login-email').value;
             const pass = document.getElementById('login-password').value;
 
             try {
                 await signInWithEmailAndPassword(auth, email, pass);
             } catch (err) {
-                loginError.innerText = "Gagal masuk. Periksa kembali email dan sandi Anda.";
+                console.error("Login error:", err);
+                loginError.innerText = "Gagal masuk: " + err.message;
+                loginError.classList.add('error');
                 loginError.style.display = 'block';
             }
         });

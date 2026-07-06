@@ -140,8 +140,21 @@
 
     <!-- Firebase Integration Scripts -->
     <script type="module">
-        import { db } from "./firebase-config.js";
-        import { doc, getDoc, collection, getDocs, query, orderBy, limit } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getFirestore, doc, getDoc, collection, getDocs, query, orderBy, limit } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyC3hrH5xgIv693tJKlywgQYHtQdPTkaRE0",
+            authDomain: "fazar-site.firebaseapp.com",
+            projectId: "fazar-site",
+            storageBucket: "fazar-site.firebasestorage.app",
+            messagingSenderId: "854820135089",
+            appId: "1:854820135089:web:0f3efd71beb16dc9564290",
+            measurementId: "G-K80C7WB17Y"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
 
         // Modal Logic
         const modal = document.getElementById('contact-modal');

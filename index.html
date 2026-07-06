@@ -26,13 +26,13 @@
     <section class="hero">
         <div class="container hero-grid">
             <div class="hero-info" style="text-align: left;">
-                <h1 class="hero-title" style="font-size: 3.5rem;">Fazar Riansyah</h1>
-                <p class="hero-desc" style="font-size: 1.1rem; line-height: 1.7; margin-bottom: 8px;">
+                <h1 class="hero-title" id="profile-name" style="font-size: 3.5rem;">Fazar Riansyah</h1>
+                <p class="hero-desc" id="profile-bio" style="font-size: 1.1rem; line-height: 1.7; margin-bottom: 8px;">
                     Saya adalah seorang <strong>Pengembang Teknologi Pembelajaran</strong> yang berdedikasi merancang sistem pembelajaran digital yang efektif, mengoptimasi platform LMS, serta menciptakan pengalaman desain UI/UX yang fungsional dan intuitif.
                 </p>
                 <div class="hero-actions" style="justify-content: flex-start; margin-top: 24px;">
                     <a href="tentang.html" class="btn btn-primary">Baca Profil Lengkap</a>
-                    <a href="mailto:fazarriansyah@gmail.com" class="btn btn-secondary">Hubungi Saya</a>
+                    <button class="btn btn-secondary" id="open-contact-btn">Hubungi Saya</button>
                 </div>
             </div>
             <div class="hero-visual">
@@ -41,15 +41,15 @@
                     <div style="display: flex; flex-direction: column; gap: 12px; font-size: 0.9rem;">
                         <div>
                             <span style="color: var(--text-muted);">Posisi:</span>
-                            <span style="font-weight: 500; display: block; color: var(--text-primary);">Pengembang Teknologi Pembelajaran</span>
+                            <span id="profile-pos" style="font-weight: 500; display: block; color: var(--text-primary);">Pengembang Teknologi Pembelajaran</span>
                         </div>
                         <div>
                             <span style="color: var(--text-muted);">Instansi:</span>
-                            <span style="font-weight: 500; display: block; color: var(--text-primary);">Dinas Pendidikan Provinsi DKI Jakarta</span>
+                            <span id="profile-inst" style="font-weight: 500; display: block; color: var(--text-primary);">Dinas Pendidikan Provinsi DKI Jakarta</span>
                         </div>
                         <div>
                             <span style="color: var(--text-muted);">Lokasi:</span>
-                            <span style="font-weight: 500; display: block; color: var(--text-primary);">Jakarta, Indonesia</span>
+                            <span id="profile-loc" style="font-weight: 500; display: block; color: var(--text-primary);">Jakarta, Indonesia</span>
                         </div>
                     </div>
                 </div>
@@ -62,19 +62,16 @@
         <div class="container">
             <span class="section-label" style="text-align: center; display: block; margin-bottom: 48px;">Fokus & Keahlian</span>
             <div class="pillars-grid">
-                <!-- Pillar 1 -->
                 <div class="pillar-card" style="background: #ffffff;">
                     <div class="pillar-icon">🎓</div>
                     <h3 class="pillar-title">Teknologi Pembelajaran</h3>
                     <p class="pillar-desc">Perancangan kurikulum digital, pengembangan modul e-learning, serta pengelolaan dan optimasi Learning Management System (LMS) berskala besar.</p>
                 </div>
-                <!-- Pillar 2 -->
                 <div class="pillar-card" style="background: #ffffff;">
                     <div class="pillar-icon">✨</div>
                     <h3 class="pillar-title">Desain UI/UX</h3>
                     <p class="pillar-desc">Penerjemahan ide produk ke dalam wireframe, pembuatan prototipe interaktif, serta pengujian kegunaan (usability testing) yang berpusat pada pengguna.</p>
                 </div>
-                <!-- Pillar 3 -->
                 <div class="pillar-card" style="background: #ffffff;">
                     <div class="pillar-icon">📊</div>
                     <h3 class="pillar-title">Operasional Program</h3>
@@ -88,7 +85,8 @@
     <section class="projects">
         <div class="container" style="max-width: 640px;">
             <span class="section-label" style="text-align: center; display: block; margin-bottom: 48px;">Pengalaman Terkini</span>
-            <div class="timeline">
+            <div class="timeline" id="timeline-container">
+                <!-- Will load dynamically from Firebase with static fallback -->
                 <div class="timeline-item">
                     <p class="timeline-time">Juni 2025 - Sekarang</p>
                     <h4 class="timeline-title">Pengembang Teknologi Pembelajaran Ahli Pertama</h4>
@@ -99,11 +97,6 @@
                     <h4 class="timeline-title">Learning Operations</h4>
                     <p class="timeline-company">Karier.mu</p>
                 </div>
-                <div class="timeline-item">
-                    <p class="timeline-time">Januari 2024 - Oktober 2024</p>
-                    <h4 class="timeline-title">Learning Operations</h4>
-                    <p class="timeline-company">Rumah Siap Kerja</p>
-                </div>
             </div>
             <div style="text-align: center; margin-top: 40px;">
                 <a href="tentang.html" class="nav-link" style="font-weight: 600; text-decoration: underline;">/lihat riwayat karir selengkapnya</a>
@@ -111,17 +104,132 @@
         </div>
     </section>
 
+    <!-- Contact Pop-up Modal -->
+    <div class="modal-backdrop" id="contact-modal">
+        <div class="modal-card">
+            <button class="modal-close-btn" id="close-modal-btn">&times;</button>
+            <h3 class="modal-title">Hubungi Saya</h3>
+            <div class="contact-options">
+                <a href="mailto:fazarriansyah@gmail.com" id="link-email" class="contact-opt-btn" target="_blank">
+                    <span>📧</span> Email: fazarriansyah@gmail.com
+                </a>
+                <a href="https://linkedin.com/in/fazarriansyah/" id="link-linkedin" class="contact-opt-btn" target="_blank">
+                    <span>🔗</span> LinkedIn Profile
+                </a>
+                <a href="https://wa.me/628123456789" id="link-whatsapp" class="contact-opt-btn" target="_blank">
+                    <span>💬</span> WhatsApp Chat
+                </a>
+                <a href="https://t.me/fazarriansyah" id="link-telegram" class="contact-opt-btn" target="_blank">
+                    <span>✈️</span> Telegram Chat
+                </a>
+            </div>
+        </div>
+    </div>
+
     <!-- Footer -->
     <footer class="footer">
         <div class="container footer-content">
             <p>&copy; 2026 Fazar Riansyah. All rights reserved.</p>
             <div class="footer-links">
-                <a href="https://linkedin.com/in/fazarriansyah/" target="_blank" class="footer-link">LinkedIn</a>
+                <a href="https://linkedin.com/in/fazarriansyah/" target="_blank" class="footer-link ln-url">LinkedIn</a>
                 <a href="https://github.com/FazarRiansyah" target="_blank" class="footer-link">GitHub</a>
-                <a href="mailto:fazarriansyah@gmail.com" class="footer-link">Email</a>
+                <a href="mailto:fazarriansyah@gmail.com" class="footer-link em-url">Email</a>
             </div>
         </div>
     </footer>
 
+    <!-- Firebase Integration Scripts -->
+    <script type="module">
+        import { db } from "./firebase-config.js";
+        import { doc, getDoc, collection, getDocs, query, orderBy, limit } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+        // Modal Logic
+        const modal = document.getElementById('contact-modal');
+        const openBtn = document.getElementById('open-contact-btn');
+        const closeBtn = document.getElementById('close-modal-btn');
+
+        openBtn.addEventListener('click', () => {
+            modal.style.display = 'flex';
+            setTimeout(() => modal.classList.add('show'), 10);
+        });
+
+        const closeModal = () => {
+            modal.classList.remove('show');
+            setTimeout(() => modal.style.display = 'none', 250);
+        };
+
+        closeBtn.addEventListener('click', closeModal);
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) closeModal();
+        });
+
+        // Load Data from Firestore
+        async function loadProfile() {
+            try {
+                // Profile Text
+                const profileDoc = await getDoc(doc(db, "settings", "profile"));
+                if (profileDoc.exists()) {
+                    const data = profileDoc.data();
+                    if (data.name) document.getElementById('profile-name').innerText = data.name;
+                    if (data.bio) document.getElementById('profile-bio').innerHTML = data.bio;
+                    if (data.peran) document.getElementById('profile-pos').innerText = data.peran;
+                    if (data.instansi) document.getElementById('profile-inst').innerText = data.instansi;
+                    if (data.lokasi) document.getElementById('profile-loc').innerText = data.lokasi;
+                }
+
+                // Contact links
+                const contactDoc = await getDoc(doc(db, "settings", "contacts"));
+                if (contactDoc.exists()) {
+                    const data = contactDoc.data();
+                    if (data.email) {
+                        document.getElementById('link-email').href = `mailto:${data.email}`;
+                        document.getElementById('link-email').innerHTML = `<span>📧</span> Email: ${data.email}`;
+                        document.querySelectorAll('.em-url').forEach(el => el.href = `mailto:${data.email}`);
+                    }
+                    if (data.linkedin) {
+                        document.getElementById('link-linkedin').href = data.linkedin;
+                        document.querySelectorAll('.ln-url').forEach(el => el.href = data.linkedin);
+                    }
+                    if (data.whatsapp) {
+                        // strip non digits from phone
+                        const waNum = data.whatsapp.replace(/\D/g, '');
+                        document.getElementById('link-whatsapp').href = `https://wa.me/${waNum}`;
+                        document.getElementById('link-whatsapp').style.display = 'flex';
+                    } else {
+                        document.getElementById('link-whatsapp').style.display = 'none';
+                    }
+                    if (data.telegram) {
+                        document.getElementById('link-telegram').href = `https://t.me/${data.telegram.replace('@', '')}`;
+                        document.getElementById('link-telegram').style.display = 'flex';
+                    } else {
+                        document.getElementById('link-telegram').style.display = 'none';
+                    }
+                }
+
+                // Latest Timeline Jobs (Limit 3)
+                const expQuery = query(collection(db, "experience"), orderBy("sortOrder", "asc"), limit(3));
+                const expSnap = await getDocs(expQuery);
+                if (!expSnap.empty) {
+                    const container = document.getElementById('timeline-container');
+                    container.innerHTML = '';
+                    expSnap.forEach(doc => {
+                        const data = doc.data();
+                        const item = document.createElement('div');
+                        item.className = 'timeline-item';
+                        item.innerHTML = `
+                            <p class="timeline-time">${data.time || ''}</p>
+                            <h4 class="timeline-title">${data.title || ''}</h4>
+                            <p class="timeline-company">${data.company || ''}</p>
+                        `;
+                        container.appendChild(item);
+                    });
+                }
+            } catch (err) {
+                console.warn("Using offline fallback mode due to Firebase connection status:", err);
+            }
+        }
+
+        loadProfile();
+    </script>
 </body>
 </html>

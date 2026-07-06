@@ -81,7 +81,8 @@
                 <!-- Timeline / Experience -->
                 <div>
                     <h3 class="detail-section-title">Riwayat Karir</h3>
-                    <div class="timeline">
+                    <div class="timeline" id="experience-list">
+                        <!-- Will load dynamically from Firebase with static fallback -->
                         <div class="timeline-item">
                             <p class="timeline-time">Juni 2025 - Sekarang</p>
                             <h4 class="timeline-title">Pengembang Teknologi Pembelajaran Ahli Pertama</h4>
@@ -101,16 +102,6 @@
                             <p class="timeline-time">Nov 2023 - Jan 2024</p>
                             <h4 class="timeline-title">Learning Operations (Intern)</h4>
                             <p class="timeline-company">Talenesia</p>
-                        </div>
-                        <div class="timeline-item">
-                            <p class="timeline-time">Agu 2022 - Des 2022</p>
-                            <h4 class="timeline-title">HR - Learning Specialist (Intern)</h4>
-                            <p class="timeline-company">Kalbe Nutritionals (PT Sanghiang Perkasa)</p>
-                        </div>
-                        <div class="timeline-item">
-                            <p class="timeline-time">Apr 2022 - Jun 2022</p>
-                            <h4 class="timeline-title">UI/UX Designer (Intern)</h4>
-                            <p class="timeline-company">Smartven</p>
                         </div>
                     </div>
                 </div>
@@ -138,12 +129,56 @@
         <div class="container footer-content">
             <p>&copy; 2026 Fazar Riansyah. All rights reserved.</p>
             <div class="footer-links">
-                <a href="https://linkedin.com/in/fazarriansyah/" target="_blank" class="footer-link">LinkedIn</a>
+                <a href="https://linkedin.com/in/fazarriansyah/" target="_blank" class="footer-link ln-url">LinkedIn</a>
                 <a href="https://github.com/FazarRiansyah" target="_blank" class="footer-link">GitHub</a>
-                <a href="mailto:fazarriansyah@gmail.com" class="footer-link">Email</a>
+                <a href="mailto:fazarriansyah@gmail.com" class="footer-link em-url">Email</a>
             </div>
         </div>
     </footer>
 
+    <!-- Firebase Integration Scripts -->
+    <script type="module">
+        import { db } from "./firebase-config.js";
+        import { collection, getDocs, query, orderBy, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+        async function loadAboutData() {
+            try {
+                // Get Contacts for Footer
+                const contactDoc = await getDoc(doc(db, "settings", "contacts"));
+                if (contactDoc.exists()) {
+                    const data = contactDoc.data();
+                    if (data.email) {
+                        document.querySelectorAll('.em-url').forEach(el => el.href = `mailto:${data.email}`);
+                    }
+                    if (data.linkedin) {
+                        document.querySelectorAll('.ln-url').forEach(el => el.href = data.linkedin);
+                    }
+                }
+
+                // Load Full Career Timeline
+                const expQuery = query(collection(db, "experience"), orderBy("sortOrder", "asc"));
+                const expSnap = await getDocs(expQuery);
+                if (!expSnap.empty) {
+                    const container = document.getElementById('experience-list');
+                    container.innerHTML = '';
+                    expSnap.forEach(docSnap => {
+                        const data = docSnap.data();
+                        const item = document.createElement('div');
+                        item.className = 'timeline-item';
+                        item.innerHTML = `
+                            <p class="timeline-time">${data.time || ''}</p>
+                            <h4 class="timeline-title">${data.title || ''}</h4>
+                            <p class="timeline-company">${data.company || ''}</p>
+                        `;
+                        container.appendChild(item);
+                    });
+                }
+            } catch (err) {
+                console.warn("Using offline fallback mode:", err);
+            }
+        }
+
+        loadAboutData();
+    </script>
 </body>
 </html>

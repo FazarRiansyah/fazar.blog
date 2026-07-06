@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>fazar.site | Admin Panel</title>
+    <link rel="icon" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .login-card {
+            max-width: 360px;
+            width: 90%;
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 32px;
+            margin: 100px auto;
+            background-color: #ffffff;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.02);
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header Navigation -->
+    <nav class="navbar">
+        <div class="container nav-container">
+            <a href="index.html" class="nav-brand">fazar<span>.site</span></a>
+            <span style="font-family: var(--font-mono); font-size: 0.8rem; color: var(--text-muted);">/admin-panel</span>
+        </div>
+    </nav>
+
+    <!-- Login Area -->
+    <div id="login-section" class="login-card">
+        <h2 style="font-family: var(--font-heading); font-size: 1.5rem; font-weight: 700; text-align: center;">Login Admin</h2>
+        <div class="admin-alert-toast error" id="login-error"></div>
+        <form id="login-form" style="display: flex; flex-direction: column; gap: 16px;">
+            <div class="admin-form-ctrl">
+                <label for="login-email">Email</label>
+                <input type="email" id="login-email" class="admin-input-txt" required>
+            </div>
+            <div class="admin-form-ctrl">
+                <label for="login-password">Password</label>
+                <input type="password" id="login-password" class="admin-input-txt" required>
+            </div>
+            <button type="submit" class="admin-submit-btn" style="width: 100%;">Masuk</button>
+        </form>
+    </div>
+
+    <!-- Admin Dashboard Container -->
+    <div id="dashboard-section" class="admin-container" style="display: none;">
+        <div class="admin-header-row">
+            <div>
+                <h1 class="admin-title-main">Dashboard Editor</h1>
+                <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 4px;">Kelola semua konten fazar.site Anda</p>
+            </div>
+            <button class="admin-logout-btn" id="logout-btn">Log Out</button>
+        </div>
+
+        <!-- Alert Toast -->
+        <div class="admin-alert-toast" id="alert-toast" style="margin-bottom: 24px;"></div>
+
+        <!-- Tabs Navigation -->
+        <div class="admin-tabs-nav">
+            <button class="admin-tab-trigger active" onclick="switchTab('tab-profile')">1. Profil & Kontak</button>
+            <button class="admin-tab-trigger" onclick="switchTab('tab-experience')">2. Pengalaman Kerja</button>
+            <button class="admin-tab-trigger" onclick="switchTab('tab-projects')">3. Portofolio</button>
+        </div>
+
+        <!-- Tab 1: Profile & Contacts -->
+        <div id="tab-profile" class="admin-tab-content active">
+            <div class="admin-card-box">
+                <h3 style="font-family: var(--font-heading); font-size: 1.15rem; font-weight: 700; margin-bottom: 8px;">Ubah Informasi Diri</h3>
+                <form id="profile-form" style="display: flex; flex-direction: column; gap: 20px;">
+                    <div class="admin-form-ctrl">
+                        <label>Nama Lengkap</label>
+                        <input type="text" id="edit-name" class="admin-input-txt" required>
+                    </div>
+                    <div class="admin-form-ctrl">
+                        <label>Biografi (HTML didukung)</label>
+                        <textarea id="edit-bio" class="admin-textarea" required></textarea>
+                    </div>
+                    <div class="admin-form-ctrl">
+                        <label>Posisi / Pekerjaan</label>
+                        <input type="text" id="edit-peran" class="admin-input-txt" required>
+                    </div>
+                    <div class="admin-form-ctrl">
+                        <label>Instansi</label>
+                        <input type="text" id="edit-instansi" class="admin-input-txt" required>
+                    </div>
+                    <div class="admin-form-ctrl">
+                        <label>Lokasi</label>
+                        <input type="text" id="edit-lokasi" class="admin-input-txt" required>
+                    </div>
+
+                    <h4 style="font-family: var(--font-heading); font-size: 1rem; font-weight: 700; border-top: 1px solid var(--border-color); padding-top: 24px; margin-top: 8px;">Saluran Kontak (Popup & Footer)</h4>
+                    <div class="admin-form-ctrl">
+                        <label>Email Kontak</label>
+                        <input type="email" id="edit-email" class="admin-input-txt" required>
+                    </div>
+                    <div class="admin-form-ctrl">
+                        <label>LinkedIn URL</label>
+                        <input type="url" id="edit-linkedin" class="admin-input-txt" required>
+                    </div>
+                    <div class="admin-form-ctrl">
+                        <label>Nomor WhatsApp (Contoh: 62812xxxxxx)</label>
+                        <input type="text" id="edit-whatsapp" class="admin-input-txt">
+                    </div>
+                    <div class="admin-form-ctrl">
+                        <label>Username Telegram (Tanpa @)</label>
+                        <input type="text" id="edit-telegram" class="admin-input-txt">
+                    </div>
+
+                    <button type="submit" class="admin-submit-btn">Simpan Informasi</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Tab 2: Experience Manager -->
+        <div id="tab-experience" class="admin-tab-content">
+            <div class="admin-card-box" style="margin-bottom: 32px;">
+                <h3 style="font-family: var(--font-heading); font-size: 1.15rem; font-weight: 700; margin-bottom: 12px;">Tambah Pengalaman Baru</h3>
+                <form id="exp-add-form" style="display: flex; flex-direction: column; gap: 16px;">
+                    <div class="admin-form-ctrl">
+                        <label>Rentang Waktu (Contoh: Juni 2025 - Sekarang)</label>
+                        <input type="text" id="add-exp-time" class="admin-input-txt" required>
+                    </div>
+                    <div class="admin-form-ctrl">
+                        <label>Nama Posisi / Pekerjaan</label>
+                        <input type="text" id="add-exp-title" class="admin-input-txt" required>
+                    </div>
+                    <div class="admin-form-ctrl">
+                        <label>Perusahaan / Instansi</label>
+                        <input type="text" id="add-exp-company" class="admin-input-txt" required>
+                    </div>
+                    <div class="admin-form-ctrl">
+                        <label>No Urut Tampil (Angka Kecil Di Atas, misal: 1 untuk teratas)</label>
+                        <input type="number" id="add-exp-order" class="admin-input-txt" required value="1">
+                    </div>
+                    <button type="submit" class="admin-submit-btn">Tambah Pengalaman</button>
+                </form>
+            </div>
+
+            <div class="admin-card-box">
+                <h3 style="font-family: var(--font-heading); font-size: 1.15rem; font-weight: 700;">Daftar Pengalaman Karir</h3>
+                <div id="exp-list-admin" style="display: flex; flex-direction: column;">
+                    <!-- Will load dynamically -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Tab 3: Projects Manager -->
+        <div id="tab-projects" class="admin-tab-content">
+            <div class="admin-card-box" style="margin-bottom: 32px;">
+                <h3 style="font-family: var(--font-heading); font-size: 1.15rem; font-weight: 700; margin-bottom: 12px;">Tambah Proyek Baru</h3>
+                <form id="proj-add-form" style="display: flex; flex-direction: column; gap: 16px;">
+                    <div class="admin-form-ctrl">
+                        <label>Judul Proyek</label>
+                        <input type="text" id="add-proj-title" class="admin-input-txt" required>
+                    </div>
+                    <div class="admin-form-ctrl">
+                        <label>Kategori / Tag (Contoh: Web Development)</label>
+                        <input type="text" id="add-proj-tag" class="admin-input-txt" required>
+                    </div>
+                    <div class="admin-form-ctrl">
+                        <label>Deskripsi Singkat</label>
+                        <textarea id="add-proj-desc" class="admin-textarea" required></textarea>
+                    </div>
+                    <div class="admin-form-ctrl">
+                        <label>No Urut Tampil (Urutan)</label>
+                        <input type="number" id="add-proj-order" class="admin-input-txt" required value="1">
+                    </div>
+                    <button type="submit" class="admin-submit-btn">Tambah Proyek</button>
+                </form>
+            </div>
+
+            <div class="admin-card-box">
+                <h3 style="font-family: var(--font-heading); font-size: 1.15rem; font-weight: 700;">Daftar Proyek</h3>
+                <div id="proj-list-admin" style="display: flex; flex-direction: column;">
+                    <!-- Will load dynamically -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script type="module">
+        import { auth, db } from "./firebase-config.js";
+        import { onAuthStateChanged, signInWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { doc, getDoc, setDoc, collection, getDocs, deleteDoc, addDoc, query, orderBy } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+        const loginSection = document.getElementById('login-section');
+        const dashboardSection = document.getElementById('dashboard-section');
+        const loginError = document.getElementById('login-error');
+        const alertToast = document.getElementById('alert-toast');
+
+        // Authentication State Listener
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                loginSection.style.display = 'none';
+                dashboardSection.style.display = 'block';
+                loadDashboardData();
+            } else {
+                loginSection.style.display = 'flex';
+                dashboardSection.style.display = 'none';
+            }
+        });
+
+        // Login Handler
+        document.getElementById('login-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            loginError.style.display = 'none';
+            const email = document.getElementById('login-email').value;
+            const pass = document.getElementById('login-password').value;
+
+            try {
+                await signInWithEmailAndPassword(auth, email, pass);
+            } catch (err) {
+                loginError.innerText = "Gagal masuk. Periksa kembali email dan sandi Anda.";
+                loginError.style.display = 'block';
+            }
+        });
+
+        // Logout Handler
+        document.getElementById('logout-btn').addEventListener('click', () => {
+            signOut(auth);
+        });
+
+        // Switch Tabs Function
+        window.switchTab = function(tabId) {
+            document.querySelectorAll('.admin-tab-content').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.admin-tab-trigger').forEach(el => el.classList.remove('active'));
+
+            document.getElementById(tabId).classList.add('active');
+            event.currentTarget.classList.add('active');
+        };
+
+        // Show toast helper
+        function showToast(msg, type='success') {
+            alertToast.innerText = msg;
+            alertToast.className = `admin-alert-toast ${type}`;
+            setTimeout(() => {
+                alertToast.style.display = 'none';
+            }, 4000);
+        }
+
+        // Load all data
+        async function loadDashboardData() {
+            try {
+                // 1. Profile Data
+                const profileSnap = await getDoc(doc(db, "settings", "profile"));
+                if (profileSnap.exists()) {
+                    const data = profileSnap.data();
+                    document.getElementById('edit-name').value = data.name || '';
+                    document.getElementById('edit-bio').value = data.bio || '';
+                    document.getElementById('edit-peran').value = data.peran || '';
+                    document.getElementById('edit-instansi').value = data.instansi || '';
+                    document.getElementById('edit-lokasi').value = data.lokasi || '';
+                }
+
+                // 2. Contact Data
+                const contactSnap = await getDoc(doc(db, "settings", "contacts"));
+                if (contactSnap.exists()) {
+                    const data = contactSnap.data();
+                    document.getElementById('edit-email').value = data.email || '';
+                    document.getElementById('edit-linkedin').value = data.linkedin || '';
+                    document.getElementById('edit-whatsapp').value = data.whatsapp || '';
+                    document.getElementById('edit-telegram').value = data.telegram || '';
+                }
+
+                // 3. Load Experience
+                loadAdminExperience();
+
+                // 4. Load Projects
+                loadAdminProjects();
+
+            } catch (err) {
+                showToast("Gagal memuat data dari database.", "error");
+            }
+        }
+
+        // Save Profile & Contacts Form
+        document.getElementById('profile-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            try {
+                await setDoc(doc(db, "settings", "profile"), {
+                    name: document.getElementById('edit-name').value,
+                    bio: document.getElementById('edit-bio').value,
+                    peran: document.getElementById('edit-peran').value,
+                    instansi: document.getElementById('edit-instansi').value,
+                    lokasi: document.getElementById('edit-lokasi').value
+                });
+
+                await setDoc(doc(db, "settings", "contacts"), {
+                    email: document.getElementById('edit-email').value,
+                    linkedin: document.getElementById('edit-linkedin').value,
+                    whatsapp: document.getElementById('edit-whatsapp').value,
+                    telegram: document.getElementById('edit-telegram').value
+                });
+
+                showToast("Informasi diri dan kontak berhasil disimpan!");
+            } catch (err) {
+                showToast("Gagal menyimpan data.", "error");
+            }
+        });
+
+        // --- Experience CRUD Section ---
+        async function loadAdminExperience() {
+            const expList = document.getElementById('exp-list-admin');
+            expList.innerHTML = '<p style="font-size:0.9rem; color:var(--text-muted);">Memuat...</p>';
+
+            const expQuery = query(collection(db, "experience"), orderBy("sortOrder", "asc"));
+            const snap = await getDocs(expQuery);
+            expList.innerHTML = '';
+            
+            if (snap.empty) {
+                expList.innerHTML = '<p style="font-size:0.9rem; color:var(--text-muted);">Belum ada riwayat ditambahkan.</p>';
+                return;
+            }
+
+            snap.forEach(docSnap => {
+                const data = docSnap.data();
+                const row = document.createElement('div');
+                row.className = 'admin-item-row';
+                row.innerHTML = `
+                    <div class="admin-item-details">
+                        <span style="font-weight:600; font-size:0.95rem;">${data.title}</span>
+                        <span style="font-size:0.85rem; color:var(--text-secondary);">${data.company} (${data.time})</span>
+                    </div>
+                    <div class="admin-item-action-btns">
+                        <button class="admin-action-btn-danger" onclick="deleteExp('${docSnap.id}')">Hapus</button>
+                    </div>
+                `;
+                expList.appendChild(row);
+            });
+        }
+
+        document.getElementById('exp-add-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            try {
+                await addDoc(collection(db, "experience"), {
+                    time: document.getElementById('add-exp-time').value,
+                    title: document.getElementById('add-exp-title').value,
+                    company: document.getElementById('add-exp-company').value,
+                    sortOrder: parseInt(document.getElementById('add-exp-order').value)
+                });
+                document.getElementById('exp-add-form').reset();
+                showToast("Pengalaman kerja berhasil ditambahkan!");
+                loadAdminExperience();
+            } catch (err) {
+                showToast("Gagal menambah pengalaman.", "error");
+            }
+        });
+
+        window.deleteExp = async function(id) {
+            if (confirm("Apakah Anda yakin ingin menghapus riwayat ini?")) {
+                try {
+                    await deleteDoc(doc(db, "experience", id));
+                    showToast("Pengalaman kerja berhasil dihapus.");
+                    loadAdminExperience();
+                } catch (err) {
+                    showToast("Gagal menghapus.", "error");
+                }
+            }
+        };
+
+        // --- Projects CRUD Section ---
+        async function loadAdminProjects() {
+            const projList = document.getElementById('proj-list-admin');
+            projList.innerHTML = '<p style="font-size:0.9rem; color:var(--text-muted);">Memuat...</p>';
+
+            const projQuery = query(collection(db, "projects"), orderBy("sortOrder", "asc"));
+            const snap = await getDocs(projQuery);
+            projList.innerHTML = '';
+            
+            if (snap.empty) {
+                projList.innerHTML = '<p style="font-size:0.9rem; color:var(--text-muted);">Belum ada proyek ditambahkan.</p>';
+                return;
+            }
+
+            snap.forEach(docSnap => {
+                const data = docSnap.data();
+                const row = document.createElement('div');
+                row.className = 'admin-item-row';
+                row.innerHTML = `
+                    <div class="admin-item-details">
+                        <span style="font-weight:600; font-size:0.95rem;">${data.title}</span>
+                        <span style="font-size:0.85rem; color:var(--text-secondary);">${data.tag}</span>
+                    </div>
+                    <div class="admin-item-action-btns">
+                        <button class="admin-action-btn-danger" onclick="deleteProj('${docSnap.id}')">Hapus</button>
+                    </div>
+                `;
+                projList.appendChild(row);
+            });
+        }
+
+        document.getElementById('proj-add-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            try {
+                await addDoc(collection(db, "projects"), {
+                    title: document.getElementById('add-proj-title').value,
+                    tag: document.getElementById('add-proj-tag').value,
+                    desc: document.getElementById('add-proj-desc').value,
+                    sortOrder: parseInt(document.getElementById('add-proj-order').value)
+                });
+                document.getElementById('proj-add-form').reset();
+                showToast("Proyek berhasil ditambahkan!");
+                loadAdminProjects();
+            } catch (err) {
+                showToast("Gagal menambah proyek.", "error");
+            }
+        });
+
+        window.deleteProj = async function(id) {
+            if (confirm("Apakah Anda yakin ingin menghapus proyek ini?")) {
+                try {
+                    await deleteDoc(doc(db, "projects", id));
+                    showToast("Proyek berhasil dihapus.");
+                    loadAdminProjects();
+                } catch (err) {
+                    showToast("Gagal menghapus.", "error");
+                }
+            }
+        };
+
+    </script>
+</body>
+</html>

@@ -670,6 +670,13 @@
             }
         });
 
+        // Global variables for local data storage to prevent escape/newline issues
+        const localPillars = {};
+        const localEdu = {};
+        const localCerts = {};
+        const localExps = {};
+        const localProjs = {};
+
         // --- Pillars (Expertise) CRUD ---
         async function loadAdminPillars() {
             const list = document.getElementById('pillar-list-admin');
@@ -680,6 +687,8 @@
             
             snap.forEach(docSnap => {
                 const data = docSnap.data();
+                localPillars[docSnap.id] = data;
+                
                 const row = document.createElement('div');
                 row.className = 'admin-item-row draggable-item';
                 row.draggable = true;
@@ -698,7 +707,7 @@
                         </div>
                     </div>
                     <div class="admin-item-action-btns">
-                        <button class="admin-action-btn-edit" onclick="startEditPillar('${docSnap.id}', '${data.icon}', '${data.title.replace(/'/g, "\\'")}', '${data.desc.replace(/'/g, "\\'")}')">Edit</button>
+                        <button class="admin-action-btn-edit" onclick="startEditPillar('${docSnap.id}')">Edit</button>
                         <button class="admin-action-btn-danger" onclick="deletePillar('${docSnap.id}')">Delete</button>
                     </div>
                 `;
@@ -706,11 +715,13 @@
             });
         }
 
-        window.startEditPillar = function(id, icon, title, desc) {
+        window.startEditPillar = function(id) {
+            const data = localPillars[id];
+            if (!data) return;
             editPillarId = id;
-            document.getElementById('add-pillar-icon').value = icon;
-            document.getElementById('add-pillar-title').value = title;
-            document.getElementById('add-pillar-desc').value = desc;
+            document.getElementById('add-pillar-icon').value = data.icon || '';
+            document.getElementById('add-pillar-title').value = data.title || '';
+            document.getElementById('add-pillar-desc').value = data.desc || '';
             
             document.getElementById('pillar-form-title').innerText = "Edit Pillar";
             document.getElementById('pillar-submit-btn').innerText = "Save Changes";
@@ -755,7 +766,7 @@
                 }
                 loadAdminPillars();
             } catch (err) {
-                showToast("Failed to process pillar.", "error");
+                showToast("Failed to process pilar.", "error");
             }
         });
 
@@ -777,6 +788,8 @@
             
             snap.forEach(docSnap => {
                 const data = docSnap.data();
+                localEdu[docSnap.id] = data;
+
                 const row = document.createElement('div');
                 row.className = 'admin-item-row draggable-item';
                 row.draggable = true;
@@ -795,7 +808,7 @@
                         </div>
                     </div>
                     <div class="admin-item-action-btns">
-                        <button class="admin-action-btn-edit" onclick="startEditEdu('${docSnap.id}', '${data.time}', '${data.title.replace(/'/g, "\\'")}', '${data.school.replace(/'/g, "\\'")}', '${(data.desc || '').replace(/'/g, "\\'")}')">Edit</button>
+                        <button class="admin-action-btn-edit" onclick="startEditEdu('${docSnap.id}')">Edit</button>
                         <button class="admin-action-btn-danger" onclick="deleteEdu('${docSnap.id}')">Delete</button>
                     </div>
                 `;
@@ -803,12 +816,14 @@
             });
         }
 
-        window.startEditEdu = function(id, time, title, school, desc) {
+        window.startEditEdu = function(id) {
+            const data = localEdu[id];
+            if (!data) return;
             editEduId = id;
-            document.getElementById('add-edu-time').value = time;
-            document.getElementById('add-edu-title').value = title;
-            document.getElementById('add-edu-school').value = school;
-            document.getElementById('add-edu-desc').value = desc;
+            document.getElementById('add-edu-time').value = data.time || '';
+            document.getElementById('add-edu-title').value = data.title || '';
+            document.getElementById('add-edu-school').value = data.school || '';
+            document.getElementById('add-edu-desc').value = data.desc || '';
 
             document.getElementById('edu-form-title').innerText = "Edit Education";
             document.getElementById('edu-submit-btn').innerText = "Save Changes";
@@ -876,6 +891,8 @@
             
             snap.forEach(docSnap => {
                 const data = docSnap.data();
+                localCerts[docSnap.id] = data;
+
                 const row = document.createElement('div');
                 row.className = 'admin-item-row draggable-item';
                 row.draggable = true;
@@ -894,7 +911,7 @@
                         </div>
                     </div>
                     <div class="admin-item-action-btns">
-                        <button class="admin-action-btn-edit" onclick="startEditCert('${docSnap.id}', '${data.time}', '${data.title.replace(/'/g, "\\'")}', '${data.publisher.replace(/'/g, "\\'")}')">Edit</button>
+                        <button class="admin-action-btn-edit" onclick="startEditCert('${docSnap.id}')">Edit</button>
                         <button class="admin-action-btn-danger" onclick="deleteCert('${docSnap.id}')">Delete</button>
                     </div>
                 `;
@@ -902,11 +919,13 @@
             });
         }
 
-        window.startEditCert = function(id, time, title, publisher) {
+        window.startEditCert = function(id) {
+            const data = localCerts[id];
+            if (!data) return;
             editCertId = id;
-            document.getElementById('add-cert-time').value = time;
-            document.getElementById('add-cert-title').value = title;
-            document.getElementById('add-cert-publisher').value = publisher;
+            document.getElementById('add-cert-time').value = data.time || '';
+            document.getElementById('add-cert-title').value = data.title || '';
+            document.getElementById('add-cert-publisher').value = data.publisher || '';
 
             document.getElementById('cert-form-title').innerText = "Edit Certificate";
             document.getElementById('cert-submit-btn').innerText = "Save Changes";
@@ -973,6 +992,8 @@
             
             snap.forEach(docSnap => {
                 const data = docSnap.data();
+                localExps[docSnap.id] = data;
+
                 const row = document.createElement('div');
                 row.className = 'admin-item-row draggable-item';
                 row.draggable = true;
@@ -992,7 +1013,7 @@
                         </div>
                     </div>
                     <div class="admin-item-action-btns">
-                        <button class="admin-action-btn-edit" onclick="startEditExp('${docSnap.id}', '${data.time}', '${data.title.replace(/'/g, "\\'")}', '${data.company.replace(/'/g, "\\'")}', '${(data.desc || '').replace(/'/g, "\\'")}')">Edit</button>
+                        <button class="admin-action-btn-edit" onclick="startEditExp('${docSnap.id}')">Edit</button>
                         <button class="admin-action-btn-danger" onclick="deleteExp('${docSnap.id}')">Delete</button>
                     </div>
                 `;
@@ -1000,12 +1021,14 @@
             });
         }
 
-        window.startEditExp = function(id, time, title, company, desc) {
+        window.startEditExp = function(id) {
+            const data = localExps[id];
+            if (!data) return;
             editExpId = id;
-            document.getElementById('add-exp-time').value = time;
-            document.getElementById('add-exp-title').value = title;
-            document.getElementById('add-exp-company').value = company;
-            document.getElementById('add-exp-desc').value = desc;
+            document.getElementById('add-exp-time').value = data.time || '';
+            document.getElementById('add-exp-title').value = data.title || '';
+            document.getElementById('add-exp-company').value = data.company || '';
+            document.getElementById('add-exp-desc').value = data.desc || '';
 
             document.getElementById('exp-form-title').innerText = "Edit Career Record";
             document.getElementById('exp-submit-btn').innerText = "Save Changes";
@@ -1073,6 +1096,8 @@
             
             snap.forEach(docSnap => {
                 const data = docSnap.data();
+                localProjs[docSnap.id] = data;
+
                 const row = document.createElement('div');
                 row.className = 'admin-item-row draggable-item';
                 row.draggable = true;
@@ -1091,7 +1116,7 @@
                         </div>
                     </div>
                     <div class="admin-item-action-btns">
-                        <button class="admin-action-btn-edit" onclick="startEditProj('${docSnap.id}', '${data.title.replace(/'/g, "\\'")}', '${data.tag.replace(/'/g, "\\'")}', '${data.desc.replace(/'/g, "\\'")}')">Edit</button>
+                        <button class="admin-action-btn-edit" onclick="startEditProj('${docSnap.id}')">Edit</button>
                         <button class="admin-action-btn-danger" onclick="deleteProj('${docSnap.id}')">Delete</button>
                     </div>
                 `;
@@ -1099,11 +1124,13 @@
             });
         }
 
-        window.startEditProj = function(id, title, tag, desc) {
+        window.startEditProj = function(id) {
+            const data = localProjs[id];
+            if (!data) return;
             editProjId = id;
-            document.getElementById('add-proj-title').value = title;
-            document.getElementById('add-proj-tag').value = tag;
-            document.getElementById('add-proj-desc').value = desc;
+            document.getElementById('add-proj-title').value = data.title || '';
+            document.getElementById('add-proj-tag').value = data.tag || '';
+            document.getElementById('add-proj-desc').value = data.desc || '';
 
             document.getElementById('proj-form-title').innerText = "Edit Project";
             document.getElementById('proj-submit-btn').innerText = "Save Changes";

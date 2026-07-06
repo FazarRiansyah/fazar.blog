@@ -6,6 +6,8 @@
     <title>fazar.site | Admin Panel</title>
     <link rel="icon" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=">
     <link rel="stylesheet" href="style.css">
+    <!-- Quill Rich Text Editor Stylesheet -->
+    <link href="https://cdn.jsdelivr.net/npm/quill@2.0.0/dist/quill.snow.css" rel="stylesheet">
     <style>
         .login-card {
             max-width: 360px;
@@ -58,6 +60,21 @@
             margin-right: 12px;
             color: var(--text-muted);
             font-size: 1rem;
+        }
+        /* Custom styles to align Quill with our premium UI */
+        .ql-container.ql-snow {
+            border: 1px solid var(--border-color) !important;
+            border-bottom-left-radius: 8px;
+            border-bottom-right-radius: 8px;
+            font-family: var(--font-body);
+            font-size: 0.95rem;
+            color: var(--text-primary);
+        }
+        .ql-toolbar.ql-snow {
+            border: 1px solid var(--border-color) !important;
+            border-top-left-radius: 8px;
+            border-top-right-radius: 8px;
+            background-color: var(--bg-alt);
         }
     </style>
 </head>
@@ -123,12 +140,12 @@
                         <input type="text" id="edit-name" class="admin-input-txt" required>
                     </div>
                     <div class="admin-form-ctrl">
-                        <label>Homepage Biography (HTML Supported)</label>
-                        <textarea id="edit-bio" class="admin-textarea" required></textarea>
+                        <label>Homepage Biography</label>
+                        <div id="edit-bio" style="height: 120px; background-color: #ffffff; border-radius: 8px;"></div>
                     </div>
                     <div class="admin-form-ctrl">
-                        <label>About Page Biography (HTML Supported)</label>
-                        <textarea id="edit-bio-tentang" class="admin-textarea" required></textarea>
+                        <label>About Page Biography</label>
+                        <div id="edit-bio-tentang" style="height: 200px; background-color: #ffffff; border-radius: 8px;"></div>
                     </div>
                     <div class="admin-form-ctrl">
                         <label>Primary Job Title / Role</label>
@@ -339,6 +356,9 @@
         </div>
     </div>
 
+    <!-- Quill Editor library script -->
+    <script src="https://cdn.jsdelivr.net/npm/quill@2.0.0/dist/quill.js"></script>
+
     <!-- Scripts -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
@@ -363,6 +383,22 @@
         const dashboardSection = document.getElementById('dashboard-section');
         const loginError = document.getElementById('login-error');
         const alertToast = document.getElementById('alert-toast');
+
+        // Initialize Quill Rich Text Editors
+        const quillBio = new Quill('#edit-bio', {
+            theme: 'snow',
+            placeholder: 'Write your homepage biography...',
+            modules: {
+                toolbar: [['bold', 'italic', 'underline'], ['link'], [{ 'list': 'ordered'}, { 'list': 'bullet' }]]
+            }
+        });
+        const quillBioTentang = new Quill('#edit-bio-tentang', {
+            theme: 'snow',
+            placeholder: 'Write your about page biography...',
+            modules: {
+                toolbar: [['bold', 'italic', 'underline'], ['link'], [{ 'list': 'ordered'}, { 'list': 'bullet' }]]
+            }
+        });
 
         // Edit IDs tracking state
         let editPillarId = null;
@@ -556,8 +592,8 @@
                 if (profileSnap.exists()) {
                     const data = profileSnap.data();
                     document.getElementById('edit-name').value = data.name || '';
-                    document.getElementById('edit-bio').value = data.bio || '';
-                    document.getElementById('edit-bio-tentang').value = data.bioTentang || '';
+                    quillBio.root.innerHTML = data.bio || '';
+                    quillBioTentang.root.innerHTML = data.bioTentang || '';
                     document.getElementById('edit-peran').value = data.peran || '';
                     document.getElementById('edit-instansi').value = data.instansi || '';
                     document.getElementById('edit-lokasi').value = data.lokasi || '';
@@ -598,8 +634,8 @@
             try {
                 await setDoc(doc(db, "settings", "profile"), {
                     name: document.getElementById('edit-name').value,
-                    bio: document.getElementById('edit-bio').value,
-                    bioTentang: document.getElementById('edit-bio-tentang').value,
+                    bio: quillBio.root.innerHTML,
+                    bioTentang: quillBioTentang.root.innerHTML,
                     peran: document.getElementById('edit-peran').value,
                     instansi: document.getElementById('edit-instansi').value,
                     lokasi: document.getElementById('edit-lokasi').value
@@ -694,7 +730,6 @@
         document.getElementById('pillar-add-form').addEventListener('submit', async (e) => {
             e.preventDefault();
             try {
-                // If adding new, get next sortOrder
                 let nextOrder = 1;
                 if (!editPillarId) {
                     const snap = await getDocs(collection(db, "expertise"));

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -45,6 +45,20 @@
             background-color: var(--accent-color);
             color: white;
         }
+        .draggable-item {
+            cursor: move;
+            user-select: none;
+            transition: transform 0.2s ease, background-color 0.2s ease;
+        }
+        .draggable-item:active {
+            opacity: 0.6;
+            background-color: var(--bg-alt);
+        }
+        .drag-handle {
+            margin-right: 12px;
+            color: var(--text-muted);
+            font-size: 1rem;
+        }
     </style>
 </head>
 <body>
@@ -59,18 +73,18 @@
 
     <!-- Login Area -->
     <div id="login-section" class="login-card">
-        <h2 style="font-family: var(--font-heading); font-size: 1.5rem; font-weight: 700; text-align: center;">Login Admin</h2>
+        <h2 style="font-family: var(--font-heading); font-size: 1.5rem; font-weight: 700; text-align: center;">Admin Login</h2>
         <div class="admin-alert-toast" id="login-error" style="display: none; margin-top: 10px; margin-bottom: 10px;"></div>
         <form id="login-form" style="display: flex; flex-direction: column; gap: 16px;">
             <div class="admin-form-ctrl">
-                <label for="login-email">Email</label>
+                <label for="login-email">Email Address</label>
                 <input type="email" id="login-email" class="admin-input-txt" required>
             </div>
             <div class="admin-form-ctrl">
                 <label for="login-password">Password</label>
                 <input type="password" id="login-password" class="admin-input-txt" required>
             </div>
-            <button type="submit" class="admin-submit-btn" style="width: 100%;">Masuk</button>
+            <button type="submit" class="admin-submit-btn" style="width: 100%;">Sign In</button>
         </form>
     </div>
 
@@ -78,11 +92,11 @@
     <div id="dashboard-section" class="admin-container" style="display: none; max-width: 960px;">
         <div class="admin-header-row">
             <div>
-                <h1 class="admin-title-main">Dashboard Editor</h1>
-                <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 4px;">Kelola semua konten fazar.site Anda</p>
+                <h1 class="admin-title-main">Editor Dashboard</h1>
+                <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 4px;">Manage all content on your fazar.site</p>
             </div>
             <div style="display: flex; gap: 8px; align-items: center;">
-                <button class="admin-logout-btn" id="import-btn" style="background-color: var(--accent-color); color: var(--bg-main); border-color: transparent;">Impor Data Awal</button>
+                <button class="admin-logout-btn" id="import-btn" style="background-color: var(--accent-color); color: var(--bg-main); border-color: transparent;">Initial Setup</button>
                 <button class="admin-logout-btn" id="logout-btn">Log Out</button>
             </div>
         </div>
@@ -92,46 +106,46 @@
 
         <!-- Tabs Navigation -->
         <div class="admin-tabs-nav" style="flex-wrap: wrap;">
-            <button class="admin-tab-trigger active" onclick="switchTab('tab-profile')">1. Profil & Bio</button>
-            <button class="admin-tab-trigger" onclick="switchTab('tab-expertise')">2. Keahlian & Tag</button>
-            <button class="admin-tab-trigger" onclick="switchTab('tab-edu-cert')">3. Edukasi & Sertifikat</button>
-            <button class="admin-tab-trigger" onclick="switchTab('tab-experience')">4. Karir</button>
-            <button class="admin-tab-trigger" onclick="switchTab('tab-projects')">5. Portofolio</button>
+            <button class="admin-tab-trigger active" onclick="switchTab('tab-profile')">1. Profile & Bio</button>
+            <button class="admin-tab-trigger" onclick="switchTab('tab-expertise')">2. Expertise & Tags</button>
+            <button class="admin-tab-trigger" onclick="switchTab('tab-edu-cert')">3. Education & Certs</button>
+            <button class="admin-tab-trigger" onclick="switchTab('tab-experience')">4. Career History</button>
+            <button class="admin-tab-trigger" onclick="switchTab('tab-projects')">5. Portfolio</button>
         </div>
 
         <!-- Tab 1: Profile & Contacts -->
         <div id="tab-profile" class="admin-tab-content active">
             <div class="admin-card-box">
-                <h3 style="font-family: var(--font-heading); font-size: 1.15rem; font-weight: 700; margin-bottom: 8px;">Ubah Informasi Diri & Kontak</h3>
+                <h3 style="font-family: var(--font-heading); font-size: 1.15rem; font-weight: 700; margin-bottom: 8px;">Edit Personal Info & Contacts</h3>
                 <form id="profile-form" style="display: flex; flex-direction: column; gap: 20px;">
                     <div class="admin-form-ctrl">
-                        <label>Nama Lengkap</label>
+                        <label>Full Name</label>
                         <input type="text" id="edit-name" class="admin-input-txt" required>
                     </div>
                     <div class="admin-form-ctrl">
-                        <label>Biografi Halaman Utama (HTML didukung)</label>
+                        <label>Homepage Biography (HTML Supported)</label>
                         <textarea id="edit-bio" class="admin-textarea" required></textarea>
                     </div>
                     <div class="admin-form-ctrl">
-                        <label>Biografi Halaman Tentang Saya (HTML didukung)</label>
+                        <label>About Page Biography (HTML Supported)</label>
                         <textarea id="edit-bio-tentang" class="admin-textarea" required></textarea>
                     </div>
                     <div class="admin-form-ctrl">
-                        <label>Posisi / Pekerjaan Utama</label>
+                        <label>Primary Job Title / Role</label>
                         <input type="text" id="edit-peran" class="admin-input-txt" required>
                     </div>
                     <div class="admin-form-ctrl">
-                        <label>Instansi Kerja</label>
+                        <label>Work Institution / Company</label>
                         <input type="text" id="edit-instansi" class="admin-input-txt" required>
                     </div>
                     <div class="admin-form-ctrl">
-                        <label>Lokasi Saat Ini</label>
+                        <label>Current Location</label>
                         <input type="text" id="edit-lokasi" class="admin-input-txt" required>
                     </div>
 
-                    <h4 style="font-family: var(--font-heading); font-size: 1rem; font-weight: 700; border-top: 1px solid var(--border-color); padding-top: 24px; margin-top: 8px;">Saluran Kontak (Popup & Footer)</h4>
+                    <h4 style="font-family: var(--font-heading); font-size: 1rem; font-weight: 700; border-top: 1px solid var(--border-color); padding-top: 24px; margin-top: 8px;">Contact Channels (Popup & Footer)</h4>
                     <div class="admin-form-ctrl">
-                        <label>Email Kontak</label>
+                        <label>Contact Email</label>
                         <input type="email" id="edit-email" class="admin-input-txt" required>
                     </div>
                     <div class="admin-form-ctrl">
@@ -139,15 +153,15 @@
                         <input type="url" id="edit-linkedin" class="admin-input-txt" required>
                     </div>
                     <div class="admin-form-ctrl">
-                        <label>Nomor WhatsApp (Contoh: 62812xxxxxx)</label>
+                        <label>WhatsApp Number (Example: 62812xxxxxx)</label>
                         <input type="text" id="edit-whatsapp" class="admin-input-txt">
                     </div>
                     <div class="admin-form-ctrl">
-                        <label>Username Telegram (Tanpa @)</label>
+                        <label>Telegram Username (Without @)</label>
                         <input type="text" id="edit-telegram" class="admin-input-txt">
                     </div>
 
-                    <button type="submit" class="admin-submit-btn">Simpan Informasi</button>
+                    <button type="submit" class="admin-submit-btn">Save Information</button>
                 </form>
             </div>
         </div>
@@ -157,44 +171,41 @@
             <div class="admin-flex-row">
                 <!-- Left Column: Skills Tags -->
                 <div class="admin-card-box">
-                    <h3 style="font-family: var(--font-heading); font-size: 1.15rem; font-weight: 700;">Tag Keahlian</h3>
-                    <p style="font-size: 0.8rem; color: var(--text-muted);">Masukkan keahlian dipisahkan dengan koma (contoh: HTML, CSS, React, UI/UX)</p>
+                    <h3 style="font-family: var(--font-heading); font-size: 1.15rem; font-weight: 700;">Skills Tags</h3>
+                    <p style="font-size: 0.8rem; color: var(--text-muted);">Enter skills separated by commas (example: HTML, CSS, React, UI/UX)</p>
                     <form id="skills-tags-form" style="display: flex; flex-direction: column; gap: 16px;">
                         <div class="admin-form-ctrl">
-                            <label>Daftar Keahlian (Koma terpisah)</label>
-                            <input type="text" id="edit-skills-tags" class="admin-input-txt" placeholder="HTML, CSS, JavaScript, dll.">
+                            <label>Skills List (Comma separated)</label>
+                            <input type="text" id="edit-skills-tags" class="admin-input-txt" placeholder="HTML, CSS, JavaScript, etc.">
                         </div>
-                        <button type="submit" class="admin-submit-btn">Simpan Tag</button>
+                        <button type="submit" class="admin-submit-btn">Save Tags</button>
                     </form>
                 </div>
 
                 <!-- Right Column: Home Pillars CRUD -->
                 <div class="admin-card-box">
-                    <h3 id="pillar-form-title" style="font-family: var(--font-heading); font-size: 1.15rem; font-weight: 700;">Tambah Pilar Keahlian Beranda</h3>
+                    <h3 id="pillar-form-title" style="font-family: var(--font-heading); font-size: 1.15rem; font-weight: 700;">Add Homepage Pillar</h3>
                     <form id="pillar-add-form" style="display: flex; flex-direction: column; gap: 16px;">
                         <div class="admin-form-ctrl">
-                            <label>Ikon / Emoji (Contoh: 🎓, ✨, ⚡)</label>
+                            <label>Icon / Emoji (Example: 🎓, ✨, ⚡)</label>
                             <input type="text" id="add-pillar-icon" class="admin-input-txt" required>
                         </div>
                         <div class="admin-form-ctrl">
-                            <label>Nama Keahlian</label>
+                            <label>Expertise Name</label>
                             <input type="text" id="add-pillar-title" class="admin-input-txt" required>
                         </div>
                         <div class="admin-form-ctrl">
-                            <label>Deskripsi Pendek</label>
+                            <label>Short Description</label>
                             <textarea id="add-pillar-desc" class="admin-textarea" required></textarea>
                         </div>
-                        <div class="admin-form-ctrl">
-                            <label>No Urut</label>
-                            <input type="number" id="add-pillar-order" class="admin-input-txt" required value="1">
-                        </div>
                         <div style="display: flex; gap: 8px;">
-                            <button type="submit" id="pillar-submit-btn" class="admin-submit-btn">Tambah Pilar</button>
-                            <button type="button" id="pillar-cancel-btn" class="admin-logout-btn" style="display: none;">Batal</button>
+                            <button type="submit" id="pillar-submit-btn" class="admin-submit-btn">Add Pillar</button>
+                            <button type="button" id="pillar-cancel-btn" class="admin-logout-btn" style="display: none;">Cancel</button>
                         </div>
                     </form>
 
-                    <h4 style="font-family: var(--font-heading); font-size: 1rem; font-weight: 700; margin-top: 16px;">Daftar Pilar Beranda</h4>
+                    <h4 style="font-family: var(--font-heading); font-size: 1rem; font-weight: 700; margin-top: 16px;">Homepage Pillars List</h4>
+                    <p style="font-size:0.75rem; color:var(--text-muted); margin-bottom:8px;">💡 Tip: Drag and drop items to reorder them.</p>
                     <div id="pillar-list-admin" style="display: flex; flex-direction: column;"></div>
                 </div>
             </div>
@@ -205,61 +216,57 @@
             <div class="admin-flex-row">
                 <!-- Left: Education CRUD -->
                 <div class="admin-card-box">
-                    <h3 id="edu-form-title" style="font-family: var(--font-heading); font-size: 1.15rem; font-weight: 700;">Kelola Riwayat Pendidikan</h3>
+                    <h3 id="edu-form-title" style="font-family: var(--font-heading); font-size: 1.15rem; font-weight: 700;">Manage Education</h3>
                     <form id="edu-add-form" style="display: flex; flex-direction: column; gap: 16px; margin-bottom: 24px;">
                         <div class="admin-form-ctrl">
-                            <label>Tahun (Contoh: 2019 - 2023)</label>
+                            <label>Year Period (Example: 2019 - 2023)</label>
                             <input type="text" id="add-edu-time" class="admin-input-txt" required>
                         </div>
                         <div class="admin-form-ctrl">
-                            <label>Gelar / Jurusan</label>
+                            <label>Degree / Field of Study</label>
                             <input type="text" id="add-edu-title" class="admin-input-txt" required>
                         </div>
                         <div class="admin-form-ctrl">
-                            <label>Institusi</label>
+                            <label>School / University</label>
                             <input type="text" id="add-edu-school" class="admin-input-txt" required>
                         </div>
                         <div class="admin-form-ctrl">
-                            <label>Keterangan Tambahan</label>
+                            <label>Additional Details</label>
                             <textarea id="add-edu-desc" class="admin-textarea"></textarea>
                         </div>
-                        <div class="admin-form-ctrl">
-                            <label>Urutan</label>
-                            <input type="number" id="add-edu-order" class="admin-input-txt" required value="1">
-                        </div>
                         <div style="display: flex; gap: 8px;">
-                            <button type="submit" id="edu-submit-btn" class="admin-submit-btn">Tambah Pendidikan</button>
-                            <button type="button" id="edu-cancel-btn" class="admin-logout-btn" style="display: none;">Batal</button>
+                            <button type="submit" id="edu-submit-btn" class="admin-submit-btn">Add Education</button>
+                            <button type="button" id="edu-cancel-btn" class="admin-logout-btn" style="display: none;">Cancel</button>
                         </div>
                     </form>
+                    <h4 style="font-family: var(--font-heading); font-size: 1rem; font-weight: 700;">Education List</h4>
+                    <p style="font-size:0.75rem; color:var(--text-muted); margin-bottom:8px;">💡 Tip: Drag and drop items to reorder them.</p>
                     <div id="edu-list-admin" style="display: flex; flex-direction: column;"></div>
                 </div>
 
                 <!-- Right: Certifications CRUD -->
                 <div class="admin-card-box">
-                    <h3 id="cert-form-title" style="font-family: var(--font-heading); font-size: 1.15rem; font-weight: 700;">Kelola Sertifikat</h3>
+                    <h3 id="cert-form-title" style="font-family: var(--font-heading); font-size: 1.15rem; font-weight: 700;">Manage Certifications</h3>
                     <form id="cert-add-form" style="display: flex; flex-direction: column; gap: 16px; margin-bottom: 24px;">
                         <div class="admin-form-ctrl">
-                            <label>Waktu Perolehan (Contoh: Maret 2024)</label>
+                            <label>Issue Date (Example: March 2024)</label>
                             <input type="text" id="add-cert-time" class="admin-input-txt" required>
                         </div>
                         <div class="admin-form-ctrl">
-                            <label>Nama Sertifikasi</label>
+                            <label>Certification Name</label>
                             <input type="text" id="add-cert-title" class="admin-input-txt" required>
                         </div>
                         <div class="admin-form-ctrl">
-                            <label>Penerbit / Lembaga</label>
+                            <label>Issuing Organization</label>
                             <input type="text" id="add-cert-publisher" class="admin-input-txt" required>
                         </div>
-                        <div class="admin-form-ctrl">
-                            <label>Urutan</label>
-                            <input type="number" id="add-cert-order" class="admin-input-txt" required value="1">
-                        </div>
                         <div style="display: flex; gap: 8px;">
-                            <button type="submit" id="cert-submit-btn" class="admin-submit-btn">Tambah Sertifikat</button>
-                            <button type="button" id="cert-cancel-btn" class="admin-logout-btn" style="display: none;">Batal</button>
+                            <button type="submit" id="cert-submit-btn" class="admin-submit-btn">Add Certificate</button>
+                            <button type="button" id="cert-cancel-btn" class="admin-logout-btn" style="display: none;">Cancel</button>
                         </div>
                     </form>
+                    <h4 style="font-family: var(--font-heading); font-size: 1rem; font-weight: 700;">Certificates List</h4>
+                    <p style="font-size:0.75rem; color:var(--text-muted); margin-bottom:8px;">💡 Tip: Drag and drop items to reorder them.</p>
                     <div id="cert-list-admin" style="display: flex; flex-direction: column;"></div>
                 </div>
             </div>
@@ -268,33 +275,34 @@
         <!-- Tab 4: Career Manager -->
         <div id="tab-experience" class="admin-tab-content">
             <div class="admin-card-box" style="margin-bottom: 32px;">
-                <h3 id="exp-form-title" style="font-family: var(--font-heading); font-size: 1.15rem; font-weight: 700; margin-bottom: 12px;">Tambah Pengalaman Baru</h3>
+                <h3 id="exp-form-title" style="font-family: var(--font-heading); font-size: 1.15rem; font-weight: 700; margin-bottom: 12px;">Add Professional Experience</h3>
                 <form id="exp-add-form" style="display: flex; flex-direction: column; gap: 16px;">
                     <div class="admin-form-ctrl">
-                        <label>Rentang Waktu (Contoh: Juni 2025 - Sekarang)</label>
+                        <label>Period (Example: June 2025 - Present)</label>
                         <input type="text" id="add-exp-time" class="admin-input-txt" required>
                     </div>
                     <div class="admin-form-ctrl">
-                        <label>Nama Posisi / Pekerjaan</label>
+                        <label>Job Title / Position</label>
                         <input type="text" id="add-exp-title" class="admin-input-txt" required>
                     </div>
                     <div class="admin-form-ctrl">
-                        <label>Perusahaan / Instansi</label>
+                        <label>Company / Institution</label>
                         <input type="text" id="add-exp-company" class="admin-input-txt" required>
                     </div>
                     <div class="admin-form-ctrl">
-                        <label>No Urut Tampil (Angka Kecil Di Atas)</label>
-                        <input type="number" id="add-exp-order" class="admin-input-txt" required value="1">
+                        <label>Job Description / Responsibilities</label>
+                        <textarea id="add-exp-desc" class="admin-textarea" placeholder="List your key contributions..."></textarea>
                     </div>
                     <div style="display: flex; gap: 8px;">
-                        <button type="submit" id="exp-submit-btn" class="admin-submit-btn">Tambah Pengalaman</button>
-                        <button type="button" id="exp-cancel-btn" class="admin-logout-btn" style="display: none;">Batal</button>
+                        <button type="submit" id="exp-submit-btn" class="admin-submit-btn">Add Experience</button>
+                        <button type="button" id="exp-cancel-btn" class="admin-logout-btn" style="display: none;">Cancel</button>
                     </div>
                 </form>
             </div>
 
             <div class="admin-card-box">
-                <h3 style="font-family: var(--font-heading); font-size: 1.15rem; font-weight: 700;">Daftar Pengalaman Karir</h3>
+                <h3 style="font-family: var(--font-heading); font-size: 1.15rem; font-weight: 700;">Career History List</h3>
+                <p style="font-size:0.75rem; color:var(--text-muted); margin-bottom:8px;">💡 Tip: Drag and drop items to reorder them.</p>
                 <div id="exp-list-admin" style="display: flex; flex-direction: column;"></div>
             </div>
         </div>
@@ -302,33 +310,30 @@
         <!-- Tab 5: Projects Manager -->
         <div id="tab-projects" class="admin-tab-content">
             <div class="admin-card-box" style="margin-bottom: 32px;">
-                <h3 id="proj-form-title" style="font-family: var(--font-heading); font-size: 1.15rem; font-weight: 700; margin-bottom: 12px;">Tambah Proyek Baru</h3>
+                <h3 id="proj-form-title" style="font-family: var(--font-heading); font-size: 1.15rem; font-weight: 700; margin-bottom: 12px;">Add Project</h3>
                 <form id="proj-add-form" style="display: flex; flex-direction: column; gap: 16px;">
                     <div class="admin-form-ctrl">
-                        <label>Judul Proyek</label>
+                        <label>Project Title</label>
                         <input type="text" id="add-proj-title" class="admin-input-txt" required>
                     </div>
                     <div class="admin-form-ctrl">
-                        <label>Kategori / Tag (Contoh: Web Development)</label>
+                        <label>Category / Tag (Example: Web Development)</label>
                         <input type="text" id="add-proj-tag" class="admin-input-txt" required>
                     </div>
                     <div class="admin-form-ctrl">
-                        <label>Deskripsi Singkat</label>
+                        <label>Short Description</label>
                         <textarea id="add-proj-desc" class="admin-textarea" required></textarea>
                     </div>
-                    <div class="admin-form-ctrl">
-                        <label>No Urut Tampil (Urutan)</label>
-                        <input type="number" id="add-proj-order" class="admin-input-txt" required value="1">
-                    </div>
                     <div style="display: flex; gap: 8px;">
-                        <button type="submit" id="proj-submit-btn" class="admin-submit-btn">Tambah Proyek</button>
-                        <button type="button" id="proj-cancel-btn" class="admin-logout-btn" style="display: none;">Batal</button>
+                        <button type="submit" id="proj-submit-btn" class="admin-submit-btn">Add Project</button>
+                        <button type="button" id="proj-cancel-btn" class="admin-logout-btn" style="display: none;">Cancel</button>
                     </div>
                 </form>
             </div>
 
             <div class="admin-card-box">
-                <h3 style="font-family: var(--font-heading); font-size: 1.15rem; font-weight: 700;">Daftar Proyek</h3>
+                <h3 style="font-family: var(--font-heading); font-size: 1.15rem; font-weight: 700;">Projects List</h3>
+                <p style="font-size:0.75rem; color:var(--text-muted); margin-bottom:8px;">💡 Tip: Drag and drop items to reorder them.</p>
                 <div id="proj-list-admin" style="display: flex; flex-direction: column;"></div>
             </div>
         </div>
@@ -366,6 +371,9 @@
         let editExpId = null;
         let editProjId = null;
 
+        // Drag and Drop Variables
+        let draggedItem = null;
+
         // Authentication State Listener
         onAuthStateChanged(auth, (user) => {
             if (user) {
@@ -390,7 +398,7 @@
                 await signInWithEmailAndPassword(auth, email, pass);
             } catch (err) {
                 console.error("Login error:", err);
-                loginError.innerText = "Gagal masuk: " + err.message;
+                loginError.innerText = "Access denied: " + err.message;
                 loginError.classList.add('error');
                 loginError.style.display = 'block';
             }
@@ -419,19 +427,60 @@
             }, 4000);
         }
 
-        // --- Inisialisasi Data Awal (Impor Otomatis) ---
-        document.getElementById('import-btn').addEventListener('click', async () => {
-            if (confirm("Ingin memigrasikan seluruh profil, karir, dan portofolio default saat ini ke Firebase?")) {
+        // --- Drag & Drop Reordering Event Handlers ---
+        window.handleDragStart = function(e) {
+            draggedItem = e.currentTarget;
+            e.dataTransfer.effectAllowed = 'move';
+        };
+
+        window.handleDragOver = function(e) {
+            e.preventDefault();
+        };
+
+        window.handleDrop = async function(e, collectionName, callback) {
+            e.preventDefault();
+            const targetItem = e.currentTarget;
+            if (draggedItem && draggedItem !== targetItem) {
+                const listContainer = targetItem.parentNode;
+                const items = Array.from(listContainer.children);
+                const draggedIndex = items.indexOf(draggedItem);
+                const targetIndex = items.indexOf(targetItem);
+                
+                if (draggedIndex < targetIndex) {
+                    listContainer.insertBefore(draggedItem, targetItem.nextSibling);
+                } else {
+                    listContainer.insertBefore(draggedItem, targetItem);
+                }
+                
+                // Recalculate sortOrder for all elements and save to Firestore
                 try {
-                    showToast("Sedang mengimpor data awal...", "success");
+                    const updatedItems = Array.from(listContainer.children);
+                    for (let i = 0; i < updatedItems.length; i++) {
+                        const docId = updatedItems[i].dataset.id;
+                        const docRef = doc(db, collectionName, docId);
+                        await setDoc(docRef, { sortOrder: i + 1 }, { merge: true });
+                    }
+                    showToast("Sorting order updated successfully!");
+                    if (callback) callback();
+                } catch (err) {
+                    showToast("Failed to update sorting order: " + err.message, "error");
+                }
+            }
+        };
+
+        // --- Initial Setup Default Data ---
+        document.getElementById('import-btn').addEventListener('click', async () => {
+            if (confirm("Reset and import all initial English portfolio & career data to Firebase?")) {
+                try {
+                    showToast("Importing setup data...", "success");
 
                     // 1. Profile
                     await setDoc(doc(db, "settings", "profile"), {
                         name: "Fazar Riansyah",
-                        bio: "Saya adalah seorang <strong>Pengembang Teknologi Pembelajaran</strong> yang berdedikasi merancang sistem pembelajaran digital yang efektif, mengoptimasi platform LMS, serta menciptakan pengalaman desain UI/UX yang fungsional dan intuitif.",
-                        bioTentang: "Halo! Saya Fazar Riansyah. Saya berfokus pada ranah <strong>Teknologi Pendidikan & Desain Pengalaman Pengguna (UI/UX)</strong>. Melalui kombinasi keahlian di bidang riset pembelajaran, perancangan kurikulum digital, dan desain antarmuka, saya berupaya menghadirkan solusi media pembelajaran yang bermakna, efisien, dan menyenangkan.<br><br>Saat ini, saya mengabdi sebagai <strong>Pengembang Teknologi Pembelajaran Ahli Pertama</strong> di Dinas Pendidikan Provinsi DKI Jakarta, mengelola dan mengembangkan strategi pembelajaran digital berskala kota.",
-                        peran: "Pengembang Teknologi Pembelajaran",
-                        instansi: "Dinas Pendidikan Provinsi DKI Jakarta",
+                        bio: "I am a <strong>Learning Technology Developer</strong> dedicated to designing effective digital learning systems, optimizing LMS platforms, and creating functional, intuitive UI/UX designs.",
+                        bioTentang: "Hello! I am Fazar Riansyah. I focus on the fields of <strong>Educational Technology & User Experience Design (UI/UX)</strong>. By combining expertise in learning research, digital curriculum design, and interface design, I strive to deliver meaningful, efficient, and engaging learning solutions.<br><br>Currently, I serve as a <strong>First Expert Learning Technology Developer</strong> at the DKI Jakarta Provincial Education Department, managing and developing city-scale digital learning strategies.",
+                        peran: "Learning Technology Developer",
+                        instansi: "DKI Jakarta Education Department",
                         lokasi: "Jakarta, Indonesia"
                     });
 
@@ -452,49 +501,49 @@
                     const expCol = collection(db, "expertise");
                     const currentPillars = await getDocs(expCol);
                     if (currentPillars.empty) {
-                        await addDoc(expCol, { icon: "🎓", title: "Teknologi Pembelajaran", desc: "Perancangan kurikulum digital, pengembangan modul e-learning, serta pengelolaan dan optimasi Learning Management System (LMS) berskala besar.", sortOrder: 1 });
-                        await addDoc(expCol, { icon: "✨", title: "Desain UI/UX", desc: "Penerjemahan ide produk ke dalam wireframe, pembuatan prototipe interaktif, serta pengujian kegunaan (usability testing) yang berpusat pada pengguna.", sortOrder: 2 });
-                        await addDoc(expCol, { icon: "📊", title: "Operasional Program", desc: "Manajemen operasional pembelajaran ujung-ke-ujung (end-to-end), analisis kebutuhan pelatihan (TNA), serta fasilitasi program pengembangan kompetensi.", sortOrder: 3 });
+                        await addDoc(expCol, { icon: "🎓", title: "Learning Technology", desc: "Digital curriculum design, e-learning module development, and management of large-scale Learning Management Systems (LMS).", sortOrder: 1 });
+                        await addDoc(expCol, { icon: "✨", title: "UI/UX Design", desc: "Translating product concepts into wireframes, building interactive prototypes, and conducting user-centered usability testing.", sortOrder: 2 });
+                        await addDoc(expCol, { icon: "📊", title: "Program Operations", desc: "End-to-end management of learning operations, Training Needs Analysis (TNA), and facilitating professional competency development programs.", sortOrder: 3 });
                     }
 
                     // 5. Education
                     const eduCol = collection(db, "education");
                     const currentEdu = await getDocs(eduCol);
                     if (currentEdu.empty) {
-                        await addDoc(eduCol, { time: "2019 - 2023", title: "Sarjana Pendidikan (S.Pd) - Teknologi Pendidikan", school: "Universitas Negeri Malang (IPK: 3.70)", desc: "Fokus studi: Learning Management Systems, Desain Pembelajaran, Seamless Learning, Manajemen Sistem Informasi.", sortOrder: 1 });
+                        await addDoc(eduCol, { time: "2019 - 2023", title: "Bachelor of Education (B.Ed) - Educational Technology", school: "Universitas Negeri Malang (GPA: 3.70)", desc: "Focus of study: Learning Management Systems, Instructional Design, Seamless Learning, Management Information Systems.", sortOrder: 1 });
                     }
 
                     // 6. Certifications
                     const certCol = collection(db, "certifications");
                     const currentCert = await getDocs(certCol);
                     if (currentCert.empty) {
-                        await addDoc(certCol, { time: "Maret 2024", title: "Critical Thinking: Analyze Problem and Make Decision", publisher: "Dale Carnegie® Indonesia", sortOrder: 1 });
-                        await addDoc(certCol, { time: "September 2023", title: "Mengelola Karyawan sebagai Staf Sumber Daya Manusia (HR)", publisher: "Karier.mu", sortOrder: 2 });
-                        await addDoc(certCol, { time: "Juli 2022", title: "Fundamental UI/UX Designer", publisher: "Hacktiv8 Indonesia", sortOrder: 3 });
+                        await addDoc(certCol, { time: "March 2024", title: "Critical Thinking: Analyze Problem and Make Decision", publisher: "Dale Carnegie® Indonesia", sortOrder: 1 });
+                        await addDoc(certCol, { time: "September 2023", title: "Managing Employees as HR Staff", publisher: "Karier.mu", sortOrder: 2 });
+                        await addDoc(certCol, { time: "July 2022", title: "Fundamental UI/UX Designer", publisher: "Hacktiv8 Indonesia", sortOrder: 3 });
                     }
 
                     // 7. Experiences
                     const careerCol = collection(db, "experience");
                     const currentCareer = await getDocs(careerCol);
                     if (currentCareer.empty) {
-                        await addDoc(careerCol, { time: "Juni 2025 - Sekarang", title: "Pengembang Teknologi Pembelajaran Ahli Pertama", company: "Dinas Pendidikan Provinsi DKI Jakarta (Puslatbangdik Jakpus)", sortOrder: 1 });
-                        await addDoc(careerCol, { time: "Okt 2024 - Mei 2025", title: "Learning Operations", company: "Karier.mu", sortOrder: 2 });
-                        await addDoc(careerCol, { time: "Jan 2024 - Okt 2024", title: "Learning Operations", company: "Rumah Siap Kerja", sortOrder: 3 });
-                        await addDoc(careerCol, { time: "Nov 2023 - Jan 2024", title: "Learning Operations (Intern)", company: "Talenesia", sortOrder: 4 });
+                        await addDoc(careerCol, { time: "June 2025 - Present", title: "First Expert Learning Technology Developer", company: "DKI Jakarta Education Department", desc: "Managed learning technology systems, e-learning program operations, and city-wide Learning Management System (LMS) administration.", sortOrder: 1 });
+                        await addDoc(careerCol, { time: "Oct 2024 - May 2025", title: "Learning Operations", company: "Karier.mu", desc: "Facilitated end-to-end learning operations, coordinated virtual class programs, and analyzed training needs (TNA).", sortOrder: 2 });
+                        await addDoc(careerCol, { time: "Jan 2024 - Oct 2024", title: "Learning Operations", company: "Rumah Siap Kerja", desc: "Managed digital learning program schedules, student enrollment systems, and coordinated operational support.", sortOrder: 3 });
+                        await addDoc(careerCol, { time: "Nov 2023 - Jan 2024", title: "Learning Operations (Intern)", company: "Talenesia", desc: "Assisted in curriculum preparation, LMS setup, and operational coordination for corporate training programs.", sortOrder: 4 });
                     }
 
                     // 8. Projects
                     const projCol = collection(db, "projects");
                     const currentProj = await getDocs(projCol);
                     if (currentProj.empty) {
-                        await addDoc(projCol, { title: "FTI Website", tag: "Web Development", desc: "Pembaruan total situs web fakultas dengan arsitektur modern untuk waktu pemuatan yang sangat cepat.", sortOrder: 1 });
-                        await addDoc(projCol, { title: "Jakarta Berdampak", tag: "UI/UX Design", desc: "Desain antarmuka visualisasi data yang ramah pengguna untuk menyampaikan info publik secara efektif.", sortOrder: 2 });
+                        await addDoc(projCol, { title: "FTI Website", tag: "Web Development", desc: "Complete overhaul of the faculty website with modern frontend architecture for rapid page loads.", sortOrder: 1 });
+                        await addDoc(projCol, { title: "Jakarta Impactful", tag: "UI/UX Design", desc: "User-friendly dashboard data visualization interface design to effectively present public information.", sortOrder: 2 });
                     }
 
-                    showToast("Seluruh data default berhasil diimpor!");
+                    showToast("All default initial data imported successfully!");
                     loadDashboardData();
                 } catch (err) {
-                    showToast("Gagal mengimpor data: " + err.message, "error");
+                    showToast("Failed to import data: " + err.message, "error");
                 }
             }
         });
@@ -539,7 +588,7 @@
                 loadAdminProjects();
 
             } catch (err) {
-                showToast("Gagal memuat data dari database.", "error");
+                showToast("Failed to fetch data from Firestore.", "error");
             }
         }
 
@@ -563,9 +612,9 @@
                     telegram: document.getElementById('edit-telegram').value
                 });
 
-                showToast("Informasi diri dan kontak berhasil disimpan!");
+                showToast("Profile & contacts saved successfully!");
             } catch (err) {
-                showToast("Gagal menyimpan data.", "error");
+                showToast("Failed to save profile.", "error");
             }
         });
 
@@ -579,16 +628,16 @@
                 await setDoc(doc(db, "settings", "skills"), {
                     tags: tagsArray
                 });
-                showToast("Daftar tag keahlian berhasil disimpan!");
+                showToast("Skills tags saved successfully!");
             } catch (err) {
-                showToast("Gagal menyimpan tag.", "error");
+                showToast("Failed to save skills tags.", "error");
             }
         });
 
         // --- Pillars (Expertise) CRUD ---
         async function loadAdminPillars() {
             const list = document.getElementById('pillar-list-admin');
-            list.innerHTML = 'Memuat...';
+            list.innerHTML = 'Loading...';
             const q = query(collection(db, "expertise"), orderBy("sortOrder", "asc"));
             const snap = await getDocs(q);
             list.innerHTML = '';
@@ -596,74 +645,89 @@
             snap.forEach(docSnap => {
                 const data = docSnap.data();
                 const row = document.createElement('div');
-                row.className = 'admin-item-row';
+                row.className = 'admin-item-row draggable-item';
+                row.draggable = true;
+                row.dataset.id = docSnap.id;
+                
+                row.addEventListener('dragstart', handleDragStart);
+                row.addEventListener('dragover', handleDragOver);
+                row.addEventListener('drop', (e) => handleDrop(e, 'expertise', loadAdminPillars));
+
                 row.innerHTML = `
-                    <div class="admin-item-details">
-                        <span style="font-weight:600;">${data.icon} ${data.title}</span>
-                        <span style="font-size:0.8rem; color:var(--text-secondary);">${data.desc}</span>
+                    <div class="admin-item-details" style="display:flex; align-items:center;">
+                        <span class="drag-handle">☰</span>
+                        <div>
+                            <span style="font-weight:600;">${data.icon} ${data.title}</span>
+                            <span style="font-size:0.8rem; color:var(--text-secondary); display:block;">${data.desc}</span>
+                        </div>
                     </div>
                     <div class="admin-item-action-btns">
-                        <button class="admin-action-btn-edit" onclick="startEditPillar('${docSnap.id}', '${data.icon}', '${data.title.replace(/'/g, "\\'")}', '${data.desc.replace(/'/g, "\\'")}', ${data.sortOrder})">Ubah</button>
-                        <button class="admin-action-btn-danger" onclick="deletePillar('${docSnap.id}')">Hapus</button>
+                        <button class="admin-action-btn-edit" onclick="startEditPillar('${docSnap.id}', '${data.icon}', '${data.title.replace(/'/g, "\\'")}', '${data.desc.replace(/'/g, "\\'")}')">Edit</button>
+                        <button class="admin-action-btn-danger" onclick="deletePillar('${docSnap.id}')">Delete</button>
                     </div>
                 `;
                 list.appendChild(row);
             });
         }
 
-        window.startEditPillar = function(id, icon, title, desc, sortOrder) {
+        window.startEditPillar = function(id, icon, title, desc) {
             editPillarId = id;
             document.getElementById('add-pillar-icon').value = icon;
             document.getElementById('add-pillar-title').value = title;
             document.getElementById('add-pillar-desc').value = desc;
-            document.getElementById('add-pillar-order').value = sortOrder;
             
-            document.getElementById('pillar-form-title').innerText = "Ubah Pilar Keahlian";
-            document.getElementById('pillar-submit-btn').innerText = "Simpan Perubahan";
+            document.getElementById('pillar-form-title').innerText = "Edit Pillar";
+            document.getElementById('pillar-submit-btn').innerText = "Save Changes";
             document.getElementById('pillar-cancel-btn').style.display = 'inline-block';
             
-            // Scroll to form
             document.getElementById('pillar-form-title').scrollIntoView({ behavior: 'smooth' });
         }
 
         document.getElementById('pillar-cancel-btn').addEventListener('click', () => {
             editPillarId = null;
             document.getElementById('pillar-add-form').reset();
-            document.getElementById('pillar-form-title').innerText = "Tambah Pilar Keahlian Beranda";
-            document.getElementById('pillar-submit-btn').innerText = "Tambah Pilar";
+            document.getElementById('pillar-form-title').innerText = "Add Homepage Pillar";
+            document.getElementById('pillar-submit-btn').innerText = "Add Pillar";
             document.getElementById('pillar-cancel-btn').style.display = 'none';
         });
 
         document.getElementById('pillar-add-form').addEventListener('submit', async (e) => {
             e.preventDefault();
             try {
+                // If adding new, get next sortOrder
+                let nextOrder = 1;
+                if (!editPillarId) {
+                    const snap = await getDocs(collection(db, "expertise"));
+                    nextOrder = snap.size + 1;
+                }
+
                 const data = {
                     icon: document.getElementById('add-pillar-icon').value,
                     title: document.getElementById('add-pillar-title').value,
-                    desc: document.getElementById('add-pillar-desc').value,
-                    sortOrder: parseInt(document.getElementById('add-pillar-order').value)
+                    desc: document.getElementById('add-pillar-desc').value
                 };
 
                 if (editPillarId) {
-                    await setDoc(doc(db, "expertise", editPillarId), data);
+                    await setDoc(doc(db, "expertise", editPillarId), data, { merge: true });
                     editPillarId = null;
                     document.getElementById('pillar-cancel-btn').click();
-                    showToast("Pilar keahlian berhasil diperbarui!");
+                    showToast("Pillar updated successfully!");
                 } else {
+                    data.sortOrder = nextOrder;
                     await addDoc(collection(db, "expertise"), data);
                     document.getElementById('pillar-add-form').reset();
-                    showToast("Pilar keahlian berhasil ditambahkan!");
+                    showToast("Pillar added successfully!");
                 }
                 loadAdminPillars();
             } catch (err) {
-                showToast("Gagal memproses pilar.", "error");
+                showToast("Failed to process pillar.", "error");
             }
         });
 
         window.deletePillar = async function(id) {
-            if (confirm("Hapus pilar keahlian ini?")) {
+            if (confirm("Delete this pillar?")) {
                 await deleteDoc(doc(db, "expertise", id));
-                showToast("Pilar keahlian dihapus.");
+                showToast("Pillar deleted.");
                 loadAdminPillars();
             }
         };
@@ -671,7 +735,7 @@
         // --- Education CRUD ---
         async function loadAdminEducation() {
             const list = document.getElementById('edu-list-admin');
-            list.innerHTML = 'Memuat...';
+            list.innerHTML = 'Loading...';
             const q = query(collection(db, "education"), orderBy("sortOrder", "asc"));
             const snap = await getDocs(q);
             list.innerHTML = '';
@@ -679,31 +743,40 @@
             snap.forEach(docSnap => {
                 const data = docSnap.data();
                 const row = document.createElement('div');
-                row.className = 'admin-item-row';
+                row.className = 'admin-item-row draggable-item';
+                row.draggable = true;
+                row.dataset.id = docSnap.id;
+                
+                row.addEventListener('dragstart', handleDragStart);
+                row.addEventListener('dragover', handleDragOver);
+                row.addEventListener('drop', (e) => handleDrop(e, 'education', loadAdminEducation));
+
                 row.innerHTML = `
-                    <div class="admin-item-details">
-                        <span style="font-weight:600;">${data.title}</span>
-                        <span style="font-size:0.8rem; color:var(--text-secondary);">${data.school} (${data.time})</span>
+                    <div class="admin-item-details" style="display:flex; align-items:center;">
+                        <span class="drag-handle">☰</span>
+                        <div>
+                            <span style="font-weight:600;">${data.title}</span>
+                            <span style="font-size:0.8rem; color:var(--text-secondary); display:block;">${data.school} (${data.time})</span>
+                        </div>
                     </div>
                     <div class="admin-item-action-btns">
-                        <button class="admin-action-btn-edit" onclick="startEditEdu('${docSnap.id}', '${data.time}', '${data.title.replace(/'/g, "\\'")}', '${data.school.replace(/'/g, "\\'")}', '${(data.desc || '').replace(/'/g, "\\'")}', ${data.sortOrder})">Ubah</button>
-                        <button class="admin-action-btn-danger" onclick="deleteEdu('${docSnap.id}')">Hapus</button>
+                        <button class="admin-action-btn-edit" onclick="startEditEdu('${docSnap.id}', '${data.time}', '${data.title.replace(/'/g, "\\'")}', '${data.school.replace(/'/g, "\\'")}', '${(data.desc || '').replace(/'/g, "\\'")}')">Edit</button>
+                        <button class="admin-action-btn-danger" onclick="deleteEdu('${docSnap.id}')">Delete</button>
                     </div>
                 `;
                 list.appendChild(row);
             });
         }
 
-        window.startEditEdu = function(id, time, title, school, desc, sortOrder) {
+        window.startEditEdu = function(id, time, title, school, desc) {
             editEduId = id;
             document.getElementById('add-edu-time').value = time;
             document.getElementById('add-edu-title').value = title;
             document.getElementById('add-edu-school').value = school;
             document.getElementById('add-edu-desc').value = desc;
-            document.getElementById('add-edu-order').value = sortOrder;
 
-            document.getElementById('edu-form-title').innerText = "Ubah Riwayat Pendidikan";
-            document.getElementById('edu-submit-btn').innerText = "Simpan Perubahan";
+            document.getElementById('edu-form-title').innerText = "Edit Education";
+            document.getElementById('edu-submit-btn').innerText = "Save Changes";
             document.getElementById('edu-cancel-btn').style.display = 'inline-block';
 
             document.getElementById('edu-form-title').scrollIntoView({ behavior: 'smooth' });
@@ -712,42 +785,48 @@
         document.getElementById('edu-cancel-btn').addEventListener('click', () => {
             editEduId = null;
             document.getElementById('edu-add-form').reset();
-            document.getElementById('edu-form-title').innerText = "Kelola Riwayat Pendidikan";
-            document.getElementById('edu-submit-btn').innerText = "Tambah Pendidikan";
+            document.getElementById('edu-form-title').innerText = "Manage Education";
+            document.getElementById('edu-submit-btn').innerText = "Add Education";
             document.getElementById('edu-cancel-btn').style.display = 'none';
         });
 
         document.getElementById('edu-add-form').addEventListener('submit', async (e) => {
             e.preventDefault();
             try {
+                let nextOrder = 1;
+                if (!editEduId) {
+                    const snap = await getDocs(collection(db, "education"));
+                    nextOrder = snap.size + 1;
+                }
+
                 const data = {
                     time: document.getElementById('add-edu-time').value,
                     title: document.getElementById('add-edu-title').value,
                     school: document.getElementById('add-edu-school').value,
-                    desc: document.getElementById('add-edu-desc').value,
-                    sortOrder: parseInt(document.getElementById('add-edu-order').value)
+                    desc: document.getElementById('add-edu-desc').value
                 };
 
                 if (editEduId) {
-                    await setDoc(doc(db, "education", editEduId), data);
+                    await setDoc(doc(db, "education", editEduId), data, { merge: true });
                     editEduId = null;
                     document.getElementById('edu-cancel-btn').click();
-                    showToast("Pendidikan berhasil diperbarui!");
+                    showToast("Education updated successfully!");
                 } else {
+                    data.sortOrder = nextOrder;
                     await addDoc(collection(db, "education"), data);
                     document.getElementById('edu-add-form').reset();
-                    showToast("Riwayat pendidikan ditambahkan!");
+                    showToast("Education added successfully!");
                 }
                 loadAdminEducation();
             } catch (err) {
-                showToast("Gagal memproses riwayat pendidikan.", "error");
+                showToast("Failed to process education.", "error");
             }
         });
 
         window.deleteEdu = async function(id) {
-            if (confirm("Hapus riwayat pendidikan ini?")) {
+            if (confirm("Delete this education record?")) {
                 await deleteDoc(doc(db, "education", id));
-                showToast("Riwayat pendidikan dihapus.");
+                showToast("Education record deleted.");
                 loadAdminEducation();
             }
         };
@@ -755,7 +834,7 @@
         // --- Certifications CRUD ---
         async function loadAdminCertifications() {
             const list = document.getElementById('cert-list-admin');
-            list.innerHTML = 'Memuat...';
+            list.innerHTML = 'Loading...';
             const q = query(collection(db, "certifications"), orderBy("sortOrder", "asc"));
             const snap = await getDocs(q);
             list.innerHTML = '';
@@ -763,30 +842,39 @@
             snap.forEach(docSnap => {
                 const data = docSnap.data();
                 const row = document.createElement('div');
-                row.className = 'admin-item-row';
+                row.className = 'admin-item-row draggable-item';
+                row.draggable = true;
+                row.dataset.id = docSnap.id;
+                
+                row.addEventListener('dragstart', handleDragStart);
+                row.addEventListener('dragover', handleDragOver);
+                row.addEventListener('drop', (e) => handleDrop(e, 'certifications', loadAdminCertifications));
+
                 row.innerHTML = `
-                    <div class="admin-item-details">
-                        <span style="font-weight:600;">${data.title}</span>
-                        <span style="font-size:0.8rem; color:var(--text-secondary);">${data.publisher} (${data.time})</span>
+                    <div class="admin-item-details" style="display:flex; align-items:center;">
+                        <span class="drag-handle">☰</span>
+                        <div>
+                            <span style="font-weight:600;">${data.title}</span>
+                            <span style="font-size:0.8rem; color:var(--text-secondary); display:block;">${data.publisher} (${data.time})</span>
+                        </div>
                     </div>
                     <div class="admin-item-action-btns">
-                        <button class="admin-action-btn-edit" onclick="startEditCert('${docSnap.id}', '${data.time}', '${data.title.replace(/'/g, "\\'")}', '${data.publisher.replace(/'/g, "\\'")}', ${data.sortOrder})">Ubah</button>
-                        <button class="admin-action-btn-danger" onclick="deleteCert('${docSnap.id}')">Hapus</button>
+                        <button class="admin-action-btn-edit" onclick="startEditCert('${docSnap.id}', '${data.time}', '${data.title.replace(/'/g, "\\'")}', '${data.publisher.replace(/'/g, "\\'")}')">Edit</button>
+                        <button class="admin-action-btn-danger" onclick="deleteCert('${docSnap.id}')">Delete</button>
                     </div>
                 `;
                 list.appendChild(row);
             });
         }
 
-        window.startEditCert = function(id, time, title, publisher, sortOrder) {
+        window.startEditCert = function(id, time, title, publisher) {
             editCertId = id;
             document.getElementById('add-cert-time').value = time;
             document.getElementById('add-cert-title').value = title;
             document.getElementById('add-cert-publisher').value = publisher;
-            document.getElementById('add-cert-order').value = sortOrder;
 
-            document.getElementById('cert-form-title').innerText = "Ubah Sertifikat";
-            document.getElementById('cert-submit-btn').innerText = "Simpan Perubahan";
+            document.getElementById('cert-form-title').innerText = "Edit Certificate";
+            document.getElementById('cert-submit-btn').innerText = "Save Changes";
             document.getElementById('cert-cancel-btn').style.display = 'inline-block';
 
             document.getElementById('cert-form-title').scrollIntoView({ behavior: 'smooth' });
@@ -795,41 +883,47 @@
         document.getElementById('cert-cancel-btn').addEventListener('click', () => {
             editCertId = null;
             document.getElementById('cert-add-form').reset();
-            document.getElementById('cert-form-title').innerText = "Kelola Sertifikat";
-            document.getElementById('cert-submit-btn').innerText = "Tambah Sertifikat";
+            document.getElementById('cert-form-title').innerText = "Manage Certifications";
+            document.getElementById('cert-submit-btn').innerText = "Add Certificate";
             document.getElementById('cert-cancel-btn').style.display = 'none';
         });
 
         document.getElementById('cert-add-form').addEventListener('submit', async (e) => {
             e.preventDefault();
             try {
+                let nextOrder = 1;
+                if (!editCertId) {
+                    const snap = await getDocs(collection(db, "certifications"));
+                    nextOrder = snap.size + 1;
+                }
+
                 const data = {
                     time: document.getElementById('add-cert-time').value,
                     title: document.getElementById('add-cert-title').value,
-                    publisher: document.getElementById('add-cert-publisher').value,
-                    sortOrder: parseInt(document.getElementById('add-cert-order').value)
+                    publisher: document.getElementById('add-cert-publisher').value
                 };
 
                 if (editCertId) {
-                    await setDoc(doc(db, "certifications", editCertId), data);
+                    await setDoc(doc(db, "certifications", editCertId), data, { merge: true });
                     editCertId = null;
                     document.getElementById('cert-cancel-btn').click();
-                    showToast("Sertifikat berhasil diperbarui!");
+                    showToast("Certificate updated successfully!");
                 } else {
+                    data.sortOrder = nextOrder;
                     await addDoc(collection(db, "certifications"), data);
                     document.getElementById('cert-add-form').reset();
-                    showToast("Sertifikasi ditambahkan!");
+                    showToast("Certificate added successfully!");
                 }
                 loadAdminCertifications();
             } catch (err) {
-                showToast("Gagal memproses sertifikasi.", "error");
+                showToast("Failed to process certificate.", "error");
             }
         });
 
         window.deleteCert = async function(id) {
-            if (confirm("Hapus sertifikasi ini?")) {
+            if (confirm("Delete this certificate?")) {
                 await deleteDoc(doc(db, "certifications", id));
-                showToast("Sertifikasi dihapus.");
+                showToast("Certificate deleted.");
                 loadAdminCertifications();
             }
         };
@@ -837,7 +931,7 @@
         // --- Experience CRUD ---
         async function loadAdminExperience() {
             const expList = document.getElementById('exp-list-admin');
-            expList.innerHTML = 'Memuat...';
+            expList.innerHTML = 'Loading...';
             const expQuery = query(collection(db, "experience"), orderBy("sortOrder", "asc"));
             const snap = await getDocs(expQuery);
             expList.innerHTML = '';
@@ -845,30 +939,41 @@
             snap.forEach(docSnap => {
                 const data = docSnap.data();
                 const row = document.createElement('div');
-                row.className = 'admin-item-row';
+                row.className = 'admin-item-row draggable-item';
+                row.draggable = true;
+                row.dataset.id = docSnap.id;
+                
+                row.addEventListener('dragstart', handleDragStart);
+                row.addEventListener('dragover', handleDragOver);
+                row.addEventListener('drop', (e) => handleDrop(e, 'experience', loadAdminExperience));
+
                 row.innerHTML = `
-                    <div class="admin-item-details">
-                        <span style="font-weight:600; font-size:0.95rem;">${data.title}</span>
-                        <span style="font-size:0.85rem; color:var(--text-secondary);">${data.company} (${data.time})</span>
+                    <div class="admin-item-details" style="display:flex; align-items:center;">
+                        <span class="drag-handle">☰</span>
+                        <div>
+                            <span style="font-weight:600; font-size:0.95rem;">${data.title}</span>
+                            <span style="font-size:0.85rem; color:var(--text-secondary); display:block;">${data.company} (${data.time})</span>
+                            <span style="font-size:0.8rem; color:var(--text-muted); display:block;">${data.desc || ''}</span>
+                        </div>
                     </div>
                     <div class="admin-item-action-btns">
-                        <button class="admin-action-btn-edit" onclick="startEditExp('${docSnap.id}', '${data.time}', '${data.title.replace(/'/g, "\\'")}', '${data.company.replace(/'/g, "\\'")}', ${data.sortOrder})">Ubah</button>
-                        <button class="admin-action-btn-danger" onclick="deleteExp('${docSnap.id}')">Hapus</button>
+                        <button class="admin-action-btn-edit" onclick="startEditExp('${docSnap.id}', '${data.time}', '${data.title.replace(/'/g, "\\'")}', '${data.company.replace(/'/g, "\\'")}', '${(data.desc || '').replace(/'/g, "\\'")}')">Edit</button>
+                        <button class="admin-action-btn-danger" onclick="deleteExp('${docSnap.id}')">Delete</button>
                     </div>
                 `;
                 expList.appendChild(row);
             });
         }
 
-        window.startEditExp = function(id, time, title, company, sortOrder) {
+        window.startEditExp = function(id, time, title, company, desc) {
             editExpId = id;
             document.getElementById('add-exp-time').value = time;
             document.getElementById('add-exp-title').value = title;
             document.getElementById('add-exp-company').value = company;
-            document.getElementById('add-exp-order').value = sortOrder;
+            document.getElementById('add-exp-desc').value = desc;
 
-            document.getElementById('exp-form-title').innerText = "Ubah Riwayat Kerja";
-            document.getElementById('exp-submit-btn').innerText = "Simpan Perubahan";
+            document.getElementById('exp-form-title').innerText = "Edit Career Record";
+            document.getElementById('exp-submit-btn').innerText = "Save Changes";
             document.getElementById('exp-cancel-btn').style.display = 'inline-block';
 
             document.getElementById('exp-form-title').scrollIntoView({ behavior: 'smooth' });
@@ -877,41 +982,48 @@
         document.getElementById('exp-cancel-btn').addEventListener('click', () => {
             editExpId = null;
             document.getElementById('exp-add-form').reset();
-            document.getElementById('exp-form-title').innerText = "Tambah Pengalaman Baru";
-            document.getElementById('exp-submit-btn').innerText = "Tambah Pengalaman";
+            document.getElementById('exp-form-title').innerText = "Add Professional Experience";
+            document.getElementById('exp-submit-btn').innerText = "Add Experience";
             document.getElementById('exp-cancel-btn').style.display = 'none';
         });
 
         document.getElementById('exp-add-form').addEventListener('submit', async (e) => {
             e.preventDefault();
             try {
+                let nextOrder = 1;
+                if (!editExpId) {
+                    const snap = await getDocs(collection(db, "experience"));
+                    nextOrder = snap.size + 1;
+                }
+
                 const data = {
                     time: document.getElementById('add-exp-time').value,
                     title: document.getElementById('add-exp-title').value,
                     company: document.getElementById('add-exp-company').value,
-                    sortOrder: parseInt(document.getElementById('add-exp-order').value)
+                    desc: document.getElementById('add-exp-desc').value
                 };
 
                 if (editExpId) {
-                    await setDoc(doc(db, "experience", editExpId), data);
+                    await setDoc(doc(db, "experience", editExpId), data, { merge: true });
                     editExpId = null;
                     document.getElementById('exp-cancel-btn').click();
-                    showToast("Riwayat kerja berhasil diperbarui!");
+                    showToast("Career record updated successfully!");
                 } else {
+                    data.sortOrder = nextOrder;
                     await addDoc(collection(db, "experience"), data);
                     document.getElementById('exp-add-form').reset();
-                    showToast("Pengalaman kerja berhasil ditambahkan!");
+                    showToast("Career record added successfully!");
                 }
                 loadAdminExperience();
             } catch (err) {
-                showToast("Gagal memproses riwayat kerja.", "error");
+                showToast("Failed to process career record.", "error");
             }
         });
 
         window.deleteExp = async function(id) {
-            if (confirm("Hapus riwayat ini?")) {
+            if (confirm("Delete this experience record?")) {
                 await deleteDoc(doc(db, "experience", id));
-                showToast("Pengalaman kerja dihapus.");
+                showToast("Experience record deleted.");
                 loadAdminExperience();
             }
         };
@@ -919,7 +1031,7 @@
         // --- Projects CRUD ---
         async function loadAdminProjects() {
             const projList = document.getElementById('proj-list-admin');
-            projList.innerHTML = 'Memuat...';
+            projList.innerHTML = 'Loading...';
             const projQuery = query(collection(db, "projects"), orderBy("sortOrder", "asc"));
             const snap = await getDocs(projQuery);
             projList.innerHTML = '';
@@ -927,30 +1039,39 @@
             snap.forEach(docSnap => {
                 const data = docSnap.data();
                 const row = document.createElement('div');
-                row.className = 'admin-item-row';
+                row.className = 'admin-item-row draggable-item';
+                row.draggable = true;
+                row.dataset.id = docSnap.id;
+                
+                row.addEventListener('dragstart', handleDragStart);
+                row.addEventListener('dragover', handleDragOver);
+                row.addEventListener('drop', (e) => handleDrop(e, 'projects', loadAdminProjects));
+
                 row.innerHTML = `
-                    <div class="admin-item-details">
-                        <span style="font-weight:600; font-size:0.95rem;">${data.title}</span>
-                        <span style="font-size:0.85rem; color:var(--text-secondary);">${data.tag}</span>
+                    <div class="admin-item-details" style="display:flex; align-items:center;">
+                        <span class="drag-handle">☰</span>
+                        <div>
+                            <span style="font-weight:600; font-size:0.95rem;">${data.title}</span>
+                            <span style="font-size:0.85rem; color:var(--text-secondary); display:block;">${data.tag}</span>
+                        </div>
                     </div>
                     <div class="admin-item-action-btns">
-                        <button class="admin-action-btn-edit" onclick="startEditProj('${docSnap.id}', '${data.title.replace(/'/g, "\\'")}', '${data.tag.replace(/'/g, "\\'")}', '${data.desc.replace(/'/g, "\\'")}', ${data.sortOrder})">Ubah</button>
-                        <button class="admin-action-btn-danger" onclick="deleteProj('${docSnap.id}')">Hapus</button>
+                        <button class="admin-action-btn-edit" onclick="startEditProj('${docSnap.id}', '${data.title.replace(/'/g, "\\'")}', '${data.tag.replace(/'/g, "\\'")}', '${data.desc.replace(/'/g, "\\'")}')">Edit</button>
+                        <button class="admin-action-btn-danger" onclick="deleteProj('${docSnap.id}')">Delete</button>
                     </div>
                 `;
                 projList.appendChild(row);
             });
         }
 
-        window.startEditProj = function(id, title, tag, desc, sortOrder) {
+        window.startEditProj = function(id, title, tag, desc) {
             editProjId = id;
             document.getElementById('add-proj-title').value = title;
             document.getElementById('add-proj-tag').value = tag;
             document.getElementById('add-proj-desc').value = desc;
-            document.getElementById('add-proj-order').value = sortOrder;
 
-            document.getElementById('proj-form-title').innerText = "Ubah Proyek";
-            document.getElementById('proj-submit-btn').innerText = "Simpan Perubahan";
+            document.getElementById('proj-form-title').innerText = "Edit Project";
+            document.getElementById('proj-submit-btn').innerText = "Save Changes";
             document.getElementById('proj-cancel-btn').style.display = 'inline-block';
 
             document.getElementById('proj-form-title').scrollIntoView({ behavior: 'smooth' });
@@ -959,41 +1080,47 @@
         document.getElementById('proj-cancel-btn').addEventListener('click', () => {
             editProjId = null;
             document.getElementById('proj-add-form').reset();
-            document.getElementById('proj-form-title').innerText = "Tambah Proyek Baru";
-            document.getElementById('proj-submit-btn').innerText = "Tambah Proyek";
+            document.getElementById('proj-form-title').innerText = "Add Project";
+            document.getElementById('proj-submit-btn').innerText = "Add Project";
             document.getElementById('proj-cancel-btn').style.display = 'none';
         });
 
         document.getElementById('proj-add-form').addEventListener('submit', async (e) => {
             e.preventDefault();
             try {
+                let nextOrder = 1;
+                if (!editProjId) {
+                    const snap = await getDocs(collection(db, "projects"));
+                    nextOrder = snap.size + 1;
+                }
+
                 const data = {
                     title: document.getElementById('add-proj-title').value,
                     tag: document.getElementById('add-proj-tag').value,
-                    desc: document.getElementById('add-proj-desc').value,
-                    sortOrder: parseInt(document.getElementById('add-proj-order').value)
+                    desc: document.getElementById('add-proj-desc').value
                 };
 
                 if (editProjId) {
-                    await setDoc(doc(db, "projects", editProjId), data);
+                    await setDoc(doc(db, "projects", editProjId), data, { merge: true });
                     editProjId = null;
                     document.getElementById('proj-cancel-btn').click();
-                    showToast("Proyek berhasil diperbarui!");
+                    showToast("Project updated successfully!");
                 } else {
+                    data.sortOrder = nextOrder;
                     await addDoc(collection(db, "projects"), data);
                     document.getElementById('proj-add-form').reset();
-                    showToast("Proyek berhasil ditambahkan!");
+                    showToast("Project added successfully!");
                 }
                 loadAdminProjects();
             } catch (err) {
-                showToast("Gagal memproses proyek.", "error");
+                showToast("Failed to process project.", "error");
             }
         });
 
         window.deleteProj = async function(id) {
-            if (confirm("Hapus proyek ini?")) {
+            if (confirm("Delete this project?")) {
                 await deleteDoc(doc(db, "projects", id));
-                showToast("Proyek dihapus.");
+                showToast("Project deleted.");
                 loadAdminProjects();
             }
         };
